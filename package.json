@@ -1,0 +1,35 @@
+{
+  "name": "judo-react-native",
+  "title": "Judopay React Native module",
+  "version": "1.0.0",
+  "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Judopay/Judo-React-Native"
+  },
+  "keywords": [
+    "react-native",
+    "judo",
+    "judopay",
+    "payment",
+    "gateway"
+  ],
+  "author": {
+    "name": "Zeno Foltin",
+    "email": "zeno.foltin@gmail.com"
+  },
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react-native": "^0.59.0"
+  },
+  "devDependencies": {
+    "react": "16.8.3",
+    "react-native": "^0.59.3"
+  }
+}
