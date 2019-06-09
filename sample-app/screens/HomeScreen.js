@@ -83,8 +83,11 @@ export default class HomeScreen extends React.Component<Props> {
         <Text style={styles.welcome}>
           {`Welcome to the\nJudopay sample app!`}
         </Text>
+        <View style={styles.buttons}>
         <Button title="Make payment" onPress={() => this.makePayment()} />
+          <View style={styles.spacing} />
         <Button title="Make pre-auth" onPress={() => this.makePreAuth()} />
+      </View>
       </View>
     );
   }
@@ -95,11 +98,20 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 16,
     justifyContent: "flex-start",
-    alignItems: "center"
+    alignItems: "stretch"
   },
   welcome: {
     fontSize: 20,
     textAlign: "center",
     margin: 16
+  },
+  buttons: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "stretch",
+    padding: 16
+  },
+  spacing: {
+    height: 16
   }
 });
