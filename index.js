@@ -14,3 +14,10 @@ export type JudoOptions = {
   currency: string,
   consumerReference: string
 };
+
+export type JudoApplePayOptions = {
+  merchantId: string,
+  countryCode: string,
+  summaryLabel: string,
+  isPayment: boolean
+};

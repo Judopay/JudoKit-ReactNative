@@ -56,7 +56,6 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
             }
 
             if (requestCode == PAYMENT_REQUEST || requestCode == PRE_AUTH_REQUEST) {
-                // TODO: handle 3ds
                 switch (resultCode) {
                     case RESULT_SUCCESS:
                         Receipt receipt = intent.getParcelableExtra(JUDO_RECEIPT);
@@ -152,6 +151,9 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
     }
 
     private WritableMap convert(Risks risks) {
+        if (risks == null) {
+            return null;
+        }
         WritableMap result = new WritableNativeMap();
         result.putString("postCodeCheck", risks.getPostCodeCheck());
         return result;
