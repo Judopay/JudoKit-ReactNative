@@ -5,12 +5,14 @@ import { showMessage } from "../utils";
 import {
   RNJudo,
   type JudoOptions,
-  type JudoApplePayOptions
+  type JudoApplePayOptions,
+  type JudoGooglePayOptions
 } from "judo-react-native";
 
 type Props = {};
 type State = {
-  canUseApplePay: boolean
+  canUseApplePay: boolean,
+  canUseGooglePay: boolean
 };
 
 const judoOptions: JudoOptions = {
@@ -27,7 +29,13 @@ const applePayOptions: JudoApplePayOptions = {
   merchantId: "<MERCHANT_ID>",
   countryCode: "GB",
   summaryLabel: "<MERCHANT_NAME>",
-  isPayment: true
+  isPayment: false // pre-auth
+};
+
+const googlePayOptions: JudoGooglePayOptions = {
+  googlePayTestEnvironment: false,
+  merchantId: "<MERCHANT_ID>",
+  isPayment: false // pre-auth
 };
 
 export default class HomeScreen extends React.Component<Props, State> {
@@ -38,7 +46,8 @@ export default class HomeScreen extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      canUseApplePay: false
+      canUseApplePay: false,
+      canUseGooglePay: false
     };
   }
 
@@ -46,6 +55,9 @@ export default class HomeScreen extends React.Component<Props, State> {
     if (Platform.OS === "ios") {
       const canUseApplePay = await RNJudo.canUseApplePay();
       this.setState({ canUseApplePay });
+    } else if (Platform.OS === "android") {
+      const canUseGooglePay = await RNJudo.canUseGooglePay(googlePayOptions);
+      this.setState({ canUseGooglePay });
     }
   }
 
@@ -134,8 +146,48 @@ export default class HomeScreen extends React.Component<Props, State> {
     }
   }
 
+  async makeGooglePayPayment(isPayment: boolean = true) {
+    const title = isPayment ? "Google Pay payment" : "Google Pay pre-auth";
+    try {
+      let response = await RNJudo.makeGooglePayPayment(
+        Object.assign({}, judoOptions, googlePayOptions, { isPayment })
+      );
+      if (response && response.result === "Success") {
+        await showMessage(
+          `${title} successful`,
+          `ReceiptId: ${response.receiptId}`
+        );
+      } else {
+        const errorMessage = response
+          ? response.result
+          : "Something went wrong";
+        await showMessage(`${title} error`, errorMessage);
+      }
+    } catch (e) {
+      if (e.code === "JUDO_USER_CANCELLED") {
+        // do nothing when the user cancels
+        return;
+      } else if (
+        e.code === "JUDO_ERROR" &&
+        e.userInfo &&
+        e.userInfo.result === "Declined"
+      ) {
+        await showMessage(
+          `${title} failed`,
+          "Card declined. Please try again and make sure the card details are correct."
+        );
+      } else if (e.code === "JUDO_GOOGLE_PAY_ERROR") {
+        // Google Pay error messages are handled on the native side, nothing to do here
+      } else {
+        let message =
+          e.message ?? "Something went wrong. Please try again later.";
+        await showMessage("Oops...", message);
+      }
+    }
+  }
+
   render() {
-    const { canUseApplePay } = this.state;
+    const { canUseApplePay, canUseGooglePay } = this.state;
     const isIos = Platform.OS === "ios";
 
     return (
@@ -155,7 +207,11 @@ export default class HomeScreen extends React.Component<Props, State> {
               onPress={() => this.makeApplePayPayment()}
             />
           ) : (
-            <Button title="Make Google Pay payment" onPress={() => {}} />
+            <Button
+              disabled={!canUseGooglePay}
+              title="Make Google Pay payment"
+              onPress={() => this.makeGooglePayPayment()}
+            />
           )}
           <View style={styles.spacing} />
           {isIos ? (
@@ -165,7 +221,11 @@ export default class HomeScreen extends React.Component<Props, State> {
               onPress={() => this.makeApplePayPayment(false)}
             />
           ) : (
-            <Button title="Make Google Pay pre-auth" onPress={() => {}} />
+            <Button
+              disabled={!canUseGooglePay}
+              title="Make Google Pay pre-auth"
+              onPress={() => this.makeGooglePayPayment(false)}
+            />
           )}
         </View>
       </View>

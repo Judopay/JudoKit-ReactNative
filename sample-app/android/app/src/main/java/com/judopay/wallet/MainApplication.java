@@ -1,4 +1,4 @@
-package com.example;
+package com.judopay.wallet;
 
 import android.app.Application;
 

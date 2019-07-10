@@ -21,3 +21,9 @@ export type JudoApplePayOptions = {
   summaryLabel: string,
   isPayment: boolean
 };
+
+export type JudoGooglePayOptions = {
+  googlePayTestEnvironment: boolean,
+  merchantId: string,
+  isPayment: boolean
+};

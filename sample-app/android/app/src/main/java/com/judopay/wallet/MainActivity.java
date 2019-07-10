@@ -1,4 +1,4 @@
-package com.example;
+package com.judopay.wallet;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
