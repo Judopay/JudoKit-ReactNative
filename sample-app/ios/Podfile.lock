@@ -1,12 +1,12 @@
 PODS:
   - DeviceDNA (0.1.6)
-  - JudoKitObjC (7.1.0):
+  - JudoKitObjC (8.0.0):
     - DeviceDNA
     - TrustKit
-  - TrustKit (1.6.1)
+  - TrustKit (1.6.2)
 
 DEPENDENCIES:
-  - JudoKitObjC (~> 7.1)
+  - JudoKitObjC
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -16,9 +16,9 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   DeviceDNA: 06c4c1af198fc8b44711d10bed39e0a8638b490d
-  JudoKitObjC: 27e6128f4888fd348d0f0edb29975603f446700c
-  TrustKit: 0660dd1ce827ae7c8f553f35502a8542e248188f
+  JudoKitObjC: 4c621d2cabb8bb71003523b5df1de4db208bb578
+  TrustKit: 0a64b37d31518f16e344ceaf27e129dde624ce75
 
-PODFILE CHECKSUM: d3185af6e179f3676f957d930c75eea9b81272dd
+PODFILE CHECKSUM: 252d29c0f478f75ee4dd34aaeed808f18dba1f11
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.7.4

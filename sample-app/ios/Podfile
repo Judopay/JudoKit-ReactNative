@@ -6,7 +6,7 @@ target 'sample-app' do
   # use_frameworks!
 
   # Pods for sample-app
-  pod 'JudoKitObjC', '~> 7.1'
+  pod 'JudoKitObjC'
 
   target 'sample-appTests' do
     inherit! :search_paths

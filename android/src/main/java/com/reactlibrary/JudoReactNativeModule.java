@@ -2,8 +2,6 @@ package com.reactlibrary;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.BaseActivityEventListener;
@@ -16,24 +14,20 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wallet.AutoResolveHelper;
 import com.google.android.gms.wallet.CardInfo;
-import com.google.android.gms.wallet.CardRequirements;
-import com.google.android.gms.wallet.IsReadyToPayRequest;
 import com.google.android.gms.wallet.PaymentData;
 import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentMethodToken;
-import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
 import com.google.android.gms.wallet.PaymentsClient;
-import com.google.android.gms.wallet.ShippingAddressRequirements;
-import com.google.android.gms.wallet.TransactionInfo;
-import com.google.android.gms.wallet.Wallet;
 import com.google.android.gms.wallet.WalletConstants;
 import com.judopay.Judo;
+import com.judopay.JudoApiService;
 import com.judopay.PaymentActivity;
 import com.judopay.PreAuthActivity;
+import com.judopay.arch.GooglePayIsReadyResult;
+import com.judopay.arch.GooglePaymentUtils;
 import com.judopay.model.CardToken;
 import com.judopay.model.Consumer;
 import com.judopay.model.GooglePayRequest;
@@ -42,14 +36,13 @@ import com.judopay.model.Receipt;
 import com.judopay.model.Risks;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -67,6 +60,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private static final int PAYMENT_REQUEST = 101;
     private static final int PRE_AUTH_REQUEST = 201;
     private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 1337;
+    private static final int GPAY_REQUEST = 500;
     private static final String ACTIVITY_DOES_NOT_EXIST = "ACTIVITY_DOES_NOT_EXIST";
     private static final String JUDO_ERROR = "JUDO_ERROR";
     private static final String JUDO_GOOGLE_PAY_ERROR = "JUDO_GOOGLE_PAY_ERROR";
@@ -77,6 +71,14 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private Promise promise;
     private ReadableMap options;
     private Disposable disposable;
+    private PaymentsClient googlePayClient;
+
+    @Nonnull
+    @Override
+    public String getName() {
+        return "RNJudo";
+    }
+
     @SuppressWarnings("FieldCanBeLocal")
     private final ActivityEventListener activityEventListener = new BaseActivityEventListener() {
 
@@ -127,10 +129,32 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                         promise = null;
                         break;
                 }
+            } else if (requestCode == GPAY_REQUEST) {
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        PaymentData paymentData = PaymentData.getFromIntent(intent);
+                        if (paymentData != null) {
+                            GooglePayRequest googlePayRequest = GooglePaymentUtils.createGooglePayRequest(getJudo(), paymentData);
+                            finishGPayRequest(googlePayRequest);
+                        } else {
+                            promise.reject(JUDO_ERROR, "LoadPaymentData failed. No payment data found.");
+                        }
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        promise.reject(JUDO_USER_CANCELLED, "User cancelled");
+                        break;
+                    case AutoResolveHelper.RESULT_ERROR:
+                        Status status = AutoResolveHelper.getStatusFromIntent(intent);
+                        if (status != null) {
+                            promise.reject(JUDO_ERROR, String.format("LoadPaymentData failed. Error code: %d", status.getStatusCode()));
+                        } else {
+                            promise.reject(JUDO_ERROR, "LoadPaymentData failed");
+                        }
+                        break;
+                }
             }
         }
     };
-    private PaymentsClient googlePayClient;
 
     @SuppressWarnings("WeakerAccess")
     public JudoReactNativeModule(ReactApplicationContext reactContext) {
@@ -159,6 +183,27 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         }
     }
 
+    private void finishGPayRequest(GooglePayRequest googlePayRequest) {
+        final JudoApiService apiService = getJudo().getApiService(Objects.requireNonNull(getCurrentActivity()));
+        Single<Receipt> apiRequest = apiService.googlePayPayment(googlePayRequest);
+        
+        disposable = apiRequest
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(receipt -> {
+                    if (receipt.isSuccess()) {
+                        promise.resolve(convert(receipt));
+                    } else {
+                        promise.reject(JUDO_ERROR, receipt.getErrorExplanation());
+                    }
+                    promise = null;
+                }, error -> {
+                    promise.reject(JUDO_ERROR, error.getLocalizedMessage());
+                    promise = null;
+                });
+
+    }
+
     private void handlePaymentSuccess(PaymentData paymentData) {
         PaymentMethodToken token = paymentData.getPaymentMethodToken();
         if (token == null) {
@@ -172,7 +217,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
             return;
         }
 
-        Judo judo = getJudo(options);
+        Judo judo = getJudo();
 
         CardInfo cardInfo = paymentData.getCardInfo();
         GooglePayWallet googlePayWallet = new GooglePayWallet.Builder()
@@ -274,12 +319,6 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         return result;
     }
 
-    @Nonnull
-    @Override
-    public String getName() {
-        return "RNJudo";
-    }
-
     @ReactMethod
     public void makePayment(ReadableMap options, Promise promise) {
         // TODO: validate options
@@ -290,9 +329,10 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         }
 
         this.promise = promise;
+        this.options = options;
 
         Intent intent = new Intent(currentActivity, PaymentActivity.class);
-        intent.putExtra(JUDO_OPTIONS, getJudo(options));
+        intent.putExtra(JUDO_OPTIONS, getJudo());
         currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
     }
 
@@ -306,101 +346,73 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         }
 
         this.promise = promise;
+        this.options = options;
 
         Intent intent = new Intent(currentActivity, PreAuthActivity.class);
-        intent.putExtra(JUDO_OPTIONS, getJudo(options));
+        intent.putExtra(JUDO_OPTIONS, getJudo());
         currentActivity.startActivityForResult(intent, PRE_AUTH_REQUEST);
     }
 
     @ReactMethod
     public void canUseGooglePay(ReadableMap options, final Promise promise) {
-        initGooglePayClient(options);
 
-        IsReadyToPayRequest request = IsReadyToPayRequest.newBuilder()
-                .addAllowedPaymentMethod(WalletConstants.PAYMENT_METHOD_TOKENIZED_CARD)
-                .build();
+        this.promise = promise;
+        this.options = options;
+        initGooglePayClient();
 
-        googlePayClient.isReadyToPay(request).addOnCompleteListener(new OnCompleteListener<Boolean>() {
+        GooglePaymentUtils.checkIsReadyGooglePay(googlePayClient, new GooglePayIsReadyResult() {
             @Override
-            public void onComplete(@NonNull Task<Boolean> task) {
-                promise.resolve(task.isSuccessful());
+            public void setResult(boolean result) {
+                promise.resolve(result);
             }
         });
     }
 
-    private void initGooglePayClient(ReadableMap options) {
+    private void initGooglePayClient() {
         if (googlePayClient == null) {
             int googlePayEnvironment = WalletConstants.ENVIRONMENT_PRODUCTION;
             if (options.getBoolean("googlePayTestEnvironment")) {
                 googlePayEnvironment = WalletConstants.ENVIRONMENT_TEST;
             }
-            googlePayClient = Wallet.getPaymentsClient(
-                    Objects.requireNonNull(getCurrentActivity()),
-                    (new Wallet.WalletOptions.Builder())
-                            .setEnvironment(googlePayEnvironment)
-                            .build()
-            );
+            googlePayClient = GooglePaymentUtils.getGooglePayPaymentsClient(Objects.requireNonNull(
+                    getCurrentActivity()),
+                    googlePayEnvironment);
         }
     }
 
     @ReactMethod
     public void makeGooglePayPayment(ReadableMap options, final Promise promise) {
-        initGooglePayClient(options);
-
-        TransactionInfo transactionInfo = TransactionInfo.newBuilder()
-                .setTotalPriceStatus(WalletConstants.TOTAL_PRICE_STATUS_FINAL)
-                .setTotalPrice(options.getString("amount"))
-                .setCurrencyCode(options.getString("currency"))
-                .build();
-
-        String merchantId = options.getString("merchantId");
-
-        PaymentMethodTokenizationParameters.Builder paramsBuilder = PaymentMethodTokenizationParameters.newBuilder()
-                .setPaymentMethodTokenizationType(WalletConstants.PAYMENT_METHOD_TOKENIZATION_TYPE_PAYMENT_GATEWAY)
-                .addParameter("gateway", "judopay")
-                .addParameter("gatewayMerchantId", merchantId);
-
-        PaymentDataRequest request =
-                PaymentDataRequest.newBuilder()
-                        .setPhoneNumberRequired(false)
-                        .setEmailRequired(true)
-                        .setShippingAddressRequired(true)
-                        .setShippingAddressRequirements(
-                                ShippingAddressRequirements.newBuilder()
-                                        .addAllowedCountryCodes(Arrays.asList(
-                                                "US",
-                                                "GB"
-                                        ))
-                                        .build())
-                        .setTransactionInfo(transactionInfo)
-                        .addAllowedPaymentMethods(Collections.singletonList(WalletConstants.PAYMENT_METHOD_TOKENIZED_CARD))
-                        .setCardRequirements(
-                                CardRequirements.newBuilder()
-                                        .addAllowedCardNetworks(Arrays.asList(
-                                                WalletConstants.CARD_NETWORK_AMEX,
-                                                WalletConstants.CARD_NETWORK_DISCOVER,
-                                                WalletConstants.CARD_NETWORK_VISA,
-                                                WalletConstants.CARD_NETWORK_MASTERCARD
-                                        ))
-                                        .setAllowPrepaidCards(true)
-                                        .setBillingAddressRequired(true)
-                                        .setBillingAddressFormat(WalletConstants.BILLING_ADDRESS_FORMAT_FULL)
-                                        .build())
-                        .setPaymentMethodTokenizationParameters(paramsBuilder.build())
-                        .setUiRequired(true)
-                        .build();
 
         this.promise = promise;
         this.options = options;
+        initGooglePayClient();
+
+        PaymentDataRequest request = GooglePaymentUtils.createDefaultPaymentDataRequest(getJudo());
 
         AutoResolveHelper.resolveTask(
                 googlePayClient.loadPaymentData(request),
                 Objects.requireNonNull(getCurrentActivity()),
                 LOAD_PAYMENT_DATA_REQUEST_CODE);
-
     }
 
-    private Judo getJudo(ReadableMap options) {
+    @ReactMethod
+    public void makeNativePayPayment(ReadableMap options, final Promise promise) {
+
+        this.promise = promise;
+        this.options = options;
+        initGooglePayClient();
+
+        Judo judo = getJudo();
+        PaymentDataRequest paymentDataRequest = GooglePaymentUtils.createDefaultPaymentDataRequest(judo);
+        final Task<PaymentData> taskDefaultPaymentData = googlePayClient.loadPaymentData(paymentDataRequest);
+        AutoResolveHelper.resolveTask(
+                taskDefaultPaymentData,
+                Objects.requireNonNull(getCurrentActivity()),
+                Judo.GPAY_REQUEST);
+    }
+
+
+    private Judo getJudo() {
         return new Judo.Builder()
                 .setJudoId(options.getString("judoId"))
                 .setApiToken(options.getString("token"))

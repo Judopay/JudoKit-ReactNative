@@ -1,5 +1,6 @@
 #import "RNJudo.h"
 #import "JudoKitObjC.h"
+#import <PassKit/PassKit.h>
 #import <React/RCTConvert.h>
 
 @interface RNJudo() <PKPaymentAuthorizationViewControllerDelegate>
@@ -65,34 +66,103 @@ RCT_REMAP_METHOD(canUseApplePay,
     resolve([NSNumber numberWithBool:canUse]);
 }
 
+RCT_REMAP_METHOD(makeNativePayPayment,
+                 options:(NSDictionary *)options
+                 makeNativeApplePayPaymentWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+  [self initWithOptions:options];
+
+  NSString *merchantIdentifier = [RCTConvert NSString:options[@"merchantId"]];
+  NSString *countryCode = [RCTConvert NSString:options[@"countryCode"]];
+  TransactionType transactionType = [RCTConvert NSInteger:options[@"transactionType"]];
+  PaymentShippingType paymentShippingType = [RCTConvert NSInteger:options[@"paymentShippingType"]];
+
+  NSMutableArray<PaymentSummaryItem *> * paymentSummaryItems = [NSMutableArray new];
+  for (NSDictionary *dict in options[@"paymentSummaryItems"]) {
+    [paymentSummaryItems addObject: [[PaymentSummaryItem alloc] initWithLabel:dict[@"label"]
+                                                                       amount: [NSDecimalNumber decimalNumberWithString: dict[@"amount"]]]];
+  }
+
+  NSMutableArray<PaymentShippingMethod *> * shippingMethods = [NSMutableArray new];
+  for (NSDictionary *dict in options[@"paymentShippingMethods"]) {
+    PaymentSummaryItemType itemType = [RCTConvert NSInteger:options[@"paymentSummaryItemType"]];
+    [shippingMethods addObject: [[PaymentShippingMethod alloc] initWithIdentifier:dict[@"identifier"]
+                                                                           detail:dict[@"detail"]
+                                                                            label:dict[@"label"]
+                                                                           amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]
+                                                                             type:itemType]];
+  }
+
+  JudoKit *judoKit = [[JudoKit alloc] initWithToken:self.token secret:self.secret];
+  ApplePayConfiguration *applePayConfiguration = [[ApplePayConfiguration alloc] initWithJudoId: self.judoId
+                                                                                     reference: self.consumerReference
+                                                                                    merchantId: merchantIdentifier
+                                                                                      currency: self.currency
+                                                                                   countryCode: countryCode
+                                                                           paymentSummaryItems: paymentSummaryItems];
+  applePayConfiguration.transactionType = transactionType;
+  applePayConfiguration.shippingType = paymentShippingType;
+  applePayConfiguration.requiredShippingContactFields = ContactFieldAll;
+  applePayConfiguration.requiredBillingContactFields = ContactFieldAll;
+  applePayConfiguration.returnedContactInfo = ReturnedInfoAll;
+  applePayConfiguration.shippingMethods = shippingMethods;
+
+  [judoKit invokeApplePayWithConfiguration: applePayConfiguration
+                                completion: [self paymentCompletion:judoKit reject:reject resolve:resolve]];
+}
+
 RCT_REMAP_METHOD(makeApplePayPayment,
                  options:(NSDictionary *)options
                  makeApplePayPaymentWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [self initWithOptions:options];
+  [self initWithOptions:options];
 
-    NSString *merchantIdentifier = [RCTConvert NSString:options[@"merchantId"]];
-    NSString *countryCode = [RCTConvert NSString:options[@"countryCode"]];
-    NSString *summaryLabel = [RCTConvert NSString:options[@"summaryLabel"]];
-    self.isApplePayPayment = [RCTConvert BOOL:options[@"isPayment"]];
+  NSString *merchantIdentifier = [RCTConvert NSString:options[@"merchantId"]];
+  NSString *countryCode = [RCTConvert NSString:options[@"countryCode"]];
+  TransactionType transactionType = [RCTConvert NSInteger:options[@"transactionType"]];
+  PaymentShippingType paymentShippingType = [RCTConvert NSInteger:options[@"paymentShippingType"]];
+  NSMutableArray<PaymentSummaryItem *> * paymentSummaryItems = [NSMutableArray new];
+  for (NSDictionary *dict in options[@"paymentShippingMethods"]) {
+    [paymentSummaryItems addObject: [[PaymentSummaryItem alloc] initWithLabel:dict[@"label"]
+                                                                       amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]]];
+  }
 
-    PKPaymentRequest *paymentRequest = [PKPaymentRequest new];
-    paymentRequest.merchantIdentifier = merchantIdentifier;
-    paymentRequest.countryCode = countryCode;
-    paymentRequest.currencyCode = self.currency;
-    paymentRequest.supportedNetworks = @[PKPaymentNetworkAmex, PKPaymentNetworkMasterCard, PKPaymentNetworkVisa];
-    paymentRequest.merchantCapabilities = PKMerchantCapability3DS;
-    paymentRequest.paymentSummaryItems = @[[PKPaymentSummaryItem summaryItemWithLabel:summaryLabel amount:[NSDecimalNumber decimalNumberWithString:self.amount]]];
+  NSMutableArray<PaymentShippingMethod *> * shippingMethods = [NSMutableArray new];
+  for (NSDictionary *dict in options[@"paymentShippingMethods"]) {
+    PaymentSummaryItemType itemType = [RCTConvert NSInteger:options[@"paymentSummaryItemType"]];
+    [shippingMethods addObject: [[PaymentShippingMethod alloc] initWithIdentifier:dict[@"identifier"]
+                                                                           detail:dict[@"detail"]
+                                                                            label:dict[@"label"]
+                                                                           amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]
+                                                                             type:itemType]];
+  }
 
-    PKPaymentAuthorizationViewController *paymentAuthorizationViewController = [[PKPaymentAuthorizationViewController alloc] initWithPaymentRequest:paymentRequest];
-    paymentAuthorizationViewController.delegate = self;
+  JudoKit *judoKit = [[JudoKit alloc] initWithToken:self.token secret:self.secret];
+  judoKit.apiSession.sandboxed = self.isSandbox;
+  JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
+  JPReference *judoReference = [[JPReference alloc] initWithConsumerReference:self.consumerReference];
+  ApplePayConfiguration *applePayConfiguration = [[ApplePayConfiguration alloc] initWithJudoId: self.judoId
+                                                                                     reference: self.consumerReference
+                                                                                    merchantId: merchantIdentifier
+                                                                                      currency: self.currency
+                                                                                   countryCode: countryCode
+                                                                           paymentSummaryItems: paymentSummaryItems];
+  applePayConfiguration.transactionType = transactionType;
+  applePayConfiguration.shippingType = paymentShippingType;
+  applePayConfiguration.requiredShippingContactFields = ContactFieldAll;
+  applePayConfiguration.requiredBillingContactFields = ContactFieldAll;
+  applePayConfiguration.returnedContactInfo = ReturnedInfoAll;
+  applePayConfiguration.shippingMethods = shippingMethods;
 
-    self.applePayResolve = resolve;
-    self.applePayReject = reject;
-
-    UIViewController *rootViewController = UIApplication.sharedApplication.keyWindow.rootViewController;
-    [rootViewController presentViewController:paymentAuthorizationViewController animated:YES completion:nil];
+  [judoKit invokePayment: self.judoId
+           amount: judoAmount
+           consumerReference: judoReference
+           paymentMethods: PaymentMethodApplePay
+           applePayConfiguratation: applePayConfiguration
+           cardDetails: nil
+           completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
 }
 
 - (void)initWithOptions:(NSDictionary *)options
@@ -122,40 +192,4 @@ RCT_REMAP_METHOD(makeApplePayPayment,
         }
     };
 }
-
-#pragma mark - PKPaymentAuthorizationViewControllerDelegate
-
-- (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *)controller didAuthorizePayment:(PKPayment *)payment handler:(nonnull void (^)(PKPaymentAuthorizationResult * _Nonnull))completion {
-    JudoKit *judoKit = [[JudoKit alloc] initWithToken:self.token secret:self.secret];
-    judoKit.apiSession.sandboxed = self.isSandbox;
-    JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
-    JPReference *judoReference = [[JPReference alloc] initWithConsumerReference:self.consumerReference];
-    JPTransaction *transaction = nil;
-
-    if (self.isApplePayPayment) {
-        transaction = [judoKit paymentWithJudoId:self.judoId amount:judoAmount reference:judoReference];
-    } else {
-        transaction = [judoKit preAuthWithJudoId:self.judoId amount:judoAmount reference:judoReference];
-    }
-
-    NSError *error;
-    [transaction setPkPayment:payment error:&error];
-    [transaction sendWithCompletion:^(JPResponse * response, NSError * error) {
-        if (error || response.items.count == 0) {
-            completion([[PKPaymentAuthorizationResult alloc] initWithStatus:PKPaymentAuthorizationStatusFailure errors:@[error]]);
-            self.applePayReject(@"JUDO_ERROR", error.localizedDescription, error);
-        } else {
-            completion([[PKPaymentAuthorizationResult alloc] initWithStatus:PKPaymentAuthorizationStatusSuccess errors:nil]);
-            self.applePayResolve(response.items[0].rawData);
-        }
-        self.applePayResolve = nil;
-        self.applePayReject = nil;
-        [controller dismissViewControllerAnimated:YES completion:nil];
-    }];
-}
-
-- (void)paymentAuthorizationViewControllerDidFinish:(PKPaymentAuthorizationViewController *)controller {
-    [controller dismissViewControllerAnimated:YES completion:nil];
-}
-
 @end

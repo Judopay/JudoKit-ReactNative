@@ -1,6 +1,14 @@
 // @flow
 import React from "react";
-import { Button, Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+  Image
+} from "react-native";
 import { showMessage } from "../utils";
 import {
   RNJudo,
@@ -14,26 +22,61 @@ type State = {
   canUseApplePay: boolean,
   canUseGooglePay: boolean
 };
-
+var requireNativeComponent = require('requireNativeComponent')
+const NativePayButton = requireNativeComponent(
+      'RNNativePayButton',
+    );
 const judoOptions: JudoOptions = {
-  token: "<API_TOKEN>",
-  secret: "<API_SECRET>",
-  judoId: "<JUDO_ID>",
+  token: "Izx9omsBR15LatAl",
+  secret: "b5787124845533d8e68d12a586fa3713871b876b528600ebfdc037afec880cd6",
+  judoId: "100915867",
   isSandbox: true,
   amount: "0.01",
   currency: "GBP",
   consumerReference: "myCustomerReference"
 };
 
+const ApplePayTransactionType = {
+  Payment: 0,
+  PreAuth: 1,
+  Refund: 2,
+  RegisterCard: 3,
+  SaveCard: 4
+};
+
+const ApplePayPaymentShippingType = {
+  Shipping: 0,
+  Delivery: 1,
+  StorePickup: 2,
+  ServicePickup: 3
+};
+
+const ApplePayPaymentSummaryItemType = {
+  Final: 0,
+  Pending: 1
+};
+
+const applePayShippingMethod: ApplePayShippingMethod = {
+  identifier: "identifier for shiping method",
+  detail: "shipping method description",
+  label: "shipping method label",
+  amount: "10.0",
+  paymentSummaryItemType: ApplePayPaymentSummaryItemType.Final
+}
+
 const applePayOptions: JudoApplePayOptions = {
   merchantId: "<MERCHANT_ID>",
   countryCode: "GB",
   summaryLabel: "<MERCHANT_NAME>",
-  isPayment: false // pre-auth
+  transactionType: ApplePayTransactionType.Payment,
+  paymentShippingType: ApplePayPaymentShippingType.Delivery,
+  paymentSummaryItems: [{label: "Purchased Item name", amount: "102.4"}],
+  paymentShippingMethods: [applePayShippingMethod]
 };
 
 const googlePayOptions: JudoGooglePayOptions = {
   googlePayTestEnvironment: false,
+  countryCode: "GB",
   merchantId: "<MERCHANT_ID>",
   isPayment: false // pre-auth
 };
@@ -119,10 +162,37 @@ export default class HomeScreen extends React.Component<Props, State> {
 
   async makeApplePayPayment(isPayment: boolean = true) {
     const title = isPayment ? "Apple Pay payment" : "Apple Pay pre-auth";
-
+    applePayOptions.transactionType = isPayment ? ApplePayTransactionType.Payment : ApplePayTransactionType.PreAuth;
     try {
       let response = await RNJudo.makeApplePayPayment(
-        Object.assign({}, judoOptions, applePayOptions, { isPayment })
+        Object.assign({}, judoOptions, applePayOptions)
+      );
+      if (response.result === "Success") {
+        await showMessage(
+          `${title} successful`,
+          `ReceiptId: ${response.receiptId}`
+        );
+      } else {
+        await showMessage(`${title} error`, response.result);
+      }
+    } catch (e) {
+      if (e.code === "JUDO_ERROR" && e.userInfo.result === "Declined") {
+        await showMessage(
+          `${title} failed`,
+          "Card declined. Please try again and make sure the card details are correct."
+        );
+      } else {
+        let message =
+          e.message ?? "Something went wrong. Please try again later.";
+        await showMessage("Oops...", message);
+      }
+    }
+  }
+
+  async makeNativePayment() {
+    try {
+      let response = await RNJudo.makeNativePayPayment(
+        Object.assign({}, judoOptions, applePayOptions, googlePayOptions)
       );
       if (response.result === "Success") {
         await showMessage(
@@ -227,6 +297,11 @@ export default class HomeScreen extends React.Component<Props, State> {
               onPress={() => this.makeGooglePayPayment(false)}
             />
           )}
+          <View style={styles.spacing} />
+          <NativePayButton
+            style={styles.payButtonStyle}
+            onPayPress={() => this.makeNativePayment()}
+          />
         </View>
       </View>
     );
@@ -249,6 +324,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "stretch"
+  },
+  payButtonStyle: {
+    marginLeft: 40,
+    marginRight: 40,
+    height: 32
   },
   spacing: {
     height: 16
