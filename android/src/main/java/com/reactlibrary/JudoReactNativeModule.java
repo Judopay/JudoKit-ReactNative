@@ -2,6 +2,7 @@ package com.reactlibrary;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.BaseActivityEventListener;
@@ -10,6 +11,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -25,6 +27,7 @@ import com.google.android.gms.wallet.WalletConstants;
 import com.judopay.Judo;
 import com.judopay.JudoApiService;
 import com.judopay.PaymentActivity;
+import com.judopay.PaymentMethodActivity;
 import com.judopay.PreAuthActivity;
 import com.judopay.arch.GooglePayIsReadyResult;
 import com.judopay.arch.GooglePaymentUtils;
@@ -32,11 +35,15 @@ import com.judopay.model.CardToken;
 import com.judopay.model.Consumer;
 import com.judopay.model.GooglePayRequest;
 import com.judopay.model.GooglePayWallet;
+import com.judopay.model.PaymentMethod;
 import com.judopay.model.Receipt;
 import com.judopay.model.Risks;
 
 import java.text.SimpleDateFormat;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -65,6 +72,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private static final String JUDO_ERROR = "JUDO_ERROR";
     private static final String JUDO_GOOGLE_PAY_ERROR = "JUDO_GOOGLE_PAY_ERROR";
     private static final String JUDO_USER_CANCELLED = "JUDO_USER_CANCELLED";
+    private static final String SDK_WRAPPER_NAME = "RNJudo";
 
     private final String ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private final SimpleDateFormat sdf = new SimpleDateFormat(ISO_FORMAT, Locale.ENGLISH);
@@ -76,7 +84,17 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     @Nonnull
     @Override
     public String getName() {
-        return "RNJudo";
+        return JudoReactNativeModule.SDK_WRAPPER_NAME;
+    }
+
+    @Override
+    public void onHostResume() {
+        // Activity `onResume`
+    }
+
+    @Override
+    public void onHostPause() {
+        // Activity `onPause`
     }
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -165,18 +183,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     }
 
     @Override
-    public void onHostResume() {
-        // Activity `onResume`
-    }
-
-    @Override
-    public void onHostPause() {
-        // Activity `onPause`
-    }
-
-    @Override
     public void onHostDestroy() {
-        // Activity `onDestroy`
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
             disposable = null;
@@ -186,7 +193,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private void finishGPayRequest(GooglePayRequest googlePayRequest) {
         final JudoApiService apiService = getJudo().getApiService(Objects.requireNonNull(getCurrentActivity()));
         Single<Receipt> apiRequest = apiService.googlePayPayment(googlePayRequest);
-        
+
         disposable = apiRequest
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -319,9 +326,83 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         return result;
     }
 
+    private void initGooglePayClient() {
+        if (googlePayClient == null) {
+            int googlePayEnvironment = WalletConstants.ENVIRONMENT_PRODUCTION;
+            if (options.getBoolean("googlePayTestEnvironment")) {
+                googlePayEnvironment = WalletConstants.ENVIRONMENT_TEST;
+            }
+            googlePayClient = GooglePaymentUtils.getGooglePayPaymentsClient(Objects.requireNonNull(
+                    getCurrentActivity()),
+                    googlePayEnvironment);
+        }
+    }
+
+    private Judo getJudo() {
+        Bundle bundle = new Bundle();
+        ReadableMap metadataMap = options.getMap("metaData");
+        assert metadataMap != null;
+        for (String keyName : metadataMap.toHashMap().keySet()) {
+            bundle.putString(keyName, metadataMap.getString(keyName));
+        }
+        EnumSet<PaymentMethod> paymentMethodEnumSet = EnumSet.noneOf(PaymentMethod.class);
+        if (options.hasKey("paymentMethods")) {
+            switch (options.getInt("paymentMethods")) {
+                case 1:
+                    paymentMethodEnumSet.add(PaymentMethod.CREATE_PAYMENT);
+                    break;
+                case 2:
+                    paymentMethodEnumSet.add(PaymentMethod.GPAY_PAYMENT);
+                    break;
+                case 3:
+                    paymentMethodEnumSet.add(PaymentMethod.CREATE_PAYMENT);
+                    paymentMethodEnumSet.add(PaymentMethod.GPAY_PAYMENT);
+                    break;
+                default:
+                    break;
+            }
+        }
+        Judo.Builder judoBuilder = new Judo.Builder()
+                .setJudoId(options.getString("judoId"))
+                .setApiToken(options.getString("token"))
+                .setApiSecret(options.getString("secret"))
+                .setEnvironment(options.getBoolean("isSandbox") ? SANDBOX : LIVE)
+                .setAmount(options.getString("amount"))
+                .setCurrency(options.getString("currency"))
+                .setConsumerReference(options.getString("consumerReference"))
+                .setPaymentReference(options.getString("paymentReference"))
+                .setMetaData(bundle)
+                .setPaymentMethod(paymentMethodEnumSet)
+        if (options.hasKey("isRequestContactDetails")) {
+            judoBuilder.setGPayRequireContactDetails(options.getBoolean("isRequestContactDetails"));
+        }
+        if (options.hasKey("isRequestBilling")) {
+            judoBuilder.setGPayRequireBillingDetails(options.getBoolean("isRequestBilling"));
+        }
+        if (options.hasKey("isRequestShipping")) {
+            judoBuilder.setGPayRequireShippingDetails(options.getBoolean("isRequestShipping"));
+        }
+        return judoBuilder.build();
+    }
+
+    @ReactMethod
+    public void showPaymentMethods(ReadableMap options, Promise promise) {
+        Activity currentActivity = getCurrentActivity();
+        if (currentActivity == null) {
+            promise.reject(ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist");
+            return;
+        }
+
+        this.promise = promise;
+        this.options = options;
+
+        Intent intent = new Intent(currentActivity, PaymentMethodActivity.class);
+        intent.putExtra(JUDO_OPTIONS, getJudo());
+        currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
+    }
+
     @ReactMethod
     public void makePayment(ReadableMap options, Promise promise) {
-        // TODO: validate options
         Activity currentActivity = getCurrentActivity();
         if (currentActivity == null) {
             promise.reject(ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist");
@@ -338,7 +419,6 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
 
     @ReactMethod
     public void makePreAuth(ReadableMap options, Promise promise) {
-        // TODO: validate options
         Activity currentActivity = getCurrentActivity();
         if (currentActivity == null) {
             promise.reject(ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist");
@@ -368,18 +448,6 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         });
     }
 
-    private void initGooglePayClient() {
-        if (googlePayClient == null) {
-            int googlePayEnvironment = WalletConstants.ENVIRONMENT_PRODUCTION;
-            if (options.getBoolean("googlePayTestEnvironment")) {
-                googlePayEnvironment = WalletConstants.ENVIRONMENT_TEST;
-            }
-            googlePayClient = GooglePaymentUtils.getGooglePayPaymentsClient(Objects.requireNonNull(
-                    getCurrentActivity()),
-                    googlePayEnvironment);
-        }
-    }
-
     @ReactMethod
     public void makeGooglePayPayment(ReadableMap options, final Promise promise) {
 
@@ -396,7 +464,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     }
 
     @ReactMethod
-    public void makeNativePayPayment(ReadableMap options, final Promise promise) {
+    public void makeNativePayment(ReadableMap options, final Promise promise) {
 
         this.promise = promise;
         this.options = options;
@@ -409,18 +477,5 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                 taskDefaultPaymentData,
                 Objects.requireNonNull(getCurrentActivity()),
                 Judo.GPAY_REQUEST);
-    }
-
-
-    private Judo getJudo() {
-        return new Judo.Builder()
-                .setJudoId(options.getString("judoId"))
-                .setApiToken(options.getString("token"))
-                .setApiSecret(options.getString("secret"))
-                .setEnvironment(options.getBoolean("isSandbox") ? SANDBOX : LIVE)
-                .setAmount(options.getString("amount"))
-                .setCurrency(options.getString("currency"))
-                .setConsumerReference(options.getString("consumerReference"))
-                .build();
     }
 }

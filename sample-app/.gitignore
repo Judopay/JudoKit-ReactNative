@@ -20,7 +20,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
+xcshareddata
 
 # Android/IntelliJ
 #
@@ -29,6 +29,7 @@ build/
 .gradle
 local.properties
 *.iml
+!debug.keystore
 
 # node.js
 #

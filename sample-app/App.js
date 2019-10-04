@@ -2,10 +2,10 @@
 
 import React from "react";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import { useScreens } from "react-native-screens";
+// import { useScreens } from "react-native-screens";
 import HomeScreen from "./screens/HomeScreen";
 
-useScreens();
+// useScreens();
 
 const AppNavigator = createStackNavigator({
   Home: {

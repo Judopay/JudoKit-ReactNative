@@ -7,14 +7,16 @@ import {
   Text,
   View,
   TouchableHighlight,
-  Image
+  Image,
+  requireNativeComponent
 } from "react-native";
 import { showMessage } from "../utils";
 import {
   RNJudo,
   type JudoOptions,
   type JudoApplePayOptions,
-  type JudoGooglePayOptions
+  type JudoGooglePayOptions,
+  type PaymentOptions
 } from "judo-react-native";
 
 type Props = {};
@@ -22,27 +24,32 @@ type State = {
   canUseApplePay: boolean,
   canUseGooglePay: boolean
 };
-var requireNativeComponent = require('requireNativeComponent')
 const NativePayButton = requireNativeComponent(
       'RNNativePayButton',
     );
 const judoOptions: JudoOptions = {
-  token: "Izx9omsBR15LatAl",
-  secret: "b5787124845533d8e68d12a586fa3713871b876b528600ebfdc037afec880cd6",
-  judoId: "100915867",
+  token: "<TOKEN>",
+  secret: "<SECRET>",
+  judoId: "<JUDO_ID>",
   isSandbox: true,
   amount: "0.01",
   currency: "GBP",
-  consumerReference: "myCustomerReference"
+  consumerReference: "myCustomerReference",
+  paymentReference: "myPaymentReference",
+  metaData: {metadatakey: "metadataValue", metadatakey2: "metadataValue2"}
 };
 
 const ApplePayTransactionType = {
   Payment: 0,
-  PreAuth: 1,
-  Refund: 2,
-  RegisterCard: 3,
-  SaveCard: 4
+  PreAuth: 1
 };
+
+const PaymentMethodType = {
+  None: 0,
+  Card: 1,
+  AppleGooglePay: 2,
+  All: 3
+}
 
 const ApplePayPaymentShippingType = {
   Shipping: 0,
@@ -69,16 +76,22 @@ const applePayOptions: JudoApplePayOptions = {
   countryCode: "GB",
   summaryLabel: "<MERCHANT_NAME>",
   transactionType: ApplePayTransactionType.Payment,
-  paymentShippingType: ApplePayPaymentShippingType.Delivery,
+  paymentShippingType: ApplePayPaymentShippingType.Shipping,
   paymentSummaryItems: [{label: "Purchased Item name", amount: "102.4"}],
   paymentShippingMethods: [applePayShippingMethod]
 };
 
 const googlePayOptions: JudoGooglePayOptions = {
   googlePayTestEnvironment: false,
-  countryCode: "GB",
   merchantId: "<MERCHANT_ID>",
-  isPayment: false // pre-auth
+  isPayment: false, // pre-auth
+  isRequestBilling: false,
+  isRequestContactDetails: false,
+  isRequestShipping: false
+};
+
+const paymentOptions: PaymentOptions = {
+  paymentMethods: PaymentMethodType.All
 };
 
 export default class HomeScreen extends React.Component<Props, State> {
@@ -163,9 +176,10 @@ export default class HomeScreen extends React.Component<Props, State> {
   async makeApplePayPayment(isPayment: boolean = true) {
     const title = isPayment ? "Apple Pay payment" : "Apple Pay pre-auth";
     applePayOptions.transactionType = isPayment ? ApplePayTransactionType.Payment : ApplePayTransactionType.PreAuth;
+    paymentOptions.paymentMethods = PaymentMethodType.AppleGooglePay;
     try {
-      let response = await RNJudo.makeApplePayPayment(
-        Object.assign({}, judoOptions, applePayOptions)
+      let response = await RNJudo.showPaymentMethods(
+        Object.assign({}, judoOptions, applePayOptions, paymentOptions)
       );
       if (response.result === "Success") {
         await showMessage(
@@ -189,9 +203,37 @@ export default class HomeScreen extends React.Component<Props, State> {
     }
   }
 
+  async selectPaymentMethod(isPayment: boolean = true) {
+    paymentOptions.paymentMethods = PaymentMethodType.All;
+    try {
+      let response = await RNJudo.showPaymentMethods(
+        Object.assign({}, judoOptions, applePayOptions, googlePayOptions, paymentOptions)
+      );
+      if (response.result === "Success") {
+        await showMessage(
+          `${title} successful`,
+          `ReceiptId: ${response.receiptId}`
+        );
+      } else {
+        await showMessage(`${"Select payment method"} error`, response.result);
+      }
+    } catch (e) {
+      if (e.code === "JUDO_ERROR" && e.userInfo.result === "Declined") {
+        await showMessage(
+          `${title} failed`,
+          "Card declined. Please try again and make sure the card details are correct."
+        );
+      } else {
+        let message =
+          e.message ?? "Something went wrong. Please try again later.";
+        await showMessage("Oops...", message);
+      }
+    }
+  }
+
   async makeNativePayment() {
     try {
-      let response = await RNJudo.makeNativePayPayment(
+      let response = await RNJudo.makeNativePayment(
         Object.assign({}, judoOptions, applePayOptions, googlePayOptions)
       );
       if (response.result === "Success") {
@@ -270,6 +312,8 @@ export default class HomeScreen extends React.Component<Props, State> {
           <View style={styles.spacing} />
           <Button title="Make pre-auth" onPress={() => this.makePreAuth()} />
           <View style={styles.spacing} />
+          <Button title="Select payment method" onPress={() => this.selectPaymentMethod()} />
+          <View style={styles.spacing} />
           {isIos ? (
             <Button
               disabled={!canUseApplePay}
@@ -300,12 +344,18 @@ export default class HomeScreen extends React.Component<Props, State> {
           <View style={styles.spacing} />
           <NativePayButton
             style={styles.payButtonStyle}
+            setStyle={GooglePayButtonStyle.Dark}
             onPayPress={() => this.makeNativePayment()}
           />
         </View>
       </View>
     );
   }
+}
+
+const GooglePayButtonStyle = {
+  Light: 0,
+  Dark: 1
 }
 
 const styles = StyleSheet.create({

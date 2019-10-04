@@ -35,7 +35,7 @@ RCT_EXPORT_VIEW_PROPERTY(onPayPress, RCTBubblingEventBlock)
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if ((self = [super initWithFrame:frame])) {
-    _applePayButton = [PKPaymentButton buttonWithType: PKPaymentButtonTypePlain style:PKPaymentButtonStyleBlack];
+    _applePayButton = [PKPaymentButton buttonWithType: PKPaymentButtonTypePlain style: PKPaymentButtonStyleBlack];
     [_applePayButton addTarget:self action:@selector(onPayPress:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_applePayButton];
   }
@@ -44,8 +44,7 @@ RCT_EXPORT_VIEW_PROPERTY(onPayPress, RCTBubblingEventBlock)
 
 - (void)onPayPress:(id)sender
 {
-  NSDictionary *data = @{};
-  self.onPayPress(data);
+  self.onPayPress(@{});
 }
 
 - (void)layoutSubviews

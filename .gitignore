@@ -27,7 +27,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
+xcshareddata
 
 
 # Android/IntelliJ
@@ -38,6 +38,7 @@ build/
 local.properties
 *.iml
 android/bin
+!debug.keystore
 
 # BUCK
 buck-out/
