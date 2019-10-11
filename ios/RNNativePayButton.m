@@ -14,7 +14,7 @@
 @implementation RNApplePayButtonManager
 
 RCT_EXPORT_MODULE(RNNativePayButton);
-RCT_EXPORT_VIEW_PROPERTY(onPayPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPayPress, RCTBubblingEventBlock);
 
 - (UIView *)view
 {
@@ -24,6 +24,8 @@ RCT_EXPORT_VIEW_PROPERTY(onPayPress, RCTBubblingEventBlock)
 @end
 
 @interface RNNativePayButton () <RCTRootViewDelegate>
+
+@property (nonatomic, strong) NSNumber *styleId;
 
 @end
 
@@ -35,7 +37,12 @@ RCT_EXPORT_VIEW_PROPERTY(onPayPress, RCTBubblingEventBlock)
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if ((self = [super initWithFrame:frame])) {
-    _applePayButton = [PKPaymentButton buttonWithType: PKPaymentButtonTypePlain style: PKPaymentButtonStyleBlack];
+    PKPaymentButtonStyle style = PKPaymentButtonStyleBlack;
+//    if ([self.styleId intValue] == 0) {
+//      style = PKPaymentButtonStyleWhite;
+//    }
+    _applePayButton = [PKPaymentButton buttonWithType: PKPaymentButtonTypePlain
+                                                style: style];
     [_applePayButton addTarget:self action:@selector(onPayPress:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_applePayButton];
   }
@@ -60,4 +67,12 @@ RCT_EXPORT_VIEW_PROPERTY(onPayPress, RCTBubblingEventBlock)
   (void)[super reactSubviews];
   return @[];
 }
+
+RCT_CUSTOM_VIEW_PROPERTY(setThemeStyle, NSNumber, RNNativePayButton)
+{
+  NSNumber *style = json ? [RCTConvert NSNumber:json] : 0;
+  self.styleId = style;
+  [self reactSubviews];
+}
+
 @end

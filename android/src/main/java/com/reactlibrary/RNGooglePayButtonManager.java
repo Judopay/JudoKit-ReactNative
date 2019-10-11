@@ -62,8 +62,8 @@ public class RNGooglePayButtonManager extends SimpleViewManager<RelativeLayout> 
         );
     }
 
-    @ReactProp(name = "setStyle")
-    public void setStyle(RelativeLayout view, @Nullable int styleId) {
+    @ReactProp(name = "setThemeStyle")
+    public void setThemeStyle(RelativeLayout view, @Nullable int styleId) {
         selectedStyle = stylesArray[styleId];
         view.invalidate();
     }

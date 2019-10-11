@@ -344,7 +344,7 @@ export default class HomeScreen extends React.Component<Props, State> {
           <View style={styles.spacing} />
           <NativePayButton
             style={styles.payButtonStyle}
-            setStyle={GooglePayButtonStyle.Dark}
+            setThemeStyle={GooglePayButtonStyle.Dark}
             onPayPress={() => this.makeNativePayment()}
           />
         </View>
