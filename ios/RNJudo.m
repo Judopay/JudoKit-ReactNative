@@ -105,7 +105,7 @@ RCT_REMAP_METHOD(showPaymentMethods,
     JudoKit *judoKit = [self judoKit];
     ApplePayConfiguration *applePayConfiguration = [self appleConfigWith: paymentMethod and: options];
     JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
-    
+
     [judoKit invokePayment:self.judoId
                     amount:judoAmount
          consumerReference:self.consumerReference

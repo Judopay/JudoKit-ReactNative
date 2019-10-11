@@ -1,7 +1,6 @@
 package com.reactlibrary;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -36,6 +35,29 @@ public class RNGooglePayButtonManager extends SimpleViewManager<RelativeLayout> 
 
     @Override
     public RelativeLayout createViewInstance(ThemedReactContext context) {
+        RelativeLayout container = new RelativeLayout(context);
+
+        container.addView(addGoogleButton(context));
+        return container;
+    }
+
+    @Override
+    public @Nullable
+    Map getExportedCustomDirectEventTypeConstants() {
+        return MapBuilder.of(
+                "onPayPress",
+                MapBuilder.of("registrationName", "onPayPress")
+        );
+    }
+
+    @ReactProp(name = "setThemeStyle")
+    public void setThemeStyle(RelativeLayout view, @Nullable int styleId) {
+        selectedStyle = stylesArray[styleId];
+        view.removeAllViews();
+        view.addView(addGoogleButton((ThemedReactContext)view.getContext()));
+    }
+
+    private RelativeLayout addGoogleButton(ThemedReactContext context) {
         final LayoutInflater mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         RelativeLayout googlePayButton = (RelativeLayout)mLayoutInflater.inflate(selectedStyle, null);
         googlePayButton.setOnClickListener(view -> {
@@ -52,20 +74,4 @@ public class RNGooglePayButtonManager extends SimpleViewManager<RelativeLayout> 
                 null
         );
     }
-
-    @Override
-    public @Nullable
-    Map getExportedCustomDirectEventTypeConstants() {
-        return MapBuilder.of(
-                "onPayPress",
-                MapBuilder.of("registrationName", "onPayPress")
-        );
-    }
-
-    @ReactProp(name = "setThemeStyle")
-    public void setThemeStyle(RelativeLayout view, @Nullable int styleId) {
-        selectedStyle = stylesArray[styleId];
-        view.invalidate();
-    }
-
 }
