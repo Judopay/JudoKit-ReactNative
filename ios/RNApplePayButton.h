@@ -2,7 +2,7 @@
 
 #import <React/RCTView.h>
 
-@interface RNNativePayButton : RCTView
+@interface RNApplePayButton : RCTView
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPayPress;
 @property (nonatomic, strong) NSNumber *styleId;

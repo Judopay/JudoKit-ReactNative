@@ -12,7 +12,7 @@
   "dependencies": {
     "judo-react-native": "file:../",
     "react": "16.9.0",
-    "react-native": "0.61.0",
+    "react-native": "0.61.2",
     "react-native-gesture-handler": "^1.2.0",
     "react-native-screens": "^1.0.0-alpha.22",
     "react-navigation": "^3.9.1"

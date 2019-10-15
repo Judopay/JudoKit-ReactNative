@@ -73,6 +73,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private static final String JUDO_GOOGLE_PAY_ERROR = "JUDO_GOOGLE_PAY_ERROR";
     private static final String JUDO_USER_CANCELLED = "JUDO_USER_CANCELLED";
     private static final String SDK_WRAPPER_NAME = "RNJudo";
+    private static final String PAYMENT_METHODS_KEY = "paymentMethods";
 
     private final String ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private final SimpleDateFormat sdf = new SimpleDateFormat(ISO_FORMAT, Locale.ENGLISH);
@@ -80,6 +81,11 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private ReadableMap options;
     private Disposable disposable;
     private PaymentsClient googlePayClient;
+
+    private static final String PAYMENT_METHOD_NONE = "PAYMENT_METHOD_NONE";
+    private static final String PAYMENT_METHOD_CARD = "PAYMENT_METHOD_CARD";
+    private static final String PAYMENT_METHOD_GOOGLE_PAY = "PAYMENT_METHOD_GOOGLE_PAY";
+    private static final String PAYMENT_METHOD_ALL = "PAYMENT_METHOD_ALL";
 
     @Nonnull
     @Override
@@ -95,6 +101,16 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     @Override
     public void onHostPause() {
         // Activity `onPause`
+    }
+
+    @Override
+    public Map<String, Object> getConstants() {
+        final Map<String, Object> constants = new HashMap<>();
+        constants.put(PAYMENT_METHOD_NONE, 0);
+        constants.put(PAYMENT_METHOD_CARD, 1);
+        constants.put(PAYMENT_METHOD_GOOGLE_PAY, 2);
+        constants.put(PAYMENT_METHOD_ALL, 3);
+        return constants;
     }
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -155,19 +171,22 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                             GooglePayRequest googlePayRequest = GooglePaymentUtils.createGooglePayRequest(getJudo(), paymentData);
                             finishGPayRequest(googlePayRequest);
                         } else {
-                            promise.reject(JUDO_ERROR, "LoadPaymentData failed. No payment data found.");
+                            promise.reject(JUDO_ERROR, "Google Pay error. No payment data.");
+                            promise = null;
                         }
                         break;
                     case Activity.RESULT_CANCELED:
                         promise.reject(JUDO_USER_CANCELLED, "User cancelled");
+                        promise = null;
                         break;
                     case AutoResolveHelper.RESULT_ERROR:
                         Status status = AutoResolveHelper.getStatusFromIntent(intent);
                         if (status != null) {
-                            promise.reject(JUDO_ERROR, String.format("LoadPaymentData failed. Error code: %d", status.getStatusCode()));
+                            promise.reject(JUDO_ERROR, String.format("Google Pay error. Code: %d", status.getStatusCode()));
                         } else {
-                            promise.reject(JUDO_ERROR, "LoadPaymentData failed");
+                            promise.reject(JUDO_ERROR, "Google Pay error");
                         }
+                        promise = null;
                         break;
                 }
             }
@@ -341,13 +360,13 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private Judo getJudo() {
         Bundle bundle = new Bundle();
         ReadableMap metadataMap = options.getMap("metaData");
-        assert metadataMap != null;
+        // assert metadataMap != null;
         for (String keyName : metadataMap.toHashMap().keySet()) {
             bundle.putString(keyName, metadataMap.getString(keyName));
         }
         EnumSet<PaymentMethod> paymentMethodEnumSet = EnumSet.noneOf(PaymentMethod.class);
-        if (options.hasKey("paymentMethods")) {
-            switch (options.getInt("paymentMethods")) {
+        if (options.hasKey(PAYMENT_METHODS_KEY)) {
+            switch (options.getInt(PAYMENT_METHODS_KEY)) {
                 case 1:
                     paymentMethodEnumSet.add(PaymentMethod.CREATE_PAYMENT);
                     break;
@@ -372,7 +391,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                 .setConsumerReference(options.getString("consumerReference"))
                 .setPaymentReference(options.getString("paymentReference"))
                 .setMetaData(bundle)
-                .setPaymentMethod(paymentMethodEnumSet)
+                .setPaymentMethod(paymentMethodEnumSet);
         if (options.hasKey("isRequestContactDetails")) {
             judoBuilder.setGPayRequireContactDetails(options.getBoolean("isRequestContactDetails"));
         }
@@ -435,8 +454,6 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
 
     @ReactMethod
     public void canUseGooglePay(ReadableMap options, final Promise promise) {
-
-        this.promise = promise;
         this.options = options;
         initGooglePayClient();
 
@@ -450,7 +467,6 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
 
     @ReactMethod
     public void makeGooglePayPayment(ReadableMap options, final Promise promise) {
-
         this.promise = promise;
         this.options = options;
         initGooglePayClient();
@@ -464,8 +480,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     }
 
     @ReactMethod
-    public void makeNativePayment(ReadableMap options, final Promise promise) {
-
+    public void makeGoogleNativePayment(ReadableMap options, final Promise promise) {
         this.promise = promise;
         this.options = options;
         initGooglePayClient();

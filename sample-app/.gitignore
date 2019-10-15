@@ -29,7 +29,7 @@ build/
 .gradle
 local.properties
 *.iml
-!debug.keystore
+*/**/fabric.properties
 
 # node.js
 #

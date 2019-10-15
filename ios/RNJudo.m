@@ -18,10 +18,6 @@
 @property (nonatomic, strong) RCTPromiseResolveBlock applePayResolve;
 @property (nonatomic, strong) RCTPromiseRejectBlock applePayReject;
 
-typedef enum PaymentType : NSUInteger {
-   Payment,
-   PreAuth,
-} PaymentType;
 
 @end
 
@@ -32,6 +28,22 @@ RCT_EXPORT_MODULE();
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
+}
+
+- (NSDictionary *)constantsToExport
+{
+  return @{ @"APPLE_PAY_TRANSACTION_PAYMENT": @0,
+            @"APPLE_PAY_TRANSACTION_PREAUTH": @1,
+            @"PAYMENT_METHOD_NONE": @0,
+            @"PAYMENT_METHOD_CARD": @1,
+            @"PAYMENT_METHOD_APPLE_PAY": @2,
+            @"PAYMENT_METHOD_ALL": @3,
+            @"APPLE_PAYMENT_SHIPPING": @0,
+            @"APPLE_PAYMENT_DELIVERY": @1,
+            @"APPLE_PAYMENT_STORE_PICKUP": @2,
+            @"APPLE_PAYMENT_SERVICE_PICKUP": @3,
+            @"APPLE_PAYMENT_SUMMARY_FINAL": @0,
+            @"APPLE_PAYMENT_SUMMARY_PENDING": @1 };
 }
 
 RCT_REMAP_METHOD(makePayment,
@@ -47,7 +59,8 @@ RCT_REMAP_METHOD(makePayment,
                                             paymentReference:self.paymentReference
                                                     metaData:self.metaData];
 
-    [judoKit invokePayment:self.judoId amount:judoAmount
+    [judoKit invokePayment:self.judoId
+                    amount:judoAmount
                  reference:judoReference
                cardDetails:nil completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
 }
@@ -66,7 +79,8 @@ RCT_REMAP_METHOD(makePreAuth,
                                                     metaData:self.metaData];
 
     [judoKit invokePreAuth:self.judoId
-                    amount:judoAmount reference:judoReference
+                    amount:judoAmount
+                 reference:judoReference
                cardDetails:nil
                 completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
 }
@@ -79,19 +93,21 @@ RCT_REMAP_METHOD(canUseApplePay,
     resolve([NSNumber numberWithBool:canUse]);
 }
 
-RCT_REMAP_METHOD(makeNativePayment,
+RCT_REMAP_METHOD(makeAppleNativePayment,
                  options:(NSDictionary *)options
-                 makeNativePaymentWithResolver:(RCTPromiseResolveBlock)resolve
+                 makeAppleNativePaymentWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     [self initWithOptions:options];
 
     JudoKit *judoKit = [self judoKit];
     PaymentMethods paymentMethod = PaymentMethodApplePay;
-    ApplePayConfiguration *applePayConfiguration = [self appleConfigWith: paymentMethod and: options];
+    ApplePayConfiguration *applePayConfiguration = [self appleConfigWith: paymentMethod
+                                                                     and: options];
 
     [judoKit invokeApplePayWithConfiguration: applePayConfiguration
-                                  completion: [self paymentCompletion:judoKit reject:reject resolve:resolve]];
+                                  completion: [self paymentCompletion:judoKit
+                                                               reject:reject resolve:resolve]];
 }
 
 RCT_REMAP_METHOD(showPaymentMethods,
@@ -137,39 +153,39 @@ RCT_REMAP_METHOD(showPaymentMethods,
 {
     ApplePayConfiguration *applePayConfiguration = nil;
     if (paymentMethod == PaymentMethodApplePay || paymentMethod == PaymentMethodsAll) {
-      PaymentShippingType paymentShippingType = [RCTConvert NSInteger:options[@"paymentShippingType"]];
-      TransactionType transactionType = [RCTConvert NSInteger:options[@"transactionType"]];
-      NSString *countryCode = [RCTConvert NSString:options[@"countryCode"]];
-      NSString *merchantIdentifier = [RCTConvert NSString:options[@"merchantId"]];
+        PaymentShippingType paymentShippingType = [RCTConvert NSInteger:options[@"paymentShippingType"]];
+        TransactionType transactionType = [RCTConvert NSInteger:options[@"transactionType"]];
+        NSString *countryCode = [RCTConvert NSString:options[@"countryCode"]];
+        NSString *merchantIdentifier = [RCTConvert NSString:options[@"merchantId"]];
 
-      NSMutableArray<PaymentSummaryItem *> * paymentSummaryItems = [NSMutableArray new];
-      for (NSDictionary *dict in options[@"paymentSummaryItems"]) {
-        [paymentSummaryItems addObject: [[PaymentSummaryItem alloc] initWithLabel:dict[@"label"]
-                                                                           amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]]];
-      }
+        NSMutableArray<PaymentSummaryItem *> * paymentSummaryItems = [NSMutableArray new];
+        for (NSDictionary *dict in options[@"paymentSummaryItems"]) {
+          [paymentSummaryItems addObject: [[PaymentSummaryItem alloc] initWithLabel:dict[@"label"]
+                                                                             amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]]];
+        }
 
-      NSMutableArray<PaymentShippingMethod *> * shippingMethods = [NSMutableArray new];
-      for (NSDictionary *dict in options[@"paymentShippingMethods"]) {
-        PaymentSummaryItemType itemType = [RCTConvert NSInteger:options[@"paymentSummaryItemType"]];
-        [shippingMethods addObject: [[PaymentShippingMethod alloc] initWithIdentifier:dict[@"identifier"]
-                                                                               detail:dict[@"detail"]
-                                                                                label:dict[@"label"]
-                                                                               amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]
-                                                                                 type:itemType]];
-      }
+        NSMutableArray<PaymentShippingMethod *> * shippingMethods = [NSMutableArray new];
+        for (NSDictionary *dict in options[@"paymentShippingMethods"]) {
+          PaymentSummaryItemType itemType = [RCTConvert NSInteger:options[@"paymentSummaryItemType"]];
+          [shippingMethods addObject: [[PaymentShippingMethod alloc] initWithIdentifier:dict[@"identifier"]
+                                                                                 detail:dict[@"detail"]
+                                                                                  label:dict[@"label"]
+                                                                                 amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]
+                                                                                   type:itemType]];
+        }
 
-      applePayConfiguration = [[ApplePayConfiguration alloc] initWithJudoId:self.judoId
-                                                                  reference:self.consumerReference
-                                                                 merchantId:merchantIdentifier
-                                                                   currency:self.currency
-                                                                countryCode:countryCode
-                                                        paymentSummaryItems:paymentSummaryItems];
-      applePayConfiguration.transactionType = transactionType;
-      applePayConfiguration.shippingType = paymentShippingType;
-      applePayConfiguration.requiredShippingContactFields = ContactFieldAll;
-      applePayConfiguration.requiredBillingContactFields = ContactFieldAll;
-      applePayConfiguration.returnedContactInfo = ReturnedInfoAll;
-      applePayConfiguration.shippingMethods = shippingMethods;
+        applePayConfiguration = [[ApplePayConfiguration alloc] initWithJudoId:self.judoId
+                                                                    reference:self.consumerReference
+                                                                   merchantId:merchantIdentifier
+                                                                     currency:self.currency
+                                                                  countryCode:countryCode
+                                                          paymentSummaryItems:paymentSummaryItems];
+        applePayConfiguration.transactionType = transactionType;
+        applePayConfiguration.shippingType = paymentShippingType;
+        applePayConfiguration.requiredShippingContactFields = ContactFieldAll;
+        applePayConfiguration.requiredBillingContactFields = ContactFieldAll;
+        applePayConfiguration.returnedContactInfo = ReturnedInfoAll;
+        applePayConfiguration.shippingMethods = shippingMethods;
     }
     return applePayConfiguration;
 }

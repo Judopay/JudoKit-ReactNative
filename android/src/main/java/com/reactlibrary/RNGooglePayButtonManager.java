@@ -18,15 +18,13 @@ import androidx.annotation.Nullable;
 
 public class RNGooglePayButtonManager extends SimpleViewManager<RelativeLayout> {
 
-    public static final String REACT_CLASS = "RNNativePayButton";
+    public static final String REACT_CLASS = "RNGooglePayButton";
 
     private int[] stylesArray = new int[]{
-            R.layout.googlepay_button,
-            R.layout.googlepay_button_dark
-
+            R.layout.googlepay_button_no_shadow
     };
 
-    private int selectedStyle = R.layout.googlepay_button;
+    private int selectedStyle = R.layout.googlepay_button_no_shadow;
 
     @Override
     public String getName() {
@@ -36,14 +34,12 @@ public class RNGooglePayButtonManager extends SimpleViewManager<RelativeLayout> 
     @Override
     public RelativeLayout createViewInstance(ThemedReactContext context) {
         RelativeLayout container = new RelativeLayout(context);
-
-        container.addView(addGoogleButton(context));
+        container.addView(addGoogleButton(context, container));
         return container;
     }
 
     @Override
-    public @Nullable
-    Map getExportedCustomDirectEventTypeConstants() {
+    public @Nullable Map getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
                 "onPayPress",
                 MapBuilder.of("registrationName", "onPayPress")
@@ -52,16 +48,20 @@ public class RNGooglePayButtonManager extends SimpleViewManager<RelativeLayout> 
 
     @ReactProp(name = "setThemeStyle")
     public void setThemeStyle(RelativeLayout view, @Nullable int styleId) {
-        selectedStyle = stylesArray[styleId];
+        try {
+           selectedStyle = stylesArray[styleId];
+        } catch (ArrayIndexOutOfBoundsException ex) {
+           selectedStyle = stylesArray[0];
+        }
         view.removeAllViews();
-        view.addView(addGoogleButton((ThemedReactContext)view.getContext()));
+        view.addView(addGoogleButton((ThemedReactContext)view.getContext(), view));
     }
 
-    private RelativeLayout addGoogleButton(ThemedReactContext context) {
+    private RelativeLayout addGoogleButton(ThemedReactContext context, RelativeLayout container) {
         final LayoutInflater mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         RelativeLayout googlePayButton = (RelativeLayout)mLayoutInflater.inflate(selectedStyle, null);
         googlePayButton.setOnClickListener(view -> {
-            onClickCalled(view, context);
+            onClickCalled(container, context);
         });
         return googlePayButton;
     }

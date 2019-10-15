@@ -1,5 +1,5 @@
 
-#import "RNNativePayButton.h"
+#import "RNApplePayButton.h"
 
 #import <React/RCTBridge.h>
 #import <React/RCTRootView.h>
@@ -13,24 +13,24 @@
 
 @implementation RNApplePayButtonManager
 
-RCT_EXPORT_MODULE(RNNativePayButton);
+RCT_EXPORT_MODULE(RNApplePayButton);
 RCT_EXPORT_VIEW_PROPERTY(onPayPress, RCTBubblingEventBlock);
 
-RCT_CUSTOM_VIEW_PROPERTY(setThemeStyle, NSNumber, RNNativePayButton) {
+RCT_CUSTOM_VIEW_PROPERTY(setThemeStyle, NSNumber, RNApplePayButton) {
   [view setStyleId:json ? [RCTConvert NSNumber:json] : [NSNumber numberWithInt: 0]];
   [view addButtonToView];
 }
 
 - (UIView *)view
 {
-  return [RNNativePayButton new];
+  return [RNApplePayButton new];
 }
 
 @end
 
-@implementation RNNativePayButton
+@implementation RNApplePayButton
 {
-  PKPaymentButton *_applePayButton;
+  PKPaymentButton *applePayButton;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -43,17 +43,17 @@ RCT_CUSTOM_VIEW_PROPERTY(setThemeStyle, NSNumber, RNNativePayButton) {
 
 - (void) addButtonToView
 {
-  if (_applePayButton != nil) {
-    [_applePayButton removeFromSuperview];
+  if (applePayButton != nil) {
+    [applePayButton removeFromSuperview];
   }
   PKPaymentButtonStyle style = PKPaymentButtonStyleWhite;
   if ([self.styleId intValue] == 1) {
     style = PKPaymentButtonStyleBlack;
   }
-  _applePayButton = [PKPaymentButton buttonWithType: PKPaymentButtonTypePlain
+  applePayButton = [PKPaymentButton buttonWithType: PKPaymentButtonTypePlain
                                               style: style];
-  [_applePayButton addTarget:self action:@selector(onPayPress:) forControlEvents:UIControlEventTouchUpInside];
-  [self addSubview:_applePayButton];
+  [applePayButton addTarget:self action:@selector(onPayPress:) forControlEvents:UIControlEventTouchUpInside];
+  [self addSubview: applePayButton];
 }
 
 - (void)onPayPress:(id)sender
@@ -63,15 +63,15 @@ RCT_CUSTOM_VIEW_PROPERTY(setThemeStyle, NSNumber, RNNativePayButton) {
 
 - (void)layoutSubviews
 {
-  float rootViewWidth = self.bounds.size.width;
-  float rootViewHeigh = self.bounds.size.height;
-  [_applePayButton setFrame:CGRectMake(0, 0, rootViewWidth, rootViewHeigh)];
+  float width = self.bounds.size.width;
+  float height = self.bounds.size.height;
+  [applePayButton setFrame:CGRectMake(0, 0, width, height)];
 }
 
 - (NSArray<UIView<RCTComponent> *> *)reactSubviews
 {
   // this is to avoid unregistering our RCTRootView when the component is removed from RN hierarchy
-  (void)[super reactSubviews];
+  [super reactSubviews];
   return @[];
 }
 
