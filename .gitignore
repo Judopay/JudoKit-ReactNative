@@ -38,6 +38,10 @@ build/
 local.properties
 *.iml
 android/bin
+gradlew
+gradlew.bat
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
 
 # BUCK
 buck-out/
