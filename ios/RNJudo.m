@@ -18,12 +18,16 @@
 @property (nonatomic, strong) RCTPromiseResolveBlock applePayResolve;
 @property (nonatomic, strong) RCTPromiseRejectBlock applePayReject;
 
-
 @end
 
 @implementation RNJudo
 
 RCT_EXPORT_MODULE();
+
+NSString *const PAYMENT_METHOD_NONE = @"PAYMENT_METHOD_NONE";
+NSString *const PAYMENT_METHOD_CARD = @"PAYMENT_METHOD_CARD";
+NSString *const PAYMENT_METHOD_APPLE_PAY = @"PAYMENT_METHOD_APPLE_PAY";
+NSString *const PAYMENT_METHOD_ALL = @"PAYMENT_METHOD_ALL";
 
 + (BOOL)requiresMainQueueSetup
 {
@@ -39,10 +43,10 @@ RCT_EXPORT_MODULE();
 {
   return @{ @"APPLE_PAY_TRANSACTION_PAYMENT": @0,
             @"APPLE_PAY_TRANSACTION_PREAUTH": @1,
-            @"PAYMENT_METHOD_NONE": @0,
-            @"PAYMENT_METHOD_CARD": @1,
-            @"PAYMENT_METHOD_APPLE_PAY": @2,
-            @"PAYMENT_METHOD_ALL": @3,
+            @"PAYMENT_METHOD_NONE": PAYMENT_METHOD_NONE,
+            @"PAYMENT_METHOD_CARD": PAYMENT_METHOD_CARD,
+            @"PAYMENT_METHOD_APPLE_PAY": PAYMENT_METHOD_APPLE_PAY,
+            @"PAYMENT_METHOD_ALL": PAYMENT_METHOD_ALL,
             @"APPLE_PAYMENT_SHIPPING": @0,
             @"APPLE_PAYMENT_DELIVERY": @1,
             @"APPLE_PAYMENT_STORE_PICKUP": @2,
@@ -124,7 +128,15 @@ RCT_REMAP_METHOD(showPaymentMethods,
 {
     [self initWithOptions:options];
 
-    PaymentMethods paymentMethod = [RCTConvert NSUInteger:options[@"paymentMethods"]];
+    PaymentMethods paymentMethod = PaymentMethodNone;
+    NSString *paymentMethodValue = [RCTConvert NSString:options[@"paymentMethods"]];
+    if ([paymentMethodValue isEqualToString:PAYMENT_METHOD_CARD]) {
+        paymentMethod = PaymentMethodCard;
+    } else if ([paymentMethodValue isEqualToString: PAYMENT_METHOD_APPLE_PAY]) {
+        paymentMethod = PaymentMethodApplePay;
+    } else if ([paymentMethodValue isEqualToString: PAYMENT_METHOD_ALL]) {
+        paymentMethod = PaymentMethodsAll;
+    }
     JudoKit *judoKit = [self judoKit];
     ApplePayConfiguration *applePayConfiguration = [self appleConfigWith: paymentMethod and: options];
     JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];

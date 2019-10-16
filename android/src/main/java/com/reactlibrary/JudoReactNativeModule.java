@@ -106,10 +106,10 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
-        constants.put(PAYMENT_METHOD_NONE, 0);
-        constants.put(PAYMENT_METHOD_CARD, 1);
-        constants.put(PAYMENT_METHOD_GOOGLE_PAY, 2);
-        constants.put(PAYMENT_METHOD_ALL, 3);
+        constants.put(PAYMENT_METHOD_NONE, PAYMENT_METHOD_NONE);
+        constants.put(PAYMENT_METHOD_CARD, PAYMENT_METHOD_CARD);
+        constants.put(PAYMENT_METHOD_GOOGLE_PAY, PAYMENT_METHOD_GOOGLE_PAY);
+        constants.put(PAYMENT_METHOD_ALL, PAYMENT_METHOD_ALL);
         return constants;
     }
 
@@ -367,14 +367,14 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         }
         EnumSet<PaymentMethod> paymentMethodEnumSet = EnumSet.noneOf(PaymentMethod.class);
         if (options.hasKey(PAYMENT_METHODS_KEY)) {
-            switch (options.getInt(PAYMENT_METHODS_KEY)) {
-                case 1:
+            switch (options.getString(PAYMENT_METHODS_KEY)) {
+                case PAYMENT_METHOD_CARD:
                     paymentMethodEnumSet.add(PaymentMethod.CREATE_PAYMENT);
                     break;
-                case 2:
+                case PAYMENT_METHOD_GOOGLE_PAY:
                     paymentMethodEnumSet.add(PaymentMethod.GPAY_PAYMENT);
                     break;
-                case 3:
+                case PAYMENT_METHOD_ALL:
                     paymentMethodEnumSet.add(PaymentMethod.CREATE_PAYMENT);
                     paymentMethodEnumSet.add(PaymentMethod.GPAY_PAYMENT);
                     break;

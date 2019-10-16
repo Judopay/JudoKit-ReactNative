@@ -67,7 +67,7 @@ const googlePayOptions: JudoGooglePayOptions = {
 };
 
 const paymentOptions: PaymentOptions = {
-  paymentMethods: RNJudo.PAYMENT_METHOD_ALL
+  paymentMethods: RNJudo.PAYMENT_METHOD_NONE
 };
 
 export default class HomeScreen extends React.Component<Props, State> {
