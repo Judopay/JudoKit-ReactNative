@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01E6699E2347361200B7C911 /* RNNativePayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E6699C2347361200B7C911 /* RNNativePayButton.m */; };
+		0190D32923570CFE00040223 /* RNApplePayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0190D32823570CFD00040223 /* RNApplePayButton.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNJudo.m */; };
 /* End PBXBuildFile section */
 
@@ -24,8 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		01E6699C2347361200B7C911 /* RNNativePayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNativePayButton.m; sourceTree = "<group>"; };
-		01E6699D2347361200B7C911 /* RNNativePayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNativePayButton.h; sourceTree = "<group>"; };
+		0190D32723570CFD00040223 /* RNApplePayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNApplePayButton.h; sourceTree = "<group>"; };
+		0190D32823570CFD00040223 /* RNApplePayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNApplePayButton.m; sourceTree = "<group>"; };
 		134814201AA4EA6300B7C361 /* libRNJudo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNJudo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3E7B5881CC2AC0600A0062D /* RNJudo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNJudo.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNJudo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNJudo.m; sourceTree = "<group>"; };
@@ -55,8 +55,8 @@
 			children = (
 				B3E7B5881CC2AC0600A0062D /* RNJudo.h */,
 				B3E7B5891CC2AC0600A0062D /* RNJudo.m */,
-				01E6699D2347361200B7C911 /* RNNativePayButton.h */,
-				01E6699C2347361200B7C911 /* RNNativePayButton.m */,
+				0190D32723570CFD00040223 /* RNApplePayButton.h */,
+				0190D32823570CFD00040223 /* RNApplePayButton.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -119,7 +119,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */,
-				01E6699E2347361200B7C911 /* RNNativePayButton.m in Sources */,
+				0190D32923570CFE00040223 /* RNApplePayButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

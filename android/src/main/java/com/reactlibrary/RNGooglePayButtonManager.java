@@ -48,10 +48,8 @@ public class RNGooglePayButtonManager extends SimpleViewManager<RelativeLayout> 
 
     @ReactProp(name = "setThemeStyle")
     public void setThemeStyle(RelativeLayout view, @Nullable int styleId) {
-        try {
-           selectedStyle = stylesArray[styleId];
-        } catch (ArrayIndexOutOfBoundsException ex) {
-           selectedStyle = stylesArray[0];
+        if (styleId > -1 && styleId < stylesArray.length) {
+          selectedStyle = stylesArray[styleId];
         }
         view.removeAllViews();
         view.addView(addGoogleButton((ThemedReactContext)view.getContext(), view));

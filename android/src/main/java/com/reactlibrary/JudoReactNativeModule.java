@@ -360,9 +360,10 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private Judo getJudo() {
         Bundle bundle = new Bundle();
         ReadableMap metadataMap = options.getMap("metaData");
-        // assert metadataMap != null;
-        for (String keyName : metadataMap.toHashMap().keySet()) {
-            bundle.putString(keyName, metadataMap.getString(keyName));
+        if (metadataMap != null) {
+          for (String keyName : metadataMap.toHashMap().keySet()) {
+              bundle.putString(keyName, metadataMap.getString(keyName));
+          }
         }
         EnumSet<PaymentMethod> paymentMethodEnumSet = EnumSet.noneOf(PaymentMethod.class);
         if (options.hasKey(PAYMENT_METHODS_KEY)) {
@@ -467,20 +468,6 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
 
     @ReactMethod
     public void makeGooglePayPayment(ReadableMap options, final Promise promise) {
-        this.promise = promise;
-        this.options = options;
-        initGooglePayClient();
-
-        PaymentDataRequest request = GooglePaymentUtils.createDefaultPaymentDataRequest(getJudo());
-
-        AutoResolveHelper.resolveTask(
-                googlePayClient.loadPaymentData(request),
-                Objects.requireNonNull(getCurrentActivity()),
-                LOAD_PAYMENT_DATA_REQUEST_CODE);
-    }
-
-    @ReactMethod
-    public void makeGoogleNativePayment(ReadableMap options, final Promise promise) {
         this.promise = promise;
         this.options = options;
         initGooglePayClient();

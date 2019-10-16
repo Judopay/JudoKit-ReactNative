@@ -25,6 +25,11 @@
 
 RCT_EXPORT_MODULE();
 
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
@@ -43,7 +48,9 @@ RCT_EXPORT_MODULE();
             @"APPLE_PAYMENT_STORE_PICKUP": @2,
             @"APPLE_PAYMENT_SERVICE_PICKUP": @3,
             @"APPLE_PAYMENT_SUMMARY_FINAL": @0,
-            @"APPLE_PAYMENT_SUMMARY_PENDING": @1 };
+            @"APPLE_PAYMENT_SUMMARY_PENDING": @1,
+            @"APPLE_PAY_BUTTON_THEME_LIGHT": @0,
+            @"APPLE_PAY_BUTTON_THEME_DARK": @1};
 }
 
 RCT_REMAP_METHOD(makePayment,
@@ -93,9 +100,9 @@ RCT_REMAP_METHOD(canUseApplePay,
     resolve([NSNumber numberWithBool:canUse]);
 }
 
-RCT_REMAP_METHOD(makeAppleNativePayment,
+RCT_REMAP_METHOD(makeApplePayPayment,
                  options:(NSDictionary *)options
-                 makeAppleNativePaymentWithResolver:(RCTPromiseResolveBlock)resolve
+                 makeApplePayPaymentWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     [self initWithOptions:options];
@@ -160,7 +167,7 @@ RCT_REMAP_METHOD(showPaymentMethods,
 
         NSMutableArray<PaymentSummaryItem *> * paymentSummaryItems = [NSMutableArray new];
         for (NSDictionary *dict in options[@"paymentSummaryItems"]) {
-          [paymentSummaryItems addObject: [[PaymentSummaryItem alloc] initWithLabel:dict[@"label"]
+            [paymentSummaryItems addObject: [[PaymentSummaryItem alloc] initWithLabel:dict[@"label"]
                                                                              amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]]];
         }
 
