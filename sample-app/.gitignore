@@ -29,7 +29,6 @@ build/
 .gradle
 local.properties
 *.iml
-*/**/fabric.properties
 gradlew
 gradlew.bat
 gradle/wrapper/gradle-wrapper.jar
