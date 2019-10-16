@@ -30,7 +30,10 @@ build/
 local.properties
 *.iml
 */**/fabric.properties
-android/gradle/wrapper/gradle-wrapper.jar
+gradlew
+gradlew.bat
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
 
 # node.js
 #
