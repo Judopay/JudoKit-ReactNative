@@ -1,21 +1,17 @@
 // @flow
-
-import React from "react";
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import HomeScreen from "./screens/HomeScreen";
+import React from 'react'
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import HomeScreen from './screens/HomeScreen'
 
 const AppNavigator = createStackNavigator({
   Home: {
-    screen: HomeScreen
-  }
-});
+    screen: HomeScreen,
+  },
+})
 
-const AppContainer = createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(AppNavigator)
 
-type Props = {};
-
-export default class App extends React.Component<Props> {
-  render() {
-    return <AppContainer />;
-  }
+export default () => {
+  return <AppContainer />
 }

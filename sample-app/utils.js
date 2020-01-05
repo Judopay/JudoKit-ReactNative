@@ -1,21 +1,23 @@
 // @flow
-
-import { Alert } from "react-native";
+import { Alert, Platform } from 'react-native'
 
 export const showMessage = async function(
   title: string,
   message: string,
-  onPress: () => void = () => {}
+  onPress: () => void = () => {},
 ) {
   await Alert.alert(
     title,
     message,
     [
       {
-        text: "OK",
-        onPress: onPress()
-      }
+        text: 'OK',
+        onPress: onPress(),
+      },
     ],
-    { cancelable: false }
-  );
-};
+    { cancelable: false },
+  )
+}
+
+export const isIos = Platform.OS === 'ios'
+export const isAndroid = Platform.OS === 'android'

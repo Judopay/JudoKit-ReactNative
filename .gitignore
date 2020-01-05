@@ -38,6 +38,7 @@ build/
 local.properties
 *.iml
 android/bin
+android/.classpath
 
 # BUCK
 buck-out/
