@@ -27,6 +27,7 @@ import com.judopay.PaymentActivity;
 import com.judopay.PaymentMethodActivity;
 import com.judopay.PreAuthActivity;
 import com.judopay.arch.GooglePaymentUtils;
+import com.judopay.error.JudoIdInvalidError;
 import com.judopay.model.CardToken;
 import com.judopay.model.Consumer;
 import com.judopay.model.GooglePayRequest;
@@ -107,7 +108,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                     case Activity.RESULT_OK:
                         PaymentData paymentData = PaymentData.getFromIntent(intent);
                         if (paymentData != null) {
-                            Judo judo = getJudo();
+                            Judo judo = getJudo(options);
                             if (judo == null) {
                                 promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
                                 promise = null;
@@ -171,7 +172,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     }
 
     private void handleGooglePayRequest(GooglePayRequest googlePayRequest) {
-        Judo judo = getJudo();
+        Judo judo = getJudo(options);
         if (judo == null) {
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             promise = null;
@@ -271,7 +272,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         return result;
     }
 
-    private Judo getJudo() {
+    private Judo getJudo(ReadableMap options) {
         Bundle bundle = new Bundle();
         ReadableMap metadataMap = options.getMap("metaData");
         if (metadataMap != null) {
@@ -319,7 +320,11 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
             judoBuilder.setGPayRequireShippingDetails(options.getBoolean("requireShippingDetails"));
         }
 
-        return judoBuilder.build();
+        try {
+            return judoBuilder.build();
+        } catch (JudoIdInvalidError e) {
+            return null;
+        }
     }
 
     private boolean isOptionsInvalid(ReadableMap options) {
@@ -356,12 +361,17 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             return;
         }
+        Judo judo = getJudo(options);
+        if (judo == null) {
+            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
+            return;
+        }
         this.promise = promise;
         this.options = options;
 
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
         Intent intent = new Intent(currentActivity, PaymentActivity.class);
-        intent.putExtra(JUDO_OPTIONS, getJudo());
+        intent.putExtra(JUDO_OPTIONS, judo);
         currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
     }
 
@@ -371,12 +381,17 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             return;
         }
+        Judo judo = getJudo(options);
+        if (judo == null) {
+            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
+            return;
+        }
         this.promise = promise;
         this.options = options;
 
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
         Intent intent = new Intent(currentActivity, PreAuthActivity.class);
-        intent.putExtra(JUDO_OPTIONS, getJudo());
+        intent.putExtra(JUDO_OPTIONS, judo);
         currentActivity.startActivityForResult(intent, PRE_AUTH_REQUEST);
     }
 
@@ -386,12 +401,17 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             return;
         }
+        Judo judo = getJudo(options);
+        if (judo == null) {
+            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
+            return;
+        }
         this.promise = promise;
         this.options = options;
 
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
         Intent intent = new Intent(currentActivity, PaymentMethodActivity.class);
-        intent.putExtra(JUDO_OPTIONS, getJudo());
+        intent.putExtra(JUDO_OPTIONS, judo);
         intent.putExtra(Judo.GPAY_PREAUTH, options.getInt("transactionType") == 1);
         currentActivity.startActivityForResult(intent, PAYMENT_METHOD);
     }
@@ -409,17 +429,16 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             return;
         }
+        Judo judo = getJudo(options);
+        if (judo == null) {
+            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
+            return;
+        }
         this.promise = promise;
         this.options = options;
 
         boolean isTestEnv = options.getBoolean("googlePayTestEnvironment");
         initGooglePayClient(isTestEnv);
-
-        Judo judo = getJudo();
-        if (judo == null) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
 
         PaymentDataRequest paymentDataRequest = GooglePaymentUtils.createDefaultPaymentDataRequest(judo);
         final Task<PaymentData> taskDefaultPaymentData = googlePayClient.loadPaymentData(paymentDataRequest);

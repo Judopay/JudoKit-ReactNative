@@ -107,7 +107,7 @@ const HomeScreen = () => {
         ...judoOptions,
         paymentReference: `myPaymentReference${Date.now()}`,
       })
-      debugger
+
       if (response && response.result === 'Success') {
         await showMessage(
           'Payment successful',
