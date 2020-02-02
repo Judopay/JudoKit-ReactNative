@@ -20,7 +20,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - JudoKitObjC (8.2.2):
+  - JudoKitObjC (9.0.0):
     - DeviceDNA
     - TrustKit
   - RCTRequired (0.61.5)
@@ -223,12 +223,12 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNGestureHandler (1.5.3):
     - React
-  - RNJudopay (2.0.0):
-    - JudoKitObjC (~> 8.0)
+  - RNJudopay (2.0.2):
+    - JudoKitObjC (~> 9.0)
     - React
   - RNScreens (1.0.0-alpha.23):
     - React
-  - TrustKit (1.6.3)
+  - TrustKit (1.6.4)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -237,7 +237,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKitObjC (~> 8.0)
+  - JudoKitObjC (~> 9.0)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -338,7 +338,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  JudoKitObjC: b2bb97abd5aa2df4486712a117d29986d14501a5
+  JudoKitObjC: a0c350c7ba8824cea16dd7ded871409e5d95fd65
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -359,11 +359,11 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
-  RNJudopay: 0e7ee56200bf466462d3d7d77f341acc53842c89
+  RNJudopay: 3c1f184004d1837492ea02a955da41896930cd3f
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
-  TrustKit: a2f0c3a926f0a3ce3c082db9a39f1f540dbb04cb
+  TrustKit: 578f77c59a23167e55b523d460bb495114ed0de7
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: fe57d01e30bc427a7cc7eaf9592a160256febf8b
+PODFILE CHECKSUM: a271433f93287f0a105f886bdd7316eebffd9738
 
 COCOAPODS: 1.8.4

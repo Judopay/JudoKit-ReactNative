@@ -159,8 +159,12 @@ RCT_REMAP_METHOD(showPaymentMethods,
                                                                                      type:itemType]];
         }
 
+        JPReference *judoReference = [self generateReferenceWith:self.consumerReference
+                                                paymentReference:self.paymentReference
+                                                        metaData:self.metaData];
+
         applePayConfiguration = [[ApplePayConfiguration alloc] initWithJudoId:self.judoId
-                                                                    reference:self.consumerReference
+                                                                    reference:judoReference
                                                                    merchantId:[RCTConvert NSString:options[@"merchantId"]]
                                                                      currency:self.currency
                                                                   countryCode:[RCTConvert NSString:options[@"countryCode"]]
