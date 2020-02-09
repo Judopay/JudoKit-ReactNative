@@ -60,6 +60,24 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
     ```
 
+## Update an existing project
+
+`yarn upgrade judo-react-native`
+
+### iOS
+
+- Update Cocoapods
+
+    `cd ios`
+
+    `pod repo update`
+
+    `pod update JudoKitObjC`
+
+### Android
+
+- Rebuild your project
+
 ## Usage
 
 with Flow:
