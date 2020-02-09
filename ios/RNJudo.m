@@ -114,13 +114,38 @@ RCT_REMAP_METHOD(showPaymentMethods,
     PaymentMethods paymentMethods = [RCTConvert NSInteger:options[@"paymentMethods"]];
     ApplePayConfiguration *applePayConfiguration = [self appleConfigWith:paymentMethods and:options];
 
+    // TODO: redirectCompletion added - BREAKING CHANGE!!!
     [judoKit invokePayment:self.judoId
                     amount:judoAmount
          consumerReference:self.consumerReference
             paymentMethods:paymentMethods
    applePayConfiguratation:applePayConfiguration
                cardDetails:nil
+        redirectCompletion:nil
                 completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
+}
+
+RCT_REMAP_METHOD(makeIDEALPayment,
+                 options:(NSDictionary *)options
+                 makeIDEALPaymentResolver:(RCTPromiseResolveBlock)resolve
+                 erejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self initWithOptions:options reject:reject]) {
+        return;
+    }
+
+    JudoKit *judoKit = [self judoKit];
+    // TODO: weird... amount is a double...
+    double judoAmount = [self.amount doubleValue];
+//    JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
+    JPReference *judoReference = [self generateReferenceWith:self.consumerReference
+                                            paymentReference:self.paymentReference
+                                                    metaData:self.metaData];
+
+    [judoKit invokeIDEALPaymentWithJudoId:self.judoId
+                                   amount:judoAmount
+                                reference:judoReference
+                       redirectCompletion:nil
+                               completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
 }
 
 - (JudoKit *)judoKit {

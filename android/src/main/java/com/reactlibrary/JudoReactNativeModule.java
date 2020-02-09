@@ -23,7 +23,6 @@ import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.WalletConstants;
 import com.judopay.Judo;
 import com.judopay.JudoApiService;
-import com.judopay.PaymentActivity;
 import com.judopay.PaymentMethodActivity;
 import com.judopay.PreAuthActivity;
 import com.judopay.arch.GooglePaymentUtils;
@@ -49,6 +48,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.judopay.Judo.GPAY_REQUEST;
+import static com.judopay.Judo.IDEAL_ORDER_ID;
+import static com.judopay.Judo.IDEAL_PAYMENT;
+import static com.judopay.Judo.IDEAL_SALE_STATUS;
+//import static com.judopay.Judo.IDEAL_STATUS; // IDEAL_SALE_STATUS ??
 import static com.judopay.Judo.JUDO_OPTIONS;
 import static com.judopay.Judo.JUDO_RECEIPT;
 import static com.judopay.Judo.LIVE;
@@ -78,8 +81,18 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                 return;
             }
 
-            if (requestCode == PAYMENT_REQUEST || requestCode == PRE_AUTH_REQUEST || requestCode == PAYMENT_METHOD) {
+            if (requestCode == PAYMENT_REQUEST || requestCode == PRE_AUTH_REQUEST || requestCode == PAYMENT_METHOD || requestCode == IDEAL_PAYMENT) {
                 switch (resultCode) {
+                    case Judo.IDEAL_SUCCESS:
+                        OrderStatus orderStatus = (OrderStatus) data.getSerializableExtra(IDEAL_SALE_STATUS);
+                        String orderId = data.getStringExtra(IDEAL_ORDER_ID);
+                        // TODO: resolve promise with some data
+//                        toast = Toast.makeText(this, orderId + " " + getString(orderStatus.getOrderStatusTextId()), Toast.LENGTH_SHORT);
+//                        toast.show();
+                        break;
+                    case Judo.IDEAL_ERROR:
+                        promise.reject(JUDO_ERROR, "iDEAL error");
+                        break;
                     case RESULT_SUCCESS:
                         Receipt receipt = intent.getParcelableExtra(JUDO_RECEIPT);
                         WritableMap result = convert(receipt);
@@ -370,9 +383,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         this.options = options;
 
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
-        Intent intent = new Intent(currentActivity, PaymentActivity.class);
-        intent.putExtra(JUDO_OPTIONS, judo);
-        currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
+        IdealPaymentActivity.openIdealScreen(currentActivity, judo);
     }
 
     @ReactMethod
@@ -414,6 +425,26 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         intent.putExtra(JUDO_OPTIONS, judo);
         intent.putExtra(Judo.GPAY_PREAUTH, options.getInt("transactionType") == 1);
         currentActivity.startActivityForResult(intent, PAYMENT_METHOD);
+    }
+
+    @ReactMethod
+    public void makeIDEALPayment(ReadableMap options, Promise promise) {
+        if (isOptionsInvalid(options)) {
+            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
+            return;
+        }
+        Judo judo = getJudo(options);
+        if (judo == null) {
+            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
+            return;
+        }
+        this.promise = promise;
+        this.options = options;
+
+        Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
+        Intent intent = new Intent(currentActivity, IdealPaymentActivity.class);
+        intent.putExtra(JUDO_OPTIONS, judo);
+        currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
     }
 
     @ReactMethod

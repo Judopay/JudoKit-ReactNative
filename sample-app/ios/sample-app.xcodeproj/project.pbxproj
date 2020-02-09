@@ -985,10 +985,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-sample-app/Pods-sample-app-resources.sh",
+				"${PODS_ROOT}/JudoKitObjC/Resources/icons.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKitObjC/JudoKitObjC.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icons.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKitObjC.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
