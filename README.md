@@ -4,44 +4,65 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
 ## Getting started
 
-`yarn add judo-react-native`
+- `yarn add judo-react-native`
 
-or
+    or if you use npm: `npm install judo-react-native --save`
 
-`npm install judo-react-native --save`
+### iOS
 
-### Mostly automatic installation
+- Make sure that the minimum deployment target is set to `11.0` or higher in your `ios/Podfile` :
 
-`react-native link judo-react-native`
+    `platform :ios, '11.0'`
 
-### Manual installation
+- Update Cocopods
 
-#### iOS
+    `cd ios`
 
-1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `judo-react-native` and add `RNJudo.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNJudo.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4. Run your project (`Cmd+R`)
+    `pod install`
 
-#### Android
+### Android
 
-1. Open up `android/app/src/main/java/[...]/MainApplication.java`
+- Make sure that `minSdkVersion` is set to 19 or higher in your `android/build.gradle`:
 
- - Add `import com.reactlibrary.JudoReactNativePackage;` to the imports at the top of the file
- - Add `new JudoReactNativePackage()` to the list returned by the `getPackages()` method
+    ```
+    buildscript {
+        ext {
+            buildToolsVersion = "28.0.3"
+            minSdkVersion = 19
+            compileSdkVersion = 28
+            targetSdkVersion = 28
+        }
+        ...
+    }
+    ```
 
-2. Append the following lines to `android/settings.gradle`:
-   ```
-   include ':judo-react-native'
-   project(':judo-react-native').projectDir = new File(rootProject.projectDir, 	'../node_modules/judo-react-native/android')
-   ```
+-  Add the Judopay maven repository to `allprojects / repositories` in your `android/build.gradle`:
 
-3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-   ```
-     compile project(':judo-react-native')
-   ```
+    ```
+    allprojects {
+        repositories {
+            mavenLocal()
+            maven {
+                // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+                url("$rootDir/../node_modules/react-native/android")
+            }
+            maven {
+                // Android JSC is installed from npm
+                url("$rootDir/../node_modules/jsc-android/dist")
+            }
+    
+            google()
+            jcenter()
+            maven { url 'https://jitpack.io' }
+            maven { url "http://dl.bintray.com/judopay/maven" }
+        }
+    }
+
+    ```
 
 ## Usage
+
+with Flow:
 
 ```javascript
 // @flow
@@ -82,3 +103,9 @@ async makePayment() {
     }
 };
 ```
+
+-
+
+with TypeScript:
+
+Coming soon...
