@@ -4111,7 +4111,7 @@ jsx-ast-utils@^2.2.1:
     object.assign "^4.1.0"
 
 "judo-react-native@file:..":
-  version "2.0.0"
+  version "2.1.0"
 
 kind-of@^1.1.0:
   version "1.1.0"

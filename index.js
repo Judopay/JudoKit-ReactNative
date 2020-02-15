@@ -20,7 +20,8 @@ type JudopayAPI = {
     ...JudoApplePayConfig,
     ...JudoGooglePayConfig,
     ...JudoPaymentMethodsConfig
-  }): Promise<?JudoResponse>
+  }): Promise<?JudoResponse>,
+  makeIDEALPayment(JudoConfig): Promise<?JudoIDEALResponse>
 };
 
 export type JudoResponse = {
@@ -42,6 +43,24 @@ export type JudoResponse = {
   risks?: any,
   device?: any,
   paymentToken?: any
+};
+
+export type JudoIDEALResponse = {
+  siteId: string,
+  paymentMethod: string,
+  merchantPaymentReference: string,
+  merchantConsumerReference: string,
+  orderDetails: JudoIDEALOrderDetails
+};
+
+export type JudoIDEALOrderDetails = {
+  orderStatus: string,
+  currency: string,
+  orderId: string,
+  timestamp: string,
+  amount: number,
+  refundedAmount: number,
+  orderFailureReason?: string
 };
 
 const Judopay = (NativeModules.RNJudo: JudopayAPI);

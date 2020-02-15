@@ -164,13 +164,27 @@ const HomeScreen = () => {
 
   const makeIDEALPayment = useCallback(async () => {
     try {
-      let response = await Judopay.makeIDEALPayment(judoOptions)
-      if (response && response.result === 'Success') {
-        await showMessage(`Successful`, `ReceiptId: ${response.receiptId}`)
+      let response = await Judopay.makeIDEALPayment({
+        ...judoOptions,
+        paymentReference: `hasToBeLongerThan39-myPaymentReference${Date.now()}`,
+      })
+      // MEMO: ignore everything on the response except orderDetails - other properties will be wrong/misleading
+      if (
+        response &&
+        response.orderDetails &&
+        response.orderDetails.orderStatus === 'SUCCEEDED'
+      ) {
+        await showMessage(
+          `Successful`,
+          `orderId: ${response.orderDetails.orderId}`,
+        )
       } else {
         await showMessage(
           'iDEAL payment error',
-          (response && response.result) || '',
+          (response &&
+            response.orderDetails &&
+            response.orderDetails.orderFailureReason) ||
+            '',
         )
       }
     } catch (e) {
