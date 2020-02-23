@@ -21,8 +21,10 @@ import com.google.android.gms.wallet.PaymentData;
 import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.WalletConstants;
+import com.judopay.IdealPaymentActivity;
 import com.judopay.Judo;
 import com.judopay.JudoApiService;
+import com.judopay.PaymentActivity;
 import com.judopay.PaymentMethodActivity;
 import com.judopay.PreAuthActivity;
 import com.judopay.arch.GooglePaymentUtils;
@@ -48,10 +50,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.judopay.Judo.GPAY_REQUEST;
-import static com.judopay.Judo.IDEAL_ORDER_ID;
 import static com.judopay.Judo.IDEAL_PAYMENT;
-import static com.judopay.Judo.IDEAL_SALE_STATUS;
-//import static com.judopay.Judo.IDEAL_STATUS; // IDEAL_SALE_STATUS ??
 import static com.judopay.Judo.JUDO_OPTIONS;
 import static com.judopay.Judo.JUDO_RECEIPT;
 import static com.judopay.Judo.LIVE;
@@ -83,20 +82,14 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
 
             if (requestCode == PAYMENT_REQUEST || requestCode == PRE_AUTH_REQUEST || requestCode == PAYMENT_METHOD || requestCode == IDEAL_PAYMENT) {
                 switch (resultCode) {
-                    case Judo.IDEAL_SUCCESS:
-                        OrderStatus orderStatus = (OrderStatus) data.getSerializableExtra(IDEAL_SALE_STATUS);
-                        String orderId = data.getStringExtra(IDEAL_ORDER_ID);
-                        // TODO: resolve promise with some data
-//                        toast = Toast.makeText(this, orderId + " " + getString(orderStatus.getOrderStatusTextId()), Toast.LENGTH_SHORT);
-//                        toast.show();
-                        break;
-                    case Judo.IDEAL_ERROR:
-                        promise.reject(JUDO_ERROR, "iDEAL error");
-                        break;
                     case RESULT_SUCCESS:
                         Receipt receipt = intent.getParcelableExtra(JUDO_RECEIPT);
-                        WritableMap result = convert(receipt);
-                        promise.resolve(result);
+                        if (receipt != null) {
+                            WritableMap result = convert(receipt);
+                            promise.resolve(result);
+                        } else {
+                            promise.reject(JUDO_ERROR, "Something went wrong");
+                        }
                         break;
                     case RESULT_CANCELED:
                         promise.reject(JUDO_USER_CANCELLED, "User cancelled");
@@ -111,8 +104,12 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                         break;
                     case RESULT_DECLINED:
                         Receipt declinedReceipt = intent.getParcelableExtra(JUDO_RECEIPT);
-                        WritableMap userInfo = convert(declinedReceipt);
-                        promise.reject(JUDO_ERROR, userInfo);
+                        if (declinedReceipt != null) {
+                            WritableMap userInfo = convert(declinedReceipt);
+                            promise.reject(JUDO_ERROR, userInfo);
+                        } else {
+                            promise.reject(JUDO_ERROR, "Something went wrong");
+                        }
                         break;
                 }
                 promise = null;
@@ -258,6 +255,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private WritableMap convert(CardToken cardDetail) {
         WritableMap result = new WritableNativeMap();
         result.putString("endDate", cardDetail.getEndDate());
+        //noinspection SpellCheckingInspection
         result.putString("cardLastfour", cardDetail.getLastFour());
         result.putString("cardToken", cardDetail.getToken());
         result.putInt("cardType", cardDetail.getType());
@@ -312,8 +310,13 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
             return null;
         }
 
+        String siteId = options.getString("siteId");
+        boolean idealEnabled = siteId != null && !siteId.isEmpty();
+
         Judo.Builder judoBuilder = new Judo.Builder()
                 .setJudoId(judoId)
+                .setSiteId(siteId)
+                .setIdealEnabled(idealEnabled)
                 .setApiToken(options.getString("token"))
                 .setApiSecret(options.getString("secret"))
                 .setEnvironment(options.getBoolean("isSandbox") ? SANDBOX : LIVE)
@@ -383,7 +386,9 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         this.options = options;
 
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
-        IdealPaymentActivity.openIdealScreen(currentActivity, judo);
+        Intent intent = new Intent(currentActivity, PaymentActivity.class);
+        intent.putExtra(JUDO_OPTIONS, judo);
+        currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
     }
 
     @ReactMethod
@@ -444,7 +449,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
         Intent intent = new Intent(currentActivity, IdealPaymentActivity.class);
         intent.putExtra(JUDO_OPTIONS, judo);
-        currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
+        currentActivity.startActivityForResult(intent, IDEAL_PAYMENT);
     }
 
     @ReactMethod

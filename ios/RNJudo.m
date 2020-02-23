@@ -8,6 +8,7 @@
 @property (nonatomic, strong) NSString *token;
 @property (nonatomic, strong) NSString *secret;
 @property (nonatomic, strong) NSString *judoId;
+@property (nonatomic, strong) NSString *siteId;
 @property BOOL isSandbox;
 @property (nonatomic, strong) NSString *amount;
 @property (nonatomic, strong) NSString *currency;
@@ -115,6 +116,7 @@ RCT_REMAP_METHOD(showPaymentMethods,
     ApplePayConfiguration *applePayConfiguration = [self appleConfigWith:paymentMethods and:options];
 
     [judoKit invokePayment:self.judoId
+                    siteId:self.siteId
                     amount:judoAmount
          consumerReference:self.consumerReference
             paymentMethods:paymentMethods
@@ -131,18 +133,13 @@ RCT_REMAP_METHOD(makeIDEALPayment,
         return;
     }
 
-    if (![self.currency isEqual: @"EUR"]) {
-        reject(@"JUDO_ERROR", @"Configuration error", nil);
-        return;
-    }
-
     JudoKit *judoKit = [self judoKit];
     JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
     JPReference *judoReference = [self generateReferenceWith:self.consumerReference
                                             paymentReference:self.paymentReference
                                                     metaData:self.metaData];
 
-    [judoKit invokeIDEALPaymentWithJudoId:self.judoId
+    [judoKit invokeIDEALPaymentWithSiteId:self.siteId
                                    amount:judoAmount
                                 reference:judoReference
                                completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
@@ -217,6 +214,7 @@ RCT_REMAP_METHOD(makeIDEALPayment,
     self.token = [RCTConvert NSString:options[@"token"]];
     self.secret = [RCTConvert NSString:options[@"secret"]];
     self.judoId = [RCTConvert NSString:options[@"judoId"]];
+    self.siteId = [RCTConvert NSString:options[@"siteId"]];
     self.isSandbox = [RCTConvert BOOL:options[@"isSandbox"]];
     self.amount = [RCTConvert NSString:options[@"amount"]];
     self.currency = [RCTConvert NSString:options[@"currency"]];

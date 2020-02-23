@@ -94,6 +94,7 @@ export type JudoConfig = {|
   token: string,
   secret: string,
   judoId: string,
+  siteId: string,
   isSandbox: boolean,
   amount: string,
   currency: string,

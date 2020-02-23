@@ -19,9 +19,10 @@ const judoOptions: JudoConfig = {
   token: '<TOKEN>',
   secret: '<SECRET>',
   judoId: '<JUDO_ID>',
+  siteId: '<SITE_ID>',
   isSandbox: true,
-  amount: '1.50',
-  currency: 'GBP',
+  amount: '1.00',
+  currency: 'EUR',
   consumerReference: 'myConsumerReference',
   paymentReference: 'myPaymentReference',
   metaData: {
@@ -166,25 +167,19 @@ const HomeScreen = () => {
     try {
       let response = await Judopay.makeIDEALPayment({
         ...judoOptions,
-        paymentReference: `hasToBeLongerThan39-myPaymentReference${Date.now()}`,
+        paymentReference: `myPaymentReference${Date.now()}`, // MEMO: max length = 39
       })
-      // MEMO: ignore everything on the response except orderDetails - other properties will be wrong/misleading
-      if (
-        response &&
-        response.orderDetails &&
-        response.orderDetails.orderStatus === 'SUCCEEDED'
-      ) {
+      // MEMO: response.orderDetails contains the information about the transaction - other properties on the response could be wrong or misleading
+      const orderDetails = (response && response.orderDetails) || {}
+      if (orderDetails.orderStatus === 'SUCCEEDED') {
         await showMessage(
           `Successful`,
-          `orderId: ${response.orderDetails.orderId}`,
+          `orderId: ${orderDetails.orderId || ''}`,
         )
       } else {
         await showMessage(
           'iDEAL payment error',
-          (response &&
-            response.orderDetails &&
-            response.orderDetails.orderFailureReason) ||
-            '',
+          orderDetails.orderFailureReason || '',
         )
       }
     } catch (e) {
