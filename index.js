@@ -21,7 +21,7 @@ type JudopayAPI = {
     ...JudoGooglePayConfig,
     ...JudoPaymentMethodsConfig
   }): Promise<?JudoResponse>,
-  makeIDEALPayment(JudoConfig): Promise<?JudoResponse>
+  makeIDEALPayment(JudoConfig): Promise<?JudoIDEALResponse>
 };
 
 export type JudoResponse = {
@@ -43,11 +43,10 @@ export type JudoResponse = {
   consumer?: any,
   risks?: any,
   device?: any,
-  paymentToken?: any,
-  orderDetails?: JudoIDEALOrderDetails
+  paymentToken?: any
 };
 
-export type JudoIDEALOrderDetails = {
+export type JudoIDEALResponse = {
   orderId?: string,
   orderStatus?: string,
   orderFailureReason?: string,

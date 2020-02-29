@@ -169,17 +169,12 @@ const HomeScreen = () => {
         ...judoOptions,
         paymentReference: `myPaymentReference${Date.now()}`, // MEMO: max length = 40
       })
-      // MEMO: response.orderDetails contains the information about the transaction - other properties on the response could be wrong or misleading
-      const orderDetails = (response && response.orderDetails) || {}
-      if (orderDetails.orderStatus === 'SUCCEEDED') {
-        await showMessage(
-          `Successful`,
-          `orderId: ${orderDetails.orderId || ''}`,
-        )
+      if (response && response.orderStatus === 'SUCCEEDED') {
+        await showMessage(`Successful`, `orderId: ${response.orderId || ''}`)
       } else {
         await showMessage(
           'iDEAL payment error',
-          orderDetails.orderFailureReason || '',
+          (response && response.orderFailureReason) || '',
         )
       }
     } catch (e) {

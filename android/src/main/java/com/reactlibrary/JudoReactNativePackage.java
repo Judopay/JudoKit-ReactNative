@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+@SuppressWarnings("unused")
 public class JudoReactNativePackage implements ReactPackage {
 
     @Nonnull

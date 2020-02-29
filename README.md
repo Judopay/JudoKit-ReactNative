@@ -14,11 +14,9 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
     `platform :ios, '11.0'`
 
-- Update Cocopods
+- Install Cocopods
 
-    `cd ios`
-
-    `pod install`
+    `cd ios && pod install`
 
 ### Android
 
@@ -27,10 +25,10 @@ Judopay's React Native module and sample app. This module is a wrapper around th
     ```
     buildscript {
         ext {
-            buildToolsVersion = "28.0.3"
+            buildToolsVersion = "29.0.3"
             minSdkVersion = 19
-            compileSdkVersion = 28
-            targetSdkVersion = 28
+            compileSdkVersion = 29
+            targetSdkVersion = 29
         }
         ...
     }
@@ -42,6 +40,9 @@ Judopay's React Native module and sample app. This module is a wrapper around th
     allprojects {
         repositories {
             mavenLocal()
+            google()
+            jcenter()
+            maven { url 'https://jitpack.io' }
             maven {
                 // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
                 url("$rootDir/../node_modules/react-native/android")
@@ -50,11 +51,7 @@ Judopay's React Native module and sample app. This module is a wrapper around th
                 // Android JSC is installed from npm
                 url("$rootDir/../node_modules/jsc-android/dist")
             }
-    
-            google()
-            jcenter()
-            maven { url 'https://jitpack.io' }
-            maven { url "http://dl.bintray.com/judopay/maven" }
+            maven { url 'http://dl.bintray.com/judopay/maven' }
         }
     }
 
@@ -68,11 +65,7 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
 - Update Cocoapods
 
-    `cd ios`
-
-    `pod repo update`
-
-    `pod update JudoKitObjC`
+    `cd ios && pod update JudoKitObjC`
 
 ### Android
 
@@ -80,7 +73,7 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
 ## Usage
 
-with Flow:
+with Flow
 
 ```javascript
 // @flow
@@ -91,6 +84,7 @@ async makePayment() {
         token: "<API_TOKEN>",
         secret: "<API_SECRET>",
         judoId: "<JUDO_ID>",
+        siteId: "<SITE_ID>",
         isSandbox: true,
         amount: "0.01",
         currency: "GBP",
@@ -122,8 +116,6 @@ async makePayment() {
 };
 ```
 
--
-
-with TypeScript:
+with TypeScript
 
 Coming soon...

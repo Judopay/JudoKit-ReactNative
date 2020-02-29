@@ -142,7 +142,21 @@ RCT_REMAP_METHOD(makeIDEALPayment,
     [judoKit invokeIDEALPaymentWithSiteId:self.siteId
                                    amount:judoAmount
                                 reference:judoReference
-                               completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
+                               completion:^(JPResponse *response, NSError *error) {
+        [judoKit.activeViewController dismissViewControllerAnimated:true completion:nil];
+        if (error) {
+            if (error.domain == JudoErrorDomain && error.code == JudoErrorUserDidCancel) {
+                reject(@"JUDO_USER_CANCELLED", @"User cancelled", nil);
+            } else {
+                reject(@"JUDO_ERROR", error.localizedDescription, error);
+            }
+        } else if (response.items.count == 1) {
+            NSDictionary *orderDetails = response.items[0].rawData[@"orderDetails"];
+            resolve(orderDetails);
+        } else {
+            resolve([NSNull null]);
+        }
+    }];
 }
 
 - (JudoKit *)judoKit {
