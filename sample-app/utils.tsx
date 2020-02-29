@@ -4,7 +4,7 @@ import { Alert, Platform } from 'react-native'
 export const showMessage = async function(
   title: string,
   message: string,
-  onPress: () => void = () => {},
+  onPress?: (value?: string) => void
 ) {
   await Alert.alert(
     title,

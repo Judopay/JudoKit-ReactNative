@@ -32,6 +32,7 @@ import com.judopay.error.JudoIdInvalidError;
 import com.judopay.model.CardToken;
 import com.judopay.model.Consumer;
 import com.judopay.model.GooglePayRequest;
+import com.judopay.model.OrderDetails;
 import com.judopay.model.PaymentMethod;
 import com.judopay.model.Receipt;
 import com.judopay.model.Risks;
@@ -85,7 +86,12 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                     case RESULT_SUCCESS:
                         Receipt receipt = intent.getParcelableExtra(JUDO_RECEIPT);
                         if (receipt != null) {
-                            WritableMap result = convert(receipt);
+                            WritableMap result;
+                            if (requestCode == IDEAL_PAYMENT) {
+                                result = convert(receipt.getOrderDetails());
+                            } else {
+                                result = convert(receipt);
+                            }
                             promise.resolve(result);
                         } else {
                             promise.reject(JUDO_ERROR, "Something went wrong");
@@ -283,6 +289,18 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         return result;
     }
 
+    private WritableMap convert(OrderDetails orderDetails) {
+        if (orderDetails == null) {
+            return null;
+        }
+        WritableMap result = new WritableNativeMap();
+        result.putString("orderId", orderDetails.getOrderId());
+        result.putString("orderStatus", orderDetails.getOrderStatus().name());
+        result.putString("orderFailureReason", orderDetails.getOrderFailureReason());
+        result.putString("timestamp", orderDetails.getTimestamp());
+        return result;
+    }
+
     private Judo getJudo(ReadableMap options) {
         Bundle bundle = new Bundle();
         ReadableMap metadataMap = options.getMap("metaData");
@@ -371,6 +389,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         return s == null || s.isEmpty();
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void makePayment(ReadableMap options, Promise promise) {
         if (isOptionsInvalid(options)) {
@@ -391,6 +410,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void makePreAuth(ReadableMap options, Promise promise) {
         if (isOptionsInvalid(options)) {
@@ -411,6 +431,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         currentActivity.startActivityForResult(intent, PRE_AUTH_REQUEST);
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void showPaymentMethods(ReadableMap options, Promise promise) {
         if (isOptionsInvalid(options)) {
@@ -432,6 +453,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         currentActivity.startActivityForResult(intent, PAYMENT_METHOD);
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void makeIDEALPayment(ReadableMap options, Promise promise) {
         if (isOptionsInvalid(options)) {
@@ -452,6 +474,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         currentActivity.startActivityForResult(intent, IDEAL_PAYMENT);
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void canUseGooglePay(ReadableMap options, final Promise promise) {
         boolean isTestEnv = options.getBoolean("googlePayTestEnvironment");
@@ -459,6 +482,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         GooglePaymentUtils.checkIsReadyGooglePay(googlePayClient, promise::resolve);
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void makeGooglePayPayment(ReadableMap options, final Promise promise) {
         if (isOptionsInvalid(options)) {

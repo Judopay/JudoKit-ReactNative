@@ -9,9 +9,9 @@ import {
   JudoPaymentSummaryItemType,
   JudoPaymentMethods,
   JudoPaymentShippingType,
-  type JudoConfig,
-  type JudoApplePayConfig,
-  type JudoGooglePayConfig,
+  JudoConfig,
+  JudoApplePayConfig,
+  JudoGooglePayConfig,
 } from 'judo-react-native'
 import { showMessage, isAndroid, isIos } from '../utils'
 
@@ -169,17 +169,12 @@ const HomeScreen = () => {
         ...judoOptions,
         paymentReference: `myPaymentReference${Date.now()}`, // MEMO: max length = 40
       })
-      // MEMO: response.orderDetails contains the information about the transaction - other properties on the response could be wrong or misleading
-      const orderDetails = (response && response.orderDetails) || {}
-      if (orderDetails.orderStatus === 'SUCCEEDED') {
-        await showMessage(
-          `Successful`,
-          `orderId: ${orderDetails.orderId || ''}`,
-        )
+      if (response && response.orderStatus === 'SUCCEEDED') {
+        await showMessage(`Successful`, `orderId: ${response.orderId || ''}`)
       } else {
         await showMessage(
           'iDEAL payment error',
-          orderDetails.orderFailureReason || '',
+          (response && response.orderFailureReason) || '',
         )
       }
     } catch (e) {
@@ -251,7 +246,7 @@ const HomeScreen = () => {
       let message = e.message || 'Something went wrong. Please try again later.'
       await showMessage('Oops...', message)
     }
-  })
+  }, [])
 
   return (
     <View style={styles.container}>

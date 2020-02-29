@@ -55,8 +55,11 @@ public class RNGooglePayButtonManager extends SimpleViewManager<RelativeLayout> 
 
     private RelativeLayout getGooglePayButton(View container) {
         final LayoutInflater mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        RelativeLayout googlePayButton = (RelativeLayout) mLayoutInflater.inflate(R.layout.googlepay_button_no_shadow, null);
-        googlePayButton.setOnClickListener(view -> context.getJSModule(RCTEventEmitter.class).receiveEvent(container.getId(), "onPayPress", null));
-        return googlePayButton;
+        if (mLayoutInflater != null) {
+            RelativeLayout googlePayButton = (RelativeLayout) mLayoutInflater.inflate(R.layout.googlepay_button_no_shadow, null);
+            googlePayButton.setOnClickListener(view -> context.getJSModule(RCTEventEmitter.class).receiveEvent(container.getId(), "onPayPress", null));
+            return googlePayButton;
+        }
+        return null;
     }
 }
