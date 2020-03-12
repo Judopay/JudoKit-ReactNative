@@ -19,9 +19,10 @@ const judoOptions: JudoConfig = {
   token: '<TOKEN>',
   secret: '<SECRET>',
   judoId: '<JUDO_ID>',
+  siteId: '<SITE_ID>',
   isSandbox: true,
-  amount: '1.50',
-  currency: 'GBP',
+  amount: '1.00',
+  currency: 'EUR',
   consumerReference: 'myConsumerReference',
   paymentReference: 'myPaymentReference',
   metaData: {
@@ -162,6 +163,25 @@ const HomeScreen = () => {
     }
   }, [])
 
+  const makeIDEALPayment = useCallback(async () => {
+    try {
+      let response = await Judopay.makeIDEALPayment({
+        ...judoOptions,
+        paymentReference: `myPaymentReference${Date.now()}`, // MEMO: max length = 40
+      })
+      if (response && response.orderStatus === 'SUCCEEDED') {
+        await showMessage(`Successful`, `orderId: ${response.orderId || ''}`)
+      } else {
+        await showMessage(
+          'iDEAL payment error',
+          (response && response.orderFailureReason) || '',
+        )
+      }
+    } catch (e) {
+      handleException(e, 'iDEAL transaction')
+    }
+  }, [])
+
   const makeApplePayPayment = useCallback(async () => {
     const title =
       applePayOptions.transactionType === JudoTransactionType.payment
@@ -239,6 +259,10 @@ const HomeScreen = () => {
         <OptionButton
           title="Select payment method"
           onPress={() => selectPaymentMethod()}
+        />
+        <OptionButton
+          title="iDEAL payment"
+          onPress={() => makeIDEALPayment()}
         />
         {isIos && canUseApplePay && (
           <JudoApplePayButton

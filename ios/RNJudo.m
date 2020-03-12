@@ -8,6 +8,7 @@
 @property (nonatomic, strong) NSString *token;
 @property (nonatomic, strong) NSString *secret;
 @property (nonatomic, strong) NSString *judoId;
+@property (nonatomic, strong) NSString *siteId;
 @property BOOL isSandbox;
 @property (nonatomic, strong) NSString *amount;
 @property (nonatomic, strong) NSString *currency;
@@ -115,12 +116,47 @@ RCT_REMAP_METHOD(showPaymentMethods,
     ApplePayConfiguration *applePayConfiguration = [self appleConfigWith:paymentMethods and:options];
 
     [judoKit invokePayment:self.judoId
+                    siteId:self.siteId
                     amount:judoAmount
          consumerReference:self.consumerReference
             paymentMethods:paymentMethods
    applePayConfiguratation:applePayConfiguration
                cardDetails:nil
                 completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
+}
+
+RCT_REMAP_METHOD(makeIDEALPayment,
+                 options:(NSDictionary *)options
+                 makeIDEALPaymentResolver:(RCTPromiseResolveBlock)resolve
+                 erejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self initWithOptions:options reject:reject]) {
+        return;
+    }
+
+    JudoKit *judoKit = [self judoKit];
+    JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
+    JPReference *judoReference = [self generateReferenceWith:self.consumerReference
+                                            paymentReference:self.paymentReference
+                                                    metaData:self.metaData];
+
+    [judoKit invokeIDEALPaymentWithSiteId:self.siteId
+                                   amount:judoAmount
+                                reference:judoReference
+                               completion:^(JPResponse *response, NSError *error) {
+        [judoKit.activeViewController dismissViewControllerAnimated:true completion:nil];
+        if (error) {
+            if (error.domain == JudoErrorDomain && error.code == JudoErrorUserDidCancel) {
+                reject(@"JUDO_USER_CANCELLED", @"User cancelled", nil);
+            } else {
+                reject(@"JUDO_ERROR", error.localizedDescription, error);
+            }
+        } else if (response.items.count == 1) {
+            NSDictionary *orderDetails = response.items[0].rawData[@"orderDetails"];
+            resolve(orderDetails);
+        } else {
+            resolve([NSNull null]);
+        }
+    }];
 }
 
 - (JudoKit *)judoKit {
@@ -192,6 +228,7 @@ RCT_REMAP_METHOD(showPaymentMethods,
     self.token = [RCTConvert NSString:options[@"token"]];
     self.secret = [RCTConvert NSString:options[@"secret"]];
     self.judoId = [RCTConvert NSString:options[@"judoId"]];
+    self.siteId = [RCTConvert NSString:options[@"siteId"]];
     self.isSandbox = [RCTConvert BOOL:options[@"isSandbox"]];
     self.amount = [RCTConvert NSString:options[@"amount"]];
     self.currency = [RCTConvert NSString:options[@"currency"]];

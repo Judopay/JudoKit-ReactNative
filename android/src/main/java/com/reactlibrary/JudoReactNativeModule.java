@@ -21,6 +21,7 @@ import com.google.android.gms.wallet.PaymentData;
 import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.WalletConstants;
+import com.judopay.IdealPaymentActivity;
 import com.judopay.Judo;
 import com.judopay.JudoApiService;
 import com.judopay.PaymentActivity;
@@ -31,6 +32,7 @@ import com.judopay.error.JudoIdInvalidError;
 import com.judopay.model.CardToken;
 import com.judopay.model.Consumer;
 import com.judopay.model.GooglePayRequest;
+import com.judopay.model.OrderDetails;
 import com.judopay.model.PaymentMethod;
 import com.judopay.model.Receipt;
 import com.judopay.model.Risks;
@@ -49,6 +51,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.judopay.Judo.GPAY_REQUEST;
+import static com.judopay.Judo.IDEAL_PAYMENT;
 import static com.judopay.Judo.JUDO_OPTIONS;
 import static com.judopay.Judo.JUDO_RECEIPT;
 import static com.judopay.Judo.LIVE;
@@ -78,12 +81,21 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                 return;
             }
 
-            if (requestCode == PAYMENT_REQUEST || requestCode == PRE_AUTH_REQUEST || requestCode == PAYMENT_METHOD) {
+            if (requestCode == PAYMENT_REQUEST || requestCode == PRE_AUTH_REQUEST || requestCode == PAYMENT_METHOD || requestCode == IDEAL_PAYMENT) {
                 switch (resultCode) {
                     case RESULT_SUCCESS:
                         Receipt receipt = intent.getParcelableExtra(JUDO_RECEIPT);
-                        WritableMap result = convert(receipt);
-                        promise.resolve(result);
+                        if (receipt != null) {
+                            WritableMap result;
+                            if (requestCode == IDEAL_PAYMENT) {
+                                result = convert(receipt.getOrderDetails());
+                            } else {
+                                result = convert(receipt);
+                            }
+                            promise.resolve(result);
+                        } else {
+                            promise.reject(JUDO_ERROR, "Something went wrong");
+                        }
                         break;
                     case RESULT_CANCELED:
                         promise.reject(JUDO_USER_CANCELLED, "User cancelled");
@@ -98,8 +110,12 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
                         break;
                     case RESULT_DECLINED:
                         Receipt declinedReceipt = intent.getParcelableExtra(JUDO_RECEIPT);
-                        WritableMap userInfo = convert(declinedReceipt);
-                        promise.reject(JUDO_ERROR, userInfo);
+                        if (declinedReceipt != null) {
+                            WritableMap userInfo = convert(declinedReceipt);
+                            promise.reject(JUDO_ERROR, userInfo);
+                        } else {
+                            promise.reject(JUDO_ERROR, "Something went wrong");
+                        }
                         break;
                 }
                 promise = null;
@@ -245,6 +261,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private WritableMap convert(CardToken cardDetail) {
         WritableMap result = new WritableNativeMap();
         result.putString("endDate", cardDetail.getEndDate());
+        //noinspection SpellCheckingInspection
         result.putString("cardLastfour", cardDetail.getLastFour());
         result.putString("cardToken", cardDetail.getToken());
         result.putInt("cardType", cardDetail.getType());
@@ -269,6 +286,18 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         }
         WritableMap result = new WritableNativeMap();
         result.putString("postCodeCheck", risks.getPostCodeCheck());
+        return result;
+    }
+
+    private WritableMap convert(OrderDetails orderDetails) {
+        if (orderDetails == null) {
+            return null;
+        }
+        WritableMap result = new WritableNativeMap();
+        result.putString("orderId", orderDetails.getOrderId());
+        result.putString("orderStatus", orderDetails.getOrderStatus().name());
+        result.putString("orderFailureReason", orderDetails.getOrderFailureReason());
+        result.putString("timestamp", orderDetails.getTimestamp());
         return result;
     }
 
@@ -299,8 +328,13 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
             return null;
         }
 
+        String siteId = options.getString("siteId");
+        boolean idealEnabled = siteId != null && !siteId.isEmpty();
+
         Judo.Builder judoBuilder = new Judo.Builder()
                 .setJudoId(judoId)
+                .setSiteId(siteId)
+                .setIdealEnabled(idealEnabled)
                 .setApiToken(options.getString("token"))
                 .setApiSecret(options.getString("secret"))
                 .setEnvironment(options.getBoolean("isSandbox") ? SANDBOX : LIVE)
@@ -355,6 +389,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         return s == null || s.isEmpty();
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void makePayment(ReadableMap options, Promise promise) {
         if (isOptionsInvalid(options)) {
@@ -375,6 +410,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void makePreAuth(ReadableMap options, Promise promise) {
         if (isOptionsInvalid(options)) {
@@ -395,6 +431,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         currentActivity.startActivityForResult(intent, PRE_AUTH_REQUEST);
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void showPaymentMethods(ReadableMap options, Promise promise) {
         if (isOptionsInvalid(options)) {
@@ -416,6 +453,28 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         currentActivity.startActivityForResult(intent, PAYMENT_METHOD);
     }
 
+    @SuppressWarnings("unused")
+    @ReactMethod
+    public void makeIDEALPayment(ReadableMap options, Promise promise) {
+        if (isOptionsInvalid(options)) {
+            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
+            return;
+        }
+        Judo judo = getJudo(options);
+        if (judo == null) {
+            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
+            return;
+        }
+        this.promise = promise;
+        this.options = options;
+
+        Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
+        Intent intent = new Intent(currentActivity, IdealPaymentActivity.class);
+        intent.putExtra(JUDO_OPTIONS, judo);
+        currentActivity.startActivityForResult(intent, IDEAL_PAYMENT);
+    }
+
+    @SuppressWarnings("unused")
     @ReactMethod
     public void canUseGooglePay(ReadableMap options, final Promise promise) {
         boolean isTestEnv = options.getBoolean("googlePayTestEnvironment");
@@ -423,6 +482,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         GooglePaymentUtils.checkIsReadyGooglePay(googlePayClient, promise::resolve);
     }
 
+    @SuppressWarnings("unused")
     @ReactMethod
     public void makeGooglePayPayment(ReadableMap options, final Promise promise) {
         if (isOptionsInvalid(options)) {

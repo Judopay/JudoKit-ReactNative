@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.version      = package["version"]
   s.summary      = "React Native module for Judopay"
   s.description  = package["description"]
-  s.homepage     = "https://github.com/Judopay/Judo-React-Native"
+  s.homepage     = "https://github.com/judopay/judo-reactnative"
   s.license      = { :file => 'LICENSE' }
   s.author       = { "Judopay" => "devteam@judopayments.com" }
   s.platform     = :ios, "11.0"
@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m}"
   s.requires_arc = true
   s.dependency "React"
-  s.dependency "JudoKitObjC", '~> 9.0'
+  s.dependency "JudoKitObjC", '~> 10.0'
 end

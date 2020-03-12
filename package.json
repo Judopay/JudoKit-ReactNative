@@ -1,15 +1,25 @@
 {
   "name": "judo-react-native",
   "title": "Judopay React Native module",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "index.js",
+    "android/src/main/AndroidManifest.xml",
+    "android/src/main/java/",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "ios/",
+    "RNJudopay.podspec",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Judopay/Judo-React-Native"
+    "url": "https://github.com/judopay/judo-reactnative"
   },
   "keywords": [
     "react-native",

@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 buildscript {
     repositories {
         google()
@@ -11,7 +13,7 @@ buildscript {
     dependencies {
         // Matches the RN Hello World template
         // https://github.com/facebook/react-native/blob/1e8f3b11027fe0a7514b4fc97d0798d3c64bc895/local-cli/templates/HelloWorld/android/build.gradle#L8
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.1'
     }
 }
 
@@ -22,10 +24,10 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
-def DEFAULT_COMPILE_SDK_VERSION = 28
-def DEFAULT_BUILD_TOOLS_VERSION = "29.0.2"
-def DEFAULT_MIN_SDK_VERSION = 16
-def DEFAULT_TARGET_SDK_VERSION = 28
+def DEFAULT_COMPILE_SDK_VERSION = 29
+def DEFAULT_BUILD_TOOLS_VERSION = "29.0.3"
+def DEFAULT_MIN_SDK_VERSION = 19
+def DEFAULT_TARGET_SDK_VERSION = 29
 
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
@@ -54,19 +56,25 @@ repositories {
         url "$projectDir/../node_modules/react-native/android"
     }
     mavenCentral()
+    google()
+    jcenter()
+    maven {
+        url "http://dl.bintray.com/judopay/maven"
+    }
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.judopay:android-sdk:8.+'
-    implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'com.judopay:android-sdk:9.+'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat-resources:1.1.0'
     implementation 'com.google.android.gms:play-services-wallet:18.0.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.13'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 }
 
 def configureReactNativePom(def pom) {
-    def packageJson = new groovy.json.JsonSlurper().parseText(file('../package.json').text)
+    def packageJson = new JsonSlurper().parseText(file('../package.json').text)
 
     pom.project {
         name packageJson.title
