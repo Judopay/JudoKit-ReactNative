@@ -6,21 +6,10 @@ interface JudopayAPI {
   makePayment(config: JudoConfig): Promise<JudoResponse | null>;
   makePreAuth(config: JudoConfig): Promise<JudoResponse | null>;
   canUseApplePay(): Promise<boolean>,
-  makeApplePayPayment({
-    ...JudoConfig,
-    ...JudoApplePayConfig
-  }): Promise<JudoResponse | null>;
+  makeApplePayPayment(config: JudoPaymentParams): Promise<JudoResponse | null>; //pass JudoConfig and JudoApplePayConfig objects
   canUseGooglePay(config: JudoGooglePayConfig): Promise<boolean>;
-  makeGooglePayPayment({
-    ...JudoConfig,
-    ...JudoGooglePayConfig
-  }): Promise<JudoResponse | null>;
-  showPaymentMethods({
-    ...JudoConfig,
-    ...JudoApplePayConfig,
-    ...JudoGooglePayConfig,
-    ...JudoPaymentMethodsConfig
-  }): Promise<JudoResponse | null>;
+  makeGooglePayPayment(config: JudoPaymentParams): Promise<JudoResponse | null>; //pass JudoConfig and JudoGooglePayConfig objects
+  showPaymentMethods(config: JudoPaymentParams): Promise<JudoResponse | null>; // pass JudoConfig, JudoApplePayConfig, JudoGooglePayConfig and JudoPaymentMethodsConfig objects
   makeIDEALPayment(config: JudoConfig): Promise<JudoIDEALResponse | null>;
 };
 
@@ -93,6 +82,13 @@ export interface JudoConfig {
   metaData?: { [string: string]: string },
   theme?: JudoTheme
 };
+
+export interface JudoPaymentParams {
+  judoConfig?: JudoConfig,
+  judoApplePayConfig?: JudoApplePayConfig,
+  judoGooglePayConfig?: JudoGooglePayConfig,
+  judoPaymentMethodsConfig?: JudoPaymentMethodsConfig
+}
 
 // iOS only. On Android theming works by overriding style definitions
 interface JudoTheme {

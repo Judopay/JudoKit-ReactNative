@@ -236,7 +236,7 @@ RCT_REMAP_METHOD(makeIDEALPayment,
     self.paymentReference = [RCTConvert NSString:options[@"paymentReference"]];
     self.metaData = [RCTConvert NSDictionary:options[@"metaData"]];
 
-    if ([self.token length] == 0 || [self.secret length] == 0 || [self.judoId length] < 9 || [self.amount length] == 0 || [self.currency length] == 0 || [self.consumerReference length] == 0 || [self.paymentReference length] == 0) {
+    if ([self.token length] == 0 || [self.secret length] == 0 || [self.amount length] == 0 || [self.currency length] == 0 || [self.consumerReference length] == 0 || [self.paymentReference length] == 0) {
         reject(@"JUDO_ERROR", @"Configuration error", nil);
         return NO;
     }
