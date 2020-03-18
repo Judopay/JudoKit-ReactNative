@@ -9,9 +9,11 @@ import {
   JudoPaymentSummaryItemType,
   JudoPaymentMethods,
   JudoPaymentShippingType,
+  JudoPaymentParams,
   JudoConfig,
   JudoApplePayConfig,
   JudoGooglePayConfig,
+  JudoPaymentMethodsConfig
 } from 'judo-react-native'
 import { showMessage, isAndroid, isIos } from '../utils'
 
@@ -103,10 +105,10 @@ const HomeScreen = () => {
   }, [])
 
   const makePayment = useCallback(async () => {
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     try {
-      let response = await Judopay.makePayment({
-        ...judoOptions,
-        paymentReference: `myPaymentReference${Date.now()}`,
+      const response = await Judopay.makePayment({
+        ...judoOptions
       })
 
       if (response && response.result === 'Success') {
@@ -123,10 +125,10 @@ const HomeScreen = () => {
   }, [])
 
   const makePreAuth = useCallback(async () => {
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     try {
-      let response = await Judopay.makePreAuth({
-        ...judoOptions,
-        paymentReference: `myPaymentReference${Date.now()}`,
+      const response = await Judopay.makePreAuth({
+        ...judoOptions
       })
       if (response && response.result === 'Success') {
         await showMessage(
@@ -142,13 +144,18 @@ const HomeScreen = () => {
   }, [])
 
   const selectPaymentMethod = useCallback(async () => {
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    const params: JudoPaymentParams = {
+      judoConfig: judoOptions,
+      judoApplePayConfig: applePayOptions,
+      judoGooglePayConfig: googlePayOptions,
+      judoPaymentMethodsConfig: {
+        paymentMethods: JudoPaymentMethods.all
+      }
+    }
     try {
-      let response = await Judopay.showPaymentMethods({
-        ...judoOptions,
-        ...applePayOptions,
-        ...googlePayOptions,
-        paymentReference: `myPaymentReference${Date.now()}`,
-        paymentMethods: JudoPaymentMethods.all,
+      const response = await Judopay.showPaymentMethods({
+        ...params
       })
       if (response && response.result === 'Success') {
         await showMessage(`Successful`, `ReceiptId: ${response.receiptId}`)
@@ -164,10 +171,10 @@ const HomeScreen = () => {
   }, [])
 
   const makeIDEALPayment = useCallback(async () => {
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}` // MEMO: max length = 40
     try {
-      let response = await Judopay.makeIDEALPayment({
-        ...judoOptions,
-        paymentReference: `myPaymentReference${Date.now()}`, // MEMO: max length = 40
+      const response = await Judopay.makeIDEALPayment({
+        ...judoOptions
       })
       if (response && response.orderStatus === 'SUCCEEDED') {
         await showMessage(`Successful`, `orderId: ${response.orderId || ''}`)
@@ -183,15 +190,18 @@ const HomeScreen = () => {
   }, [])
 
   const makeApplePayPayment = useCallback(async () => {
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    const params: JudoPaymentParams = {
+      judoConfig: judoOptions,
+      judoApplePayConfig: applePayOptions
+    }
     const title =
       applePayOptions.transactionType === JudoTransactionType.payment
         ? 'Apple Pay payment'
         : 'Apple Pay pre-auth'
     try {
-      let response = await Judopay.makeApplePayPayment({
-        ...judoOptions,
-        ...applePayOptions,
-        paymentReference: `myPaymentReference${Date.now()}`,
+      const response = await Judopay.makeApplePayPayment({
+        ...params
       })
       if (response && response.result === 'Success') {
         await showMessage(
@@ -207,15 +217,18 @@ const HomeScreen = () => {
   }, [])
 
   const makeGooglePayPayment = useCallback(async () => {
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    const params: JudoPaymentParams = {
+      judoConfig: judoOptions,
+      judoGooglePayConfig: googlePayOptions
+    }
     const title =
       googlePayOptions.transactionType == JudoTransactionType.payment
         ? 'Google Pay payment'
         : 'Google Pay pre-auth'
     try {
-      let response = await Judopay.makeGooglePayPayment({
-        ...judoOptions,
-        ...googlePayOptions,
-        paymentReference: `myPaymentReference${Date.now()}`,
+      const response = await Judopay.makeGooglePayPayment({
+        ...params
       })
       if (response && response.result === 'Success') {
         await showMessage(
@@ -243,7 +256,7 @@ const HomeScreen = () => {
         'Card declined. Please try again and make sure the card details are correct.',
       )
     } else {
-      let message = e.message || 'Something went wrong. Please try again later.'
+      const message = e.message || 'Something went wrong. Please try again later.'
       await showMessage('Oops...', message)
     }
   }, [])

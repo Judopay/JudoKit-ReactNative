@@ -6,17 +6,12 @@ export const showMessage = async function(
   message: string,
   onPress?: (value?: string) => void
 ) {
-  await Alert.alert(
-    title,
-    message,
-    [
-      {
-        text: 'OK',
-        onPress: onPress(),
-      },
-    ],
-    { cancelable: false },
-  )
+  Alert.alert(title, message, [
+    {
+      text: 'OK',
+      onPress: onPress,
+    },
+  ], { cancelable: false })
 }
 
 export const isIos = Platform.OS === 'ios'

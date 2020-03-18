@@ -1,6 +1,11 @@
 // @flow
 import React from "react";
-import { NativeModules, requireNativeComponent } from "react-native";
+import {
+  NativeModules,
+  requireNativeComponent,
+  StyleProp,
+  ViewStyle
+} from "react-native";
 
 interface JudopayAPI {
   makePayment(config: JudoConfig): Promise<JudoResponse | null>;
@@ -47,14 +52,15 @@ const Judopay = (NativeModules.RNJudo as JudopayAPI);
 const RNApplePayButton = requireNativeComponent("RNApplePayButton");
 type JudoApplePayButtonProps = {
   isDark: boolean,
-  onPayPress: () => any
+  onPayPress: () => any,
+  style: StyleProp<ViewStyle>
 };
 const JudoApplePayButton = ({
   isDark,
   onPayPress,
-  ...rest
+  style
 }: JudoApplePayButtonProps) => (
-  <RNApplePayButton isDark={isDark} onPayPress={onPayPress} {...rest} />
+  <RNApplePayButton isDark={isDark} onPayPress={onPayPress} style={style} />
 );
 
 const RNGooglePayButton = requireNativeComponent("RNGooglePayButton");
@@ -62,117 +68,117 @@ type JudoGooglePayButtonProps = JudoApplePayButtonProps;
 const JudoGooglePayButton = ({
   isDark, // not supported yet
   onPayPress,
-  ...rest
+  style
 }: JudoGooglePayButtonProps) => (
-  <RNGooglePayButton isDark={isDark} onPayPress={onPayPress} {...rest} />
+  <RNGooglePayButton isDark={isDark} onPayPress={onPayPress} style={style} />
 );
 
 export { Judopay, JudoApplePayButton, JudoGooglePayButton };
 
 export interface JudoConfig {
-  token: string,
-  secret: string,
-  judoId: string,
-  siteId: string,
-  isSandbox: boolean,
-  amount: string,
-  currency: string,
-  consumerReference: string,
-  paymentReference: string,
-  metaData?: { [string: string]: string },
-  theme?: JudoTheme
+  token: string;
+  secret: string;
+  judoId: string;
+  siteId: string;
+  isSandbox: boolean;
+  amount: string;
+  currency: string;
+  consumerReference: string;
+  paymentReference: string;
+  metaData?: { [string: string]: string };
+  theme?: JudoTheme;
 };
 
 export interface JudoPaymentParams {
-  judoConfig?: JudoConfig,
-  judoApplePayConfig?: JudoApplePayConfig,
-  judoGooglePayConfig?: JudoGooglePayConfig,
-  judoPaymentMethodsConfig?: JudoPaymentMethodsConfig
+  judoConfig: JudoConfig;
+  judoApplePayConfig?: JudoApplePayConfig;
+  judoGooglePayConfig?: JudoGooglePayConfig;
+  judoPaymentMethodsConfig?: JudoPaymentMethodsConfig;
 }
 
 // iOS only. On Android theming works by overriding style definitions
 interface JudoTheme {
-  tintColor?: number | null,
-  avsEnabled?: boolean,
-  showSecurityMessage?: boolean,
-  paymentButtonTitle?: string,
-  backButtonTitle?: string,
-  paymentTitle?: string,
-  loadingIndicatorProcessingTitle?: string,
-  inputFieldHeight?: number,
-  securityMessageString?: string,
-  securityMessageTextSize?: number,
-  textColor?: number | null,
-  navigationBarTitleColor?: number | null,
-  inputFieldTextColor?: number | null,
-  contentViewBackgroundColor?: number | null,
-  buttonColor?: number | null,
-  buttonTitleColor?: number | null,
-  loadingBackgroundColor?: number | null,
-  errorColor?: number | null,
-  loadingBlockViewColor?: number | null,
-  inputFieldBackgroundColor?: number | null,
-  buttonCornerRadius?: number,
-  buttonHeight?: number,
-  buttonSpacing?: number
+  tintColor?: number | null;
+  avsEnabled?: boolean;
+  showSecurityMessage?: boolean;
+  paymentButtonTitle?: string;
+  backButtonTitle?: string;
+  paymentTitle?: string;
+  loadingIndicatorProcessingTitle?: string;
+  inputFieldHeight?: number;
+  securityMessageString?: string;
+  securityMessageTextSize?: number;
+  textColor?: number | null;
+  navigationBarTitleColor?: number | null;
+  inputFieldTextColor?: number | null;
+  contentViewBackgroundColor?: number | null;
+  buttonColor?: number | null;
+  buttonTitleColor?: number | null;
+  loadingBackgroundColor?: number | null;
+  errorColor?: number | null;
+  loadingBlockViewColor?: number | null;
+  inputFieldBackgroundColor?: number | null;
+  buttonCornerRadius?: number;
+  buttonHeight?: number;
+  buttonSpacing?: number;
 };
 
-export const JudoTransactionType = {
-  payment: 0,
-  preAuth: 1
+export enum JudoTransactionType {
+  payment = 0,
+  preAuth = 1
 };
 
-export const JudoPaymentMethods = {
-  card: 1,
-  applePay: 2,
-  googlePay: 2,
-  all: 3
+export enum JudoPaymentMethods {
+  card = 1,
+  applePay = 2,
+  googlePay = 2,
+  all = 3
 };
 
-interface JudoPaymentMethodsConfig {
-  paymentMethods: 1 | 2 | 3 // JudoPaymentMethods
+export interface JudoPaymentMethodsConfig {
+  paymentMethods: JudoPaymentMethods;
 };
 
 interface JudoApplePayButtonStyle {
-  light: 0,
-  dark: 1
+  light: 0;
+  dark: 1;
 };
 
 export interface JudoGooglePayConfig {
-  googlePayTestEnvironment: boolean,
-  transactionType: 0 | 1, // JudoTransactionType
-  requireBillingDetails?: boolean,
-  requireContactDetails?: boolean,
-  requireShippingDetails?: boolean
+  googlePayTestEnvironment: boolean;
+  transactionType: JudoTransactionType;
+  requireBillingDetails?: boolean;
+  requireContactDetails?: boolean;
+  requireShippingDetails?: boolean;
 };
 
-export const JudoPaymentSummaryItemType = {
-  final: 0,
-  pending: 1
+export enum JudoPaymentSummaryItemType {
+  final = 0,
+  pending = 1
 };
 
 interface JudoApplePayShippingMethod {
-  identifier: string,
-  detail: string,
-  label: string,
-  amount: string,
-  paymentSummaryItemType: 0 | 1 // JudoPaymentSummaryItemType
+  identifier: string;
+  detail: string;
+  label: string;
+  amount: string;
+  paymentSummaryItemType: JudoPaymentSummaryItemType;
 };
 
-export const JudoPaymentShippingType = {
-  shipping: 0,
-  delivery: 1,
-  storePickup: 2,
-  servicePickup: 3
+export enum JudoPaymentShippingType {
+  shipping = 0,
+  delivery = 1,
+  storePickup = 2,
+  servicePickup = 3
 };
 
 export interface JudoApplePayConfig {
-  merchantId: string,
-  countryCode: string,
-  transactionType: 0 | 1, // JudoTransactionType
-  shippingType: 0 | 1 | 2 | 3, // JudoPaymentShippingType
-  shippingMethods: [JudoApplePayShippingMethod] | [],
-  requireBillingDetails?: boolean,
-  requireShippingDetails?: boolean,
-  summaryItems: [{ label: string, amount: string }]
+  merchantId: string;
+  countryCode: string;
+  transactionType: JudoTransactionType;
+  shippingType: JudoPaymentShippingType;
+  shippingMethods: [JudoApplePayShippingMethod] | [];
+  requireBillingDetails?: boolean;
+  requireShippingDetails?: boolean;
+  summaryItems: [{ label: string, amount: string }];
 };

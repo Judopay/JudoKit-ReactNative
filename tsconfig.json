@@ -9,9 +9,16 @@
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "resolveJsonModule": true,
+    "module": "esnext",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true
   },
   "exclude": [
+    "__tests__/**/*-test.ts",
     "node_modules",
     "babel.config.js",
     "metro.config.js",
