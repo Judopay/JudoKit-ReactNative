@@ -13,6 +13,10 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.6",
+    "@types/jest": "^25.1.4",
+    "@types/react": "^16.9.23",
+    "@types/react-native": "^0.61.21",
+    "@types/react-test-renderer": "^16.9.2",
     "judo-react-native": "file:../",
     "react": "16.9.0",
     "react-native": "0.61.5",
@@ -21,7 +25,8 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.2.0",
     "react-navigation": "^4.2.2",
-    "react-navigation-stack": "^2.2.2"
+    "react-navigation-stack": "^2.2.2",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

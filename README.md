@@ -73,10 +73,9 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
 ## Usage
 
-with Flow
+with TypeScript
 
 ```javascript
-// @flow
 import { Judopay, type JudoConfig } from "judo-react-native";
 
 async makePayment() {
@@ -89,12 +88,12 @@ async makePayment() {
         amount: "0.01",
         currency: "GBP",
         consumerReference: "myCustomerReference"
-	};
+	  };
+    options.paymentReference = "myUniquePaymentReference"
 
     try {
         let response = await Judopay.makePayment({
-            ...options,
-            paymentReference: "myUniquePaymentReference"
+            ...options
         });
 
         if (response.result === "Success") {
@@ -115,7 +114,3 @@ async makePayment() {
     }
 };
 ```
-
-with TypeScript
-
-Coming soon...
