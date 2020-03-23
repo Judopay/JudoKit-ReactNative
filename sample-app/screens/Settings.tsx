@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Text, Button, processColor } from 'react-native'
+import {
+  View,
+  SectionList,
+  Text,
+  Switch,
+  TouchableHighlight,
+  StyleSheet,
+  processColor
+} from 'react-native'
 import {
   JudoConfig,
   JudoApplePayConfig,
@@ -8,6 +16,9 @@ import {
   JudoPaymentShippingType,
   JudoTransactionType
 } from 'judo-react-native'
+import SafeAreaView from 'react-native-safe-area-view'
+import { SettingsData, SettingsPickType } from './SettingsData'
+import { showMessage } from '../utils'
 
 export const judoOptions: JudoConfig = {
   token: '<TOKEN>',
@@ -79,12 +90,115 @@ export const googlePayOptions: JudoGooglePayConfig = {
   requireShippingDetails: false,
 }
 
-const Settings = () => {
+function Item(item: any, index: number) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Settings</Text>
-    </View>
+    <TouchableHighlight
+      underlayColor='gray'
+      onPress={() => {ItemPressed(item)}}
+    >
+      <View style={styles.item}>
+        <View>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.subtitle}>{item.subtitle}</Text>
+        </View>
+        {item.type == SettingsPickType.switch
+          ? <Switch onValueChange = {() => {ItemPressed(item)}} value = {item.state} />
+          : <View />}
+
+      </View>
+    </TouchableHighlight>
   );
 }
+
+function ItemPressed(item: any) {
+  switch(item.type) {
+    case SettingsPickType.switch: {
+      console.log("before " + item.state);
+      item.state = !item.state
+      console.log("after " + item.state);
+      console.log("state " + this.state);
+      break;
+    }
+    case SettingsPickType.textPicker: {
+      showMessage(
+        '!!',
+        'textPicker',
+      )
+      break;
+    }
+    case SettingsPickType.singlePicker: {
+      showMessage(
+        '!!',
+        'singlePicker',
+      )
+      break;
+    }
+    case SettingsPickType.multiPicker: {
+      showMessage(
+        '!!',
+        'multiPicker',
+      )
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+}
+
+const Settings = () => {
+
+  return (
+    <SafeAreaView style={styles.container}>
+     <SectionList
+       sections={SettingsData}
+       keyExtractor={(item, index) => item.title + index}
+       renderItem={({ item, index }) => Item(item, index)}
+       renderSectionHeader={({ section: { title } }) => (
+         <View>
+          <View style={styles.separator}></View>
+          <Text style={styles.header}>{title}</Text>
+         </View>
+       )}
+     />
+   </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  separator: {
+    height: 2,
+    backgroundColor: '#e9e9e9'
+  },
+  container: {
+    flex: 1,
+  },
+  item: {
+    marginLeft: 70,
+    marginVertical: 8,
+    marginTop: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  header: {
+    marginLeft: 70,
+    fontSize: 20,
+    marginTop: 10,
+    marginBottom: 10,
+    fontWeight: 'normal',
+    color: '#7dbeb4'
+  },
+  title: {
+    fontSize: 18,
+    color: '#000',
+    width: 250
+  },
+  subtitle: {
+    fontSize: 15,
+    width: 250
+  }
+});
 
 export default Settings

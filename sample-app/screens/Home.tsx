@@ -1,7 +1,7 @@
 // @flow
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button, StatusBar, StyleSheet, Text, View } from 'react-native'
-import SafeAreaView from 'react-native-safe-area-view';
+import SafeAreaView from 'react-native-safe-area-view'
 import {
   Judopay,
   JudoApplePayButton,
