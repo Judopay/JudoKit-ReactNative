@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SectionList,
@@ -6,7 +6,7 @@ import {
   Switch,
   TouchableHighlight,
   StyleSheet,
-  processColor
+  processColor,
 } from 'react-native'
 import {
   JudoConfig,
@@ -90,79 +90,83 @@ export const googlePayOptions: JudoGooglePayConfig = {
   requireShippingDetails: false,
 }
 
-function Item(item: any, index: number) {
-  return (
-    <TouchableHighlight
-      underlayColor='gray'
-      onPress={() => {ItemPressed(item)}}
-    >
-      <View style={styles.item}>
-        <View>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.subtitle}>{item.subtitle}</Text>
+export default class Settings extends Component {
+  state = SettingsData
+
+  getListItem(item: any, index: number) {
+    return (
+      <TouchableHighlight
+        underlayColor='gray'
+        onPress={() => {this.itemPressed(item)}}
+      >
+        <View style={styles.item}>
+          <View>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.subtitle}>{item.subtitle}</Text>
+          </View>
+          {item.type == SettingsPickType.switch
+            ? <Switch onValueChange = {() => {this.itemPressed(item)}} value = {item.state} />
+            : <View />}
+
         </View>
-        {item.type == SettingsPickType.switch
-          ? <Switch onValueChange = {() => {ItemPressed(item)}} value = {item.state} />
-          : <View />}
+      </TouchableHighlight>
+    );
+  }
 
-      </View>
-    </TouchableHighlight>
-  );
-}
-
-function ItemPressed(item: any) {
-  switch(item.type) {
-    case SettingsPickType.switch: {
-      console.log("before " + item.state);
-      item.state = !item.state
-      console.log("after " + item.state);
-      console.log("state " + this.state);
-      break;
-    }
-    case SettingsPickType.textPicker: {
-      showMessage(
-        '!!',
-        'textPicker',
-      )
-      break;
-    }
-    case SettingsPickType.singlePicker: {
-      showMessage(
-        '!!',
-        'singlePicker',
-      )
-      break;
-    }
-    case SettingsPickType.multiPicker: {
-      showMessage(
-        '!!',
-        'multiPicker',
-      )
-      break;
-    }
-    default: {
-      break;
+  itemPressed(item: any) {
+    switch(item.type) {
+      case SettingsPickType.switch: {
+        console.log("before " + item.state);
+        item.state = !item.state
+        this.setState({item})
+        console.log("after " + item.state);
+        break;
+      }
+      case SettingsPickType.textPicker: {
+        showMessage(
+          '!!',
+          'textPicker',
+        )
+        break;
+      }
+      case SettingsPickType.singlePicker: {
+        showMessage(
+          '!!',
+          'singlePicker',
+        )
+        break;
+      }
+      case SettingsPickType.multiPicker: {
+        showMessage(
+          '!!',
+          'multiPicker',
+        )
+        break;
+      }
+      default: {
+        break;
+      }
     }
   }
-}
 
-const Settings = () => {
+  render() {
+    return (
+      <SafeAreaView style={styles.container}>
+       <SectionList
+         sections={this.state.list}
+         keyExtractor={(item, index) => item.title + index}
+         renderItem={({ item, index }) => this.getListItem(item, index)}
+         renderSectionHeader={({ section: { title } }) => (
+           <View>
+            <View style={styles.separator}></View>
+            <Text style={styles.header}>{title}</Text>
+           </View>
+         )}
+       />
+     </SafeAreaView>
+    );
+  }
 
-  return (
-    <SafeAreaView style={styles.container}>
-     <SectionList
-       sections={SettingsData}
-       keyExtractor={(item, index) => item.title + index}
-       renderItem={({ item, index }) => Item(item, index)}
-       renderSectionHeader={({ section: { title } }) => (
-         <View>
-          <View style={styles.separator}></View>
-          <Text style={styles.header}>{title}</Text>
-         </View>
-       )}
-     />
-   </SafeAreaView>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -200,5 +204,3 @@ const styles = StyleSheet.create({
     width: 250
   }
 });
-
-export default Settings

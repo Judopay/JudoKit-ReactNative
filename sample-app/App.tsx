@@ -2,8 +2,7 @@
 import React from 'react';
 import {
   TouchableHighlight,
-  Image,
-  StyleSheet
+  Image
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -52,12 +51,5 @@ function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-
-  button: {
-
-  }
-})
 
 export default App;
