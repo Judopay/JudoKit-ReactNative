@@ -123,24 +123,15 @@ export default class Settings extends Component {
         break;
       }
       case SettingsPickType.textPicker: {
-        showMessage(
-          '!!',
-          'textPicker',
-        )
+        //
         break;
       }
       case SettingsPickType.singlePicker: {
-        showMessage(
-          '!!',
-          'singlePicker',
-        )
+        //
         break;
       }
       case SettingsPickType.multiPicker: {
-        showMessage(
-          '!!',
-          'multiPicker',
-        )
+        //
         break;
       }
       default: {
