@@ -1,93 +1,19 @@
 // @flow
 import React, { useCallback, useEffect, useState } from 'react'
-import { Button, StyleSheet, Text, View, processColor } from 'react-native'
+import { Button, StatusBar, StyleSheet, Text, View } from 'react-native'
+import SafeAreaView from 'react-native-safe-area-view'
 import {
   Judopay,
   JudoApplePayButton,
   JudoGooglePayButton,
   JudoTransactionType,
-  JudoPaymentSummaryItemType,
   JudoPaymentMethods,
-  JudoPaymentShippingType,
   JudoPaymentParams,
-  JudoConfig,
-  JudoApplePayConfig,
-  JudoGooglePayConfig,
-  JudoPaymentMethodsConfig
 } from 'judo-react-native'
+import { judoOptions, applePayOptions, googlePayOptions } from './Settings'
 import { showMessage, isAndroid, isIos } from '../utils'
 
-const judoOptions: JudoConfig = {
-  token: '<TOKEN>',
-  secret: '<SECRET>',
-  judoId: '<JUDO_ID>',
-  siteId: '<SITE_ID>',
-  isSandbox: true,
-  amount: '1.00',
-  currency: 'EUR',
-  consumerReference: 'myConsumerReference',
-  paymentReference: 'myPaymentReference',
-  metaData: {
-    metadatakey: 'metadataValue',
-    metadatakey2: 'metadataValue2',
-  },
-  theme: {
-    // iOS only. On Android theming works by overriding style definitions
-    tintColor: processColor('#ff0000'),
-    avsEnabled: true,
-    showSecurityMessage: true,
-    paymentButtonTitle: 'Pay now',
-    backButtonTitle: 'Cancel',
-    paymentTitle: 'Pay £1.50',
-    loadingIndicatorProcessingTitle: 'Taking your money...',
-    inputFieldHeight: 65.5,
-    securityMessageString:
-      "This is the most secure way of paying you've ever experienced!",
-    securityMessageTextSize: 16,
-    textColor: processColor('#ac8805'),
-    navigationBarTitleColor: processColor('#ac0005'),
-    inputFieldTextColor: processColor('#66f'),
-    contentViewBackgroundColor: processColor('#ccc'),
-    buttonColor: processColor('#dd0'),
-    buttonTitleColor: processColor('#d00'),
-    loadingBackgroundColor: processColor('#33ffff33'),
-    errorColor: processColor('#600'),
-    loadingBlockViewColor: processColor('#3ff'),
-    inputFieldBackgroundColor: processColor('#dedede'),
-    buttonCornerRadius: 16,
-    buttonHeight: 80,
-    buttonSpacing: 64,
-  },
-}
-
-const applePayOptions: JudoApplePayConfig = {
-  merchantId: '<MERCHANT_ID>',
-  countryCode: 'GB',
-  transactionType: JudoTransactionType.preAuth,
-  shippingType: JudoPaymentShippingType.shipping,
-  shippingMethods: [
-    {
-      identifier: 'identifier for shiping method',
-      detail: 'shipping method description',
-      label: 'shipping method label',
-      amount: '10.0',
-      paymentSummaryItemType: JudoPaymentSummaryItemType.final,
-    },
-  ],
-  requireBillingDetails: true,
-  requireShippingDetails: false,
-  summaryItems: [{ label: 'Purchased item name', amount: '1.50' }],
-}
-
-const googlePayOptions: JudoGooglePayConfig = {
-  googlePayTestEnvironment: true,
-  transactionType: JudoTransactionType.preAuth,
-  requireBillingDetails: true,
-  requireContactDetails: false,
-  requireShippingDetails: false,
-}
-
-const HomeScreen = () => {
+const Home = () => {
   const [canUseApplePay, setCanUseApplePay] = useState(false)
   const [canUseGooglePay, setCanUseGooglePay] = useState(false)
 
@@ -262,37 +188,40 @@ const HomeScreen = () => {
   }, [])
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>
-        {`Welcome to the\nJudopay sample app!`}
-      </Text>
-      <View style={styles.buttons}>
-        <OptionButton title="Make payment" onPress={() => makePayment()} />
-        <OptionButton title="Make pre-auth" onPress={() => makePreAuth()} />
-        <OptionButton
-          title="Select payment method"
-          onPress={() => selectPaymentMethod()}
-        />
-        <OptionButton
-          title="iDEAL payment"
-          onPress={() => makeIDEALPayment()}
-        />
-        {isIos && canUseApplePay && (
-          <JudoApplePayButton
-            style={styles.payButtonStyle}
-            isDark={true}
-            onPayPress={() => makeApplePayPayment()}
+    <SafeAreaView style={[styles.container]}>
+      <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
+      <View style={styles.container}>
+        <Text style={styles.welcome}>
+          {`Welcome to the\nJudopay sample app!`}
+        </Text>
+        <View style={styles.buttons}>
+          <OptionButton title="Make payment" onPress={() => makePayment()} />
+          <OptionButton title="Make pre-auth" onPress={() => makePreAuth()} />
+          <OptionButton
+            title="Select payment method"
+            onPress={() => selectPaymentMethod()}
           />
-        )}
-        {isAndroid && canUseGooglePay && (
-          <JudoGooglePayButton
-            style={styles.payButtonStyle}
-            isDark={false}
-            onPayPress={() => makeGooglePayPayment()}
+          <OptionButton
+            title="iDEAL payment"
+            onPress={() => makeIDEALPayment()}
           />
-        )}
+          {isIos && canUseApplePay && (
+            <JudoApplePayButton
+              style={styles.payButtonStyle}
+              isDark={true}
+              onPayPress={() => makeApplePayPayment()}
+            />
+          )}
+          {isAndroid && canUseGooglePay && (
+            <JudoGooglePayButton
+              style={styles.payButtonStyle}
+              isDark={false}
+              onPayPress={() => makeGooglePayPayment()}
+            />
+          )}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -312,7 +241,7 @@ const OptionButton = ({
   )
 }
 
-HomeScreen.navigationOptions = {
+Home.navigationOptions = {
   title: 'Judopay Sample App',
 }
 
@@ -343,4 +272,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default HomeScreen
+export default Home
