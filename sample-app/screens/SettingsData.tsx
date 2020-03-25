@@ -7,12 +7,20 @@ export enum SettingsPickType {
   multiPicker,
 }
 
+export enum SettingsPickArray {
+  currencies,
+  cardNetworks,
+  payment,
+  googlePay,
+}
+
 export type SettingsListItem = {
   title: string,
   subtitle: string,
   type: SettingsPickType,
   value: any,
-  valueArray?: [string]
+  valueArray?: [string],
+  pickItems?: SettingsPickArray
 }
 
 export type PickerItem = {
@@ -43,6 +51,51 @@ export const Currencies = {
         { "entry": "SAR - Saudi Arabia Riyal", "value": "SAR" } as PickerItem,
         { "entry": "USD - United States Dollar", "value": "USD" } as PickerItem,
         { "entry": "ZAR - South Africa Rand", "value": "ZAR" } as PickerItem
+      ]
+    }
+  ]
+}
+
+export const CardNetworks = {
+  list: [
+    {
+      "data": [
+        { "entry": "Visa", "value": "VISA" } as PickerItem,
+        { "entry": "Master Card", "value": "MASTERCARD" } as PickerItem,
+        { "entry": "Maestro", "value": "MAESTRO" } as PickerItem,
+        { "entry": "AMEX", "value": "AMEX" } as PickerItem,
+        { "entry": "China Union Pay", "value": "CHINA_UNION_PAY" } as PickerItem,
+        { "entry": "JCB", "value": "JCB" } as PickerItem,
+        { "entry": "Discover", "value": "DISCOVER" } as PickerItem,
+        { "entry": "Diners Club", "value": "DINERS_CLUB" } as PickerItem,
+      ]
+    }
+  ]
+}
+
+export const GooglePayAddress = {
+  list: [
+    {
+      "data": [
+        { "entry": "Not required", "value": "NONE" } as PickerItem,
+        { "entry": "MIN: Name, country code, and postal code.", "value": "MIN" } as PickerItem,
+        {
+          "entry": "FULL: Name, street address, locality, region, country code, and postal code.",
+          "value": "FULL"
+        } as PickerItem
+      ]
+    }
+  ]
+}
+
+export const Payments = {
+  list: [
+    {
+      "data": [
+        { "entry": "Card", "value": "CARD" } as PickerItem,
+        { "entry": "iDeal", "value": "IDEAL" } as PickerItem,
+        { "entry": "Google Pay", "value": "GOOGLE_PAY" } as PickerItem
+
       ]
     }
   ]
@@ -98,7 +151,9 @@ export var SettingsData = {
               "title":"Currency",
               "subtitle":"Select currency",
               "type": SettingsPickType.singlePicker,
-              "value":"GBP - United Kingdom Pound"
+              "value":"GBP - United Kingdom Pound",
+              "pickItems": SettingsPickArray.currencies,
+              "valueArray": Array()
            } as SettingsListItem
         ]
      },
@@ -115,7 +170,9 @@ export var SettingsData = {
               "title":"Billing address",
               "subtitle":"Select address",
               "type": SettingsPickType.singlePicker,
-              "value":"FULL: Name, street address, locality, region, country code and postal code"
+              "value":"FULL: Name, street address, locality, region, country code and postal code",
+              "pickItems": SettingsPickArray.googlePay,
+              "valueArray": Array()
            } as SettingsListItem,
            {
               "title":"Billing address phone number",
@@ -148,17 +205,19 @@ export var SettingsData = {
         "data":[
            {
               "title":"Supported card networks",
-              "subtitle":"Card networks you want to support",
+              "subtitle":"Visa, Master card, Amex, JCB, Discover",
               "type": SettingsPickType.multiPicker,
               "value": "",
-              "valueArray": new Array()
+              "valueArray": new Array("VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"),
+              "pickItems": SettingsPickArray.cardNetworks
            } as SettingsListItem,
            {
               "title":"Payment methods",
-              "subtitle":"Payment methods you want to support",
+              "subtitle":"Card, iDeal",
               "type": SettingsPickType.multiPicker,
               "value": "",
-              "valueArray": new Array()
+              "valueArray": new Array("CARD", "IDEAL"),
+              "pickItems": SettingsPickArray.payment
            } as SettingsListItem
         ]
      }

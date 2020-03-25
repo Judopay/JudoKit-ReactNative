@@ -10,7 +10,17 @@ import {
 } from 'react-native'
 import Dialog from "react-native-dialog"
 import SafeAreaView from 'react-native-safe-area-view'
-import { SettingsData, SettingsPickType, SettingsListItem, Currencies, PickerItem } from './SettingsData'
+import {
+  SettingsData,
+  SettingsPickType,
+  SettingsListItem,
+  Currencies,
+  CardNetworks,
+  Payments,
+  GooglePayAddress,
+  PickerItem,
+  SettingsPickArray
+} from './SettingsData'
 
 export default class Settings extends Component {
   state = {
@@ -47,6 +57,7 @@ export default class Settings extends Component {
       var settingItem = this.state.settingSelected
       settingItem.value = item.value
       settingItem.subtitle = item.entry
+      console.log("item " + JSON.stringify(settingsItem))
       this.setState({settingItem})
       this.handleDialogCloseAction()
     } else {
@@ -58,13 +69,11 @@ export default class Settings extends Component {
         settingItem.valueArray!.push(item.value)
       }
       settingItem.subtitle = settingItem.valueArray!.toString()
-      console.log("items " + settingItem)
       this.setState({settingItem})
     }
   }
 
   handleSettingsItemPressed(item: SettingsListItem) {
-    console.log("item " + JSON.stringify(item))
     if (item.type == SettingsPickType.switch) {
       item.value = !item.value
       this.setState({item})
@@ -112,16 +121,23 @@ export default class Settings extends Component {
 
         <View style={[styles.listItem, { marginLeft: 0, marginRight: 0}]}>
           <Text style={styles.title}>{item.entry}</Text>
-          { settingsItem.valueArray!.indexOf(item.value, 0) > -1
-            ? <Image style={{ width: 30, height: 30, alignItems: 'center', padding: 10 }} source={require('../resources/ic_check.png')} />
+          { settingsItem.valueArray!.indexOf(item.value, 0) > -1 || settingsItem.value == item.value
+            ? <Image
+              style={{ width: 30, height: 30, alignItems: 'center', padding: 10 }}
+              source={require('../resources/ic_check.png')} />
             : <View />}
         </View>
       </TouchableHighlight>
     );
   }
 
-  getPickerDataList(item: SettingsListItem): any {
-    return Currencies.list
+  getPickerDataList(settingItem: SettingsListItem): any {
+    switch (settingItem.pickItems) {
+      case SettingsPickArray.currencies: return Currencies.list
+      case SettingsPickArray.cardNetworks: return CardNetworks.list
+      case SettingsPickArray.googlePay: return GooglePayAddress.list
+      case SettingsPickArray.payment: return Payments.list
+    }
   }
 
   getPickerType(settingsItem: SettingsListItem) {
@@ -146,8 +162,6 @@ export default class Settings extends Component {
   * Component lifecycle
   */
   render() {
-  console.log("settingSelected " + JSON.stringify(this.state.settingSelected))
-  console.log("textPickerVisible " + this.state.textPickerVisible)
     return (
       <SafeAreaView style={styles.container}>
       <SectionList
@@ -164,7 +178,7 @@ export default class Settings extends Component {
       <View>
         <Dialog.Container visible={this.state.textPickerVisible}>
           <Dialog.Title>{this.state.settingSelected.title}</Dialog.Title>
-          {this.getPickerType(this.state.settingSelected)!}
+          {this.getPickerType(this.state.settingSelected)}
           <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
           <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
         </Dialog.Container>
