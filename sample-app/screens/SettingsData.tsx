@@ -7,7 +7,7 @@ export enum SettingsPickType {
   multiPicker,
 }
 
-export const SettingsData = {
+export var SettingsData = {
   list: [
      {
         "title":"API Configurations",
@@ -21,22 +21,26 @@ export const SettingsData = {
            {
               "title":"Judo ID",
               "subtitle":"Your Judo ID",
-              "type": SettingsPickType.textPicker
+              "type": SettingsPickType.textPicker,
+              "value": ""
            },
            {
               "title":"Site ID",
               "subtitle":"Your Site ID",
-              "type": SettingsPickType.textPicker
+              "type": SettingsPickType.textPicker,
+              "value": ""
            },
            {
               "title":"Token",
               "subtitle":"Your API authorization token",
-              "type": SettingsPickType.textPicker
+              "type": SettingsPickType.textPicker,
+              "value": ""
            },
            {
               "title":"Secret",
               "subtitle":"Your API authorization secret",
-              "type": SettingsPickType.textPicker
+              "type": SettingsPickType.textPicker,
+              "value": ""
            }
         ]
      },
@@ -46,7 +50,8 @@ export const SettingsData = {
            {
               "title":"Amount",
               "subtitle":"0.15",
-              "type": SettingsPickType.textPicker
+              "type": SettingsPickType.textPicker,
+              "value": ""
            },
            {
               "title":"Currency",
@@ -90,7 +95,8 @@ export const SettingsData = {
            {
               "title":"Email address",
               "subtitle":"Turn on to request a email address",
-              "type": SettingsPickType.switch
+              "type": SettingsPickType.switch,
+              "state": false
            }
         ]
      },

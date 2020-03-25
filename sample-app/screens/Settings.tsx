@@ -8,6 +8,7 @@ import {
   StyleSheet,
   processColor,
 } from 'react-native'
+import Dialog from "react-native-dialog"
 import {
   JudoConfig,
   JudoApplePayConfig,
@@ -18,7 +19,6 @@ import {
 } from 'judo-react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import { SettingsData, SettingsPickType } from './SettingsData'
-import { showMessage } from '../utils'
 
 export const judoOptions: JudoConfig = {
   token: '<TOKEN>',
@@ -91,7 +91,32 @@ export const googlePayOptions: JudoGooglePayConfig = {
 }
 
 export default class Settings extends Component {
-  state = SettingsData
+  state = {
+    SettingsData,
+    dialogVisible: false,
+    dialogTitle: "",
+    dialogSubtitle: "",
+    dialogItemSelected: null
+  }
+
+  showTextInputDialog(item: any) {
+    this.setState({
+      dialogVisible: true,
+      dialogTitle: item.title,
+      dialogSubtitle: item.subtitle,
+      dialogItemSelected: item
+    });
+  };
+
+  handleDialogTextInputChange(text: string) {
+    var item: any = this.state.dialogItemSelected
+    item.value = text
+    this.setState({item})
+  }
+
+  handleCancel() {
+    this.setState({ dialogVisible: false });
+  };
 
   getListItem(item: any, index: number) {
     return (
@@ -102,7 +127,7 @@ export default class Settings extends Component {
         <View style={styles.item}>
           <View>
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.subtitle}>{item.subtitle}</Text>
+            <Text style={styles.subtitle}> {item.value ? item.value : item.subtitle}</Text>
           </View>
           {item.type == SettingsPickType.switch
             ? <Switch onValueChange = {() => {this.itemPressed(item)}} value = {item.state} />
@@ -116,15 +141,13 @@ export default class Settings extends Component {
   itemPressed(item: any) {
     switch(item.type) {
       case SettingsPickType.switch: {
-        console.log("before " + item.state);
         item.state = !item.state
         this.setState({item})
-        console.log("after " + item.state);
         break;
       }
       case SettingsPickType.textPicker: {
-        //
-        break;
+        console.log('Cancel Pressed')
+        this.showTextInputDialog(item)
       }
       case SettingsPickType.singlePicker: {
         //
@@ -144,7 +167,7 @@ export default class Settings extends Component {
     return (
       <SafeAreaView style={styles.container}>
        <SectionList
-         sections={this.state.list}
+         sections={this.state.SettingsData.list}
          keyExtractor={(item, index) => item.title + index}
          renderItem={({ item, index }) => this.getListItem(item, index)}
          renderSectionHeader={({ section: { title } }) => (
@@ -154,10 +177,17 @@ export default class Settings extends Component {
            </View>
          )}
        />
+       <View>
+        <Dialog.Container visible={this.state.dialogVisible}>
+          <Dialog.Title>{this.state.dialogTitle}</Dialog.Title>
+          <Dialog.Input wrapperStyle={styles.inputDialog} onChangeText={(text: string) => {this.handleDialogInputChange(text)}} />
+          <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+          <Dialog.Button label="Ok" onPress={this.handleCancel} />
+        </Dialog.Container>
+      </View>
      </SafeAreaView>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -176,6 +206,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  inputDialog: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#A9ADAE"
   },
   header: {
     marginLeft: 70,
