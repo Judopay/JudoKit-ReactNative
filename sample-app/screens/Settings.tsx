@@ -1,136 +1,98 @@
 import React, { Component } from 'react';
 import {
   View,
+  Image,
   SectionList,
   Text,
   Switch,
   TouchableHighlight,
-  StyleSheet,
-  processColor,
+  StyleSheet
 } from 'react-native'
 import Dialog from "react-native-dialog"
-import {
-  JudoConfig,
-  JudoApplePayConfig,
-  JudoGooglePayConfig,
-  JudoPaymentSummaryItemType,
-  JudoPaymentShippingType,
-  JudoTransactionType
-} from 'judo-react-native'
 import SafeAreaView from 'react-native-safe-area-view'
-import { SettingsData, SettingsPickType } from './SettingsData'
-
-export const judoOptions: JudoConfig = {
-  token: '<TOKEN>',
-  secret: '<SECRET>',
-  judoId: '<JUDO_ID>',
-  siteId: '<SITE_ID>',
-  isSandbox: true,
-  amount: '1.00',
-  currency: 'EUR',
-  consumerReference: 'myConsumerReference',
-  paymentReference: 'myPaymentReference',
-  metaData: {
-    metadatakey: 'metadataValue',
-    metadatakey2: 'metadataValue2',
-  },
-  theme: {
-    // iOS only. On Android theming works by overriding style definitions
-    tintColor: processColor('#ff0000'),
-    avsEnabled: true,
-    showSecurityMessage: true,
-    paymentButtonTitle: 'Pay now',
-    backButtonTitle: 'Cancel',
-    paymentTitle: 'Pay £1.50',
-    loadingIndicatorProcessingTitle: 'Taking your money...',
-    inputFieldHeight: 65.5,
-    securityMessageString:
-      "This is the most secure way of paying you've ever experienced!",
-    securityMessageTextSize: 16,
-    textColor: processColor('#ac8805'),
-    navigationBarTitleColor: processColor('#ac0005'),
-    inputFieldTextColor: processColor('#66f'),
-    contentViewBackgroundColor: processColor('#ccc'),
-    buttonColor: processColor('#dd0'),
-    buttonTitleColor: processColor('#d00'),
-    loadingBackgroundColor: processColor('#33ffff33'),
-    errorColor: processColor('#600'),
-    loadingBlockViewColor: processColor('#3ff'),
-    inputFieldBackgroundColor: processColor('#dedede'),
-    buttonCornerRadius: 16,
-    buttonHeight: 80,
-    buttonSpacing: 64,
-  },
-}
-
-export const applePayOptions: JudoApplePayConfig = {
-  merchantId: '<MERCHANT_ID>',
-  countryCode: 'GB',
-  transactionType: JudoTransactionType.preAuth,
-  shippingType: JudoPaymentShippingType.shipping,
-  shippingMethods: [
-    {
-      identifier: 'identifier for shiping method',
-      detail: 'shipping method description',
-      label: 'shipping method label',
-      amount: '10.0',
-      paymentSummaryItemType: JudoPaymentSummaryItemType.final,
-    },
-  ],
-  requireBillingDetails: true,
-  requireShippingDetails: false,
-  summaryItems: [{ label: 'Purchased item name', amount: '1.50' }],
-}
-
-export const googlePayOptions: JudoGooglePayConfig = {
-  googlePayTestEnvironment: true,
-  transactionType: JudoTransactionType.preAuth,
-  requireBillingDetails: true,
-  requireContactDetails: false,
-  requireShippingDetails: false,
-}
+import { SettingsData, SettingsPickType, SettingsListItem, Currencies, PickerItem } from './SettingsData'
 
 export default class Settings extends Component {
   state = {
     SettingsData,
-    dialogVisible: false,
-    dialogTitle: "",
-    dialogSubtitle: "",
-    dialogItemSelected: null
+    settingSelected: {} as SettingsListItem,
+    textPickerVisible: false
   }
 
-  showTextInputDialog(item: any) {
+  /**
+  * Show actions
+  */
+  showPickerDialog(item: SettingsListItem) {
     this.setState({
-      dialogVisible: true,
-      dialogTitle: item.title,
-      dialogSubtitle: item.subtitle,
-      dialogItemSelected: item
-    });
-  };
+      textPickerVisible: true,
+      settingSelected: item
+    })
+  }
 
+  /**
+  * Action handlers
+  */
   handleDialogTextInputChange(text: string) {
-    var item: any = this.state.dialogItemSelected
+    var item = this.state.settingSelected
     item.value = text
     this.setState({item})
   }
 
-  handleCancel() {
-    this.setState({ dialogVisible: false });
-  };
+  handleDialogCloseAction() {
+    this.setState({ textPickerVisible: false });
+  }
 
-  getListItem(item: any, index: number) {
+  handlePickerItemPressed(item: PickerItem, settingsItem: SettingsListItem) {
+    if (settingsItem.type == SettingsPickType.singlePicker) {
+      var settingItem = this.state.settingSelected
+      settingItem.value = item.value
+      settingItem.subtitle = item.entry
+      this.setState({settingItem})
+      this.handleDialogCloseAction()
+    } else {
+      var settingItem = this.state.settingSelected
+      const index = settingItem.valueArray!.indexOf(item.value, 0);
+      if (index > -1) {
+         settingItem.valueArray!.splice(index, 1);
+      } else {
+        settingItem.valueArray!.push(item.value)
+      }
+      settingItem.subtitle = settingItem.valueArray!.toString()
+      console.log("items " + settingItem)
+      this.setState({settingItem})
+    }
+  }
+
+  handleSettingsItemPressed(item: SettingsListItem) {
+    console.log("item " + JSON.stringify(item))
+    if (item.type == SettingsPickType.switch) {
+      item.value = !item.value
+      this.setState({item})
+    } else {
+      this.showPickerDialog(item)
+    }
+  }
+
+  /**
+  * Settings list setup
+  */
+  getSettingsListItem(item: SettingsListItem) {
     return (
       <TouchableHighlight
         underlayColor='gray'
-        onPress={() => {this.itemPressed(item)}}
+        onPress={() => {this.handleSettingsItemPressed(item)}}
       >
-        <View style={styles.item}>
+        <View style={styles.listItem}>
           <View>
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.subtitle}> {item.value ? item.value : item.subtitle}</Text>
+            <Text style={styles.subtitle}>
+            {item.value
+              && item.type == SettingsPickType.textPicker
+              ? item.value
+              : item.subtitle}</Text>
           </View>
           {item.type == SettingsPickType.switch
-            ? <Switch onValueChange = {() => {this.itemPressed(item)}} value = {item.state} />
+            ? <Switch onValueChange = {() => {this.handleSettingsItemPressed(item)}} value = {item.value} />
             : <View />}
 
         </View>
@@ -138,58 +100,90 @@ export default class Settings extends Component {
     );
   }
 
-  itemPressed(item: any) {
-    switch(item.type) {
-      case SettingsPickType.switch: {
-        item.state = !item.state
-        this.setState({item})
-        break;
-      }
-      case SettingsPickType.textPicker: {
-        console.log('Cancel Pressed')
-        this.showTextInputDialog(item)
-      }
-      case SettingsPickType.singlePicker: {
-        //
-        break;
-      }
-      case SettingsPickType.multiPicker: {
-        //
-        break;
-      }
-      default: {
-        break;
-      }
+  /**
+  * Pickers setup
+  */
+  getPickerListItem(item: PickerItem, settingsItem: SettingsListItem) {
+    return (
+      <TouchableHighlight
+        underlayColor='gray'
+        onPress={() => {this.handlePickerItemPressed(item, settingsItem)}}
+      >
+
+        <View style={[styles.listItem, { marginLeft: 0, marginRight: 0}]}>
+          <Text style={styles.title}>{item.entry}</Text>
+          { settingsItem.valueArray!.indexOf(item.value, 0) > -1
+            ? <Image style={{ width: 30, height: 30, alignItems: 'center', padding: 10 }} source={require('../resources/ic_check.png')} />
+            : <View />}
+        </View>
+      </TouchableHighlight>
+    );
+  }
+
+  getPickerDataList(item: SettingsListItem): any {
+    return Currencies.list
+  }
+
+  getPickerType(settingsItem: SettingsListItem) {
+    if (settingsItem.type == SettingsPickType.textPicker) {
+      return (
+        <Dialog.Input
+          wrapperStyle={styles.inputDialog}
+          onChangeText={(text: string) => {this.handleDialogTextInputChange(text)}} />
+      )
+    } else {
+      return (
+        <SectionList
+          sections={this.getPickerDataList(settingsItem)}
+          keyExtractor={(item) => item.value}
+          renderItem={({ item }) => this.getPickerListItem(item, settingsItem)}
+        />
+      )
     }
   }
 
+  /**
+  * Component lifecycle
+  */
   render() {
+  console.log("settingSelected " + JSON.stringify(this.state.settingSelected))
+  console.log("textPickerVisible " + this.state.textPickerVisible)
     return (
       <SafeAreaView style={styles.container}>
-       <SectionList
-         sections={this.state.SettingsData.list}
-         keyExtractor={(item, index) => item.title + index}
-         renderItem={({ item, index }) => this.getListItem(item, index)}
-         renderSectionHeader={({ section: { title } }) => (
-           <View>
+      <SectionList
+        sections={this.state.SettingsData.list}
+        keyExtractor={(item, index) => item.title + index}
+        renderItem={({ item }) => this.getSettingsListItem(item)}
+        renderSectionHeader={({ section: { title } }) => (
+          <View>
             <View style={styles.separator}></View>
             <Text style={styles.header}>{title}</Text>
-           </View>
-         )}
-       />
-       <View>
-        <Dialog.Container visible={this.state.dialogVisible}>
-          <Dialog.Title>{this.state.dialogTitle}</Dialog.Title>
-          <Dialog.Input wrapperStyle={styles.inputDialog} onChangeText={(text: string) => {this.handleDialogInputChange(text)}} />
-          <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-          <Dialog.Button label="Ok" onPress={this.handleCancel} />
+          </View>
+       )}
+      />
+      <View>
+        <Dialog.Container visible={this.state.textPickerVisible}>
+          <Dialog.Title>{this.state.settingSelected.title}</Dialog.Title>
+          {this.getPickerType(this.state.settingSelected)!}
+          <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
+          <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
         </Dialog.Container>
       </View>
+      <View >
+       </View>
      </SafeAreaView>
     );
   }
+
+  componentWillUnmount() {
+    //TODO remove
+    console.log("objjj " + JSON.stringify(this.state.SettingsData))
+  }
 }
 
+/**
+* Styles
+*/
 const styles = StyleSheet.create({
   separator: {
     height: 2,
@@ -198,7 +192,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  item: {
+  listItem: {
     marginLeft: 70,
     marginVertical: 8,
     marginTop: 10,
