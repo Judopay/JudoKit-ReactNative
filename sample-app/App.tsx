@@ -31,7 +31,7 @@ function App() {
               >
                 <Image
                   style={{ width: 30, height: 30, alignItems: 'center', padding: 10 }}
-                  source={require('./resources/settings.png')}
+                  source={require('./resources/ic_settings.png')}
                 />
               </TouchableHighlight>
             ),

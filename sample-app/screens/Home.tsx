@@ -10,7 +10,7 @@ import {
   JudoPaymentMethods,
   JudoPaymentParams,
 } from 'judo-react-native'
-import { judoOptions, applePayOptions, googlePayOptions } from './Settings'
+import { judoOptions, applePayOptions, googlePayOptions } from './ConfigData'
 import { showMessage, isAndroid, isIos } from '../utils'
 
 const Home = () => {
