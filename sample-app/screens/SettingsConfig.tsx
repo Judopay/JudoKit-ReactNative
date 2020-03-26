@@ -1,5 +1,7 @@
 import React from 'react';
 
+export const storageKey = "storage_key"
+
 export enum SettingsPickType {
   switch,
   textPicker,
@@ -95,7 +97,6 @@ export const Payments = {
         { "entry": "Card", "value": "CARD" } as PickerItem,
         { "entry": "iDeal", "value": "IDEAL" } as PickerItem,
         { "entry": "Google Pay", "value": "GOOGLE_PAY" } as PickerItem
-
       ]
     }
   ]

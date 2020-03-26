@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Image,
@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import Dialog from "react-native-dialog"
 import SafeAreaView from 'react-native-safe-area-view'
+import { storageKey } from './SettingsConfig'
 import {
   SettingsData,
   SettingsPickType,
@@ -20,29 +21,40 @@ import {
   GooglePayAddress,
   PickerItem,
   SettingsPickArray
-} from './SettingsData'
+} from './SettingsConfig'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default class Settings extends Component {
   state = {
-    SettingsData,
+    settingsData: SettingsData,
     settingSelected: {} as SettingsListItem,
-    textPickerVisible: false,
-    da: ""
+    textPickerVisible: false
   }
 
   /**
   * Lifecycle
   */
   componentDidMount() {
-    console.log("componentDidmount")
-    //get SettingsData obj from Async storage and set it to state this.setState({item})
+    this.getData()
   }
 
   componentWillUnmount() {
-    console.log("componentWillUnmount")
-    //TODO remove
-    // console.log("objjj " + JSON.stringify(this.state.SettingsData))
-    //Save SettingsData obj to async storage\
+    this.storeData(this.state.settingsData)
+  }
+
+  async storeData(data: any) {
+    try {
+      await AsyncStorage.setItem(storageKey, JSON.stringify(data))
+    } catch (e) { }
+  }
+
+  async getData() {
+    try {
+      const value = await AsyncStorage.getItem(storageKey)
+      if(value !== null) {
+        this.setState({ settingsData: JSON.parse(value) })
+      }
+    } catch(e) { }
   }
 
   /**
@@ -180,7 +192,7 @@ export default class Settings extends Component {
     return (
       <SafeAreaView style={styles.container}>
       <SectionList
-        sections={this.state.SettingsData.list}
+        sections={this.state.settingsData.list}
         keyExtractor={(item, index) => item.title + index}
         renderItem={({ item }) => this.getSettingsListItem(item)}
         renderSectionHeader={({ section: { title } }) => (
@@ -198,8 +210,6 @@ export default class Settings extends Component {
           <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
         </Dialog.Container>
       </View>
-      <View >
-       </View>
      </SafeAreaView>
     );
   }
