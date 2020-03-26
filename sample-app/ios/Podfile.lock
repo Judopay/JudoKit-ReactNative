@@ -230,9 +230,11 @@ PODS:
   - RNJudopay (2.1.0):
     - JudoKitObjC (~> 10.0)
     - React
-  - RNReanimated (1.7.0):
+  - RNReanimated (1.7.1):
     - React
   - RNScreens (2.4.0):
+    - React
+  - RNSecureStorage (1.0.82):
     - React
   - TrustKit (1.6.4)
   - Yoga (1.14.0)
@@ -272,6 +274,7 @@ DEPENDENCIES:
   - RNJudopay (from `../node_modules/judo-react-native`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSecureStorage (from `../node_modules/rn-secure-storage/ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -342,6 +345,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSecureStorage:
+    :path: "../node_modules/rn-secure-storage/ios"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -377,11 +382,12 @@ SPEC CHECKSUMS:
   RNCMaskedView: 76c40a1d41c3e2535df09246a2b5487f04de0814
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNJudopay: 117545df811981a4e6ecae10defaeb48e6b218ca
-  RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
+  RNReanimated: 4e102df74a9674fa943e05f97f3362b6e44d0b48
   RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
+  RNSecureStorage: 8b2b07278d80c48b3a881c56e604ab147372f243
   TrustKit: 578f77c59a23167e55b523d460bb495114ed0de7
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 8a2997be8b3731f5527d74e31cdb55438015e15b
+PODFILE CHECKSUM: 01ea147425d7fbfa40743b2f5d0502ea76919de4
 
 COCOAPODS: 1.9.1

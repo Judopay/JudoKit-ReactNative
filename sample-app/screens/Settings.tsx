@@ -26,7 +26,23 @@ export default class Settings extends Component {
   state = {
     SettingsData,
     settingSelected: {} as SettingsListItem,
-    textPickerVisible: false
+    textPickerVisible: false,
+    da: ""
+  }
+
+  /**
+  * Lifecycle
+  */
+  componentDidMount() {
+    console.log("componentDidmount")
+    //get SettingsData obj from Async storage and set it to state this.setState({item})
+  }
+
+  componentWillUnmount() {
+    console.log("componentWillUnmount")
+    //TODO remove
+    // console.log("objjj " + JSON.stringify(this.state.SettingsData))
+    //Save SettingsData obj to async storage\
   }
 
   /**
@@ -186,11 +202,6 @@ export default class Settings extends Component {
        </View>
      </SafeAreaView>
     );
-  }
-
-  componentWillUnmount() {
-    //TODO remove
-    console.log("objjj " + JSON.stringify(this.state.SettingsData))
   }
 }
 
