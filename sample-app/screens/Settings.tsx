@@ -57,7 +57,6 @@ export default class Settings extends Component {
       var settingItem = this.state.settingSelected
       settingItem.value = item.value
       settingItem.subtitle = item.entry
-      console.log("item " + JSON.stringify(settingsItem))
       this.setState({settingItem})
       this.handleDialogCloseAction()
     } else {
