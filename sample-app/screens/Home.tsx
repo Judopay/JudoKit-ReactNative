@@ -13,9 +13,9 @@ import {
 import { judoOptions, applePayOptions, googlePayOptions } from './DefaultConfig'
 import { showMessage, isAndroid, isIos } from '../utils'
 import AsyncStorage from '@react-native-community/async-storage'
-import { storageKey } from './SettingsConfig'
+import { storageKey, store } from './SettingsConfig'
 
-export default class Home2 extends Component {
+export default class Home extends Component {
   state = {
     canUseApplePay: false,
     canUseGooglePay: false,
@@ -26,23 +26,14 @@ export default class Home2 extends Component {
 
   componentDidMount() {
     this.getData()
-  }
-
-  async detect() {
-    console.log("detect " + JSON.stringify(this.state.judoOptions))
-    if (isIos) {
-      const result = await Judopay.canUseApplePay()
-      this.setState({ canUseApplePay: result })
-    } else if (isAndroid) {
-      const result = await Judopay.canUseGooglePay(this.state.googlePayOptions)
-      this.setState({ canUseGooglePay: result })
-    }
+    store.subscribe(() => this.getData())
   }
 
   async getData() {
+    console.log("data ")
     try {
       const value = await AsyncStorage.getItem(storageKey)
-      if(value !== null) {
+      if (value !== null) {
         const settings = JSON.parse(value)
         var judoOptions = this.state.judoOptions
         judoOptions.isSandbox = settings.list[0].data[0].value as boolean
@@ -56,11 +47,27 @@ export default class Home2 extends Component {
         googlePayOptions.googlePayTestEnvironment = settings.list[2].data[0].value as boolean
         googlePayOptions.requireShippingDetails = settings.list[2].data[3].value as boolean
         googlePayOptions.requireContactDetails = settings.list[2].data[5].value as boolean
-        this.setState({ judoOptions: judoOptions, googlePayOptions: googlePayOptions })
-        // this.setState({ settingsData:  })
-        this.detect()
+        var canUseGooglePay = false
+        var canUseApplePay = false
+        if (isIos) {
+          canUseApplePay = await Judopay.canUseApplePay()
+        } else if (isAndroid) {
+          canUseGooglePay = await Judopay.canUseGooglePay(googlePayOptions)
+        }
+        this.setState({
+          judoOptions: judoOptions,
+          googlePayOptions: googlePayOptions,
+          canUseGooglePay: canUseGooglePay,
+          canUseApplePay: canUseApplePay
+        })
+        console.log("get jud " + JSON.stringify(this.state.judoOptions))
+        console.log("googl " + JSON.stringify(this.state.googlePayOptions))
+        console.log("canUseGooglePay " + JSON.stringify(this.state.canUseGooglePay))
+        console.log("canUseApplePay " + JSON.stringify(this.state.canUseApplePay))
       }
-    } catch(e) { }
+    } catch(e) {
+      console.log("data " + e)
+     }
   }
 
   async makePayment() {

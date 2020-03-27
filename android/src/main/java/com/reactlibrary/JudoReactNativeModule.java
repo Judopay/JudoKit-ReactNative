@@ -12,6 +12,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.google.android.gms.common.api.Status;
@@ -39,7 +40,9 @@ import com.judopay.model.Risks;
 
 import java.text.SimpleDateFormat;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -364,7 +367,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     private boolean isOptionsInvalid(ReadableMap options) {
         String judoId = options.getString("judoId");
 
-        if (judoId == null || judoId.length() < 9) {
+        if (judoId == null) {
             return true;
         }
         if (isEmpty(options.getString("token"))) {
@@ -434,17 +437,22 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     @SuppressWarnings("unused")
     @ReactMethod
     public void showPaymentMethods(ReadableMap options, Promise promise) {
-        if (isOptionsInvalid(options)) {
+        if (isOptionsInvalid(options.getMap("judoConfig"))) {
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             return;
         }
-        Judo judo = getJudo(options);
+        Judo judo = getJudo(options.getMap("judoConfig"));
         if (judo == null) {
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             return;
         }
+        WritableMap flattenOptions = new WritableNativeMap();
+        flattenOptions.merge(options.getMap("judoConfig"));
+        flattenOptions.merge(options.getMap("judoApplePayConfig"));
+        flattenOptions.merge(options.getMap("judoGooglePayConfig"));
+        flattenOptions.merge(options.getMap("judoPaymentMethodsConfig"));
         this.promise = promise;
-        this.options = options;
+        this.options = flattenOptions;
 
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
         Intent intent = new Intent(currentActivity, PaymentMethodActivity.class);
@@ -485,17 +493,22 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
     @SuppressWarnings("unused")
     @ReactMethod
     public void makeGooglePayPayment(ReadableMap options, final Promise promise) {
-        if (isOptionsInvalid(options)) {
+        if (isOptionsInvalid(options.getMap("judoConfig"))) {
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             return;
         }
-        Judo judo = getJudo(options);
+        Judo judo = getJudo(options.getMap("judoConfig"));
         if (judo == null) {
             promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
             return;
         }
+        WritableMap flattenOptions = new WritableNativeMap();
+        flattenOptions.merge(options.getMap("judoConfig"));
+        flattenOptions.merge(options.getMap("judoApplePayConfig"));
+        flattenOptions.merge(options.getMap("judoGooglePayConfig"));
+        flattenOptions.merge(options.getMap("judoPaymentMethodsConfig"));
         this.promise = promise;
-        this.options = options;
+        this.options = flattenOptions;
 
         boolean isTestEnv = options.getBoolean("googlePayTestEnvironment");
         initGooglePayClient(isTestEnv);

@@ -89,14 +89,19 @@ RCT_REMAP_METHOD(makeApplePayPayment,
                  options:(NSDictionary *)options
                  makeApplePayPaymentWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    if (![self initWithOptions:options reject:reject]) {
+    NSMutableDictionary *flattenOptions = [[NSMutableDictionary alloc] init];
+    [flattenOptions addEntriesFromDictionary: options[@"judoConfig"]];
+    [flattenOptions addEntriesFromDictionary: options[@"judoApplePayConfig"]];
+    [flattenOptions addEntriesFromDictionary: options[@"judoGooglePayConfig"]];
+    [flattenOptions addEntriesFromDictionary: options[@"judoPaymentMethodsConfig"]];
+    if (![self initWithOptions:flattenOptions reject:reject]) {
         return;
     }
 
     JudoKit *judoKit = [self judoKit];
     PaymentMethods paymentMethod = PaymentMethodApplePay;
     ApplePayConfiguration *applePayConfiguration = [self appleConfigWith:paymentMethod
-                                                                     and:options];
+                                                                     and:flattenOptions];
 
     [judoKit invokeApplePayWithConfiguration: applePayConfiguration
                                   completion: [self paymentCompletion:judoKit reject:reject resolve:resolve]];
@@ -106,14 +111,19 @@ RCT_REMAP_METHOD(showPaymentMethods,
                  options:(NSDictionary *)options
                  showPaymentMethodsResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    if (![self initWithOptions:options reject:reject]) {
+    NSMutableDictionary *flattenOptions = [[NSMutableDictionary alloc] init];
+    [flattenOptions addEntriesFromDictionary: options[@"judoConfig"]];
+    [flattenOptions addEntriesFromDictionary: options[@"judoApplePayConfig"]];
+    [flattenOptions addEntriesFromDictionary: options[@"judoGooglePayConfig"]];
+    [flattenOptions addEntriesFromDictionary: options[@"judoPaymentMethodsConfig"]];
+    if (![self initWithOptions:flattenOptions reject:reject]) {
         return;
     }
 
     JudoKit *judoKit = [self judoKit];
     JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
-    PaymentMethods paymentMethods = [RCTConvert NSInteger:options[@"paymentMethods"]];
-    ApplePayConfiguration *applePayConfiguration = [self appleConfigWith:paymentMethods and:options];
+    PaymentMethods paymentMethods = [RCTConvert NSInteger:flattenOptions[@"paymentMethods"]];
+    ApplePayConfiguration *applePayConfiguration = [self appleConfigWith:paymentMethods and:flattenOptions];
 
     [judoKit invokePayment:self.judoId
                     siteId:self.siteId

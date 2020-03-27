@@ -1,4 +1,9 @@
 import React from 'react';
+import { createStore } from 'redux'
+
+function counter() { }
+
+export let store = createStore(counter)
 
 export const storageKey = "storage_key"
 

@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import Dialog from "react-native-dialog"
 import SafeAreaView from 'react-native-safe-area-view'
-import { storageKey } from './SettingsConfig'
+import { storageKey, store } from './SettingsConfig'
 import {
   SettingsData,
   SettingsPickType,
@@ -39,12 +39,12 @@ export default class Settings extends Component {
   }
 
   componentWillUnmount() {
-    this.storeData(this.state.settingsData)
+  store.dispatch({ type: '' })
   }
 
   async storeData(data: any) {
     try {
-      await AsyncStorage.setItem(storageKey, JSON.stringify(data))
+      await AsyncStorage.setItem(storageKey, JSON.stringify(data)).then()
     } catch (e) { }
   }
 
@@ -78,6 +78,7 @@ export default class Settings extends Component {
 
   handleDialogCloseAction() {
     this.setState({ textPickerVisible: false });
+    this.storeData(this.state.settingsData)
   }
 
   handlePickerItemPressed(item: PickerItem, settingsItem: SettingsListItem) {
@@ -104,6 +105,7 @@ export default class Settings extends Component {
     if (item.type == SettingsPickType.switch) {
       item.value = !item.value
       this.setState({item})
+      this.storeData(this.state.settingsData)
     } else {
       this.showPickerDialog(item)
     }
@@ -204,7 +206,7 @@ export default class Settings extends Component {
       />
       <View>
         <Dialog.Container visible={this.state.textPickerVisible}>
-          <Dialog.Title>{this.state.settingSelected.title}</Dialog.Title>
+           <Dialog.Title>{this.state.settingSelected.title}</Dialog.Title>
           {this.getPickerType(this.state.settingSelected)}
           <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
           <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
@@ -240,12 +242,13 @@ const styles = StyleSheet.create({
     borderBottomColor: "#A9ADAE"
   },
   header: {
-    marginLeft: 70,
-    fontSize: 20,
-    marginTop: 10,
+    paddingLeft: 70,
+    fontSize: 19,
+    paddingTop: 10,
     marginBottom: 10,
     fontWeight: 'normal',
-    color: '#7dbeb4'
+    color: '#7dbeb4',
+    backgroundColor: '#f2f2f2'
   },
   title: {
     fontSize: 18,

@@ -11,10 +11,10 @@ interface JudopayAPI {
   makePayment(config: JudoConfig): Promise<JudoResponse | null>;
   makePreAuth(config: JudoConfig): Promise<JudoResponse | null>;
   canUseApplePay(): Promise<boolean>,
-  makeApplePayPayment(config: JudoPaymentParams): Promise<JudoResponse | null>; //pass JudoConfig and JudoApplePayConfig objects
+  makeApplePayPayment(config: JudoPaymentParams): Promise<JudoResponse | null>;
   canUseGooglePay(config: JudoGooglePayConfig): Promise<boolean>;
-  makeGooglePayPayment(config: JudoPaymentParams): Promise<JudoResponse | null>; //pass JudoConfig and JudoGooglePayConfig objects
-  showPaymentMethods(config: JudoPaymentParams): Promise<JudoResponse | null>; // pass JudoConfig, JudoApplePayConfig, JudoGooglePayConfig and JudoPaymentMethodsConfig objects
+  makeGooglePayPayment(config: JudoPaymentParams): Promise<JudoResponse | null>;
+  showPaymentMethods(config: JudoPaymentParams): Promise<JudoResponse | null>;
   makeIDEALPayment(config: JudoConfig): Promise<JudoIDEALResponse | null>;
 };
 
