@@ -18,7 +18,7 @@ function App() {
         <Stack.Screen
           name="Judo Sample app"
           component={Home}
-          options={({ navigation, route }) => ({
+          options={({ navigation }) => ({
             headerStyle: {
               backgroundColor: '#5623e4',
             },

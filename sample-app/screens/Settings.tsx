@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItem: {
-    marginLeft: 70,
+    marginLeft: 20,
     marginVertical: 8,
     marginTop: 10,
     marginRight: 10,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#A9ADAE"
   },
   header: {
-    paddingLeft: 70,
+    paddingLeft: 20,
     fontSize: 19,
     paddingTop: 10,
     marginBottom: 10,
@@ -257,6 +257,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 15,
-    width: 250
+    width: 300
   }
 });

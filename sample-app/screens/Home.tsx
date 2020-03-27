@@ -25,6 +25,10 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
+    console.log("get jud " + JSON.stringify(this.state.judoOptions))
+    console.log("googl " + JSON.stringify(this.state.googlePayOptions))
+    console.log("canUseGooglePay " + JSON.stringify(this.state.canUseGooglePay))
+    console.log("canUseApplePay " + JSON.stringify(this.state.canUseApplePay))
     this.getData()
     store.subscribe(() => this.getData())
   }
