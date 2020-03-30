@@ -29,7 +29,6 @@ export default class Home extends Component {
     store.dispatch({ type: '' })
     store.subscribe(() => {
       this.getData()
-      // this.detectNativePayment()
     })
   }
 
@@ -147,6 +146,7 @@ export default class Home extends Component {
       judoOptions: judoOptions
     })
     try {
+      console.log("opt " + this.state.judoOptions)
       const response = await Judopay.makeIDEALPayment({
         ...this.state.judoOptions
       })
