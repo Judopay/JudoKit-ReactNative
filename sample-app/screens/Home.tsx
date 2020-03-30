@@ -17,8 +17,6 @@ import { storageKey, store } from './SettingsConfig'
 
 export default class Home extends Component {
   state = {
-    canUseApplePay: false,
-    canUseGooglePay: false,
     judoOptions: judoOptions,
     googlePayOptions: googlePayOptions,
     applePayOptions: applePayOptions
@@ -27,14 +25,15 @@ export default class Home extends Component {
   componentDidMount() {
     console.log("get jud " + JSON.stringify(this.state.judoOptions))
     console.log("googl " + JSON.stringify(this.state.googlePayOptions))
-    console.log("canUseGooglePay " + JSON.stringify(this.state.canUseGooglePay))
-    console.log("canUseApplePay " + JSON.stringify(this.state.canUseApplePay))
-    this.getData()
-    store.subscribe(() => this.getData())
+
+    store.dispatch({ type: '' })
+    store.subscribe(() => {
+      this.getData()
+      // this.detectNativePayment()
+    })
   }
 
   async getData() {
-    console.log("data ")
     try {
       const value = await AsyncStorage.getItem(storageKey)
       if (value !== null) {
@@ -51,32 +50,24 @@ export default class Home extends Component {
         googlePayOptions.googlePayTestEnvironment = settings.list[2].data[0].value as boolean
         googlePayOptions.requireShippingDetails = settings.list[2].data[3].value as boolean
         googlePayOptions.requireContactDetails = settings.list[2].data[5].value as boolean
-        var canUseGooglePay = false
-        var canUseApplePay = false
-        if (isIos) {
-          canUseApplePay = await Judopay.canUseApplePay()
-        } else if (isAndroid) {
-          canUseGooglePay = await Judopay.canUseGooglePay(googlePayOptions)
-        }
         this.setState({
           judoOptions: judoOptions,
-          googlePayOptions: googlePayOptions,
-          canUseGooglePay: canUseGooglePay,
-          canUseApplePay: canUseApplePay
+          googlePayOptions: googlePayOptions
         })
         console.log("get jud " + JSON.stringify(this.state.judoOptions))
         console.log("googl " + JSON.stringify(this.state.googlePayOptions))
-        console.log("canUseGooglePay " + JSON.stringify(this.state.canUseGooglePay))
-        console.log("canUseApplePay " + JSON.stringify(this.state.canUseApplePay))
       }
     } catch(e) {
-      console.log("data " + e)
-     }
+      console.log("getData error " + e)
+    }
   }
 
   async makePayment() {
-    //TODO check if state object changes
-    this.state.judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    var judoOptions = this.state.judoOptions
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    this.setState({
+      judoOptions: judoOptions
+    })
     try {
       const response = await Judopay.makePayment({
         ...this.state.judoOptions
@@ -96,8 +87,11 @@ export default class Home extends Component {
   }
 
   async makePreAuth() {
-    //TODO check if state object changes
-    this.state.judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    var judoOptions = this.state.judoOptions
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    this.setState({
+      judoOptions: judoOptions
+    })
     try {
       const response = await Judopay.makePreAuth({
         ...this.state.judoOptions
@@ -116,8 +110,11 @@ export default class Home extends Component {
   }
 
   async selectPaymentMethod() {
-    //TODO check if state object changes
-    this.state.judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    var judoOptions = this.state.judoOptions
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    this.setState({
+      judoOptions: judoOptions
+    })
     const params: JudoPaymentParams = {
       judoConfig: this.state.judoOptions,
       judoApplePayConfig: this.state.applePayOptions,
@@ -144,8 +141,11 @@ export default class Home extends Component {
   }
 
   async makeIDEALPayment() {
-    //TODO check if state object changes
-    this.state.judoOptions.paymentReference = `myPaymentReference${Date.now()}` // MEMO: max length = 40
+    var judoOptions = this.state.judoOptions
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    this.setState({
+      judoOptions: judoOptions
+    })
     try {
       const response = await Judopay.makeIDEALPayment({
         ...this.state.judoOptions
@@ -164,8 +164,11 @@ export default class Home extends Component {
   }
 
   async makeApplePayPayment() {
-    //TODO check if state object changes
-    this.state.judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    var judoOptions = this.state.judoOptions
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    this.setState({
+      judoOptions: judoOptions
+    })
     const params: JudoPaymentParams = {
       judoConfig: this.state.judoOptions,
       judoApplePayConfig: this.state.applePayOptions
@@ -192,8 +195,11 @@ export default class Home extends Component {
   }
 
   async makeGooglePayPayment() {
-    //TODO check if state object changes
-    this.state.judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    var judoOptions = this.state.judoOptions
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+    this.setState({
+      judoOptions: judoOptions
+    })
     const params: JudoPaymentParams = {
       judoConfig: this.state.judoOptions,
       judoGooglePayConfig: this.state.googlePayOptions
@@ -256,14 +262,14 @@ export default class Home extends Component {
               title="iDEAL payment"
               onPress={() => this.makeIDEALPayment()}
             />
-            {isIos && this.state.canUseApplePay && (
+            {isIos && (
               <JudoApplePayButton
                 style={styles.payButtonStyle}
                 isDark={true}
                 onPayPress={() => this.makeApplePayPayment()}
               />
             )}
-            {isAndroid && this.state.canUseGooglePay && (
+            {isAndroid && (
               <JudoGooglePayButton
                 style={styles.payButtonStyle}
                 isDark={false}
