@@ -12,6 +12,7 @@
     "update-ios": "cd ios && pod update JudoKitObjC && cd .."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.8.1",
     "@react-native-community/masked-view": "^0.1.6",
     "@react-navigation/drawer": "^5.0.5",
     "@react-navigation/native": "^5.0.5",
@@ -29,6 +30,7 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-safe-area-view": "^1.0.0",
     "react-native-screens": "^2.2.0",
+    "redux": "^4.0.5",
     "typescript": "^3.8.3"
   },
   "devDependencies": {

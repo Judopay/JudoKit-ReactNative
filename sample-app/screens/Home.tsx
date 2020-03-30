@@ -1,5 +1,5 @@
 // @flow
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { Component } from 'react'
 import { Button, StatusBar, StyleSheet, Text, View } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import {
@@ -10,27 +10,59 @@ import {
   JudoPaymentMethods,
   JudoPaymentParams,
 } from 'judo-react-native'
-import { judoOptions, applePayOptions, googlePayOptions } from './ConfigData'
+import { judoOptions, applePayOptions, googlePayOptions } from './DefaultConfig'
 import { showMessage, isAndroid, isIos } from '../utils'
+import AsyncStorage from '@react-native-community/async-storage'
+import { storageKey, store } from './SettingsConfig'
 
-const Home = () => {
-  const [canUseApplePay, setCanUseApplePay] = useState(false)
-  const [canUseGooglePay, setCanUseGooglePay] = useState(false)
+export default class Home extends Component {
+  state = {
+    judoOptions: judoOptions,
+    googlePayOptions: googlePayOptions,
+    applePayOptions: applePayOptions
+  }
 
-  useEffect(() => {
-    const detect = async () => {
-      if (isIos) {
-        const result = await Judopay.canUseApplePay()
-        setCanUseApplePay(result)
-      } else if (isAndroid) {
-        const result = await Judopay.canUseGooglePay(googlePayOptions)
-        setCanUseGooglePay(result)
+  componentDidMount() {
+    console.log("get jud " + JSON.stringify(this.state.judoOptions))
+    console.log("googl " + JSON.stringify(this.state.googlePayOptions))
+
+    store.dispatch({ type: '' })
+    store.subscribe(() => {
+      this.getData()
+    })
+  }
+
+  async getData() {
+    try {
+      const value = await AsyncStorage.getItem(storageKey)
+      if (value !== null) {
+        const settings = JSON.parse(value)
+        var judoOptions = this.state.judoOptions
+        judoOptions.isSandbox = settings.list[0].data[0].value as boolean
+        judoOptions.judoId = settings.list[0].data[1].value as string
+        judoOptions.siteId = settings.list[0].data[2].value as string
+        judoOptions.token = settings.list[0].data[3].value as string
+        judoOptions.secret = settings.list[0].data[4].value as string
+        judoOptions.amount = settings.list[1].data[0].value as string
+        judoOptions.currency = settings.list[1].data[1].valueArray[0] as string
+        var googlePayOptions = this.state.googlePayOptions
+        googlePayOptions.googlePayTestEnvironment = settings.list[2].data[0].value as boolean
+        googlePayOptions.requireShippingDetails = settings.list[2].data[3].value as boolean
+        googlePayOptions.requireContactDetails = settings.list[2].data[5].value as boolean
+        this.setState({
+          judoOptions: judoOptions,
+          googlePayOptions: googlePayOptions
+        })
+        console.log("get jud " + JSON.stringify(this.state.judoOptions))
+        console.log("googl " + JSON.stringify(this.state.googlePayOptions))
       }
+    } catch(e) {
+      console.log("getData error " + e)
     }
-    detect()
-  }, [])
+  }
 
-  const makePayment = useCallback(async () => {
+  async makePayment() {
+    var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     try {
       const response = await Judopay.makePayment({
@@ -46,11 +78,12 @@ const Home = () => {
         await showMessage('Payment error', (response && response.result) || '')
       }
     } catch (e) {
-      handleException(e, 'Payment')
+      this.handleException(e, 'Payment')
     }
-  }, [])
+  }
 
-  const makePreAuth = useCallback(async () => {
+  async makePreAuth() {
+    var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     try {
       const response = await Judopay.makePreAuth({
@@ -65,16 +98,16 @@ const Home = () => {
         await showMessage('Pre-auth error', (response && response.result) || '')
       }
     } catch (e) {
-      handleException(e, 'Pre-auth')
+      this.handleException(e, 'Pre-auth')
     }
-  }, [])
+  }
 
-  const selectPaymentMethod = useCallback(async () => {
-    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
+  async selectPaymentMethod() {
+    var judoOptions = this.state.judoOptions
     const params: JudoPaymentParams = {
       judoConfig: judoOptions,
-      judoApplePayConfig: applePayOptions,
-      judoGooglePayConfig: googlePayOptions,
+      judoApplePayConfig: this.state.applePayOptions,
+      judoGooglePayConfig: this.state.googlePayOptions,
       judoPaymentMethodsConfig: {
         paymentMethods: JudoPaymentMethods.all
       }
@@ -92,12 +125,13 @@ const Home = () => {
         )
       }
     } catch (e) {
-      handleException(e, 'Something')
+      this.handleException(e, 'Something')
     }
-  }, [])
+  }
 
-  const makeIDEALPayment = useCallback(async () => {
-    judoOptions.paymentReference = `myPaymentReference${Date.now()}` // MEMO: max length = 40
+  async makeIDEALPayment() {
+    var judoOptions = this.state.judoOptions
+    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     try {
       const response = await Judopay.makeIDEALPayment({
         ...judoOptions
@@ -111,18 +145,19 @@ const Home = () => {
         )
       }
     } catch (e) {
-      handleException(e, 'iDEAL transaction')
+      this.handleException(e, 'iDEAL transaction')
     }
-  }, [])
+  }
 
-  const makeApplePayPayment = useCallback(async () => {
+  async makeApplePayPayment() {
+    var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     const params: JudoPaymentParams = {
       judoConfig: judoOptions,
-      judoApplePayConfig: applePayOptions
+      judoApplePayConfig: this.state.applePayOptions
     }
     const title =
-      applePayOptions.transactionType === JudoTransactionType.payment
+      this.state.applePayOptions.transactionType === JudoTransactionType.payment
         ? 'Apple Pay payment'
         : 'Apple Pay pre-auth'
     try {
@@ -138,18 +173,19 @@ const Home = () => {
         await showMessage(`${title} error`, (response && response.result) || '')
       }
     } catch (e) {
-      handleException(e, title)
+      this.handleException(e, title)
     }
-  }, [])
+  }
 
-  const makeGooglePayPayment = useCallback(async () => {
+  async makeGooglePayPayment() {
+    var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     const params: JudoPaymentParams = {
       judoConfig: judoOptions,
-      judoGooglePayConfig: googlePayOptions
+      judoGooglePayConfig: this.state.googlePayOptions
     }
     const title =
-      googlePayOptions.transactionType == JudoTransactionType.payment
+      this.state.googlePayOptions.transactionType == JudoTransactionType.payment
         ? 'Google Pay payment'
         : 'Google Pay pre-auth'
     try {
@@ -165,11 +201,11 @@ const Home = () => {
         await showMessage(`${title} error`, (response && response.result) || '')
       }
     } catch (e) {
-      handleException(e, title)
+      this.handleException(e, title)
     }
-  }, [])
+  }
 
-  const handleException = useCallback(async (e, title) => {
+  async handleException(e: any, title: string) {
     if (e.code === 'JUDO_USER_CANCELLED') {
       // do nothing when the user cancels
     } else if (
@@ -185,44 +221,46 @@ const Home = () => {
       const message = e.message || 'Something went wrong. Please try again later.'
       await showMessage('Oops...', message)
     }
-  }, [])
+  }
 
-  return (
-    <SafeAreaView style={[styles.container]}>
-      <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          {`Welcome to the\nJudopay sample app!`}
-        </Text>
-        <View style={styles.buttons}>
-          <OptionButton title="Make payment" onPress={() => makePayment()} />
-          <OptionButton title="Make pre-auth" onPress={() => makePreAuth()} />
-          <OptionButton
-            title="Select payment method"
-            onPress={() => selectPaymentMethod()}
-          />
-          <OptionButton
-            title="iDEAL payment"
-            onPress={() => makeIDEALPayment()}
-          />
-          {isIos && canUseApplePay && (
-            <JudoApplePayButton
-              style={styles.payButtonStyle}
-              isDark={true}
-              onPayPress={() => makeApplePayPayment()}
+  render() {
+    return (
+      <SafeAreaView style={[styles.container]}>
+        <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
+        <View style={styles.container}>
+          <Text style={styles.welcome}>
+            {`Welcome to the\nJudopay sample app!`}
+          </Text>
+          <View style={styles.buttons}>
+            <OptionButton title="Make payment" onPress={() => this.makePayment()} />
+            <OptionButton title="Make pre-auth" onPress={() => this.makePreAuth()} />
+            <OptionButton
+              title="Select payment method"
+              onPress={() => this.selectPaymentMethod()}
             />
-          )}
-          {isAndroid && canUseGooglePay && (
-            <JudoGooglePayButton
-              style={styles.payButtonStyle}
-              isDark={false}
-              onPayPress={() => makeGooglePayPayment()}
+            <OptionButton
+              title="iDEAL payment"
+              onPress={() => this.makeIDEALPayment()}
             />
-          )}
+            {isIos && (
+              <JudoApplePayButton
+                style={styles.payButtonStyle}
+                isDark={true}
+                onPayPress={() => this.makeApplePayPayment()}
+              />
+            )}
+            {isAndroid && (
+              <JudoGooglePayButton
+                style={styles.payButtonStyle}
+                isDark={false}
+                onPayPress={() => this.makeGooglePayPayment()}
+              />
+            )}
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
-  )
+      </SafeAreaView>
+    )
+  }
 }
 
 const OptionButton = ({
@@ -239,10 +277,6 @@ const OptionButton = ({
       <Button disabled={disabled} title={title} onPress={() => onPress()} />
     </View>
   )
-}
-
-Home.navigationOptions = {
-  title: 'Judopay Sample App',
 }
 
 const styles = StyleSheet.create({
@@ -271,5 +305,3 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 })
-
-export default Home

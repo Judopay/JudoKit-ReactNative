@@ -1,4 +1,11 @@
 import React from 'react';
+import { createStore } from 'redux'
+
+function emptyHook() { }
+
+export let store = createStore(emptyHook)
+
+export const storageKey = "storage_key"
 
 export enum SettingsPickType {
   switch,
@@ -95,7 +102,6 @@ export const Payments = {
         { "entry": "Card", "value": "CARD" } as PickerItem,
         { "entry": "iDeal", "value": "IDEAL" } as PickerItem,
         { "entry": "Google Pay", "value": "GOOGLE_PAY" } as PickerItem
-
       ]
     }
   ]
@@ -149,9 +155,9 @@ export var SettingsData = {
            } as SettingsListItem,
            {
               "title":"Currency",
-              "subtitle":"Select currency",
+              "subtitle":"EUR - Euro Member Countries",
               "type": SettingsPickType.singlePicker,
-              "value":"GBP - United Kingdom Pound",
+              "value":"EUR",
               "pickItems": SettingsPickArray.currencies,
               "valueArray": Array()
            } as SettingsListItem

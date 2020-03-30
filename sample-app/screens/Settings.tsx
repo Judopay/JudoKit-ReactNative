@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Image,
@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import Dialog from "react-native-dialog"
 import SafeAreaView from 'react-native-safe-area-view'
+import { storageKey, store } from './SettingsConfig'
 import {
   SettingsData,
   SettingsPickType,
@@ -20,13 +21,44 @@ import {
   GooglePayAddress,
   PickerItem,
   SettingsPickArray
-} from './SettingsData'
+} from './SettingsConfig'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default class Settings extends Component {
   state = {
-    SettingsData,
+    settingsData: SettingsData,
     settingSelected: {} as SettingsListItem,
     textPickerVisible: false
+  }
+
+  /**
+  * Lifecycle
+  */
+  componentDidMount() {
+    this.getData()
+  }
+
+  componentWillUnmount() {
+    store.dispatch({ type: '' })
+  }
+
+  async storeData(data: any) {
+    try {
+      await AsyncStorage.setItem(storageKey, JSON.stringify(data)).then()
+    } catch (e) {
+      console.log("store data error " + e.message)
+    }
+  }
+
+  async getData() {
+    try {
+      const value = await AsyncStorage.getItem(storageKey)
+      if(value !== null) {
+        this.setState({ settingsData: JSON.parse(value) })
+      }
+    } catch(e) {
+      console.log("store data error " + e.message)
+    }
   }
 
   /**
@@ -50,6 +82,7 @@ export default class Settings extends Component {
 
   handleDialogCloseAction() {
     this.setState({ textPickerVisible: false });
+    this.storeData(this.state.settingsData)
   }
 
   handlePickerItemPressed(item: PickerItem, settingsItem: SettingsListItem) {
@@ -76,6 +109,7 @@ export default class Settings extends Component {
     if (item.type == SettingsPickType.switch) {
       item.value = !item.value
       this.setState({item})
+      this.storeData(this.state.settingsData)
     } else {
       this.showPickerDialog(item)
     }
@@ -164,7 +198,7 @@ export default class Settings extends Component {
     return (
       <SafeAreaView style={styles.container}>
       <SectionList
-        sections={this.state.SettingsData.list}
+        sections={this.state.settingsData.list}
         keyExtractor={(item, index) => item.title + index}
         renderItem={({ item }) => this.getSettingsListItem(item)}
         renderSectionHeader={({ section: { title } }) => (
@@ -176,21 +210,14 @@ export default class Settings extends Component {
       />
       <View>
         <Dialog.Container visible={this.state.textPickerVisible}>
-          <Dialog.Title>{this.state.settingSelected.title}</Dialog.Title>
+           <Dialog.Title>{this.state.settingSelected.title}</Dialog.Title>
           {this.getPickerType(this.state.settingSelected)}
           <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
           <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
         </Dialog.Container>
       </View>
-      <View >
-       </View>
      </SafeAreaView>
     );
-  }
-
-  componentWillUnmount() {
-    //TODO remove
-    console.log("objjj " + JSON.stringify(this.state.SettingsData))
   }
 }
 
@@ -206,7 +233,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItem: {
-    marginLeft: 70,
+    marginLeft: 20,
     marginVertical: 8,
     marginTop: 10,
     marginRight: 10,
@@ -219,12 +246,13 @@ const styles = StyleSheet.create({
     borderBottomColor: "#A9ADAE"
   },
   header: {
-    marginLeft: 70,
-    fontSize: 20,
-    marginTop: 10,
+    paddingLeft: 20,
+    fontSize: 19,
+    paddingTop: 10,
     marginBottom: 10,
     fontWeight: 'normal',
-    color: '#7dbeb4'
+    color: '#7dbeb4',
+    backgroundColor: '#f2f2f2'
   },
   title: {
     fontSize: 18,
@@ -233,6 +261,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 15,
-    width: 250
+    width: 300
   }
 });
