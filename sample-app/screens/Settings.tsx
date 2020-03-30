@@ -45,7 +45,9 @@ export default class Settings extends Component {
   async storeData(data: any) {
     try {
       await AsyncStorage.setItem(storageKey, JSON.stringify(data)).then()
-    } catch (e) { }
+    } catch (e) {
+      console.log("store data error " + e.message)
+    }
   }
 
   async getData() {
@@ -54,7 +56,9 @@ export default class Settings extends Component {
       if(value !== null) {
         this.setState({ settingsData: JSON.parse(value) })
       }
-    } catch(e) { }
+    } catch(e) {
+      console.log("store data error " + e.message)
+    }
   }
 
   /**
