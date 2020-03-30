@@ -64,12 +64,9 @@ export default class Home extends Component {
   async makePayment() {
     var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
-    this.setState({
-      judoOptions: judoOptions
-    })
     try {
       const response = await Judopay.makePayment({
-        ...this.state.judoOptions
+        ...judoOptions
       })
 
       if (response && response.result === 'Success') {
@@ -88,12 +85,9 @@ export default class Home extends Component {
   async makePreAuth() {
     var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
-    this.setState({
-      judoOptions: judoOptions
-    })
     try {
       const response = await Judopay.makePreAuth({
-        ...this.state.judoOptions
+        ...judoOptions
       })
       if (response && response.result === 'Success') {
         await showMessage(
@@ -110,12 +104,8 @@ export default class Home extends Component {
 
   async selectPaymentMethod() {
     var judoOptions = this.state.judoOptions
-    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
-    this.setState({
-      judoOptions: judoOptions
-    })
     const params: JudoPaymentParams = {
-      judoConfig: this.state.judoOptions,
+      judoConfig: judoOptions,
       judoApplePayConfig: this.state.applePayOptions,
       judoGooglePayConfig: this.state.googlePayOptions,
       judoPaymentMethodsConfig: {
@@ -142,13 +132,9 @@ export default class Home extends Component {
   async makeIDEALPayment() {
     var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
-    this.setState({
-      judoOptions: judoOptions
-    })
     try {
-      console.log("opt " + this.state.judoOptions)
       const response = await Judopay.makeIDEALPayment({
-        ...this.state.judoOptions
+        ...judoOptions
       })
       if (response && response.orderStatus === 'SUCCEEDED') {
         await showMessage(`Successful`, `orderId: ${response.orderId || ''}`)
@@ -166,11 +152,8 @@ export default class Home extends Component {
   async makeApplePayPayment() {
     var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
-    this.setState({
-      judoOptions: judoOptions
-    })
     const params: JudoPaymentParams = {
-      judoConfig: this.state.judoOptions,
+      judoConfig: judoOptions,
       judoApplePayConfig: this.state.applePayOptions
     }
     const title =
@@ -197,11 +180,8 @@ export default class Home extends Component {
   async makeGooglePayPayment() {
     var judoOptions = this.state.judoOptions
     judoOptions.paymentReference = `myPaymentReference${Date.now()}`
-    this.setState({
-      judoOptions: judoOptions
-    })
     const params: JudoPaymentParams = {
-      judoConfig: this.state.judoOptions,
+      judoConfig: judoOptions,
       judoGooglePayConfig: this.state.googlePayOptions
     }
     const title =

@@ -39,7 +39,7 @@ export default class Settings extends Component {
   }
 
   componentWillUnmount() {
-  store.dispatch({ type: '' })
+    store.dispatch({ type: '' })
   }
 
   async storeData(data: any) {
