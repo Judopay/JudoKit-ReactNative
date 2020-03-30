@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStore } from 'redux'
 
-function counter() { }
+function emptyHook() { }
 
-export let store = createStore(counter)
+export let store = createStore(emptyHook)
 
 export const storageKey = "storage_key"
 
