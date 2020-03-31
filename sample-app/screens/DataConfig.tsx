@@ -101,7 +101,8 @@ export const Payments = {
       "data": [
         { "entry": "Card", "value": "CARD" } as PickerItem,
         { "entry": "iDeal", "value": "IDEAL" } as PickerItem,
-        { "entry": "Google Pay", "value": "GOOGLE_PAY" } as PickerItem
+        { "entry": "Google Pay", "value": "GOOGLE_PAY" } as PickerItem,
+        { "entry": "Apple Pay", "value": "APPLE_PAY" } as PickerItem
       ]
     }
   ]
@@ -229,3 +230,88 @@ export var SettingsData = {
      }
   ]
 }
+
+export enum HomeListType {
+  cardPay,
+  cardPreAuth,
+  cardRegister,
+  cardCheck,
+  cardSave,
+  ideal,
+  googlePayment,
+  googlePreAuth,
+  applePayment,
+  applePreAuth,
+  methods,
+  methodsPreAuth
+}
+
+export type HomeListItem = {
+  title: string,
+  subtitle: string,
+  type: HomeListType
+}
+
+export const HomeScreenData = {
+  list: [
+     {
+        "data":[
+          {
+            "title": "Pay with card",
+            "subtitle": "by entering card details",
+            "type": HomeListType.cardPay
+          } as HomeListItem,
+          {
+            "title": "Pre-auth with card",
+            "subtitle": "pre-auth by entering card details",
+            "type": HomeListType.cardPreAuth
+          } as HomeListItem,
+          {
+            "title": "Register card",
+            "subtitle": "to be stored for future transactions",
+            "type": HomeListType.cardRegister
+          } as HomeListItem,
+          {
+            "title": "Check card",
+            "subtitle": "to validate a card",
+            "type": HomeListType.cardCheck
+          } as HomeListItem,
+          {
+            "title": "Save card",
+            "subtitle": "to be stored for future transactions",
+            "type": HomeListType.cardSave
+          } as HomeListItem,
+          {
+            "title": "Apple Pay payment",
+            "subtitle": "with a wallet card",
+            "type": HomeListType.applePayment
+          } as HomeListItem,
+          {
+            "title": "Apple Pay pre-auth",
+            "subtitle": "pre-auth with a wallet card",
+            "type": HomeListType.applePreAuth
+          } as HomeListItem,
+          {
+            "title": "Google Pay payment",
+            "subtitle": "with a wallet card",
+            "type": HomeListType.googlePayment
+          } as HomeListItem,
+          {
+            "title": "Google Pay pre-auth",
+            "subtitle": "pre-auth with a wallet card",
+            "type": HomeListType.googlePreAuth
+          } as HomeListItem,
+          {
+            "title": "Payment methods",
+            "subtitle": "with default payment methods",
+            "type": HomeListType.methods
+          } as HomeListItem,
+          {
+            "title": "Pre-auth payment methods",
+            "subtitle": "with default pre-auth payment methods",
+            "type": HomeListType.methodsPreAuth
+          } as HomeListItem
+        ]
+      }
+    ]
+  }

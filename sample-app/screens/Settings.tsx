@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 import Dialog from "react-native-dialog"
 import SafeAreaView from 'react-native-safe-area-view'
-import { storageKey, store } from './SettingsConfig'
 import {
   SettingsData,
   SettingsPickType,
@@ -20,8 +19,10 @@ import {
   Payments,
   GooglePayAddress,
   PickerItem,
-  SettingsPickArray
-} from './SettingsConfig'
+  SettingsPickArray,
+  storageKey,
+  store
+} from './DataConfig'
 import AsyncStorage from '@react-native-community/async-storage'
 
 export default class Settings extends Component {
