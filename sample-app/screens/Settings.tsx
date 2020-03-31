@@ -58,7 +58,7 @@ export default class Settings extends Component {
         this.setState({ settingsData: JSON.parse(value) })
       }
     } catch(e) {
-      console.log("store data error " + e.message)
+      console.log("get data error " + e.message)
     }
   }
 

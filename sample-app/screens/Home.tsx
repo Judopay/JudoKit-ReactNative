@@ -32,9 +32,6 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    console.log("get jud " + JSON.stringify(this.state.judoOptions))
-    console.log("googl " + JSON.stringify(this.state.googlePayOptions))
-
     store.dispatch({ type: '' })
     store.subscribe(() => {
       this.getData()
@@ -62,11 +59,9 @@ export default class Home extends Component {
           judoOptions: judoOptions,
           googlePayOptions: googlePayOptions
         })
-        console.log("get jud " + JSON.stringify(this.state.judoOptions))
-        console.log("googl " + JSON.stringify(this.state.googlePayOptions))
       }
     } catch(e) {
-      console.log("getData error " + e)
+      console.log("getData() error " + e)
     }
   }
 
@@ -116,7 +111,6 @@ export default class Home extends Component {
         paymentMethods: this.state.paymentMethods
       }
     }
-    console.log("opt " + JSON.stringify(params))
     try {
       const response = await Judopay.showPaymentMethods({
         ...params
@@ -183,7 +177,6 @@ export default class Home extends Component {
       judoConfig: this.state.judoOptions,
       judoGooglePayConfig: this.state.googlePayOptions
     }
-    console.log("goo " + JSON.stringify(params))
     const title =
       this.state.googlePayOptions.transactionType == JudoTransactionType.payment
         ? 'Google Pay payment'
