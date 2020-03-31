@@ -448,7 +448,6 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         }
         WritableMap flattenOptions = new WritableNativeMap();
         flattenOptions.merge(options.getMap("judoConfig"));
-        flattenOptions.merge(options.getMap("judoApplePayConfig"));
         flattenOptions.merge(options.getMap("judoGooglePayConfig"));
         flattenOptions.merge(options.getMap("judoPaymentMethodsConfig"));
         this.promise = promise;
@@ -457,7 +456,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
         Intent intent = new Intent(currentActivity, PaymentMethodActivity.class);
         intent.putExtra(JUDO_OPTIONS, judo);
-        intent.putExtra(Judo.GPAY_PREAUTH, options.getInt("transactionType") == 1);
+        intent.putExtra(Judo.GPAY_PREAUTH, this.options.getInt("transactionType") == 1);
         currentActivity.startActivityForResult(intent, PAYMENT_METHOD);
     }
 
@@ -504,13 +503,11 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule implements
         }
         WritableMap flattenOptions = new WritableNativeMap();
         flattenOptions.merge(options.getMap("judoConfig"));
-        flattenOptions.merge(options.getMap("judoApplePayConfig"));
         flattenOptions.merge(options.getMap("judoGooglePayConfig"));
-        flattenOptions.merge(options.getMap("judoPaymentMethodsConfig"));
         this.promise = promise;
         this.options = flattenOptions;
 
-        boolean isTestEnv = options.getBoolean("googlePayTestEnvironment");
+        boolean isTestEnv = this.options.getBoolean("googlePayTestEnvironment");
         initGooglePayClient(isTestEnv);
 
         PaymentDataRequest paymentDataRequest = GooglePaymentUtils.createDefaultPaymentDataRequest(judo);
