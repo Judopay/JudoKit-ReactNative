@@ -211,7 +211,7 @@ export default class Settings extends Component {
       />
       <View>
         <Dialog.Container visible={this.state.textPickerVisible}>
-           <Dialog.Title>{this.state.settingSelected.title}</Dialog.Title>
+           <Dialog.Title children={`${this.state.settingSelected.title}`}></Dialog.Title>
           {this.getPickerType(this.state.settingSelected)}
           <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
           <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
