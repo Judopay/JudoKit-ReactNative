@@ -152,7 +152,7 @@ export default class Home extends Component {
       judoApplePayConfig: this.state.applePayOptions
     }
     const title =
-      this.state.applePayOptions.transactionType === JudoTransactionType.payment
+      this.state.applePayOptions.transactionType === JudoTransactionType.Payment
         ? 'Apple Pay payment'
         : 'Apple Pay pre-auth'
     try {
@@ -178,7 +178,7 @@ export default class Home extends Component {
       judoGooglePayConfig: this.state.googlePayOptions
     }
     const title =
-      this.state.googlePayOptions.transactionType == JudoTransactionType.payment
+      this.state.googlePayOptions.transactionType == JudoTransactionType.Payment
         ? 'Google Pay payment'
         : 'Google Pay pre-auth'
     try {
@@ -246,7 +246,7 @@ export default class Home extends Component {
           this.setState({
             googlePayOptions: {
               ...this.state.googlePayOptions,
-              transactionType: JudoTransactionType.payment
+              transactionType: JudoTransactionType.Payment
             }
           }, () => this.makeGooglePayPayment())
           break
@@ -254,7 +254,7 @@ export default class Home extends Component {
           this.setState({
             googlePayOptions: {
               ...this.state.googlePayOptions,
-              transactionType: JudoTransactionType.preAuth
+              transactionType: JudoTransactionType.PreAuth
             }
           }, () => this.makeGooglePayPayment())
           break
@@ -262,7 +262,7 @@ export default class Home extends Component {
           this.setState({
             applePayOptions: {
               ...this.state.applePayOptions,
-              transactionType: JudoTransactionType.payment
+              transactionType: JudoTransactionType.Payment
             }
           }, () => this.makeApplePayPayment())
           break
@@ -270,7 +270,7 @@ export default class Home extends Component {
           this.setState({
             applePayOptions: {
               ...this.state.applePayOptions,
-              transactionType: JudoTransactionType.preAuth
+              transactionType: JudoTransactionType.PreAuth
             }
           }, () => this.makeApplePayPayment())
           break
