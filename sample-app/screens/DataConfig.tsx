@@ -8,17 +8,17 @@ export let store = createStore(emptyHook)
 export const storageKey = "storage_key"
 
 export enum SettingsPickType {
-  switch,
-  textPicker,
-  singlePicker,
-  multiPicker,
+  Switch,
+  TextPicker,
+  SinglePicker,
+  MultiPicker,
 }
 
 export enum SettingsPickArray {
-  currencies,
-  cardNetworks,
-  payment,
-  googlePay,
+  Currencies,
+  CardNetworks,
+  Payment,
+  GooglePay,
 }
 
 export type SettingsListItem = {
@@ -116,31 +116,31 @@ export var SettingsData = {
           {
             "title": "Sandboxed",
             "subtitle": "Use Judopay API sandbox environment",
-            "type": SettingsPickType.switch,
+            "type": SettingsPickType.Switch,
             "value": true
           } as SettingsListItem,
           {
             "title":"Judo ID",
             "subtitle":"Your Judo ID",
-            "type": SettingsPickType.textPicker,
+            "type": SettingsPickType.TextPicker,
             "value": ""
           } as SettingsListItem,
           {
             "title":"Site ID",
             "subtitle":"Your Site ID",
-            "type": SettingsPickType.textPicker,
+            "type": SettingsPickType.TextPicker,
             "value": ""
           } as SettingsListItem,
           {
             "title":"Token",
             "subtitle":"Your API authorization token",
-            "type": SettingsPickType.textPicker,
+            "type": SettingsPickType.TextPicker,
             "value": ""
           } as SettingsListItem,
           {
             "title":"Secret",
             "subtitle":"Your API authorization secret",
-            "type": SettingsPickType.textPicker,
+            "type": SettingsPickType.TextPicker,
             "value": ""
           }
         ]
@@ -151,15 +151,15 @@ export var SettingsData = {
            {
               "title":"Amount",
               "subtitle":"Your amount",
-              "type": SettingsPickType.textPicker,
+              "type": SettingsPickType.TextPicker,
               "value": "0.15"
            } as SettingsListItem,
            {
               "title":"Currency",
               "subtitle":"EUR - Euro Member Countries",
-              "type": SettingsPickType.singlePicker,
+              "type": SettingsPickType.SinglePicker,
               "value":"EUR",
-              "pickItems": SettingsPickArray.currencies,
+              "pickItems": SettingsPickArray.Currencies,
               "valueArray": Array()
            } as SettingsListItem
         ]
@@ -170,39 +170,39 @@ export var SettingsData = {
            {
               "title":"Production environment",
               "subtitle":"Use Google Pay production environment",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem,
            {
               "title":"Billing address",
               "subtitle":"Select address",
-              "type": SettingsPickType.singlePicker,
+              "type": SettingsPickType.SinglePicker,
               "value":"FULL: Name, street address, locality, region, country code and postal code",
-              "pickItems": SettingsPickArray.googlePay,
+              "pickItems": SettingsPickArray.GooglePay,
               "valueArray": Array()
            } as SettingsListItem,
            {
               "title":"Billing address phone number",
               "subtitle":"Turn on to request a billing address phone number",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem,
            {
               "title":"Shipping address",
               "subtitle":"Turn on to request a full shipping address",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem,
            {
               "title":"Shipping address phone number",
               "subtitle":"Turn on to request a full shipping address phone number",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem,
            {
               "title":"Email address",
               "subtitle":"Turn on to request a email address",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem
         ]
@@ -213,18 +213,18 @@ export var SettingsData = {
            {
               "title":"Supported card networks",
               "subtitle":"Visa, Master card, Amex, JCB, Discover",
-              "type": SettingsPickType.multiPicker,
+              "type": SettingsPickType.MultiPicker,
               "value": "",
               "valueArray": new Array("VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"),
-              "pickItems": SettingsPickArray.cardNetworks
+              "pickItems": SettingsPickArray.CardNetworks
            } as SettingsListItem,
            {
               "title":"Payment methods",
               "subtitle":"Card, iDeal",
-              "type": SettingsPickType.multiPicker,
+              "type": SettingsPickType.MultiPicker,
               "value": "",
               "valueArray": new Array("CARD", "IDEAL"),
-              "pickItems": SettingsPickArray.payment
+              "pickItems": SettingsPickArray.Payment
            } as SettingsListItem
         ]
      }
@@ -232,18 +232,18 @@ export var SettingsData = {
 }
 
 export enum HomeListType {
-  cardPay,
-  cardPreAuth,
-  cardRegister,
-  cardCheck,
-  cardSave,
-  ideal,
-  googlePayment,
-  googlePreAuth,
-  applePayment,
-  applePreAuth,
-  methods,
-  methodsPreAuth
+  Payment,
+  PreAuth,
+  CreateCardToken,
+  CheckCard,
+  SaveCard,
+  Ideal,
+  GooglePayPayment,
+  GooglePayPreAuth,
+  ApplePayPayment,
+  ApplePayPreAuth,
+  PaymentMethods,
+  PreAuthPaymentMethods
 }
 
 export type HomeListItem = {

@@ -224,25 +224,25 @@ export default class Home extends Component {
       }
     }, () => {
       switch (item.type) {
-        case HomeListType.cardPay:
+        case HomeListType.Payment:
           this.makePayment()
           break
-        case HomeListType.cardPreAuth:
+        case HomeListType.PreAuth:
           this.makePreAuth()
           break
-        case HomeListType.cardRegister:
+        case HomeListType.CreateCardToken:
           //TODO
           break
-        case HomeListType.cardCheck:
+        case HomeListType.CheckCard:
           //TODO
           break
-        case HomeListType.cardSave:
+        case HomeListType.SaveCard:
           //TODO
           break
-        case HomeListType.ideal:
+        case HomeListType.Ideal:
           this.makeIDEALPayment()
           break
-        case HomeListType.googlePayment:
+        case HomeListType.GooglePayPayment:
           this.setState({
             googlePayOptions: {
               ...this.state.googlePayOptions,
@@ -250,7 +250,7 @@ export default class Home extends Component {
             }
           }, () => this.makeGooglePayPayment())
           break
-        case HomeListType.googlePreAuth:
+        case HomeListType.GooglePayPreAuth:
           this.setState({
             googlePayOptions: {
               ...this.state.googlePayOptions,
@@ -258,7 +258,7 @@ export default class Home extends Component {
             }
           }, () => this.makeGooglePayPayment())
           break
-        case HomeListType.applePayment:
+        case HomeListType.ApplePayPayment:
           this.setState({
             applePayOptions: {
               ...this.state.applePayOptions,
@@ -266,7 +266,7 @@ export default class Home extends Component {
             }
           }, () => this.makeApplePayPayment())
           break
-        case HomeListType.applePreAuth:
+        case HomeListType.ApplePayPreAuth:
           this.setState({
             applePayOptions: {
               ...this.state.applePayOptions,
@@ -274,10 +274,10 @@ export default class Home extends Component {
             }
           }, () => this.makeApplePayPayment())
           break
-        case HomeListType.methods:
+        case HomeListType.PaymentMethods:
           this.selectPaymentMethod()
           break
-        case HomeListType.methodsPreAuth:
+        case HomeListType.PreAuthPaymentMethods:
           //TODO
           break
       }
@@ -285,8 +285,8 @@ export default class Home extends Component {
   }
 
   getListItem(item: HomeListItem) {
-    if (isIos && (item.type === HomeListType.googlePayment || item.type === HomeListType.googlePreAuth)
-      || isAndroid && (item.type === HomeListType.applePayment || item.type === HomeListType.applePreAuth)) {
+    if (isIos && (item.type === HomeListType.GooglePayPayment || item.type === HomeListType.GooglePayPreAuth)
+      || isAndroid && (item.type === HomeListType.ApplePayPayment || item.type === HomeListType.ApplePayPreAuth)) {
           return <View />
         }
     return (
