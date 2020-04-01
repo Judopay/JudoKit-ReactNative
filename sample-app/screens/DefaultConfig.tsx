@@ -55,15 +55,15 @@ export var judoOptions: JudoConfig = {
 export var applePayOptions: JudoApplePayConfig = {
   merchantId: '<MERCHANT_ID>',
   countryCode: 'GB',
-  transactionType: JudoTransactionType.preAuth,
-  shippingType: JudoPaymentShippingType.shipping,
+  transactionType: JudoTransactionType.PreAuth,
+  shippingType: JudoPaymentShippingType.Shipping,
   shippingMethods: [
     {
       identifier: 'identifier for shiping method',
       detail: 'shipping method description',
       label: 'shipping method label',
       amount: '10.0',
-      paymentSummaryItemType: JudoPaymentSummaryItemType.final,
+      paymentSummaryItemType: JudoPaymentSummaryItemType.Final,
     },
   ],
   requireBillingDetails: true,
@@ -73,7 +73,7 @@ export var applePayOptions: JudoApplePayConfig = {
 
 export var googlePayOptions: JudoGooglePayConfig = {
   googlePayTestEnvironment: true,
-  transactionType: JudoTransactionType.preAuth,
+  transactionType: JudoTransactionType.PreAuth,
   requireBillingDetails: true,
   requireContactDetails: false,
   requireShippingDetails: false,

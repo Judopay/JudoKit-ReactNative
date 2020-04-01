@@ -124,15 +124,15 @@ interface JudoTheme {
 };
 
 export enum JudoTransactionType {
-  payment = 0,
-  preAuth = 1
+  Payment = 0,
+  PreAuth = 1
 };
 
 export enum JudoPaymentMethods {
-  card = 1,
-  applePay = 2,
-  googlePay = 2,
-  all = 3
+  Card = 1,
+  ApplePay = 2,
+  GooglePay = 2,
+  All = 3
 };
 
 export interface JudoPaymentMethodsConfig {
@@ -153,8 +153,8 @@ export interface JudoGooglePayConfig {
 };
 
 export enum JudoPaymentSummaryItemType {
-  final = 0,
-  pending = 1
+  Final = 0,
+  Pending = 1
 };
 
 interface JudoApplePayShippingMethod {
@@ -166,10 +166,10 @@ interface JudoApplePayShippingMethod {
 };
 
 export enum JudoPaymentShippingType {
-  shipping = 0,
-  delivery = 1,
-  storePickup = 2,
-  servicePickup = 3
+  Shipping = 0,
+  Delivery = 1,
+  StorePickup = 2,
+  ServicePickup = 3
 };
 
 export interface JudoApplePayConfig {
