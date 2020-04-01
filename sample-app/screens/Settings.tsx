@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 import Dialog from "react-native-dialog"
 import SafeAreaView from 'react-native-safe-area-view'
-import { storageKey, store } from './SettingsConfig'
 import {
   SettingsData,
   SettingsPickType,
@@ -20,8 +19,10 @@ import {
   Payments,
   GooglePayAddress,
   PickerItem,
-  SettingsPickArray
-} from './SettingsConfig'
+  SettingsPickArray,
+  storageKey,
+  store
+} from './DataConfig'
 import AsyncStorage from '@react-native-community/async-storage'
 
 export default class Settings extends Component {
@@ -57,7 +58,7 @@ export default class Settings extends Component {
         this.setState({ settingsData: JSON.parse(value) })
       }
     } catch(e) {
-      console.log("store data error " + e.message)
+      console.log("get data error " + e.message)
     }
   }
 
@@ -86,7 +87,7 @@ export default class Settings extends Component {
   }
 
   handlePickerItemPressed(item: PickerItem, settingsItem: SettingsListItem) {
-    if (settingsItem.type == SettingsPickType.singlePicker) {
+    if (settingsItem.type == SettingsPickType.SinglePicker) {
       var settingItem = this.state.settingSelected
       settingItem.value = item.value
       settingItem.subtitle = item.entry
@@ -106,7 +107,7 @@ export default class Settings extends Component {
   }
 
   handleSettingsItemPressed(item: SettingsListItem) {
-    if (item.type == SettingsPickType.switch) {
+    if (item.type == SettingsPickType.Switch) {
       item.value = !item.value
       this.setState({item})
       this.storeData(this.state.settingsData)
@@ -129,11 +130,11 @@ export default class Settings extends Component {
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.subtitle}>
             {item.value
-              && item.type == SettingsPickType.textPicker
+              && item.type == SettingsPickType.TextPicker
               ? item.value
               : item.subtitle}</Text>
           </View>
-          {item.type == SettingsPickType.switch
+          {item.type == SettingsPickType.Switch
             ? <Switch onValueChange = {() => {this.handleSettingsItemPressed(item)}} value = {item.value} />
             : <View />}
 
@@ -166,15 +167,15 @@ export default class Settings extends Component {
 
   getPickerDataList(settingItem: SettingsListItem): any {
     switch (settingItem.pickItems) {
-      case SettingsPickArray.currencies: return Currencies.list
-      case SettingsPickArray.cardNetworks: return CardNetworks.list
-      case SettingsPickArray.googlePay: return GooglePayAddress.list
-      case SettingsPickArray.payment: return Payments.list
+      case SettingsPickArray.Currencies: return Currencies.list
+      case SettingsPickArray.CardNetworks: return CardNetworks.list
+      case SettingsPickArray.GooglePay: return GooglePayAddress.list
+      case SettingsPickArray.Payment: return Payments.list
     }
   }
 
   getPickerType(settingsItem: SettingsListItem) {
-    if (settingsItem.type == SettingsPickType.textPicker) {
+    if (settingsItem.type == SettingsPickType.TextPicker) {
       return (
         <Dialog.Input
           wrapperStyle={styles.inputDialog}
@@ -210,7 +211,7 @@ export default class Settings extends Component {
       />
       <View>
         <Dialog.Container visible={this.state.textPickerVisible}>
-           <Dialog.Title>{this.state.settingSelected.title}</Dialog.Title>
+           <Dialog.Title children={`${this.state.settingSelected.title}`}></Dialog.Title>
           {this.getPickerType(this.state.settingSelected)}
           <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
           <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />

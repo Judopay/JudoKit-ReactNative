@@ -1,6 +1,14 @@
 // @flow
 import React, { Component } from 'react'
-import { Button, StatusBar, StyleSheet, Text, View } from 'react-native'
+import {
+  Button,
+  StatusBar,
+  StyleSheet,
+  SectionList,
+  TouchableHighlight,
+  Text,
+  View
+} from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import {
   Judopay,
@@ -13,19 +21,17 @@ import {
 import { judoOptions, applePayOptions, googlePayOptions } from './DefaultConfig'
 import { showMessage, isAndroid, isIos } from '../utils'
 import AsyncStorage from '@react-native-community/async-storage'
-import { storageKey, store } from './SettingsConfig'
+import { storageKey, store, HomeScreenData, HomeListItem, HomeListType } from './DataConfig'
 
 export default class Home extends Component {
   state = {
     judoOptions: judoOptions,
     googlePayOptions: googlePayOptions,
-    applePayOptions: applePayOptions
+    applePayOptions: applePayOptions,
+    paymentMethods: JudoPaymentMethods.card
   }
 
   componentDidMount() {
-    console.log("get jud " + JSON.stringify(this.state.judoOptions))
-    console.log("googl " + JSON.stringify(this.state.googlePayOptions))
-
     store.dispatch({ type: '' })
     store.subscribe(() => {
       this.getData()
@@ -53,20 +59,16 @@ export default class Home extends Component {
           judoOptions: judoOptions,
           googlePayOptions: googlePayOptions
         })
-        console.log("get jud " + JSON.stringify(this.state.judoOptions))
-        console.log("googl " + JSON.stringify(this.state.googlePayOptions))
       }
     } catch(e) {
-      console.log("getData error " + e)
+      console.log("getData() error " + e)
     }
   }
 
   async makePayment() {
-    var judoOptions = this.state.judoOptions
-    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     try {
       const response = await Judopay.makePayment({
-        ...judoOptions
+        ...this.state.judoOptions
       })
 
       if (response && response.result === 'Success') {
@@ -83,11 +85,9 @@ export default class Home extends Component {
   }
 
   async makePreAuth() {
-    var judoOptions = this.state.judoOptions
-    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     try {
       const response = await Judopay.makePreAuth({
-        ...judoOptions
+        ...this.state.judoOptions
       })
       if (response && response.result === 'Success') {
         await showMessage(
@@ -103,13 +103,12 @@ export default class Home extends Component {
   }
 
   async selectPaymentMethod() {
-    var judoOptions = this.state.judoOptions
     const params: JudoPaymentParams = {
-      judoConfig: judoOptions,
+      judoConfig: this.state.judoOptions,
       judoApplePayConfig: this.state.applePayOptions,
       judoGooglePayConfig: this.state.googlePayOptions,
       judoPaymentMethodsConfig: {
-        paymentMethods: JudoPaymentMethods.all
+        paymentMethods: this.state.paymentMethods
       }
     }
     try {
@@ -130,11 +129,9 @@ export default class Home extends Component {
   }
 
   async makeIDEALPayment() {
-    var judoOptions = this.state.judoOptions
-    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     try {
       const response = await Judopay.makeIDEALPayment({
-        ...judoOptions
+        ...this.state.judoOptions
       })
       if (response && response.orderStatus === 'SUCCEEDED') {
         await showMessage(`Successful`, `orderId: ${response.orderId || ''}`)
@@ -150,10 +147,8 @@ export default class Home extends Component {
   }
 
   async makeApplePayPayment() {
-    var judoOptions = this.state.judoOptions
-    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     const params: JudoPaymentParams = {
-      judoConfig: judoOptions,
+      judoConfig: this.state.judoOptions,
       judoApplePayConfig: this.state.applePayOptions
     }
     const title =
@@ -178,10 +173,8 @@ export default class Home extends Component {
   }
 
   async makeGooglePayPayment() {
-    var judoOptions = this.state.judoOptions
-    judoOptions.paymentReference = `myPaymentReference${Date.now()}`
     const params: JudoPaymentParams = {
-      judoConfig: judoOptions,
+      judoConfig: this.state.judoOptions,
       judoGooglePayConfig: this.state.googlePayOptions
     }
     const title =
@@ -223,85 +216,134 @@ export default class Home extends Component {
     }
   }
 
+  handleListItemPressed(item: HomeListItem) {
+    this.setState({
+      judoOptions: {
+        ...this.state.judoOptions,
+        paymentReference: `myPaymentReference${Date.now()}`
+      }
+    }, () => {
+      switch (item.type) {
+        case HomeListType.Payment:
+          this.makePayment()
+          break
+        case HomeListType.PreAuth:
+          this.makePreAuth()
+          break
+        case HomeListType.CreateCardToken:
+          //TODO
+          break
+        case HomeListType.CheckCard:
+          //TODO
+          break
+        case HomeListType.SaveCard:
+          //TODO
+          break
+        case HomeListType.Ideal:
+          this.makeIDEALPayment()
+          break
+        case HomeListType.GooglePayPayment:
+          this.setState({
+            googlePayOptions: {
+              ...this.state.googlePayOptions,
+              transactionType: JudoTransactionType.payment
+            }
+          }, () => this.makeGooglePayPayment())
+          break
+        case HomeListType.GooglePayPreAuth:
+          this.setState({
+            googlePayOptions: {
+              ...this.state.googlePayOptions,
+              transactionType: JudoTransactionType.preAuth
+            }
+          }, () => this.makeGooglePayPayment())
+          break
+        case HomeListType.ApplePayPayment:
+          this.setState({
+            applePayOptions: {
+              ...this.state.applePayOptions,
+              transactionType: JudoTransactionType.payment
+            }
+          }, () => this.makeApplePayPayment())
+          break
+        case HomeListType.ApplePayPreAuth:
+          this.setState({
+            applePayOptions: {
+              ...this.state.applePayOptions,
+              transactionType: JudoTransactionType.preAuth
+            }
+          }, () => this.makeApplePayPayment())
+          break
+        case HomeListType.PaymentMethods:
+          this.selectPaymentMethod()
+          break
+        case HomeListType.PreAuthPaymentMethods:
+          //TODO
+          break
+      }
+    })
+  }
+
+  getListItem(item: HomeListItem) {
+    if (isIos && (item.type === HomeListType.GooglePayPayment || item.type === HomeListType.GooglePayPreAuth)
+      || isAndroid && (item.type === HomeListType.ApplePayPayment || item.type === HomeListType.ApplePayPreAuth)) {
+          return <View />
+        }
+    return (
+      <TouchableHighlight
+        underlayColor='gray'
+        onPress={() => {this.handleListItemPressed(item)}}
+      >
+        <View style={styles.listItem}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.subtitle}>{item.subtitle}</Text>
+          <View style={styles.separator}/>
+        </View>
+      </TouchableHighlight>
+    );
+  }
+
   render() {
     return (
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
         <View style={styles.container}>
-          <Text style={styles.welcome}>
-            {`Welcome to the\nJudopay sample app!`}
-          </Text>
-          <View style={styles.buttons}>
-            <OptionButton title="Make payment" onPress={() => this.makePayment()} />
-            <OptionButton title="Make pre-auth" onPress={() => this.makePreAuth()} />
-            <OptionButton
-              title="Select payment method"
-              onPress={() => this.selectPaymentMethod()}
-            />
-            <OptionButton
-              title="iDEAL payment"
-              onPress={() => this.makeIDEALPayment()}
-            />
-            {isIos && (
-              <JudoApplePayButton
-                style={styles.payButtonStyle}
-                isDark={true}
-                onPayPress={() => this.makeApplePayPayment()}
-              />
-            )}
-            {isAndroid && (
-              <JudoGooglePayButton
-                style={styles.payButtonStyle}
-                isDark={false}
-                onPayPress={() => this.makeGooglePayPayment()}
-              />
-            )}
-          </View>
+          <SectionList
+            sections={HomeScreenData.list}
+            keyExtractor={(item, index) => item.title + index}
+            renderItem={({ item }) => this.getListItem(item)}
+          />
         </View>
       </SafeAreaView>
     )
   }
 }
 
-const OptionButton = ({
-  disabled,
-  onPress,
-  title,
-}: {
-  disabled?: boolean,
-  onPress: () => any,
-  title: string,
-}) => {
-  return (
-    <View style={styles.button}>
-      <Button disabled={disabled} title={title} onPress={() => onPress()} />
-    </View>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     alignItems: 'stretch',
     flex: 1,
-    margin: 32,
   },
-  welcome: {
-    fontSize: 21,
-    marginBottom: 32,
-    textAlign: 'center',
+  separator: {
+    height: 1,
+    backgroundColor: '#e9e9e9'
   },
-  buttons: {
-    flex: 1,
+  listItem: {
+    marginTop: 10
   },
-  button: {
-    marginTop: 8,
-    marginBottom: 8,
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: '#000',
+    width: 250,
+    marginStart: 10,
+    marginEnd: 10,
   },
-  payButtonStyle: {
-    alignSelf: 'center',
-    height: 30,
-    width: 100,
-    marginTop: 16,
-    marginBottom: 16,
-  },
+  subtitle: {
+    fontSize: 14,
+    width: 300,
+    marginStart: 10,
+    marginEnd: 10,
+    marginBottom: 10
+  }
 })

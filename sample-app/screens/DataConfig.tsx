@@ -8,17 +8,17 @@ export let store = createStore(emptyHook)
 export const storageKey = "storage_key"
 
 export enum SettingsPickType {
-  switch,
-  textPicker,
-  singlePicker,
-  multiPicker,
+  Switch,
+  TextPicker,
+  SinglePicker,
+  MultiPicker,
 }
 
 export enum SettingsPickArray {
-  currencies,
-  cardNetworks,
-  payment,
-  googlePay,
+  Currencies,
+  CardNetworks,
+  Payment,
+  GooglePay,
 }
 
 export type SettingsListItem = {
@@ -101,7 +101,8 @@ export const Payments = {
       "data": [
         { "entry": "Card", "value": "CARD" } as PickerItem,
         { "entry": "iDeal", "value": "IDEAL" } as PickerItem,
-        { "entry": "Google Pay", "value": "GOOGLE_PAY" } as PickerItem
+        { "entry": "Google Pay", "value": "GOOGLE_PAY" } as PickerItem,
+        { "entry": "Apple Pay", "value": "APPLE_PAY" } as PickerItem
       ]
     }
   ]
@@ -115,31 +116,31 @@ export var SettingsData = {
           {
             "title": "Sandboxed",
             "subtitle": "Use Judopay API sandbox environment",
-            "type": SettingsPickType.switch,
+            "type": SettingsPickType.Switch,
             "value": true
           } as SettingsListItem,
           {
             "title":"Judo ID",
             "subtitle":"Your Judo ID",
-            "type": SettingsPickType.textPicker,
+            "type": SettingsPickType.TextPicker,
             "value": ""
           } as SettingsListItem,
           {
             "title":"Site ID",
             "subtitle":"Your Site ID",
-            "type": SettingsPickType.textPicker,
+            "type": SettingsPickType.TextPicker,
             "value": ""
           } as SettingsListItem,
           {
             "title":"Token",
             "subtitle":"Your API authorization token",
-            "type": SettingsPickType.textPicker,
+            "type": SettingsPickType.TextPicker,
             "value": ""
           } as SettingsListItem,
           {
             "title":"Secret",
             "subtitle":"Your API authorization secret",
-            "type": SettingsPickType.textPicker,
+            "type": SettingsPickType.TextPicker,
             "value": ""
           }
         ]
@@ -150,15 +151,15 @@ export var SettingsData = {
            {
               "title":"Amount",
               "subtitle":"Your amount",
-              "type": SettingsPickType.textPicker,
+              "type": SettingsPickType.TextPicker,
               "value": "0.15"
            } as SettingsListItem,
            {
               "title":"Currency",
               "subtitle":"EUR - Euro Member Countries",
-              "type": SettingsPickType.singlePicker,
+              "type": SettingsPickType.SinglePicker,
               "value":"EUR",
-              "pickItems": SettingsPickArray.currencies,
+              "pickItems": SettingsPickArray.Currencies,
               "valueArray": Array()
            } as SettingsListItem
         ]
@@ -169,39 +170,39 @@ export var SettingsData = {
            {
               "title":"Production environment",
               "subtitle":"Use Google Pay production environment",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem,
            {
               "title":"Billing address",
               "subtitle":"Select address",
-              "type": SettingsPickType.singlePicker,
+              "type": SettingsPickType.SinglePicker,
               "value":"FULL: Name, street address, locality, region, country code and postal code",
-              "pickItems": SettingsPickArray.googlePay,
+              "pickItems": SettingsPickArray.GooglePay,
               "valueArray": Array()
            } as SettingsListItem,
            {
               "title":"Billing address phone number",
               "subtitle":"Turn on to request a billing address phone number",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem,
            {
               "title":"Shipping address",
               "subtitle":"Turn on to request a full shipping address",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem,
            {
               "title":"Shipping address phone number",
               "subtitle":"Turn on to request a full shipping address phone number",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem,
            {
               "title":"Email address",
               "subtitle":"Turn on to request a email address",
-              "type": SettingsPickType.switch,
+              "type": SettingsPickType.Switch,
               "value": false
            } as SettingsListItem
         ]
@@ -212,20 +213,105 @@ export var SettingsData = {
            {
               "title":"Supported card networks",
               "subtitle":"Visa, Master card, Amex, JCB, Discover",
-              "type": SettingsPickType.multiPicker,
+              "type": SettingsPickType.MultiPicker,
               "value": "",
               "valueArray": new Array("VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"),
-              "pickItems": SettingsPickArray.cardNetworks
+              "pickItems": SettingsPickArray.CardNetworks
            } as SettingsListItem,
            {
               "title":"Payment methods",
               "subtitle":"Card, iDeal",
-              "type": SettingsPickType.multiPicker,
+              "type": SettingsPickType.MultiPicker,
               "value": "",
               "valueArray": new Array("CARD", "IDEAL"),
-              "pickItems": SettingsPickArray.payment
+              "pickItems": SettingsPickArray.Payment
            } as SettingsListItem
         ]
      }
   ]
 }
+
+export enum HomeListType {
+  Payment,
+  PreAuth,
+  CreateCardToken,
+  CheckCard,
+  SaveCard,
+  Ideal,
+  GooglePayPayment,
+  GooglePayPreAuth,
+  ApplePayPayment,
+  ApplePayPreAuth,
+  PaymentMethods,
+  PreAuthPaymentMethods
+}
+
+export type HomeListItem = {
+  title: string,
+  subtitle: string,
+  type: HomeListType
+}
+
+export const HomeScreenData = {
+  list: [
+     {
+        "data":[
+          {
+            "title": "Pay with card",
+            "subtitle": "by entering card details",
+            "type": HomeListType.cardPay
+          } as HomeListItem,
+          {
+            "title": "Pre-auth with card",
+            "subtitle": "pre-auth by entering card details",
+            "type": HomeListType.cardPreAuth
+          } as HomeListItem,
+          {
+            "title": "Register card",
+            "subtitle": "to be stored for future transactions",
+            "type": HomeListType.cardRegister
+          } as HomeListItem,
+          {
+            "title": "Check card",
+            "subtitle": "to validate a card",
+            "type": HomeListType.cardCheck
+          } as HomeListItem,
+          {
+            "title": "Save card",
+            "subtitle": "to be stored for future transactions",
+            "type": HomeListType.cardSave
+          } as HomeListItem,
+          {
+            "title": "Apple Pay payment",
+            "subtitle": "with a wallet card",
+            "type": HomeListType.applePayment
+          } as HomeListItem,
+          {
+            "title": "Apple Pay pre-auth",
+            "subtitle": "pre-auth with a wallet card",
+            "type": HomeListType.applePreAuth
+          } as HomeListItem,
+          {
+            "title": "Google Pay payment",
+            "subtitle": "with a wallet card",
+            "type": HomeListType.googlePayment
+          } as HomeListItem,
+          {
+            "title": "Google Pay pre-auth",
+            "subtitle": "pre-auth with a wallet card",
+            "type": HomeListType.googlePreAuth
+          } as HomeListItem,
+          {
+            "title": "Payment methods",
+            "subtitle": "with default payment methods",
+            "type": HomeListType.methods
+          } as HomeListItem,
+          {
+            "title": "Pre-auth payment methods",
+            "subtitle": "with default pre-auth payment methods",
+            "type": HomeListType.methodsPreAuth
+          } as HomeListItem
+        ]
+      }
+    ]
+  }

@@ -92,8 +92,6 @@ RCT_REMAP_METHOD(makeApplePayPayment,
     NSMutableDictionary *flattenOptions = [[NSMutableDictionary alloc] init];
     [flattenOptions addEntriesFromDictionary: options[@"judoConfig"]];
     [flattenOptions addEntriesFromDictionary: options[@"judoApplePayConfig"]];
-    [flattenOptions addEntriesFromDictionary: options[@"judoGooglePayConfig"]];
-    [flattenOptions addEntriesFromDictionary: options[@"judoPaymentMethodsConfig"]];
     if (![self initWithOptions:flattenOptions reject:reject]) {
         return;
     }
@@ -114,7 +112,6 @@ RCT_REMAP_METHOD(showPaymentMethods,
     NSMutableDictionary *flattenOptions = [[NSMutableDictionary alloc] init];
     [flattenOptions addEntriesFromDictionary: options[@"judoConfig"]];
     [flattenOptions addEntriesFromDictionary: options[@"judoApplePayConfig"]];
-    [flattenOptions addEntriesFromDictionary: options[@"judoGooglePayConfig"]];
     [flattenOptions addEntriesFromDictionary: options[@"judoPaymentMethodsConfig"]];
     if (![self initWithOptions:flattenOptions reject:reject]) {
         return;
