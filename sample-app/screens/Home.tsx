@@ -243,31 +243,35 @@ export default class Home extends Component {
           this.makeIDEALPayment()
           break
         case HomeListType.googlePayment:
-          var googlePayOptions = this.state.googlePayOptions
-          googlePayOptions.transactionType = JudoTransactionType.payment
           this.setState({
-            googlePayOptions: googlePayOptions
+            googlePayOptions: {
+              ...this.state.googlePayOptions,
+              transactionType: JudoTransactionType.payment
+            }
           }, () => this.makeGooglePayPayment())
           break
         case HomeListType.googlePreAuth:
-          var googlePayOptions = this.state.googlePayOptions
-          googlePayOptions.transactionType = JudoTransactionType.preAuth
           this.setState({
-            googlePayOptions: googlePayOptions
+            googlePayOptions: {
+              ...this.state.googlePayOptions,
+              transactionType: JudoTransactionType.preAuth
+            }
           }, () => this.makeGooglePayPayment())
           break
         case HomeListType.applePayment:
-          var applePayOptions = this.state.applePayOptions
-          applePayOptions.transactionType = JudoTransactionType.payment
           this.setState({
-            applePayOptions: applePayOptions
+            applePayOptions: {
+              ...this.state.applePayOptions,
+              transactionType: JudoTransactionType.payment
+            }
           }, () => this.makeApplePayPayment())
           break
         case HomeListType.applePreAuth:
-          var applePayOptions = this.state.applePayOptions
-          applePayOptions.transactionType = JudoTransactionType.preAuth
           this.setState({
-            applePayOptions: applePayOptions
+            applePayOptions: {
+              ...this.state.applePayOptions,
+              transactionType: JudoTransactionType.preAuth
+            }
           }, () => this.makeApplePayPayment())
           break
         case HomeListType.methods:
