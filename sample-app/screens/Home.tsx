@@ -32,7 +32,7 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    store.dispatch({ type: '' })
+    this.getData()
     store.subscribe(() => {
       this.getData()
     })
@@ -50,7 +50,7 @@ export default class Home extends Component {
         judoOptions.token = settings.list[0].data[3].value as string
         judoOptions.secret = settings.list[0].data[4].value as string
         judoOptions.amount = settings.list[1].data[0].value as string
-        judoOptions.currency = settings.list[1].data[1].valueArray[0] as string
+        judoOptions.currency = settings.list[1].data[1].value as string
         var googlePayOptions = this.state.googlePayOptions
         googlePayOptions.googlePayTestEnvironment = settings.list[2].data[0].value as boolean
         googlePayOptions.requireShippingDetails = settings.list[2].data[3].value as boolean
@@ -66,6 +66,7 @@ export default class Home extends Component {
   }
 
   async makePayment() {
+    console.log("ta " + JSON.stringify(this.state.judoOptions))
     try {
       const response = await Judopay.makePayment({
         ...this.state.judoOptions

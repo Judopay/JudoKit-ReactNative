@@ -183,11 +183,14 @@ export default class Settings extends Component {
       )
     } else {
       return (
-        <SectionList
-          sections={this.getPickerDataList(settingsItem)}
-          keyExtractor={(item) => item.value}
-          renderItem={({ item }) => this.getPickerListItem(item, settingsItem)}
-        />
+        <View style={{ height: 350}}>
+          <SectionList
+            style={{ marginLeft: 10, marginRight: 10 }}
+            sections={this.getPickerDataList(settingsItem)}
+            keyExtractor={(item) => item.value}
+            renderItem={({ item }) => this.getPickerListItem(item, settingsItem)}
+          />
+       </View>
       )
     }
   }
