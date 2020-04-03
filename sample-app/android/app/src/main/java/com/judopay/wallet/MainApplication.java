@@ -3,6 +3,7 @@ package com.judopay.wallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.pandulapeter.beagleCore.configuration.TriggerGesture;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

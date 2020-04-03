@@ -10,6 +10,7 @@ PODS:
     - React-Core (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/turbomodule/core (= 0.61.5)
+  - FLEX (4.0.0)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -243,6 +244,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
+  - FLEX
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - JudoKitObjC (~> 10.0)
@@ -281,6 +283,7 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - DeviceDNA
+    - FLEX
     - JudoKitObjC
     - TrustKit
 
@@ -356,6 +359,7 @@ SPEC CHECKSUMS:
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
+  FLEX: 3fb1e8096b230a08a5d4d5f3c2992b84399a6abf
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   JudoKitObjC: 5ebfbdea37ad59e68c8061da45813eaf8879b932
@@ -388,6 +392,6 @@ SPEC CHECKSUMS:
   TrustKit: 578f77c59a23167e55b523d460bb495114ed0de7
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: b222451dfa27c2fbf64313134348c9876c53e6b5
+PODFILE CHECKSUM: 46f7a72e6f3d406d208a61fc692d9e3425b58ec4
 
 COCOAPODS: 1.9.1
