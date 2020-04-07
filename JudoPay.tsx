@@ -40,7 +40,7 @@ class JudoPay {
             'token': this.token,
             'secret': this.secret,
             'sandboxed': this.isSandboxed,
-            'type': type,
+            'transactionType': type,
             'configuration': configuration,
         }
     }

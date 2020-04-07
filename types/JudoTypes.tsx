@@ -4,10 +4,11 @@ export interface JudoConfiguration {
     judoId: string,
     amount: JudoAmount,
     reference: JudoReference,
+    siteId?: string,
     cardAddress?: JudoAddress,
     uiConfiguration?: JudoUIConfiguration,
-    paymentMethods?: [JudoPaymentMethod],
-    supportedCardNetworks?: [JudoCardNetwork],
+    paymentMethods?: JudoPaymentMethod[],
+    supportedCardNetworks?: JudoCardNetwork[],
     primaryAccountDetails?: JudoAccountDetails,
     applePayConfiguration?: JudoApplePayConfiguration,
 }

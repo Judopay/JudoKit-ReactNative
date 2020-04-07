@@ -38,9 +38,10 @@ RCT_REMAP_METHOD(invokeTransaction,
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
   JudoKit *judoKit = [self judoSessionFromProperties:properties];
+  TransactionType type = [self transactionTypeFromProperties:properties];
   JPConfiguration *configuration = [self configurationFromProperties:properties];
 
-  [judoKit invokeTransactionWithType:TransactionTypePayment
+  [judoKit invokeTransactionWithType:type
                        configuration:configuration
                           completion:^(JPResponse *response, NSError *error) {
     if (error) {
@@ -62,6 +63,18 @@ RCT_REMAP_METHOD(invokeTransaction,
   judoKit.isSandboxed = isSandboxed;
 
   return judoKit;
+}
+
+- (TransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
+
+    int intType = [RCTConvert int:properties[@"transactionType"]];
+
+    NSArray<NSNumber *> *availableTypes = @[
+        @(TransactionTypePayment), @(TransactionTypePreAuth), @(TransactionTypeRegisterCard),
+        @(TransactionTypeCheckCard), @(TransactionTypeSaveCard)
+    ];
+
+    return availableTypes[intType].intValue;
 }
 
 - (JPAmount *)amountFromProperties:(NSDictionary *)properties {

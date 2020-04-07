@@ -1,4 +1,3 @@
-import React from 'react';
 import { createStore } from 'redux'
 
 function emptyHook() { }
@@ -110,213 +109,123 @@ export const Payments = {
 
 export var SettingsData = {
   list: [
-     {
-        "title":"API Configurations",
-        "data":[
-          {
-            "title": "Sandboxed",
-            "subtitle": "Use Judopay API sandbox environment",
-            "type": SettingsPickType.Switch,
-            "value": true
-          } as SettingsListItem,
-          {
-            "title":"Judo ID",
-            "subtitle":"Your Judo ID",
-            "type": SettingsPickType.TextPicker,
-            "value": ""
-          } as SettingsListItem,
-          {
-            "title":"Site ID",
-            "subtitle":"Your Site ID",
-            "type": SettingsPickType.TextPicker,
-            "value": ""
-          } as SettingsListItem,
-          {
-            "title":"Token",
-            "subtitle":"Your API authorization token",
-            "type": SettingsPickType.TextPicker,
-            "value": ""
-          } as SettingsListItem,
-          {
-            "title":"Secret",
-            "subtitle":"Your API authorization secret",
-            "type": SettingsPickType.TextPicker,
-            "value": ""
-          }
-        ]
-     },
-     {
-        "title":"Amount",
-        "data":[
-           {
-              "title":"Amount",
-              "subtitle":"Your amount",
-              "type": SettingsPickType.TextPicker,
-              "value": "0.15"
-           } as SettingsListItem,
-           {
-              "title":"Currency",
-              "subtitle":"EUR - Euro Member Countries",
-              "type": SettingsPickType.SinglePicker,
-              "value":"EUR",
-              "pickItems": SettingsPickArray.Currencies,
-              "valueArray": Array()
-           } as SettingsListItem
-        ]
-     },
-     {
-        "title":"Google Pay",
-        "data":[
-           {
-              "title":"Production environment",
-              "subtitle":"Use Google Pay production environment",
-              "type": SettingsPickType.Switch,
-              "value": false
-           } as SettingsListItem,
-           {
-              "title":"Billing address",
-              "subtitle":"Select address",
-              "type": SettingsPickType.SinglePicker,
-              "value":"FULL: Name, street address, locality, region, country code and postal code",
-              "pickItems": SettingsPickArray.GooglePay,
-              "valueArray": Array()
-           } as SettingsListItem,
-           {
-              "title":"Billing address phone number",
-              "subtitle":"Turn on to request a billing address phone number",
-              "type": SettingsPickType.Switch,
-              "value": false
-           } as SettingsListItem,
-           {
-              "title":"Shipping address",
-              "subtitle":"Turn on to request a full shipping address",
-              "type": SettingsPickType.Switch,
-              "value": false
-           } as SettingsListItem,
-           {
-              "title":"Shipping address phone number",
-              "subtitle":"Turn on to request a full shipping address phone number",
-              "type": SettingsPickType.Switch,
-              "value": false
-           } as SettingsListItem,
-           {
-              "title":"Email address",
-              "subtitle":"Turn on to request a email address",
-              "type": SettingsPickType.Switch,
-              "value": false
-           } as SettingsListItem
-        ]
-     },
-     {
-        "title":"Others",
-        "data":[
-           {
-              "title":"Supported card networks",
-              "subtitle":"Visa, Master card, Amex, JCB, Discover",
-              "type": SettingsPickType.MultiPicker,
-              "value": "",
-              "valueArray": new Array("VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"),
-              "pickItems": SettingsPickArray.CardNetworks
-           } as SettingsListItem,
-           {
-              "title":"Payment methods",
-              "subtitle":"Card, iDeal",
-              "type": SettingsPickType.MultiPicker,
-              "value": "",
-              "valueArray": new Array("CARD", "IDEAL"),
-              "pickItems": SettingsPickArray.Payment
-           } as SettingsListItem
-        ]
-     }
+    {
+      "title": "API Configurations",
+      "data": [
+        {
+          "title": "Sandboxed",
+          "subtitle": "Use Judopay API sandbox environment",
+          "type": SettingsPickType.Switch,
+          "value": true
+        } as SettingsListItem,
+        {
+          "title": "Judo ID",
+          "subtitle": "Your Judo ID",
+          "type": SettingsPickType.TextPicker,
+          "value": ""
+        } as SettingsListItem,
+        {
+          "title": "Site ID",
+          "subtitle": "Your Site ID",
+          "type": SettingsPickType.TextPicker,
+          "value": ""
+        } as SettingsListItem,
+        {
+          "title": "Token",
+          "subtitle": "Your API authorization token",
+          "type": SettingsPickType.TextPicker,
+          "value": ""
+        } as SettingsListItem,
+        {
+          "title": "Secret",
+          "subtitle": "Your API authorization secret",
+          "type": SettingsPickType.TextPicker,
+          "value": ""
+        }
+      ]
+    },
+    {
+      "title": "Amount",
+      "data": [
+        {
+          "title": "Amount",
+          "subtitle": "Your amount",
+          "type": SettingsPickType.TextPicker,
+          "value": "0.15"
+        } as SettingsListItem,
+        {
+          "title": "Currency",
+          "subtitle": "EUR - Euro Member Countries",
+          "type": SettingsPickType.SinglePicker,
+          "value": "EUR",
+          "pickItems": SettingsPickArray.Currencies,
+          "valueArray": Array()
+        } as SettingsListItem
+      ]
+    },
+    {
+      "title": "Google Pay",
+      "data": [
+        {
+          "title": "Production environment",
+          "subtitle": "Use Google Pay production environment",
+          "type": SettingsPickType.Switch,
+          "value": false
+        } as SettingsListItem,
+        {
+          "title": "Billing address",
+          "subtitle": "Select address",
+          "type": SettingsPickType.SinglePicker,
+          "value": "FULL: Name, street address, locality, region, country code and postal code",
+          "pickItems": SettingsPickArray.GooglePay,
+          "valueArray": Array()
+        } as SettingsListItem,
+        {
+          "title": "Billing address phone number",
+          "subtitle": "Turn on to request a billing address phone number",
+          "type": SettingsPickType.Switch,
+          "value": false
+        } as SettingsListItem,
+        {
+          "title": "Shipping address",
+          "subtitle": "Turn on to request a full shipping address",
+          "type": SettingsPickType.Switch,
+          "value": false
+        } as SettingsListItem,
+        {
+          "title": "Shipping address phone number",
+          "subtitle": "Turn on to request a full shipping address phone number",
+          "type": SettingsPickType.Switch,
+          "value": false
+        } as SettingsListItem,
+        {
+          "title": "Email address",
+          "subtitle": "Turn on to request a email address",
+          "type": SettingsPickType.Switch,
+          "value": false
+        } as SettingsListItem
+      ]
+    },
+    {
+      "title": "Others",
+      "data": [
+        {
+          "title": "Supported card networks",
+          "subtitle": "Visa, Master card, Amex, JCB, Discover",
+          "type": SettingsPickType.MultiPicker,
+          "value": "",
+          "valueArray": new Array("VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"),
+          "pickItems": SettingsPickArray.CardNetworks
+        } as SettingsListItem,
+        {
+          "title": "Payment methods",
+          "subtitle": "Card, iDeal",
+          "type": SettingsPickType.MultiPicker,
+          "value": "",
+          "valueArray": new Array("CARD", "IDEAL"),
+          "pickItems": SettingsPickArray.Payment
+        } as SettingsListItem
+      ]
+    }
   ]
 }
-
-export enum HomeListType {
-  Payment,
-  PreAuth,
-  CreateCardToken,
-  CheckCard,
-  SaveCard,
-  Ideal,
-  GooglePayPayment,
-  GooglePayPreAuth,
-  ApplePayPayment,
-  ApplePayPreAuth,
-  PaymentMethods,
-  PreAuthPaymentMethods
-}
-
-export type HomeListItem = {
-  title: string,
-  subtitle: string,
-  type: HomeListType
-}
-
-export const HomeScreenData = {
-  list: [
-     {
-        "data":[
-          {
-            "title": "Pay with card",
-            "subtitle": "by entering card details",
-            "type": HomeListType.Payment
-          } as HomeListItem,
-          {
-            "title": "Pre-auth with card",
-            "subtitle": "pre-auth by entering card details",
-            "type": HomeListType.PreAuth
-          } as HomeListItem,
-          {
-            "title": "Register card",
-            "subtitle": "to be stored for future transactions",
-            "type": HomeListType.CreateCardToken
-          } as HomeListItem,
-          {
-            "title": "Check card",
-            "subtitle": "to validate a card",
-            "type": HomeListType.CheckCard
-          } as HomeListItem,
-          {
-            "title": "Save card",
-            "subtitle": "to be stored for future transactions",
-            "type": HomeListType.SaveCard
-          } as HomeListItem,
-          {
-            "title": "Ideal payment",
-            "subtitle": "with ideal payment",
-            "type": HomeListType.Ideal
-          } as HomeListItem,
-          {
-            "title": "Apple Pay payment",
-            "subtitle": "with a wallet card",
-            "type": HomeListType.ApplePayPayment
-          } as HomeListItem,
-          {
-            "title": "Apple Pay pre-auth",
-            "subtitle": "pre-auth with a wallet card",
-            "type": HomeListType.ApplePayPreAuth
-          } as HomeListItem,
-          {
-            "title": "Google Pay payment",
-            "subtitle": "with a wallet card",
-            "type": HomeListType.GooglePayPayment
-          } as HomeListItem,
-          {
-            "title": "Google Pay pre-auth",
-            "subtitle": "pre-auth with a wallet card",
-            "type": HomeListType.GooglePayPreAuth
-          } as HomeListItem,
-          {
-            "title": "Payment methods",
-            "subtitle": "with default payment methods",
-            "type": HomeListType.PaymentMethods
-          } as HomeListItem,
-          {
-            "title": "Pre-auth payment methods",
-            "subtitle": "with default pre-auth payment methods",
-            "type": HomeListType.PreAuthPaymentMethods
-          } as HomeListItem
-        ]
-      }
-    ]
-  }

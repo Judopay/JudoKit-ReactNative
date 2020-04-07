@@ -12,26 +12,34 @@ import {
   SafeAreaView,
 } from 'react-native'
 
+import JudoPay, { JudoTransactionType } from 'judo-react-native'
+import configuration from '../../helpers/JudoDefaults';
+
 export default class Home extends Component {
 
   async invokePayment() {
-    //TODO: Handle payment
+    this.invokeTransaction(JudoTransactionType.Payment);
   }
 
   async invokePreAuth() {
-    //TODO: Handle preauth
+    this.invokeTransaction(JudoTransactionType.PreAuth);
   }
 
   async invokeRegisterCard() {
-    //TODO: Handle register card
+    this.invokeTransaction(JudoTransactionType.RegisterCard);
   }
 
   async invokeCheckCard() {
-    //TODO: Handle check card
+    this.invokeTransaction(JudoTransactionType.CheckCard);
   }
 
   async invokeSaveCard() {
-    //TODO: Handle save card
+    this.invokeTransaction(JudoTransactionType.SaveCard);
+  }
+
+  async invokeTransaction(type: JudoTransactionType) {
+    const judo = new JudoPay('token', 'secret');
+    await judo.invokeTransaction(type, configuration);
   }
 
   handleListItemPressed(item: HomeListItem) {
