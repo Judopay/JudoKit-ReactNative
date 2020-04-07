@@ -1,4 +1,22 @@
 import React, { Component } from 'react'
+import { storageKey, store } from '../../helpers/AsyncStore'
+import Dialog from "react-native-dialog"
+import AsyncStorage from '@react-native-community/async-storage'
+
+import {
+  SettingsData,
+  Currencies,
+  CardNetworks,
+  Payments
+} from './SettingsData'
+
+import {
+  PickerItem,
+  SettingsListItem,
+  SettingsPickArray,
+  SettingsPickType
+} from './SettingsProps'
+
 import {
   View,
   Image,
@@ -9,21 +27,6 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native'
-import Dialog from "react-native-dialog"
-import {
-  SettingsData,
-  SettingsPickType,
-  SettingsListItem,
-  Currencies,
-  CardNetworks,
-  Payments,
-  GooglePayAddress,
-  PickerItem,
-  SettingsPickArray,
-  storageKey,
-  store
-} from './DataConfig'
-import AsyncStorage from '@react-native-community/async-storage'
 
 export default class Settings extends Component {
   state = {
@@ -169,7 +172,6 @@ export default class Settings extends Component {
     switch (settingItem.pickItems) {
       case SettingsPickArray.Currencies: return Currencies.list
       case SettingsPickArray.CardNetworks: return CardNetworks.list
-      case SettingsPickArray.GooglePay: return GooglePayAddress.list
       case SettingsPickArray.Payment: return Payments.list
     }
   }
