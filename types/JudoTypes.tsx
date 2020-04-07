@@ -72,3 +72,25 @@ export interface JudoAccountDetails {
     dateOfBirth?: string,
     postCode?: string,
 }
+
+export interface JudoResponse {
+    receiptId: string,
+    yourPaymentReference: string,
+    type: string,
+    createdAt: string,
+    result: string,
+    message?: string,
+    judoId: string,
+    siteId: string,
+    merchantName: string,
+    appearsOnStatementAs: string,
+    originalAmount?: string,
+    netAmount?: string,
+    amount?: string,
+    currency?: string,
+    cardDetails?: any,
+    consumer?: any,
+    risks?: any,
+    device?: any,
+    paymentToken?: any
+};
