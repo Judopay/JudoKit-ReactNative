@@ -6,10 +6,10 @@ import {
   Text,
   Switch,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  SafeAreaView,
 } from 'react-native'
 import Dialog from "react-native-dialog"
-import SafeAreaView from 'react-native-safe-area-view'
 import {
   SettingsData,
   SettingsPickType,
@@ -54,10 +54,10 @@ export default class Settings extends Component {
   async getData() {
     try {
       const value = await AsyncStorage.getItem(storageKey)
-      if(value !== null) {
+      if (value !== null) {
         this.setState({ settingsData: JSON.parse(value) })
       }
-    } catch(e) {
+    } catch (e) {
       console.log("get data error " + e.message)
     }
   }
@@ -78,7 +78,7 @@ export default class Settings extends Component {
   handleDialogTextInputChange(text: string) {
     var item = this.state.settingSelected
     item.value = text
-    this.setState({item})
+    this.setState({ item })
   }
 
   handleDialogCloseAction() {
@@ -91,25 +91,25 @@ export default class Settings extends Component {
       var settingItem = this.state.settingSelected
       settingItem.value = item.value
       settingItem.subtitle = item.entry
-      this.setState({settingItem})
+      this.setState({ settingItem })
       this.handleDialogCloseAction()
     } else {
       var settingItem = this.state.settingSelected
       const index = settingItem.valueArray!.indexOf(item.value, 0);
       if (index > -1) {
-         settingItem.valueArray!.splice(index, 1);
+        settingItem.valueArray!.splice(index, 1);
       } else {
         settingItem.valueArray!.push(item.value)
       }
       settingItem.subtitle = settingItem.valueArray!.toString()
-      this.setState({settingItem})
+      this.setState({ settingItem })
     }
   }
 
   handleSettingsItemPressed(item: SettingsListItem) {
     if (item.type == SettingsPickType.Switch) {
       item.value = !item.value
-      this.setState({item})
+      this.setState({ item })
       this.storeData(this.state.settingsData)
     } else {
       this.showPickerDialog(item)
@@ -123,19 +123,19 @@ export default class Settings extends Component {
     return (
       <TouchableHighlight
         underlayColor='gray'
-        onPress={() => {this.handleSettingsItemPressed(item)}}
+        onPress={() => { this.handleSettingsItemPressed(item) }}
       >
         <View style={styles.listItem}>
           <View>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.subtitle}>
-            {item.value
-              && item.type == SettingsPickType.TextPicker
-              ? item.value
-              : item.subtitle}</Text>
+              {item.value
+                && item.type == SettingsPickType.TextPicker
+                ? item.value
+                : item.subtitle}</Text>
           </View>
           {item.type == SettingsPickType.Switch
-            ? <Switch onValueChange = {() => {this.handleSettingsItemPressed(item)}} value = {item.value} />
+            ? <Switch onValueChange={() => { this.handleSettingsItemPressed(item) }} value={item.value} />
             : <View />}
 
         </View>
@@ -150,12 +150,12 @@ export default class Settings extends Component {
     return (
       <TouchableHighlight
         underlayColor='gray'
-        onPress={() => {this.handlePickerItemPressed(item, settingsItem)}}
+        onPress={() => { this.handlePickerItemPressed(item, settingsItem) }}
       >
 
-        <View style={[styles.listItem, { marginLeft: 0, marginRight: 0}]}>
+        <View style={[styles.listItem, { marginLeft: 0, marginRight: 0 }]}>
           <Text style={styles.title}>{item.entry}</Text>
-          { settingsItem.valueArray!.indexOf(item.value, 0) > -1 || settingsItem.value == item.value
+          {settingsItem.valueArray!.indexOf(item.value, 0) > -1 || settingsItem.value == item.value
             ? <Image
               style={{ width: 30, height: 30, alignItems: 'center', padding: 10 }}
               source={require('../resources/ic_check.png')} />
@@ -179,7 +179,7 @@ export default class Settings extends Component {
       return (
         <Dialog.Input
           wrapperStyle={styles.inputDialog}
-          onChangeText={(text: string) => {this.handleDialogTextInputChange(text)}} />
+          onChangeText={(text: string) => { this.handleDialogTextInputChange(text) }} />
       )
     } else {
       return (
@@ -198,26 +198,26 @@ export default class Settings extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-      <SectionList
-        sections={this.state.settingsData.list}
-        keyExtractor={(item, index) => item.title + index}
-        renderItem={({ item }) => this.getSettingsListItem(item)}
-        renderSectionHeader={({ section: { title } }) => (
-          <View>
-            <View style={styles.separator}></View>
-            <Text style={styles.header}>{title}</Text>
-          </View>
-       )}
-      />
-      <View>
-        <Dialog.Container visible={this.state.textPickerVisible}>
-           <Dialog.Title children={`${this.state.settingSelected.title}`}></Dialog.Title>
-          {this.getPickerType(this.state.settingSelected)}
-          <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
-          <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
-        </Dialog.Container>
-      </View>
-     </SafeAreaView>
+        <SectionList
+          sections={this.state.settingsData.list}
+          keyExtractor={(item, index) => item.title + index}
+          renderItem={({ item }) => this.getSettingsListItem(item)}
+          renderSectionHeader={({ section: { title } }) => (
+            <View>
+              <View style={styles.separator}></View>
+              <Text style={styles.header}>{title}</Text>
+            </View>
+          )}
+        />
+        <View>
+          <Dialog.Container visible={this.state.textPickerVisible}>
+            <Dialog.Title children={`${this.state.settingSelected.title}`}></Dialog.Title>
+            {this.getPickerType(this.state.settingSelected)}
+            <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
+            <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
+          </Dialog.Container>
+        </View>
+      </SafeAreaView>
     );
   }
 }
