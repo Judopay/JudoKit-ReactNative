@@ -9,7 +9,6 @@ export enum SettingsPickArray {
     Currencies,
     CardNetworks,
     Payment,
-    GooglePay,
 }
 
 export type SettingsListItem = {

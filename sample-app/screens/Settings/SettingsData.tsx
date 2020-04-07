@@ -50,21 +50,6 @@ export const CardNetworks = {
     ]
 }
 
-export const GooglePayAddress = {
-    list: [
-        {
-            "data": [
-                { "entry": "Not required", "value": "NONE" } as PickerItem,
-                { "entry": "MIN: Name, country code, and postal code.", "value": "MIN" } as PickerItem,
-                {
-                    "entry": "FULL: Name, street address, locality, region, country code, and postal code.",
-                    "value": "FULL"
-                } as PickerItem
-            ]
-        }
-    ]
-}
-
 export const Payments = {
     list: [
         {

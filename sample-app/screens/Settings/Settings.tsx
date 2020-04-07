@@ -161,7 +161,7 @@ export default class Settings extends Component {
           {settingsItem.valueArray!.indexOf(item.value, 0) > -1 || settingsItem.value == item.value
             ? <Image
               style={{ width: 30, height: 30, alignItems: 'center', padding: 10 }}
-              source={require('../resources/ic_check.png')} />
+              source={require('../../resources/ic_check.png')} />
             : <View />}
         </View>
       </TouchableHighlight>
