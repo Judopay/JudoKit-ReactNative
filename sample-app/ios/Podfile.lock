@@ -20,9 +20,11 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - JudoKitObjC (10.0.1):
+  - JudoKitObjC (8.2.1):
     - DeviceDNA
+    - PayCardsRecognizer
     - TrustKit
+  - PayCardsRecognizer (1.1.7)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -230,13 +232,13 @@ PODS:
   - RNGestureHandler (1.6.1):
     - React
   - RNJudopay (2.1.0):
-    - JudoKitObjC (~> 10.0)
+    - JudoKitObjC (~> 8.2.1)
     - React
   - RNReanimated (1.7.1):
     - React
   - RNScreens (2.4.0):
     - React
-  - TrustKit (1.6.4)
+  - TrustKit (1.6.5)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -245,7 +247,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKitObjC (~> 10.0)
+  - "JudoKitObjC (from `git@github.com:Judopay/JudoKitObjC.git`, branch `develop-v2`)"
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -281,7 +283,7 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - DeviceDNA
-    - JudoKitObjC
+    - PayCardsRecognizer
     - TrustKit
 
 EXTERNAL SOURCES:
@@ -295,6 +297,9 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  JudoKitObjC:
+    :branch: develop-v2
+    :git: "git@github.com:Judopay/JudoKitObjC.git"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -350,6 +355,11 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
+CHECKOUT OPTIONS:
+  JudoKitObjC:
+    :commit: f021304a5694200b68bf5d6b44ca8a5608b16a07
+    :git: "git@github.com:Judopay/JudoKitObjC.git"
+
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DeviceDNA: 06c4c1af198fc8b44711d10bed39e0a8638b490d
@@ -358,7 +368,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  JudoKitObjC: 5ebfbdea37ad59e68c8061da45813eaf8879b932
+  JudoKitObjC: b8f131c987e2fb23c51a637f336da20f9db6e3db
+  PayCardsRecognizer: 2e4d1b2fdd5f1528fb56064a91e1d58a1af7a2db
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -382,12 +393,12 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: e0dd7c8a36543b4ef84969acd9f8aceba3a92dc2
   RNCMaskedView: 76c40a1d41c3e2535df09246a2b5487f04de0814
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNJudopay: 117545df811981a4e6ecae10defaeb48e6b218ca
+  RNJudopay: 09ead9760b86c100830e065030807764b1f6fce2
   RNReanimated: 4e102df74a9674fa943e05f97f3362b6e44d0b48
   RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
-  TrustKit: 578f77c59a23167e55b523d460bb495114ed0de7
+  TrustKit: 073855e3adecd317417bda4ac9e9ac54a2e3b9f2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: b222451dfa27c2fbf64313134348c9876c53e6b5
+PODFILE CHECKSUM: d6c541cab809ae01b56fd779163f756fe51c5e5e
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.8.4

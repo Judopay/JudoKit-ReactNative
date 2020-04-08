@@ -2,11 +2,11 @@
 export interface JudoApplePayConfiguration {
     merchantId: string,
     countryCode: string,
-    paymentSummaryItems: [JudoPaymentSummaryItem],
-    merchantCapabilities?: [JudoMerchantCapability],
-    requiredBillingContactFields?: [JudoContactField],
-    requiredShippingContactFields?: [JudoContactField],
-    shippingMethods?: [JudoShippingMethod],
+    paymentSummaryItems: JudoPaymentSummaryItem[],
+    merchantCapabilities?: JudoMerchantCapability[],
+    requiredBillingContactFields?: JudoContactField[],
+    requiredShippingContactFields?: JudoContactField[],
+    shippingMethods?: JudoShippingMethod[],
     shippingType?: JudoShippingType
     returnedInfo?: JudoReturnedInfo,
 }
