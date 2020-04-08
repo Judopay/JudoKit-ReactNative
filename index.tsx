@@ -2,6 +2,7 @@ import JudoPay from './JudoPay';
 
 export {
   JudoTransactionType,
+  JudoTransactionMode,
   JudoPaymentMethod,
   JudoCardNetwork,
 } from './types/JudoTypes';

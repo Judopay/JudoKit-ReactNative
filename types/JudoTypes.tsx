@@ -21,6 +21,11 @@ export enum JudoTransactionType {
     SaveCard,
 }
 
+export enum JudoTransactionMode {
+    Payment,
+    PreAuth
+}
+
 export interface JudoAmount {
     value: string,
     currency: string,

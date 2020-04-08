@@ -4,6 +4,8 @@ export enum HomeListType {
     RegisterCard,
     CheckCard,
     SaveCard,
+    PaymentMethods,
+    PreAuthMethods,
 }
 
 export type HomeListItem = {

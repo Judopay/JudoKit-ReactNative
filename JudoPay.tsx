@@ -1,5 +1,11 @@
 import { NativeModules } from 'react-native';
-import { JudoTransactionType, JudoConfiguration, JudoResponse } from './types/JudoTypes';
+
+import {
+    JudoTransactionType,
+    JudoTransactionMode,
+    JudoConfiguration,
+    JudoResponse
+} from './types/JudoTypes';
 
 class JudoPay {
 
@@ -18,10 +24,10 @@ class JudoPay {
         configuration: JudoConfiguration
     ): Promise<JudoResponse | null> {
 
-        const params = this.generateParameters(type, configuration);
+        const params = this.generateTransactionParameters(type, configuration);
+        const judoPay = NativeModules.RNJudo;
 
         return new Promise((resolve, reject) => {
-            const judoPay = NativeModules.RNJudo;
             judoPay.invokeTransaction(params)
                 .then((response: any) => {
                     resolve(response);
@@ -32,7 +38,26 @@ class JudoPay {
         });
     }
 
-    private generateParameters(
+    public invokePaymentMethodScreen(
+        mode: JudoTransactionMode,
+        configuration: JudoConfiguration
+    ): Promise<JudoResponse | null> {
+
+        const params = this.generatePaymentMethodParameters(mode, configuration);
+        const judoPay = NativeModules.RNJudo;
+
+        return new Promise((resolve, reject) => {
+            judoPay.invokePaymentMethodScreen(params)
+                .then((response: any) => {
+                    resolve(response);
+                })
+                .catch((error: any) => {
+                    reject(error);
+                })
+        });
+    }
+
+    private generateTransactionParameters(
         type: JudoTransactionType,
         configuration: JudoConfiguration
     ): any {
@@ -41,6 +66,19 @@ class JudoPay {
             'secret': this.secret,
             'sandboxed': this.isSandboxed,
             'transactionType': type,
+            'configuration': configuration,
+        }
+    }
+
+    private generatePaymentMethodParameters(
+        mode: JudoTransactionMode,
+        configuration: JudoConfiguration
+    ): any {
+        return {
+            'token': this.token,
+            'secret': this.secret,
+            'sandboxed': this.isSandboxed,
+            'transactionMode': mode,
             'configuration': configuration,
         }
     }

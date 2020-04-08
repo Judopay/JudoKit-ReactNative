@@ -29,6 +29,16 @@ export const HomeScreenData = {
                     "subtitle": "to be stored for future transactions",
                     "type": HomeListType.SaveCard
                 } as HomeListItem,
+                {
+                    "title": "Payment method",
+                    "subtitle": "with default payment methods",
+                    "type": HomeListType.PaymentMethods
+                } as HomeListItem,
+                {
+                    "title": "PreAuth method",
+                    "subtitle": "with default preauth methods",
+                    "type": HomeListType.PreAuth
+                } as HomeListItem,
             ]
         }
     ]
