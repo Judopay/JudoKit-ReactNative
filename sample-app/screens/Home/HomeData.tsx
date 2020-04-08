@@ -37,7 +37,7 @@ export const HomeScreenData = {
                 {
                     "title": "PreAuth method",
                     "subtitle": "with default preauth methods",
-                    "type": HomeListType.PreAuth
+                    "type": HomeListType.PreAuthMethods
                 } as HomeListItem,
             ]
         }
