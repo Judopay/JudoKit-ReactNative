@@ -52,6 +52,26 @@ RCT_REMAP_METHOD(invokeTransaction,
   }];
 }
 
+RCT_REMAP_METHOD(invokePaymentMethodScreen,
+                 properties:(NSDictionary *)properties
+                 invokePaymentMethodScreenWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+  JudoKit *judoKit = [self judoSessionFromProperties:properties];
+  TransactionMode mode = [self transactionModeFromProperties:properties];
+  JPConfiguration *configuration = [self configurationFromProperties:properties];
+
+    [judoKit invokePaymentMethodScreenWithMode:mode
+                                 configuration:configuration
+                                    completion:^(JPResponse *response, NSError *error) {
+      if (error) {
+        reject(@"JUDO_ERROR", @"Transaction failed", error);
+        return;
+      }
+      resolve(response);
+    }];
+}
+
 // MARK: - Getters
 
 - (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
@@ -75,6 +95,11 @@ RCT_REMAP_METHOD(invokeTransaction,
     ];
 
     return availableTypes[intType].intValue;
+}
+
+- (TransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
+    int intType = [RCTConvert int:properties[@"transactionMode"]];
+    return intType == 0 ? TransactionModePayment : TransactionModePreAuth;
 }
 
 - (JPAmount *)amountFromProperties:(NSDictionary *)properties {

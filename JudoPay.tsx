@@ -1,5 +1,11 @@
 import { NativeModules } from 'react-native';
-import { JudoTransactionType, JudoConfiguration, JudoResponse } from './types/JudoTypes';
+
+import {
+    JudoTransactionType,
+    JudoTransactionMode,
+    JudoConfiguration,
+    JudoResponse
+} from './types/JudoTypes';
 
 class JudoPay {
 
@@ -13,34 +19,52 @@ class JudoPay {
         this.secret = secret;
     }
 
-    public invokeTransaction(
+    public async invokeTransaction(
         type: JudoTransactionType,
         configuration: JudoConfiguration
-    ): Promise<JudoResponse | null> {
+    ): Promise<JudoResponse> {
 
-        const params = this.generateParameters(type, configuration);
+        const params = this.generateTransactionParameters(type, configuration);
+        const judoPay = NativeModules.RNJudo;
 
-        return new Promise((resolve, reject) => {
-            const judoPay = NativeModules.RNJudo;
-            judoPay.invokeTransaction(params)
-                .then((response: any) => {
-                    resolve(response);
-                })
-                .catch((error: any) => {
-                    reject(error);
-                })
-        });
+        const response = await judoPay.invokeTransaction(params);
+        return response;
     }
 
-    private generateParameters(
+    public async invokePaymentMethodScreen(
+        mode: JudoTransactionMode,
+        configuration: JudoConfiguration
+    ): Promise<JudoResponse> {
+
+        const params = this.generatePaymentMethodParameters(mode, configuration);
+        const judoPay = NativeModules.RNJudo;
+
+        const response = await judoPay.invokePaymentMethodScreen(params);
+        return response;
+    }
+
+    private generateTransactionParameters(
         type: JudoTransactionType,
+        configuration: JudoConfiguration
+    ): Record<string, any> {
+        return {
+            'token': this.token,
+            'secret': this.secret,
+            'sandboxed': this.isSandboxed,
+            'transactionType': type,
+            'configuration': configuration,
+        }
+    }
+
+    private generatePaymentMethodParameters(
+        mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): any {
         return {
             'token': this.token,
             'secret': this.secret,
             'sandboxed': this.isSandboxed,
-            'transactionType': type,
+            'transactionMode': mode,
             'configuration': configuration,
         }
     }
