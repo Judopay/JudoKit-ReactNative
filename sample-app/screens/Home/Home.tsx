@@ -47,12 +47,12 @@ export default class Home extends Component {
 
   async invokeTransaction(type: JudoTransactionType) {
     const judo = new JudoPay('token', 'secret');
-    judo.invokeTransaction(type, configuration);
+    const response = await judo.invokeTransaction(type, configuration);
   }
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
     const judo = new JudoPay('token', 'secret');
-    await judo.invokePaymentMethodScreen(mode, configuration);
+    const response = await judo.invokePaymentMethodScreen(mode, configuration);
   }
 
   handleListItemPressed(item: HomeListItem) {
