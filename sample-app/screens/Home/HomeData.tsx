@@ -30,6 +30,16 @@ export const HomeScreenData = {
                     "type": HomeListType.SaveCard
                 } as HomeListItem,
                 {
+                    "title": "Apple Pay payment",
+                    "subtitle": "with a wallet card",
+                    "type": HomeListType.ApplePay
+                } as HomeListItem,
+                {
+                    "title": "Apple Pay pre-auth",
+                    "subtitle": "with a wallet card",
+                    "type": HomeListType.ApplePreAuth
+                } as HomeListItem,
+                {
                     "title": "Payment method",
                     "subtitle": "with default payment methods",
                     "type": HomeListType.PaymentMethods

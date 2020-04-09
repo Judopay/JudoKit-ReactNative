@@ -37,6 +37,14 @@ export default class Home extends Component {
     this.invokeTransaction(JudoTransactionType.SaveCard);
   }
 
+  async invokeApplePay() {
+    this.displayApplePaySheet(JudoTransactionMode.Payment);
+  }
+
+  async invokeApplePreAuth() {
+    this.displayApplePaySheet(JudoTransactionMode.PreAuth);
+  }
+
   async invokePaymentMethods() {
     this.displayPaymentMethod(JudoTransactionMode.Payment);
   }
@@ -53,6 +61,11 @@ export default class Home extends Component {
   async displayPaymentMethod(mode: JudoTransactionMode) {
     const judo = new JudoPay('token', 'secret');
     const response = await judo.invokePaymentMethodScreen(mode, configuration);
+  }
+
+  async displayApplePaySheet(mode: JudoTransactionMode) {
+    const judo = new JudoPay('token', 'secret');
+    const response = await judo.invokeApplePay(mode, configuration);
   }
 
   handleListItemPressed(item: HomeListItem) {

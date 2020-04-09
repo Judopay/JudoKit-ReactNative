@@ -78,6 +78,26 @@ RCT_REMAP_METHOD(invokeTransaction,
   }];
 }
 
+RCT_REMAP_METHOD(invokeApplePay,
+                 properties:(NSDictionary *)properties
+                 invokeApplePayWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+  JudoKit *judoKit = [self judoSessionFromProperties:properties];
+  TransactionMode mode = [self transactionModeFromProperties:properties];
+  JPConfiguration *configuration = [self configurationFromProperties:properties];
+
+  [judoKit invokeApplePayWithMode:mode
+                    configuration:configuration
+                       completion:^(JPResponse *response, NSError *error) {
+    if (error) {
+      reject(@"JUDO_ERROR", @"Transaction failed", error);
+      return;
+    }
+    resolve(response);
+  }];
+}
+
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  properties:(NSDictionary *)properties
                  invokePaymentMethodScreenWithResolver:(RCTPromiseResolveBlock)resolve

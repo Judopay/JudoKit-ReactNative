@@ -4,6 +4,8 @@ export enum HomeListType {
     RegisterCard,
     CheckCard,
     SaveCard,
+    ApplePay,
+    ApplePreAuth,
     PaymentMethods,
     PreAuthMethods,
 }
