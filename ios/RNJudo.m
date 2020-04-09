@@ -102,15 +102,15 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
     return intType == 0 ? TransactionModePayment : TransactionModePreAuth;
 }
 
-- (JPAmount *)amountFromProperties:(NSDictionary *)properties {
-  NSDictionary *amountDictionary = [RCTConvert NSDictionary:properties[@"amount"]];
+- (JPAmount *)amountFromConfiguration:(NSDictionary *)configuration {
+  NSDictionary *amountDictionary = [RCTConvert NSDictionary:configuration[@"amount"]];
   NSString *amount = amountDictionary[@"value"];
   NSString *currency = amountDictionary[@"currency"];
   return [JPAmount amount:amount currency:currency];
 }
 
-- (JPReference *)referenceFromProperties:(NSDictionary *)properties {
-  NSDictionary *referenceDictionary = [RCTConvert NSDictionary:properties[@"reference"]];
+- (JPReference *)referenceFromConfiguration:(NSDictionary *)configuration {
+  NSDictionary *referenceDictionary = [RCTConvert NSDictionary:configuration[@"reference"]];
   NSString *consumerReference = referenceDictionary[@"consumerReference"];
   NSString *paymentReference = referenceDictionary[@"paymentReference"];
   NSDictionary *metadata = referenceDictionary[@"metadata"];
@@ -121,23 +121,79 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
   return reference;
 }
 
+- (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration {
+
+    CardNetwork supportedCardNetworks = CardNetworkUnknown;
+
+    NSArray *availableNetworks = @[
+        @(CardNetworkVisa),
+        @(CardNetworkMasterCard),
+        @(CardNetworkMaestro),
+        @(CardNetworkChinaUnionPay),
+        @(CardNetworkJCB),
+        @(CardNetworkDiscover),
+        @(CardNetworkDinersClub),
+    ];
+
+    NSArray<NSNumber *> *networkArray = [RCTConvert NSArray:configuration[@"supportedCardNetworks"]];
+
+    for (NSNumber *networkNumber in networkArray) {
+
+        int networkValue = networkNumber.intValue;
+
+        NSNumber *selectedNetworkNumber = availableNetworks[networkValue];
+        CardNetwork selectedNetwork = (CardNetwork)selectedNetworkNumber.intValue;
+
+        supportedCardNetworks = supportedCardNetworks | selectedNetwork;
+    }
+
+    // TODO: Test this
+    return supportedCardNetworks;
+}
+
+- (JPAddress *)cardAddressFromConfiguration:(NSDictionary *)configuration {
+    return [[JPAddress alloc] initWithDictionary:configuration];
+}
+
+- (JPUIConfiguration *)uiConfigurationFromConfiguration:(NSDictionary *)configuration {
+  JPUIConfiguration *uiConfiguration = [JPUIConfiguration new];
+
+  uiConfiguration.isAVSEnabled = [RCTConvert BOOL:configuration[@"isAVSEnabled"]];
+  uiConfiguration.shouldDisplayAmount = [RCTConvert BOOL:configuration[@"shouldDisplayAmount"]];
+  uiConfiguration.theme = [self themeFromUIConfiguration:configuration];
+
+  return uiConfiguration;
+}
+
+- (JPTheme *)themeFromUIConfiguration:(NSDictionary *)uiConfiguration {
+  //TODO: Add theming configuration
+  return [JPTheme new];
+}
+
+- (JPPrimaryAccountDetails *)accountDetailsFromConfiguration:(NSDictionary *)configuration {
+    //TODO: Test this
+    return [JPPrimaryAccountDetails detailsFromDictionary:configuration];
+}
+
 - (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
 
   NSDictionary *configurationDict = properties[@"configuration"];
 
   NSString *judoId = [RCTConvert NSString:configurationDict[@"judoId"]];
-  NSString *siteId = [RCTConvert NSString:configurationDict[@"siteId"]];
-  
-  JPAmount *amount = [self amountFromProperties:configurationDict];
-  JPReference *reference = [self referenceFromProperties:configurationDict];
+  JPAmount *amount = [self amountFromConfiguration:configurationDict];
+  JPReference *reference = [self referenceFromConfiguration:configurationDict];
 
   JPConfiguration *configuration = [[JPConfiguration alloc] initWithJudoID:judoId
                                                                     amount:amount
                                                                  reference:reference];
 
-  configuration.siteId = siteId;
-
-  // TODO: Map optional configuration properties
+  configuration.siteId = [RCTConvert NSString:configurationDict[@"siteId"]];
+  configuration.uiConfiguration = [self uiConfigurationFromConfiguration:configurationDict];
+  configuration.supportedCardNetworks = [self cardNetworksFromConfiguration:configurationDict];
+  configuration.primaryAccountDetails = [self accountDetailsFromConfiguration:configurationDict];
+  configuration.cardAddress = [self cardAddressFromConfiguration:configurationDict];
+  //TODO: Map apple pay
+  //TODO: Map payment methods
 
   return configuration;
 }
