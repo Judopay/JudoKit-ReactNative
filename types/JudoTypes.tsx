@@ -7,8 +7,8 @@ export interface JudoConfiguration {
     siteId?: string,
     cardAddress?: JudoAddress,
     uiConfiguration?: JudoUIConfiguration,
-    paymentMethods?: JudoPaymentMethod[],
-    supportedCardNetworks?: JudoCardNetwork[],
+    paymentMethods?: JudoPaymentMethod,
+    supportedCardNetworks?: JudoCardNetwork,
     primaryAccountDetails?: JudoAccountDetails,
     applePayConfiguration?: JudoApplePayConfiguration,
 }
@@ -43,7 +43,7 @@ export interface JudoAddress {
     line3?: string,
     postCode?: string,
     town?: string,
-    country?: string,
+    countryCode?: string,
 }
 
 export interface JudoUIConfiguration {
@@ -57,19 +57,22 @@ export interface JudoTheme {
 }
 
 export enum JudoPaymentMethod {
-    Card,
-    ApplePay,
-    iDEAL,
+    Card = 1 << 0,
+    ApplePay = 1 << 1,
+    iDEAL = 1 << 2,
+    All = 1 << 3,
 }
 
 export enum JudoCardNetwork {
-    Visa,
-    Mastercard,
-    Amex,
-    ChinaUnionPay,
-    JCB,
-    Discover,
-    DinersClub,
+    Visa = 1 << 0,
+    Mastercard = 1 << 1,
+    Maestro = 1 << 2,
+    Amex = 1 << 3,
+    ChinaUnionPay = 1 << 4,
+    JCB = 1 << 5,
+    Discover = 1 << 6,
+    DinersClub = 1 << 7,
+    All = 1 << 8,
 }
 
 export interface JudoAccountDetails {

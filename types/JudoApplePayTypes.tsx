@@ -3,7 +3,7 @@ export interface JudoApplePayConfiguration {
     merchantId: string,
     countryCode: string,
     paymentSummaryItems: JudoPaymentSummaryItem[],
-    merchantCapabilities?: JudoMerchantCapability[],
+    merchantCapabilities?: JudoMerchantCapability,
     requiredBillingContactFields?: JudoContactField,
     requiredShippingContactFields?: JudoContactField,
     shippingMethods?: JudoShippingMethod[],
@@ -23,14 +23,14 @@ export interface JudoPaymentSummaryItem {
 }
 
 export enum JudoMerchantCapability {
-    ThreeDS,
-    EMV,
-    Credit,
-    Debit,
+    ThreeDS = 1 << 0,
+    EMV = 1 << 1,
+    Credit = 1 << 2,
+    Debit = 1 << 3,
+    All = 1 << 4,
 }
 
 export enum JudoContactField {
-    None = 0,
     PostalAddress = 1 << 0,
     Phone = 1 << 1,
     Email = 1 << 2,
@@ -54,7 +54,6 @@ export enum JudoShippingType {
 }
 
 export enum JudoReturnedInfo {
-    None = 0,
     BillingDetails = 1 << 0,
     ShippingDetails = 1 << 1,
     All = 1 << 2,

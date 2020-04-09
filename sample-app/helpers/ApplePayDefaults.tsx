@@ -36,7 +36,7 @@ export const applePayConfiguration: JudoApplePayConfiguration = {
     merchantId: 'my-merchant-id',
     countryCode: 'my-country-code',
     paymentSummaryItems: [itemOne, itemTwo, total],
-    merchantCapabilities: [JudoMerchantCapability.ThreeDS],
+    merchantCapabilities: JudoMerchantCapability.ThreeDS,
     requiredBillingContactFields: JudoContactField.Name | JudoContactField.Email,
     requiredShippingContactFields: JudoContactField.All,
     shippingMethods: [delivery],

@@ -24,13 +24,39 @@
 
 #import "RNJudo.h"
 #import <React/RCTConvert.h>
+#import <React/RCTLog.h>
 #import <JudoKitObjC/JudoKitObjC.h>
 
 @implementation RNJudo
 
 RCT_EXPORT_MODULE();
 
+//----------------------------------------------
+// MARK: - Bitmask mappings
+//----------------------------------------------
+
+NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
+    IOSPaymentMethodCard = 1 << 0,
+    IOSPaymentMethodApplePay = 1 << 1,
+    IOSPaymentMethodIDEAL = 1 << 2,
+    IOSPaymentMethodAll = 1 << 3,
+};
+
+NS_OPTIONS(NSUInteger, IOSCardNetwork) {
+    IOSCardNetworkVisa = 1 << 0,
+    IOSCardNetworkMastercard = 1 << 1,
+    IOSCardNetworkMaestro = 1 << 2,
+    IOSCardNetworkAmex = 1 << 3,
+    IOSCardNetworkChinaUnionPay = 1 << 4,
+    IOSCardNetworkJCB = 1 << 5,
+    IOSCardNetworkDiscover = 1 << 6,
+    IOSCardNetworkDinersClub = 1 << 7,
+    IOSCardNetworkAll = 1 << 8,
+};
+
+//----------------------------------------------
 // MARK: - SDK Methods
+//----------------------------------------------
 
 RCT_REMAP_METHOD(invokeTransaction,
                  properties:(NSDictionary *)properties
@@ -72,7 +98,9 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
     }];
 }
 
+//----------------------------------------------
 // MARK: - Getters
+//----------------------------------------------
 
 - (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
   NSString *token = [RCTConvert NSString:properties[@"token"]];
@@ -90,8 +118,11 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
     int intType = [RCTConvert int:properties[@"transactionType"]];
 
     NSArray<NSNumber *> *availableTypes = @[
-        @(TransactionTypePayment), @(TransactionTypePreAuth), @(TransactionTypeRegisterCard),
-        @(TransactionTypeCheckCard), @(TransactionTypeSaveCard)
+        @(TransactionTypePayment),
+        @(TransactionTypePreAuth),
+        @(TransactionTypeRegisterCard),
+        @(TransactionTypeCheckCard),
+        @(TransactionTypeSaveCard)
     ];
 
     return availableTypes[intType].intValue;
@@ -121,46 +152,91 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
   return reference;
 }
 
+- (NSArray<JPPaymentMethod *> *)paymentMethodsFromConfiguration:(NSDictionary *)configuration {
+
+    NSMutableArray<JPPaymentMethod *> *paymentMethods = [NSMutableArray new];
+
+    int paymentMethodsBitmask = [RCTConvert int:configuration[@"paymentMethods"]];
+
+    if (paymentMethodsBitmask & IOSPaymentMethodAll) {
+        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal];
+    }
+
+    if (paymentMethodsBitmask & IOSPaymentMethodCard) {
+        [paymentMethods addObject:JPPaymentMethod.card];
+    }
+
+    if (paymentMethodsBitmask & IOSPaymentMethodApplePay) {
+        [paymentMethods addObject:JPPaymentMethod.applePay];
+    }
+
+    if (paymentMethodsBitmask & IOSPaymentMethodIDEAL) {
+        [paymentMethods addObject:JPPaymentMethod.iDeal];
+    }
+
+    return paymentMethods;
+}
+
 - (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration {
 
     CardNetwork supportedCardNetworks = CardNetworkUnknown;
 
-    NSArray *availableNetworks = @[
-        @(CardNetworkVisa),
-        @(CardNetworkMasterCard),
-        @(CardNetworkMaestro),
-        @(CardNetworkChinaUnionPay),
-        @(CardNetworkJCB),
-        @(CardNetworkDiscover),
-        @(CardNetworkDinersClub),
-    ];
+    int supportedNetworksBitmask = [RCTConvert int:configuration[@"supportedCardNetworks"]];
 
-    NSArray<NSNumber *> *networkArray = [RCTConvert NSArray:configuration[@"supportedCardNetworks"]];
-
-    for (NSNumber *networkNumber in networkArray) {
-
-        int networkValue = networkNumber.intValue;
-
-        NSNumber *selectedNetworkNumber = availableNetworks[networkValue];
-        CardNetwork selectedNetwork = (CardNetwork)selectedNetworkNumber.intValue;
-
-        supportedCardNetworks = supportedCardNetworks | selectedNetwork;
+    if (supportedNetworksBitmask & IOSCardNetworkAll) {
+        return CardNetworksAll;
     }
 
-    // TODO: Test this
+    if (supportedNetworksBitmask & IOSCardNetworkVisa) {
+        RCTLog(@"ADDING VISA");
+        supportedCardNetworks |= CardNetworkVisa;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkMastercard) {
+        RCTLog(@"ADDING MASTERCARD");
+        supportedCardNetworks |= CardNetworkMasterCard;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkMaestro) {
+        supportedCardNetworks |= CardNetworkMaestro;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkAmex) {
+        RCTLog(@"ADDING AMEX");
+        supportedCardNetworks |= CardNetworkAMEX;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkChinaUnionPay) {
+        supportedCardNetworks |= CardNetworkChinaUnionPay;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkJCB) {
+        supportedCardNetworks |= CardNetworkJCB;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkDiscover) {
+        supportedCardNetworks |= CardNetworkDiscover;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkDinersClub) {
+        supportedCardNetworks |= CardNetworkDinersClub;
+    }
+
     return supportedCardNetworks;
 }
 
 - (JPAddress *)cardAddressFromConfiguration:(NSDictionary *)configuration {
-    return [[JPAddress alloc] initWithDictionary:configuration];
+    NSDictionary *addressDictionary = configuration[@"cardAddress"];
+    return [[JPAddress alloc] initWithDictionary:addressDictionary];
 }
 
 - (JPUIConfiguration *)uiConfigurationFromConfiguration:(NSDictionary *)configuration {
+  NSDictionary *uiConfigurationDictionary = configuration[@"uiConfiguration"];
   JPUIConfiguration *uiConfiguration = [JPUIConfiguration new];
 
-  uiConfiguration.isAVSEnabled = [RCTConvert BOOL:configuration[@"isAVSEnabled"]];
-  uiConfiguration.shouldDisplayAmount = [RCTConvert BOOL:configuration[@"shouldDisplayAmount"]];
-  uiConfiguration.theme = [self themeFromUIConfiguration:configuration];
+  uiConfiguration.isAVSEnabled = [RCTConvert BOOL:uiConfigurationDictionary[@"isAVSEnabled"]];
+  uiConfiguration.shouldDisplayAmount = [RCTConvert BOOL:uiConfigurationDictionary[@"shouldDisplayAmount"]];
+  uiConfiguration.theme = [self themeFromUIConfiguration:uiConfigurationDictionary];
 
   return uiConfiguration;
 }
@@ -171,8 +247,8 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
 }
 
 - (JPPrimaryAccountDetails *)accountDetailsFromConfiguration:(NSDictionary *)configuration {
-    //TODO: Test this
-    return [JPPrimaryAccountDetails detailsFromDictionary:configuration];
+    NSDictionary *accountDetailsDictionary = configuration[@"primaryAccountDetails"];
+    return [JPPrimaryAccountDetails detailsFromDictionary:accountDetailsDictionary];
 }
 
 - (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
@@ -192,13 +268,16 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
   configuration.supportedCardNetworks = [self cardNetworksFromConfiguration:configurationDict];
   configuration.primaryAccountDetails = [self accountDetailsFromConfiguration:configurationDict];
   configuration.cardAddress = [self cardAddressFromConfiguration:configurationDict];
+  configuration.paymentMethods = [self paymentMethodsFromConfiguration:configurationDict];
+
   //TODO: Map apple pay
-  //TODO: Map payment methods
 
   return configuration;
 }
 
+//----------------------------------------------
 // MARK: - React Native methods
+//----------------------------------------------
 
 - (dispatch_queue_t)methodQueue {
   return dispatch_get_main_queue();
