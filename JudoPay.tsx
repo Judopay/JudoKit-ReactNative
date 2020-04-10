@@ -24,10 +24,22 @@ class JudoPay {
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
 
-        const params = this.generateTransactionParameters(type, configuration);
+        const params = this.generateTransactionTypeParameters(type, configuration);
         const judoPay = NativeModules.RNJudo;
 
         const response = await judoPay.invokeTransaction(params);
+        return response;
+    }
+
+    public async invokeApplePay(
+        mode: JudoTransactionMode,
+        configuration: JudoConfiguration
+    ): Promise<JudoResponse> {
+
+        const params = this.generateTransactionModeParameters(mode, configuration);
+        const judoPay = NativeModules.RNJudo;
+
+        const response = await judoPay.invokeApplePay(params);
         return response;
     }
 
@@ -36,14 +48,14 @@ class JudoPay {
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
 
-        const params = this.generatePaymentMethodParameters(mode, configuration);
+        const params = this.generateTransactionModeParameters(mode, configuration);
         const judoPay = NativeModules.RNJudo;
 
         const response = await judoPay.invokePaymentMethodScreen(params);
         return response;
     }
 
-    private generateTransactionParameters(
+    private generateTransactionTypeParameters(
         type: JudoTransactionType,
         configuration: JudoConfiguration
     ): Record<string, any> {
@@ -56,7 +68,7 @@ class JudoPay {
         }
     }
 
-    private generatePaymentMethodParameters(
+    private generateTransactionModeParameters(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): any {
