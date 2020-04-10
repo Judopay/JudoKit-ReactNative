@@ -15,8 +15,9 @@ const itemOne: JudoPaymentSummaryItem = {
 }
 
 const itemTwo: JudoPaymentSummaryItem = {
-    label: 'Item 1',
+    label: 'Item 2',
     amount: '0.02',
+    type: JudoPaymentSummaryItemType.Final,
 }
 
 const total: JudoPaymentSummaryItem = {
