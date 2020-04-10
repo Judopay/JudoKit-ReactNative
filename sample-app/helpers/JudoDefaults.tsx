@@ -31,7 +31,7 @@ const cardAddress: JudoAddress = {
     line3: 'example-address-3',
     postCode: 'example-postcode',
     town: 'example-town',
-    country: 'example-country',
+    countryCode: 'example-country-code',
 }
 
 const theme: JudoTheme = {
@@ -44,17 +44,15 @@ const uiConfiguration: JudoUIConfiguration = {
     theme: theme,
 }
 
-const paymentMethods: JudoPaymentMethod[] = [
-    JudoPaymentMethod.Card,
-    JudoPaymentMethod.ApplePay,
-    JudoPaymentMethod.iDEAL,
-]
+const paymentMethods: JudoPaymentMethod =
+    JudoPaymentMethod.Card |
+    JudoPaymentMethod.ApplePay |
+    JudoPaymentMethod.iDEAL;
 
-const supportedCardNetworks: JudoCardNetwork[] = [
-    JudoCardNetwork.Visa,
-    JudoCardNetwork.Mastercard,
-    JudoCardNetwork.Amex,
-]
+const supportedCardNetworks: JudoCardNetwork =
+    JudoCardNetwork.Visa |
+    JudoCardNetwork.Mastercard |
+    JudoCardNetwork.Amex;
 
 const primaryAccountDetails: JudoAccountDetails = {
     name: 'example-name',
