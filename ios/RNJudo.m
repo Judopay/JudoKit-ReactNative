@@ -1,314 +1,310 @@
+//
+//  RNJudo.m
+//  JudoPay
+//
+//  Copyright (c) 2020 Alternative Payments Ltd
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+
 #import "RNJudo.h"
-#import "JudoKitObjC.h"
-#import <PassKit/PassKit.h>
 #import <React/RCTConvert.h>
-
-@interface RNJudo()
-
-@property (nonatomic, strong) NSString *token;
-@property (nonatomic, strong) NSString *secret;
-@property (nonatomic, strong) NSString *judoId;
-@property (nonatomic, strong) NSString *siteId;
-@property BOOL isSandbox;
-@property (nonatomic, strong) NSString *amount;
-@property (nonatomic, strong) NSString *currency;
-@property (nonatomic, strong) NSString *consumerReference;
-@property (nonatomic, strong) NSString *paymentReference;
-@property (nonatomic, strong) NSDictionary *metaData;
-@property (nonatomic, strong) JPTheme *theme;
-
-@property (nonatomic, strong) RCTPromiseResolveBlock applePayResolve;
-@property (nonatomic, strong) RCTPromiseRejectBlock applePayReject;
-
-@end
+#import <React/RCTLog.h>
+#import <JudoKitObjC/JudoKitObjC.h>
 
 @implementation RNJudo
 
 RCT_EXPORT_MODULE();
 
-+ (BOOL)requiresMainQueueSetup
-{
-    return YES;
-}
+//----------------------------------------------
+// MARK: - Bitmask mappings
+//----------------------------------------------
 
-- (dispatch_queue_t)methodQueue
-{
-    return dispatch_get_main_queue();
-}
+NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
+    IOSPaymentMethodCard = 1 << 0,
+    IOSPaymentMethodApplePay = 1 << 1,
+    IOSPaymentMethodIDEAL = 1 << 2,
+    IOSPaymentMethodAll = 1 << 3,
+};
 
-RCT_REMAP_METHOD(makePayment,
-                 options:(NSDictionary *)options
-                 makePaymentWithResolver:(RCTPromiseResolveBlock)resolve
+NS_OPTIONS(NSUInteger, IOSCardNetwork) {
+    IOSCardNetworkVisa = 1 << 0,
+    IOSCardNetworkMastercard = 1 << 1,
+    IOSCardNetworkMaestro = 1 << 2,
+    IOSCardNetworkAmex = 1 << 3,
+    IOSCardNetworkChinaUnionPay = 1 << 4,
+    IOSCardNetworkJCB = 1 << 5,
+    IOSCardNetworkDiscover = 1 << 6,
+    IOSCardNetworkDinersClub = 1 << 7,
+    IOSCardNetworkAll = 1 << 8,
+};
+
+//----------------------------------------------
+// MARK: - SDK Methods
+//----------------------------------------------
+
+RCT_REMAP_METHOD(invokeTransaction,
+                 properties:(NSDictionary *)properties
+                 invokePaymentWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    if (![self initWithOptions:options reject:reject]) {
-        return;
+
+  JudoKit *judoKit = [self judoSessionFromProperties:properties];
+  TransactionType type = [self transactionTypeFromProperties:properties];
+  JPConfiguration *configuration = [self configurationFromProperties:properties];
+
+  [judoKit invokeTransactionWithType:type
+                       configuration:configuration
+                          completion:^(JPResponse *response, NSError *error) {
+    if (error) {
+      reject(@"JUDO_ERROR", @"Transaction failed", error);
+      return;
     }
-
-    JudoKit *judoKit = [self judoKit];
-    JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
-    JPReference *judoReference = [self generateReferenceWith:self.consumerReference
-                                            paymentReference:self.paymentReference
-                                                    metaData:self.metaData];
-
-    [judoKit invokePayment:self.judoId
-                    amount:judoAmount
-                 reference:judoReference
-               cardDetails:nil
-                completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
+    resolve(response);
+  }];
 }
 
-RCT_REMAP_METHOD(makePreAuth,
-                 options:(NSDictionary *)options
-                 makePreAuthWithResolver:(RCTPromiseResolveBlock)resolve
+RCT_REMAP_METHOD(invokeApplePay,
+                 properties:(NSDictionary *)properties
+                 invokeApplePayWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    if (![self initWithOptions:options reject:reject]) {
-        return;
+
+  JudoKit *judoKit = [self judoSessionFromProperties:properties];
+  TransactionMode mode = [self transactionModeFromProperties:properties];
+  JPConfiguration *configuration = [self configurationFromProperties:properties];
+
+  [judoKit invokeApplePayWithMode:mode
+                    configuration:configuration
+                       completion:^(JPResponse *response, NSError *error) {
+    if (error) {
+      reject(@"JUDO_ERROR", @"Transaction failed", error);
+      return;
     }
-
-    JudoKit *judoKit = [self judoKit];
-    JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
-    JPReference *judoReference = [self generateReferenceWith:self.consumerReference
-                                            paymentReference:self.paymentReference
-                                                    metaData:self.metaData];
-
-    [judoKit invokePreAuth:self.judoId
-                    amount:judoAmount
-                 reference:judoReference
-               cardDetails:nil
-                completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
+    resolve(response);
+  }];
 }
 
-RCT_REMAP_METHOD(canUseApplePay,
-                 canUseApplePayResolver:(RCTPromiseResolveBlock)resolve
+RCT_REMAP_METHOD(invokePaymentMethodScreen,
+                 properties:(NSDictionary *)properties
+                 invokePaymentMethodScreenWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    BOOL canUse = [PKPaymentAuthorizationViewController canMakePaymentsUsingNetworks:@[PKPaymentNetworkAmex, PKPaymentNetworkMasterCard, PKPaymentNetworkVisa]];
-    resolve([NSNumber numberWithBool:canUse]);
-}
 
-RCT_REMAP_METHOD(makeApplePayPayment,
-                 options:(NSDictionary *)options
-                 makeApplePayPaymentWithResolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
-    NSMutableDictionary *flattenOptions = [[NSMutableDictionary alloc] init];
-    [flattenOptions addEntriesFromDictionary: options[@"judoConfig"]];
-    [flattenOptions addEntriesFromDictionary: options[@"judoApplePayConfig"]];
-    if (![self initWithOptions:flattenOptions reject:reject]) {
+  JudoKit *judoKit = [self judoSessionFromProperties:properties];
+  TransactionMode mode = [self transactionModeFromProperties:properties];
+  JPConfiguration *configuration = [self configurationFromProperties:properties];
+
+    [judoKit invokePaymentMethodScreenWithMode:mode
+                                 configuration:configuration
+                                    completion:^(JPResponse *response, NSError *error) {
+      if (error) {
+        reject(@"JUDO_ERROR", @"Transaction failed", error);
         return;
-    }
-
-    JudoKit *judoKit = [self judoKit];
-    PaymentMethods paymentMethod = PaymentMethodApplePay;
-    ApplePayConfiguration *applePayConfiguration = [self appleConfigWith:paymentMethod
-                                                                     and:flattenOptions];
-
-    [judoKit invokeApplePayWithConfiguration: applePayConfiguration
-                                  completion: [self paymentCompletion:judoKit reject:reject resolve:resolve]];
-}
-
-RCT_REMAP_METHOD(showPaymentMethods,
-                 options:(NSDictionary *)options
-                 showPaymentMethodsResolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
-    NSMutableDictionary *flattenOptions = [[NSMutableDictionary alloc] init];
-    [flattenOptions addEntriesFromDictionary: options[@"judoConfig"]];
-    [flattenOptions addEntriesFromDictionary: options[@"judoApplePayConfig"]];
-    [flattenOptions addEntriesFromDictionary: options[@"judoPaymentMethodsConfig"]];
-    if (![self initWithOptions:flattenOptions reject:reject]) {
-        return;
-    }
-
-    JudoKit *judoKit = [self judoKit];
-    JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
-    PaymentMethods paymentMethods = [RCTConvert NSInteger:flattenOptions[@"paymentMethods"]];
-    ApplePayConfiguration *applePayConfiguration = [self appleConfigWith:paymentMethods and:flattenOptions];
-
-    [judoKit invokePayment:self.judoId
-                    siteId:self.siteId
-                    amount:judoAmount
-         consumerReference:self.consumerReference
-            paymentMethods:paymentMethods
-   applePayConfiguratation:applePayConfiguration
-               cardDetails:nil
-                completion:[self paymentCompletion:judoKit reject:reject resolve:resolve]];
-}
-
-RCT_REMAP_METHOD(makeIDEALPayment,
-                 options:(NSDictionary *)options
-                 makeIDEALPaymentResolver:(RCTPromiseResolveBlock)resolve
-                 erejecter:(RCTPromiseRejectBlock)reject) {
-    if (![self initWithOptions:options reject:reject]) {
-        return;
-    }
-
-    JudoKit *judoKit = [self judoKit];
-    JPAmount *judoAmount = [[JPAmount alloc] initWithAmount:self.amount currency:self.currency];
-    JPReference *judoReference = [self generateReferenceWith:self.consumerReference
-                                            paymentReference:self.paymentReference
-                                                    metaData:self.metaData];
-
-    [judoKit invokeIDEALPaymentWithSiteId:self.siteId
-                                   amount:judoAmount
-                                reference:judoReference
-                               completion:^(JPResponse *response, NSError *error) {
-        [judoKit.activeViewController dismissViewControllerAnimated:true completion:nil];
-        if (error) {
-            if (error.domain == JudoErrorDomain && error.code == JudoErrorUserDidCancel) {
-                reject(@"JUDO_USER_CANCELLED", @"User cancelled", nil);
-            } else {
-                reject(@"JUDO_ERROR", error.localizedDescription, error);
-            }
-        } else if (response.items.count == 1) {
-            NSDictionary *orderDetails = response.items[0].rawData[@"orderDetails"];
-            resolve(orderDetails);
-        } else {
-            resolve([NSNull null]);
-        }
+      }
+      resolve(response);
     }];
 }
 
-- (JudoKit *)judoKit {
-    JudoKit *judoKit = [[JudoKit alloc] initWithToken:self.token secret:self.secret];
-    judoKit.apiSession.sandboxed = self.isSandbox;
-    judoKit.theme = self.theme;
-    return judoKit;
+//----------------------------------------------
+// MARK: - Getters
+//----------------------------------------------
+
+- (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
+  NSString *token = [RCTConvert NSString:properties[@"token"]];
+  NSString *secret = [RCTConvert NSString:properties[@"secret"]];
+  BOOL isSandboxed = [RCTConvert BOOL:properties[@"sandboxed"]];
+
+  JudoKit *judoKit = [[JudoKit alloc] initWithToken:token secret:secret];
+  judoKit.isSandboxed = isSandboxed;
+
+  return judoKit;
 }
 
-- (JPReference *)generateReferenceWith:(NSString *)consumerReference
-                      paymentReference:(NSString *)paymentReference
-                              metaData:(NSDictionary *)metaData {
-    JPReference *judoReference = [[JPReference alloc] initWithConsumerReference:consumerReference
-                                                               paymentReference:paymentReference];
-    [judoReference setMetaData:metaData];
-    return judoReference;
+- (TransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
+
+    int intType = [RCTConvert int:properties[@"transactionType"]];
+
+    NSArray<NSNumber *> *availableTypes = @[
+        @(TransactionTypePayment),
+        @(TransactionTypePreAuth),
+        @(TransactionTypeRegisterCard),
+        @(TransactionTypeCheckCard),
+        @(TransactionTypeSaveCard)
+    ];
+
+    return availableTypes[intType].intValue;
 }
 
-- (ApplePayConfiguration *)appleConfigWith:(PaymentMethods)paymentMethod
-                                       and:(NSDictionary *)options {
-    ApplePayConfiguration *applePayConfiguration = nil;
-    if (paymentMethod == PaymentMethodApplePay || paymentMethod == PaymentMethodsAll) {
-        NSMutableArray<PaymentSummaryItem *> *paymentSummaryItems = [NSMutableArray new];
-        for (NSDictionary *dict in options[@"summaryItems"]) {
-            [paymentSummaryItems addObject: [[PaymentSummaryItem alloc] initWithLabel:dict[@"label"]
-                                                                               amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]]];
-        }
-
-        NSMutableArray<PaymentShippingMethod *> *shippingMethods = [NSMutableArray new];
-        for (NSDictionary *dict in options[@"shippingMethods"]) {
-            PaymentSummaryItemType itemType = [RCTConvert NSInteger:options[@"paymentSummaryItemType"]];
-            [shippingMethods addObject: [[PaymentShippingMethod alloc] initWithIdentifier:dict[@"identifier"]
-                                                                                   detail:dict[@"detail"]
-                                                                                    label:dict[@"label"]
-                                                                                   amount:[NSDecimalNumber decimalNumberWithString: dict[@"amount"]]
-                                                                                     type:itemType]];
-        }
-
-        JPReference *judoReference = [self generateReferenceWith:self.consumerReference
-                                                paymentReference:self.paymentReference
-                                                        metaData:self.metaData];
-
-        applePayConfiguration = [[ApplePayConfiguration alloc] initWithJudoId:self.judoId
-                                                                    reference:judoReference
-                                                                   merchantId:[RCTConvert NSString:options[@"merchantId"]]
-                                                                     currency:self.currency
-                                                                  countryCode:[RCTConvert NSString:options[@"countryCode"]]
-                                                          paymentSummaryItems:paymentSummaryItems];
-        applePayConfiguration.transactionType = [RCTConvert NSInteger:options[@"transactionType"]];
-        applePayConfiguration.shippingMethods = shippingMethods;
-        applePayConfiguration.shippingType = [RCTConvert NSInteger:options[@"shippingType"]];
-
-        BOOL requireBillingDetails = [RCTConvert BOOL:options[@"requireBillingDetails"]];
-        if (requireBillingDetails) {
-            applePayConfiguration.requiredBillingContactFields = ContactFieldAll;
-            applePayConfiguration.returnedContactInfo = ReturnedInfoBillingContacts;
-        }
-        BOOL requireShippingDetails = [RCTConvert BOOL:options[@"requireShippingDetails"]];
-        if (requireShippingDetails) {
-            applePayConfiguration.requiredShippingContactFields = ContactFieldAll;
-            applePayConfiguration.returnedContactInfo += ReturnedInfoShippingContacts;
-        }
-    }
-    return applePayConfiguration;
+- (TransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
+    int intType = [RCTConvert int:properties[@"transactionMode"]];
+    return intType == 0 ? TransactionModePayment : TransactionModePreAuth;
 }
 
-- (BOOL)initWithOptions:(NSDictionary *)options
-                 reject:(RCTPromiseRejectBlock)reject {
-    self.token = [RCTConvert NSString:options[@"token"]];
-    self.secret = [RCTConvert NSString:options[@"secret"]];
-    self.judoId = [RCTConvert NSString:options[@"judoId"]];
-    self.siteId = [RCTConvert NSString:options[@"siteId"]];
-    self.isSandbox = [RCTConvert BOOL:options[@"isSandbox"]];
-    self.amount = [RCTConvert NSString:options[@"amount"]];
-    self.currency = [RCTConvert NSString:options[@"currency"]];
-    self.consumerReference = [RCTConvert NSString:options[@"consumerReference"]];
-    self.paymentReference = [RCTConvert NSString:options[@"paymentReference"]];
-    self.metaData = [RCTConvert NSDictionary:options[@"metaData"]];
+- (JPAmount *)amountFromConfiguration:(NSDictionary *)configuration {
+  NSDictionary *amountDictionary = [RCTConvert NSDictionary:configuration[@"amount"]];
+  NSString *amount = amountDictionary[@"value"];
+  NSString *currency = amountDictionary[@"currency"];
+  return [JPAmount amount:amount currency:currency];
+}
 
-    if ([self.token length] == 0 || [self.secret length] == 0 || [self.amount length] == 0 || [self.currency length] == 0 || [self.consumerReference length] == 0 || [self.paymentReference length] == 0) {
-        reject(@"JUDO_ERROR", @"Configuration error", nil);
-        return NO;
+- (JPReference *)referenceFromConfiguration:(NSDictionary *)configuration {
+  NSDictionary *referenceDictionary = [RCTConvert NSDictionary:configuration[@"reference"]];
+  NSString *consumerReference = referenceDictionary[@"consumerReference"];
+  NSString *paymentReference = referenceDictionary[@"paymentReference"];
+  NSDictionary *metadata = referenceDictionary[@"metadata"];
+
+  JPReference *reference = [[JPReference alloc] initWithConsumerReference:consumerReference
+                                                 paymentReference:paymentReference];
+  reference.metaData = metadata;
+  return reference;
+}
+
+- (NSArray<JPPaymentMethod *> *)paymentMethodsFromConfiguration:(NSDictionary *)configuration {
+
+    NSMutableArray<JPPaymentMethod *> *paymentMethods = [NSMutableArray new];
+
+    int paymentMethodsBitmask = [RCTConvert int:configuration[@"paymentMethods"]];
+
+    if (paymentMethodsBitmask & IOSPaymentMethodAll) {
+        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal];
     }
 
-    NSDictionary *themeDict = [RCTConvert NSDictionary:options[@"theme"]];
-    if (themeDict) {
-        JPTheme *theme = [[JPTheme alloc] init];
-        // acceptedCardNetworks
-        theme.tintColor = [RCTConvert UIColor:themeDict[@"tintColor"]];
-        theme.avsEnabled = [RCTConvert BOOL:themeDict[@"avsEnabled"]];
-        theme.showSecurityMessage = [RCTConvert BOOL:themeDict[@"showSecurityMessage"]];
-        theme.paymentButtonTitle = [RCTConvert NSString:themeDict[@"paymentButtonTitle"]];
-        // registerCardButtonTitle
-        // registerCardNavBarButtonTitle
-        theme.backButtonTitle = [RCTConvert NSString:themeDict[@"backButtonTitle"]];
-        theme.paymentTitle = [RCTConvert NSString:themeDict[@"paymentTitle"]];
-        // registerCardTitle
-        // checkCardTitle
-        // refundTitle
-        // authenticationTitle
-        // loadingIndicatorRegisterCardTitle
-        theme.loadingIndicatorProcessingTitle = [RCTConvert NSString:themeDict[@"loadingIndicatorProcessingTitle"]];
-        // redirecting3DSTitle
-        // verifying3DSPaymentTitle
-        // verifying3DSRegisterCardTitle
-        theme.inputFieldHeight = [RCTConvert CGFloat:themeDict[@"inputFieldHeight"]];
-        theme.securityMessageString = [RCTConvert NSString:themeDict[@"securityMessageString"]];
-        theme.securityMessageTextSize = [RCTConvert CGFloat:themeDict[@"securityMessageTextSize"]];
-        theme.judoTextColor = [RCTConvert UIColor:themeDict[@"textColor"]];
-        theme.judoNavigationBarTitleColor = [RCTConvert UIColor:themeDict[@"navigationBarTitleColor"]];
-        theme.judoInputFieldTextColor = [RCTConvert UIColor:themeDict[@"inputFieldTextColor"]];
-        //theme.judoPlaceholderTextColor = [RCTConvert UIColor:themeDict[@"placeholderTextColor"]]; // Doesn't seem to work
-        //theme.judoInputFieldBorderColor = [RCTConvert UIColor:themeDict[@"inputFieldBorderColor"]]; // Doesn't seem to work
-        theme.judoContentViewBackgroundColor = [RCTConvert UIColor:themeDict[@"contentViewBackgroundColor"]];
-        theme.judoButtonColor = [RCTConvert UIColor:themeDict[@"buttonColor"]];
-        theme.judoButtonTitleColor = [RCTConvert UIColor:themeDict[@"buttonTitleColor"]];
-        theme.judoLoadingBackgroundColor = [RCTConvert UIColor:themeDict[@"loadingBackgroundColor"]];
-        theme.judoErrorColor = [RCTConvert UIColor:themeDict[@"errorColor"]];
-        theme.judoLoadingBlockViewColor = [RCTConvert UIColor:themeDict[@"loadingBlockViewColor"]];
-        theme.judoInputFieldBackgroundColor = [RCTConvert UIColor:themeDict[@"inputFieldBackgroundColor"]];
-        theme.buttonCornerRadius = [RCTConvert CGFloat:themeDict[@"buttonCornerRadius"]]; // Only on "Payment Method" screen
-        theme.buttonHeight = [RCTConvert CGFloat:themeDict[@"buttonHeight"]];
-        theme.buttonsSpacing = [RCTConvert CGFloat:themeDict[@"buttonSpacing"]]; // Only on "Payment Method" screen
-        self.theme = theme;
+    if (paymentMethodsBitmask & IOSPaymentMethodCard) {
+        [paymentMethods addObject:JPPaymentMethod.card];
     }
-    return YES;
+
+    if (paymentMethodsBitmask & IOSPaymentMethodApplePay) {
+        [paymentMethods addObject:JPPaymentMethod.applePay];
+    }
+
+    if (paymentMethodsBitmask & IOSPaymentMethodIDEAL) {
+        [paymentMethods addObject:JPPaymentMethod.iDeal];
+    }
+
+    return paymentMethods;
 }
 
-- (void (^)(JPResponse *, NSError *))paymentCompletion:(JudoKit *)judoKit
-                                                reject:(RCTPromiseRejectBlock)reject
-                                               resolve:(RCTPromiseResolveBlock)resolve {
-    return ^(JPResponse *response, NSError *error) {
-        [judoKit.activeViewController dismissViewControllerAnimated:true completion:nil];
-        if (error) {
-            if (error.domain == JudoErrorDomain && error.code == JudoErrorUserDidCancel) {
-                reject(@"JUDO_USER_CANCELLED", @"User cancelled", nil);
-            } else {
-                reject(@"JUDO_ERROR", error.localizedDescription, error);
-            }
-        } else if (response.items.count == 1) {
-            resolve(response.items[0].rawData);
-        } else {
-            resolve([NSNull null]);
-        }
-    };
+- (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration {
+
+    CardNetwork supportedCardNetworks = CardNetworkUnknown;
+
+    int supportedNetworksBitmask = [RCTConvert int:configuration[@"supportedCardNetworks"]];
+
+    if (supportedNetworksBitmask & IOSCardNetworkAll) {
+        return CardNetworksAll;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkVisa) {
+        RCTLog(@"ADDING VISA");
+        supportedCardNetworks |= CardNetworkVisa;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkMastercard) {
+        RCTLog(@"ADDING MASTERCARD");
+        supportedCardNetworks |= CardNetworkMasterCard;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkMaestro) {
+        supportedCardNetworks |= CardNetworkMaestro;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkAmex) {
+        RCTLog(@"ADDING AMEX");
+        supportedCardNetworks |= CardNetworkAMEX;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkChinaUnionPay) {
+        supportedCardNetworks |= CardNetworkChinaUnionPay;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkJCB) {
+        supportedCardNetworks |= CardNetworkJCB;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkDiscover) {
+        supportedCardNetworks |= CardNetworkDiscover;
+    }
+
+    if (supportedNetworksBitmask & IOSCardNetworkDinersClub) {
+        supportedCardNetworks |= CardNetworkDinersClub;
+    }
+
+    return supportedCardNetworks;
+}
+
+- (JPAddress *)cardAddressFromConfiguration:(NSDictionary *)configuration {
+    NSDictionary *addressDictionary = configuration[@"cardAddress"];
+    return [[JPAddress alloc] initWithDictionary:addressDictionary];
+}
+
+- (JPUIConfiguration *)uiConfigurationFromConfiguration:(NSDictionary *)configuration {
+  NSDictionary *uiConfigurationDictionary = configuration[@"uiConfiguration"];
+  JPUIConfiguration *uiConfiguration = [JPUIConfiguration new];
+
+  uiConfiguration.isAVSEnabled = [RCTConvert BOOL:uiConfigurationDictionary[@"isAVSEnabled"]];
+  uiConfiguration.shouldDisplayAmount = [RCTConvert BOOL:uiConfigurationDictionary[@"shouldDisplayAmount"]];
+  uiConfiguration.theme = [self themeFromUIConfiguration:uiConfigurationDictionary];
+
+  return uiConfiguration;
+}
+
+- (JPTheme *)themeFromUIConfiguration:(NSDictionary *)uiConfiguration {
+  //TODO: Add theming configuration
+  return [JPTheme new];
+}
+
+- (JPPrimaryAccountDetails *)accountDetailsFromConfiguration:(NSDictionary *)configuration {
+    NSDictionary *accountDetailsDictionary = configuration[@"primaryAccountDetails"];
+    return [JPPrimaryAccountDetails detailsFromDictionary:accountDetailsDictionary];
+}
+
+- (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
+
+  NSDictionary *configurationDict = properties[@"configuration"];
+
+  NSString *judoId = [RCTConvert NSString:configurationDict[@"judoId"]];
+  JPAmount *amount = [self amountFromConfiguration:configurationDict];
+  JPReference *reference = [self referenceFromConfiguration:configurationDict];
+
+  JPConfiguration *configuration = [[JPConfiguration alloc] initWithJudoID:judoId
+                                                                    amount:amount
+                                                                 reference:reference];
+
+  configuration.siteId = [RCTConvert NSString:configurationDict[@"siteId"]];
+  configuration.uiConfiguration = [self uiConfigurationFromConfiguration:configurationDict];
+  configuration.supportedCardNetworks = [self cardNetworksFromConfiguration:configurationDict];
+  configuration.primaryAccountDetails = [self accountDetailsFromConfiguration:configurationDict];
+  configuration.cardAddress = [self cardAddressFromConfiguration:configurationDict];
+  configuration.paymentMethods = [self paymentMethodsFromConfiguration:configurationDict];
+
+  //TODO: Map apple pay
+
+  return configuration;
+}
+
+//----------------------------------------------
+// MARK: - React Native methods
+//----------------------------------------------
+
+- (dispatch_queue_t)methodQueue {
+  return dispatch_get_main_queue();
+}
+
++ (BOOL)requiresMainQueueSetup {
+  return YES;
 }
 
 @end

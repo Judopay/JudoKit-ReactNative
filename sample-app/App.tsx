@@ -6,8 +6,8 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './screens/Home'
-import Settings from './screens/Settings'
+import Home from './screens/Home/Home'
+import Settings from './screens/Settings/Settings'
 
 const Stack = createStackNavigator();
 

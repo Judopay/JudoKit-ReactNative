@@ -7,7 +7,7 @@ target 'sample-app' do
   # use_frameworks!
   # Pods for sample-app
   pod 'FLEX'
-  pod 'JudoKitObjC', '~> 10.0'
+  pod 'JudoKitObjC', :git => "git@github.com:Judopay/JudoKitObjC.git", :branch => "develop-v2"
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
