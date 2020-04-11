@@ -86,6 +86,12 @@ export default class Home extends Component {
         case HomeListType.SaveCard:
           this.invokeSaveCard()
           break
+        case HomeListType.ApplePay:
+          this.invokeApplePay()
+          break
+        case HomeListType.ApplePreAuth:
+          this.invokeApplePreAuth()
+          break
         case HomeListType.PaymentMethods:
           this.invokePaymentMethods()
           break

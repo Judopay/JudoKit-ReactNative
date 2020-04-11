@@ -27,7 +27,7 @@ const total: JudoPaymentSummaryItem = {
 
 const delivery: JudoShippingMethod = {
     identifier: 'delivery-id',
-    label: 'Delivert',
+    label: 'Deliver',
     detail: 'Deliver to your home address',
     amount: '0.01',
     type: JudoPaymentSummaryItemType.Final,
@@ -35,7 +35,7 @@ const delivery: JudoShippingMethod = {
 
 export const applePayConfiguration: JudoApplePayConfiguration = {
     merchantId: 'my-merchant-id',
-    countryCode: 'my-country-code',
+    countryCode: 'GB',
     paymentSummaryItems: [itemOne, itemTwo, total],
     merchantCapabilities: JudoMerchantCapability.ThreeDS,
     requiredBillingContactFields: JudoContactField.Name | JudoContactField.Email,

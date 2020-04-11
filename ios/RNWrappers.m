@@ -120,12 +120,10 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
     }
 
     if (supportedNetworksBitmask & IOSCardNetworkVisa) {
-        RCTLog(@"ADDING VISA");
         supportedCardNetworks |= CardNetworkVisa;
     }
 
     if (supportedNetworksBitmask & IOSCardNetworkMastercard) {
-        RCTLog(@"ADDING MASTERCARD");
         supportedCardNetworks |= CardNetworkMasterCard;
     }
 
@@ -134,7 +132,6 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
     }
 
     if (supportedNetworksBitmask & IOSCardNetworkAmex) {
-        RCTLog(@"ADDING AMEX");
         supportedCardNetworks |= CardNetworkAMEX;
     }
 
