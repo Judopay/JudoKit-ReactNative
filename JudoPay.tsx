@@ -1,4 +1,4 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 import {
     JudoTransactionType,
@@ -38,6 +38,11 @@ class JudoPay {
 
         const params = this.generateTransactionModeParameters(mode, configuration);
         const judoPay = NativeModules.RNJudo;
+
+        if (Platform.OS === 'android') {
+            const response = await judoPay.invokeGooglePay(params);
+            return response;
+        }
 
         const response = await judoPay.invokeApplePay(params);
         return response;
