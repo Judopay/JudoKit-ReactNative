@@ -6,6 +6,8 @@ export enum HomeListType {
     SaveCard,
     ApplePay,
     ApplePreAuth,
+    GooglePay,
+    GooglePreAuth,
     PaymentMethods,
     PreAuthMethods,
 }

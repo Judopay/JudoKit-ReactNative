@@ -45,6 +45,14 @@ export default class Home extends Component {
     this.displayApplePaySheet(JudoTransactionMode.PreAuth);
   }
 
+  async invokeGooglePay() {
+    this.displayGooglePaySheet(JudoTransactionMode.Payment);
+  }
+
+  async invokeGooglePreAuth() {
+    this.displayGooglePaySheet(JudoTransactionMode.PreAuth);
+  }
+
   async invokePaymentMethods() {
     this.displayPaymentMethod(JudoTransactionMode.Payment);
   }
@@ -67,6 +75,16 @@ export default class Home extends Component {
     try {
       const judo = new JudoPay('token', 'secret');
       const response = await judo.invokeApplePay(mode, configuration);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async displayGooglePaySheet(mode: JudoTransactionMode) {
+    try {
+      const judo = new JudoPay('token', 'secret');
+      const response = await judo.invokeGooglePay(mode, configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -106,6 +124,12 @@ export default class Home extends Component {
           break
         case HomeListType.ApplePreAuth:
           this.invokeApplePreAuth()
+          break
+        case HomeListType.GooglePay:
+          this.invokeGooglePay()
+          break
+        case HomeListType.GooglePreAuth:
+          this.invokeGooglePreAuth()
           break
         case HomeListType.PaymentMethods:
           this.invokePaymentMethods()

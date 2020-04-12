@@ -1,4 +1,5 @@
 import { applePayConfiguration } from './ApplePayDefaults';
+import { googlePayConfiguration } from './GooglePayDefaults';
 
 import {
     JudoConfiguration,
@@ -47,6 +48,7 @@ const uiConfiguration: JudoUIConfiguration = {
 const paymentMethods: JudoPaymentMethod =
     JudoPaymentMethod.Card |
     JudoPaymentMethod.ApplePay |
+    JudoPaymentMethod.GooglePay |
     JudoPaymentMethod.iDEAL;
 
 const supportedCardNetworks: JudoCardNetwork =
@@ -72,6 +74,7 @@ const configuration: JudoConfiguration = {
     supportedCardNetworks: supportedCardNetworks,
     primaryAccountDetails: primaryAccountDetails,
     applePayConfiguration: applePayConfiguration,
+    googlePayConfiguration: googlePayConfiguration,
 }
 
 export default configuration;

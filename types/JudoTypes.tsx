@@ -1,4 +1,5 @@
 import { JudoApplePayConfiguration } from './JudoApplePayTypes'
+import { JudoGooglePayConfiguration } from './JudoGooglePayTypes'
 
 export interface JudoConfiguration {
     judoId: string,
@@ -11,6 +12,7 @@ export interface JudoConfiguration {
     supportedCardNetworks?: JudoCardNetwork,
     primaryAccountDetails?: JudoAccountDetails,
     applePayConfiguration?: JudoApplePayConfiguration,
+    googlePayConfiguration?: JudoGooglePayConfiguration,
 }
 
 export enum JudoTransactionType {
@@ -59,8 +61,9 @@ export interface JudoTheme {
 export enum JudoPaymentMethod {
     Card = 1 << 0,
     ApplePay = 1 << 1,
-    iDEAL = 1 << 2,
-    All = 1 << 3,
+    GooglePay = 1 << 2,
+    iDEAL = 1 << 3,
+    All = 1 << 4,
 }
 
 export enum JudoCardNetwork {

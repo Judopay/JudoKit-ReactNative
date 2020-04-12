@@ -35,8 +35,8 @@
 NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
     IOSPaymentMethodCard = 1 << 0,
     IOSPaymentMethodApplePay = 1 << 1,
-    IOSPaymentMethodIDEAL = 1 << 2,
-    IOSPaymentMethodAll = 1 << 3,
+    IOSPaymentMethodIDEAL = 1 << 3,
+    IOSPaymentMethodAll = 1 << 4,
 };
 
 NS_OPTIONS(NSUInteger, IOSCardNetwork) {

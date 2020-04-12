@@ -9,6 +9,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 import com.judopay.Judo;
@@ -18,10 +19,15 @@ import com.judopay.api.model.response.Receipt;
 import com.judopay.model.Amount;
 import com.judopay.model.CardNetwork;
 import com.judopay.model.Currency;
+import com.judopay.model.GooglePayConfiguration;
 import com.judopay.model.PaymentMethod;
 import com.judopay.model.PaymentWidgetType;
 import com.judopay.model.Reference;
 import com.judopay.model.UiConfiguration;
+import com.judopay.model.googlepay.GooglePayAddressFormat;
+import com.judopay.model.googlepay.GooglePayBillingAddressParameters;
+import com.judopay.model.googlepay.GooglePayEnvironment;
+import com.judopay.model.googlepay.GooglePayShippingAddressParameters;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,18 +39,19 @@ import static com.judopay.JudoKt.JUDO_OPTIONS;
 import static com.judopay.JudoKt.JUDO_RECEIPT;
 import static com.judopay.JudoKt.PAYMENT_ERROR;
 import static com.judopay.JudoKt.PAYMENT_SUCCESS;
+import static com.judopay.model.googlepay.GooglePayEnvironment.*;
 
 public class JudoReactNativeModule extends ReactContextBaseJavaModule {
 
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
     // MARK: Constants
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
 
     private static final int JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1;
 
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
     // MARK: Variables
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
 
     private Promise transactionPromise;
     private final ActivityEventListener listener = new BaseActivityEventListener() {
@@ -66,18 +73,18 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
         }
     };
 
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
     // MARK: Initializer
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
 
     JudoReactNativeModule(ReactApplicationContext context) {
         super(context);
         context.addActivityEventListener(listener);
     }
 
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
     // MARK: SDK Methods
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
 
     @ReactMethod
     @SuppressWarnings("unused")
@@ -89,7 +96,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
     @ReactMethod
     @SuppressWarnings("unused")
     public void invokeGooglePay(ReadableMap options, Promise promise) {
-        Judo configuration = getGooglePayConfiguration(options);
+        Judo configuration = getGoogleTransactionConfiguration(options);
         startJudoActivity(configuration, promise);
     }
 
@@ -111,16 +118,16 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
         currentActivity.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE);
     }
 
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
     // MARK: Helper methods
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
 
     private Judo getTransactionConfiguration(ReadableMap options) {
         PaymentWidgetType widgetType = getWidgetType(options);
         return getJudoConfiguration(widgetType, options);
     }
 
-    private Judo getGooglePayConfiguration(ReadableMap options) {
+    private Judo getGoogleTransactionConfiguration(ReadableMap options) {
         int transactionMode = options.getInt("transactionMode");
 
         if (transactionMode == 0) {
@@ -154,6 +161,8 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
         PaymentMethod[] paymentMethods = getPaymentMethods(options);
         UiConfiguration uiConfiguration = getUIConfiguration(options);
 
+        GooglePayConfiguration googlePayConfiguration = getGooglePayConfiguration(options);
+
         return new Judo.Builder(type)
                 .setApiToken(token)
                 .setApiSecret(secret)
@@ -165,6 +174,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
                 .setSupportedCardNetworks(cardNetworks)
                 .setPaymentMethods(paymentMethods)
                 .setUiConfiguration(uiConfiguration)
+                .setGooglePayConfiguration(googlePayConfiguration)
                 .build();
     }
 
@@ -337,13 +347,13 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
         int paymentMethodValue = configurations.getInt("paymentMethods");
 
         int METHOD_CARD = 1;
-        int METHOD_GOOGLE_PAY = 1 << 1;
-        int METHOD_IDEAL = 1 << 2;
-        int METHOD_ALL = 1 << 3;
+        int METHOD_GOOGLE_PAY = 1 << 2;
+        int METHOD_IDEAL = 1 << 3;
+        int METHOD_ALL = 1 << 4;
 
         ArrayList<PaymentMethod> paymentMethods = new ArrayList<>();
 
-        if ((paymentMethodValue & METHOD_ALL) == 1 << 3) {
+        if ((paymentMethodValue & METHOD_ALL) == 1 << 4) {
             paymentMethods.add(PaymentMethod.CARD);
             paymentMethods.add(PaymentMethod.GOOGLE_PAY);
             paymentMethods.add(PaymentMethod.IDEAL);
@@ -354,11 +364,11 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
             paymentMethods.add(PaymentMethod.CARD);
         }
 
-        if ((paymentMethodValue & METHOD_GOOGLE_PAY) == 1 << 1) {
+        if ((paymentMethodValue & METHOD_GOOGLE_PAY) == 1 << 2) {
             paymentMethods.add(PaymentMethod.GOOGLE_PAY);
         }
 
-        if ((paymentMethodValue & METHOD_IDEAL) == 1 << 2) {
+        if ((paymentMethodValue & METHOD_IDEAL) == 1 << 3) {
             paymentMethods.add(PaymentMethod.IDEAL);
         }
 
@@ -374,9 +384,61 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
                 .build();
     }
 
-    //------------------------------------------------------------
+    private GooglePayConfiguration getGooglePayConfiguration(ReadableMap options) {
+
+        ReadableMap configuration = options.getMap("configuration");
+        ReadableMap googlePayConfig = configuration.getMap("googlePayConfiguration");
+
+        String countryCode = googlePayConfig.getString("countryCode");
+
+        int environmentValue = googlePayConfig.getInt("environment");
+
+        GooglePayEnvironment environment = (environmentValue == 0) ? TEST : PRODUCTION;
+
+        Boolean isEmailRequired = googlePayConfig.getBoolean("isEmailRequired");
+        Boolean isBillingAddressRequired = googlePayConfig.getBoolean("isBillingAddressRequired");
+        Boolean isShippingAddressRequired = googlePayConfig.getBoolean("isShippingAddressRequired");
+
+        ReadableMap billingFormatMap = googlePayConfig.getMap("billingAddressParameters");
+        GooglePayBillingAddressParameters billingParameters = getBillingParameters(billingFormatMap);
+
+        ReadableMap shippingFormatMap = googlePayConfig.getMap("shippingAddressParameters");
+        GooglePayShippingAddressParameters shippingParameters = getShippingParameters(shippingFormatMap);
+
+        return new GooglePayConfiguration.Builder()
+                .setTransactionCountryCode(countryCode)
+                .setEnvironment(environment)
+                .setIsEmailRequired(isEmailRequired)
+                .setIsBillingAddressRequired(isBillingAddressRequired)
+                .setBillingAddressParameters(billingParameters)
+                .setIsShippingAddressRequired(isShippingAddressRequired)
+                .setShippingAddressParameters(shippingParameters)
+                .build();
+    }
+
+    private GooglePayBillingAddressParameters getBillingParameters(ReadableMap formatMap) {
+        int addressFormatValue = formatMap.getInt("addressFormat");
+
+        GooglePayAddressFormat addressFormat = (addressFormatValue == 0)
+                ? GooglePayAddressFormat.MIN
+                : GooglePayAddressFormat.FULL;
+
+        Boolean isPhoneNumberRequired = formatMap.getBoolean("isPhoneNumberRequired");
+        return new GooglePayBillingAddressParameters(addressFormat, isPhoneNumberRequired);
+    }
+
+    private GooglePayShippingAddressParameters getShippingParameters(ReadableMap formatMap) {
+
+        ReadableArray billingParameters = formatMap.getArray("allowedCountryCodes");
+        String[] billingParametersArray = billingParameters.toArrayList().toArray(new String[0]);
+
+        Boolean isPhoneNumberRequired = formatMap.getBoolean("isPhoneNumberRequired");
+        return new GooglePayShippingAddressParameters(billingParametersArray, isPhoneNumberRequired);
+    }
+
+    // ------------------------------------------------------------
     // MARK: React Native methods
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
 
     @Nonnull
     @Override
