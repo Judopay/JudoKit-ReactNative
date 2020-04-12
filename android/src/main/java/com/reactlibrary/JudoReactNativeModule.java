@@ -2,7 +2,6 @@ package com.reactlibrary;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.BaseActivityEventListener;
@@ -19,8 +18,10 @@ import com.judopay.api.model.response.Receipt;
 import com.judopay.model.Amount;
 import com.judopay.model.CardNetwork;
 import com.judopay.model.Currency;
+import com.judopay.model.PaymentMethod;
 import com.judopay.model.PaymentWidgetType;
 import com.judopay.model.Reference;
+import com.judopay.model.UiConfiguration;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -81,10 +82,26 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
     @ReactMethod
     @SuppressWarnings("unused")
     public void invokeTransaction(ReadableMap options, Promise promise) {
+        Judo configuration = getTransactionConfiguration(options);
+        startJudoActivity(configuration, promise);
+    }
 
+    @ReactMethod
+    @SuppressWarnings("unused")
+    public void invokeGooglePay(ReadableMap options, Promise promise) {
+        Judo configuration = getGooglePayConfiguration(options);
+        startJudoActivity(configuration, promise);
+    }
+
+    @ReactMethod
+    @SuppressWarnings("unused")
+    public void invokePaymentMethodScreen(ReadableMap options, Promise promise) {
+        Judo configuration = getPaymentMethodsConfiguration(options);
+        startJudoActivity(configuration, promise);
+    }
+
+    public void startJudoActivity(Judo configuration, Promise promise) {
         transactionPromise = promise;
-
-        Judo configuration = getJudoConfiguration(options);
 
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
 
@@ -94,61 +111,267 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
         currentActivity.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE);
     }
 
-    @ReactMethod
-    @SuppressWarnings("unused")
-    public void invokeGooglePay(ReadableMap options, Promise promise) {
-        // TODO: Handle Google Pay logic
-        System.out.println(options);
-        promise.resolve(true);
-    }
-
-    @ReactMethod
-    @SuppressWarnings("unused")
-    public void invokePaymentMethodScreen(ReadableMap options, Promise promise) {
-        // TODO: Handle Payment Methods screen logic
-        System.out.println(options);
-        promise.resolve(true);
-    }
-
     //------------------------------------------------------------
     // MARK: Helper methods
     //------------------------------------------------------------
 
-    private Judo getJudoConfiguration(ReadableMap options) {
+    private Judo getTransactionConfiguration(ReadableMap options) {
+        PaymentWidgetType widgetType = getWidgetType(options);
+        return getJudoConfiguration(widgetType, options);
+    }
 
-        Amount amount = getAmount();
-        Reference reference = getReference();
-        Boolean isSandboxed = true;
+    private Judo getGooglePayConfiguration(ReadableMap options) {
+        int transactionMode = options.getInt("transactionMode");
 
-        return new Judo.Builder(PaymentWidgetType.CARD_PAYMENT)
-                .setJudoId("judoId")
-                .setSiteId("siteId")
-                .setApiToken("token")
-                .setApiSecret("secret")
+        if (transactionMode == 0) {
+            return getJudoConfiguration(PaymentWidgetType.GOOGLE_PAY, options);
+        }
+
+        return getJudoConfiguration(PaymentWidgetType.PRE_AUTH_GOOGLE_PAY, options);
+    }
+
+    private Judo getPaymentMethodsConfiguration(ReadableMap options) {
+        int transactionMode = options.getInt("transactionMode");
+
+        if (transactionMode == 0) {
+            return getJudoConfiguration(PaymentWidgetType.PAYMENT_METHODS, options);
+        }
+
+        return getJudoConfiguration(PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS, options);
+    }
+
+    private Judo getJudoConfiguration(PaymentWidgetType type, ReadableMap options) {
+        String token = options.getString("token");
+        String secret = options.getString("secret");
+        Boolean isSandboxed = options.getBoolean("sandboxed");
+
+        String judoId = getJudoId(options);
+        String siteId = getSiteId(options);
+
+        Amount amount = getAmount(options);
+        Reference reference = getReference(options);
+        CardNetwork[] cardNetworks = getCardNetworks(options);
+        PaymentMethod[] paymentMethods = getPaymentMethods(options);
+        UiConfiguration uiConfiguration = getUIConfiguration(options);
+
+        return new Judo.Builder(type)
+                .setApiToken(token)
+                .setApiSecret(secret)
+                .setIsSandboxed(isSandboxed)
+                .setJudoId(judoId)
+                .setSiteId(siteId)
                 .setAmount(amount)
                 .setReference(reference)
-                .setIsSandboxed(isSandboxed)
+                .setSupportedCardNetworks(cardNetworks)
+                .setPaymentMethods(paymentMethods)
+                .setUiConfiguration(uiConfiguration)
                 .build();
     }
 
-    private Amount getAmount() {
+    private PaymentWidgetType getWidgetType(ReadableMap options) {
+        int transactionType = options.getInt("transactionType");
+        switch (transactionType) {
+            case 1:
+                return PaymentWidgetType.PRE_AUTH_CARD_PAYMENT;
+            case 2:
+                return PaymentWidgetType.CREATE_CARD_TOKEN;
+            case 3:
+                return PaymentWidgetType.CHECK_CARD;
+            case 4:
+                return PaymentWidgetType.SAVE_CARD;
+            default:
+                return PaymentWidgetType.CARD_PAYMENT;
+        }
+    }
+
+    private String getJudoId(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        return configurations.getString("judoId");
+    }
+
+    private Amount getAmount(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        ReadableMap amount = configurations.getMap("amount");
+
+        String amountValue = amount.getString("value");
+        String currencyValue = amount.getString("currency");
+        Currency currency = getCurrency(currencyValue);
+
         return new Amount.Builder()
-                .setAmount("0.01")
-                .setCurrency(Currency.GBP)
+                .setAmount(amountValue)
+                .setCurrency(currency)
                 .build();
     }
 
-    private Reference getReference() {
+    private Currency getCurrency(String value) {
+        switch (value) {
+            case "AED":
+                return Currency.AED;
+            case "AUD":
+                return Currency.AUD;
+            case "BRL":
+                return Currency.BRL;
+            case "CAD":
+                return Currency.CAD;
+            case "CHF":
+                return Currency.CHF;
+            case "DKK":
+                return Currency.DKK;
+            case "EUR":
+                return Currency.EUR;
+            case "HKD":
+                return Currency.HKD;
+            case "HUF":
+                return Currency.HUF;
+            case "JPY":
+                return Currency.JPY;
+            case "NOK":
+                return Currency.NOK;
+            case "NZD":
+                return Currency.NZD;
+            case "PLN":
+                return Currency.PLN;
+            case "SAR":
+                return Currency.SAR;
+            case "SEK":
+                return Currency.SEK;
+            case "SGD":
+                return Currency.SGD;
+            case "QAR":
+                return Currency.QAR;
+            case "USD":
+                return Currency.USD;
+            case "ZAR":
+                return Currency.ZAR;
+            default:
+                return Currency.GBP;
+        }
+    }
+
+    private Reference getReference(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        ReadableMap reference = configurations.getMap("reference");
+
+        String consumerReference = reference.getString("consumerReference");
+        String paymentReference = reference.getString("paymentReference");
+
+        // TODO: MAP METADATA BUNDLE ?
         return new Reference.Builder()
-                .setConsumerReference("my-reference")
-                .setPaymentReference("my-payment-reference")
+                .setConsumerReference(consumerReference)
+                .setPaymentReference(paymentReference)
                 .build();
     }
 
-    private CardNetwork[] getCardNetworks() {
-        ArrayList<CardNetwork> networks = new ArrayList<>();
-        networks.add(CardNetwork.VISA);
-        return (CardNetwork[]) networks.toArray();
+    private String getSiteId(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        return configurations.getString("siteId");
+    }
+
+    private CardNetwork[] getCardNetworks(ReadableMap options) {
+
+        int CARD_VISA = 1;
+        int CARD_MASTERCARD = 1 << 1;
+        int CARD_MAESTRO = 1 << 2;
+        int CARD_AMEX = 1 << 3;
+        int CARD_CHINAUNIONPAY = 1 << 4;
+        int CARD_JCB = 1 << 5;
+        int CARD_DISCOVER = 1 << 6;
+        int CARD_DINERSCLUB = 1 << 7;
+        int CARD_ALL = 1 << 8;
+
+        ReadableMap configurations = options.getMap("configuration");
+        int cardNetworkValue = configurations.getInt("supportedCardNetworks");
+
+        ArrayList<CardNetwork> supportedNetworks = new ArrayList<>();
+
+        if ((cardNetworkValue & CARD_ALL) == 1 << 8) {
+            supportedNetworks.add(CardNetwork.VISA);
+            supportedNetworks.add(CardNetwork.MASTERCARD);
+            supportedNetworks.add(CardNetwork.MAESTRO);
+            supportedNetworks.add(CardNetwork.AMEX);
+            supportedNetworks.add(CardNetwork.CHINA_UNION_PAY);
+            supportedNetworks.add(CardNetwork.JCB);
+            supportedNetworks.add(CardNetwork.DISCOVER);
+            supportedNetworks.add(CardNetwork.DINERS_CLUB);
+
+            return supportedNetworks.toArray(new CardNetwork[0]);
+        }
+
+        if ((cardNetworkValue & CARD_VISA) == 1) {
+            supportedNetworks.add(CardNetwork.VISA);
+        }
+
+        if ((cardNetworkValue & CARD_MASTERCARD) == 1 << 1) {
+            supportedNetworks.add(CardNetwork.MASTERCARD);
+        }
+
+        if ((cardNetworkValue & CARD_MAESTRO) == 1 << 2) {
+            supportedNetworks.add(CardNetwork.MAESTRO);
+        }
+
+        if ((cardNetworkValue & CARD_AMEX) == 1 << 3) {
+            supportedNetworks.add(CardNetwork.AMEX);
+        }
+
+        if ((cardNetworkValue & CARD_CHINAUNIONPAY) == 1 << 4) {
+            supportedNetworks.add(CardNetwork.CHINA_UNION_PAY);
+        }
+
+        if ((cardNetworkValue & CARD_JCB) == 1 << 5) {
+            supportedNetworks.add(CardNetwork.JCB);
+        }
+
+        if ((cardNetworkValue & CARD_DISCOVER) == 1 << 6) {
+            supportedNetworks.add(CardNetwork.DISCOVER);
+        }
+
+        if ((cardNetworkValue & CARD_DINERSCLUB) == 1 << 7) {
+            supportedNetworks.add(CardNetwork.DINERS_CLUB);
+        }
+
+        return supportedNetworks.toArray(new CardNetwork[0]);
+    }
+
+    private PaymentMethod[] getPaymentMethods(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        int paymentMethodValue = configurations.getInt("paymentMethods");
+
+        int METHOD_CARD = 1;
+        int METHOD_GOOGLE_PAY = 1 << 1;
+        int METHOD_IDEAL = 1 << 2;
+        int METHOD_ALL = 1 << 3;
+
+        ArrayList<PaymentMethod> paymentMethods = new ArrayList<>();
+
+        if ((paymentMethodValue & METHOD_ALL) == 1 << 3) {
+            paymentMethods.add(PaymentMethod.CARD);
+            paymentMethods.add(PaymentMethod.GOOGLE_PAY);
+            paymentMethods.add(PaymentMethod.IDEAL);
+            return paymentMethods.toArray(new PaymentMethod[0]);
+        }
+
+        if ((paymentMethodValue & METHOD_CARD) == 1) {
+            paymentMethods.add(PaymentMethod.CARD);
+        }
+
+        if ((paymentMethodValue & METHOD_GOOGLE_PAY) == 1 << 1) {
+            paymentMethods.add(PaymentMethod.GOOGLE_PAY);
+        }
+
+        if ((paymentMethodValue & METHOD_IDEAL) == 1 << 2) {
+            paymentMethods.add(PaymentMethod.IDEAL);
+        }
+
+        return paymentMethods.toArray(new PaymentMethod[0]);
+    }
+
+    private UiConfiguration getUIConfiguration(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        ReadableMap uiConfiguration = configurations.getMap("uiConfiguration");
+        Boolean isAVSEnabled = uiConfiguration.getBoolean("isAVSEnabled");
+        return new UiConfiguration.Builder()
+                .setAvsEnabled(isAVSEnabled)
+                .build();
     }
 
     //------------------------------------------------------------

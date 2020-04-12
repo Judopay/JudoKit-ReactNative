@@ -54,18 +54,33 @@ export default class Home extends Component {
   }
 
   async invokeTransaction(type: JudoTransactionType) {
-    const judo = new JudoPay('token', 'secret');
-    const response = await judo.invokeTransaction(type, configuration);
-  }
-
-  async displayPaymentMethod(mode: JudoTransactionMode) {
-    const judo = new JudoPay('token', 'secret');
-    const response = await judo.invokePaymentMethodScreen(mode, configuration);
+    try {
+      const judo = new JudoPay('token', 'secret');
+      const response = await judo.invokeTransaction(type, configuration);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
-    const judo = new JudoPay('token', 'secret');
-    const response = await judo.invokeApplePay(mode, configuration);
+    try {
+      const judo = new JudoPay('token', 'secret');
+      const response = await judo.invokeApplePay(mode, configuration);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async displayPaymentMethod(mode: JudoTransactionMode) {
+    try {
+      const judo = new JudoPay('token', 'secret');
+      const response = await judo.invokePaymentMethodScreen(mode, configuration);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   handleListItemPressed(item: HomeListItem) {
