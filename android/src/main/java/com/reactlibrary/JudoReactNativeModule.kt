@@ -3,6 +3,7 @@ package com.reactlibrary
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.facebook.react.bridge.*
 import com.judopay.*
 import com.judopay.api.error.ApiError
@@ -230,36 +231,65 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         return supportedNetworks.toTypedArray()
     }
 
-    private fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod> {
-        val configurations = options.getMap("configuration")
-        val paymentMethodValue = configurations!!.getInt("paymentMethods")
-        val METHOD_CARD = 1
-        val METHOD_GOOGLE_PAY = 1 shl 2
-        val METHOD_IDEAL = 1 shl 3
-        val METHOD_ALL = 1 shl 4
+    private fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val paymentMethodValue = try {
+            configuration?.getInt("paymentMethods")
+        } catch (_: Exception) {
+            return null
+        }
+
         val paymentMethods = ArrayList<PaymentMethod>()
-        if (paymentMethodValue and METHOD_ALL == METHOD_ALL) {
-            paymentMethods.add(PaymentMethod.CARD)
-            paymentMethods.add(PaymentMethod.GOOGLE_PAY)
-            paymentMethods.add(PaymentMethod.IDEAL)
-            return paymentMethods.toTypedArray()
+
+        val cardPaymentValue = 1
+        val googlePaymentValue = 1 shl 2
+        val idealPaymentValue = 1 shl 3
+
+        paymentMethodValue?.let {
+
+            when {
+                (paymentMethodValue and cardPaymentValue) == cardPaymentValue -> {
+                    paymentMethods.add(PaymentMethod.CARD)
+                }
+                (paymentMethodValue and googlePaymentValue) == googlePaymentValue -> {
+                    paymentMethods.add(PaymentMethod.GOOGLE_PAY)
+                }
+                (paymentMethodValue and idealPaymentValue) == idealPaymentValue -> {
+                    paymentMethods.add(PaymentMethod.IDEAL)
+                }
+                else -> return PaymentMethod.values()
+            }
         }
-        if (paymentMethodValue and METHOD_CARD == METHOD_CARD) {
-            paymentMethods.add(PaymentMethod.CARD)
-        }
-        if (paymentMethodValue and METHOD_GOOGLE_PAY == METHOD_GOOGLE_PAY) {
-            paymentMethods.add(PaymentMethod.GOOGLE_PAY)
-        }
-        if (paymentMethodValue and METHOD_IDEAL == METHOD_IDEAL) {
-            paymentMethods.add(PaymentMethod.IDEAL)
-        }
+
         return paymentMethods.toTypedArray()
     }
 
-    private fun getUIConfiguration(options: ReadableMap): UiConfiguration {
-        val configurations = options.getMap("configuration")
-        val uiConfiguration = configurations!!.getMap("uiConfiguration")
-        val isAVSEnabled = uiConfiguration!!.getBoolean("isAVSEnabled")
+    private fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val uiConfiguration = try {
+            configuration?.getMap("uiConfiguration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val isAVSEnabled = try {
+            uiConfiguration?.getBoolean("isAVSEnabled")
+        } catch (_: Exception) {
+            return null
+        }
+
         return UiConfiguration.Builder()
                 .setAvsEnabled(isAVSEnabled)
                 .build()
