@@ -6,522 +6,412 @@ import android.os.Bundle;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.BaseActivityEventListener;
-import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeMap;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wallet.AutoResolveHelper;
-import com.google.android.gms.wallet.PaymentData;
-import com.google.android.gms.wallet.PaymentDataRequest;
-import com.google.android.gms.wallet.PaymentsClient;
-import com.google.android.gms.wallet.WalletConstants;
-import com.judopay.IdealPaymentActivity;
-import com.judopay.Judo;
-import com.judopay.JudoApiService;
-import com.judopay.PaymentActivity;
-import com.judopay.PaymentMethodActivity;
-import com.judopay.PreAuthActivity;
-import com.judopay.arch.GooglePaymentUtils;
-import com.judopay.error.JudoIdInvalidError;
-import com.judopay.model.CardToken;
-import com.judopay.model.Consumer;
-import com.judopay.model.GooglePayRequest;
-import com.judopay.model.OrderDetails;
-import com.judopay.model.PaymentMethod;
-import com.judopay.model.Receipt;
-import com.judopay.model.Risks;
 
-import java.text.SimpleDateFormat;
-import java.util.EnumSet;
+import com.judopay.Judo;
+import com.judopay.JudoActivity;
+import com.judopay.api.error.ApiError;
+import com.judopay.api.model.response.Receipt;
+import com.judopay.model.Amount;
+import com.judopay.model.CardNetwork;
+import com.judopay.model.Currency;
+import com.judopay.model.GooglePayConfiguration;
+import com.judopay.model.PaymentMethod;
+import com.judopay.model.PaymentWidgetType;
+import com.judopay.model.Reference;
+import com.judopay.model.UiConfiguration;
+import com.judopay.model.googlepay.GooglePayAddressFormat;
+import com.judopay.model.googlepay.GooglePayBillingAddressParameters;
+import com.judopay.model.googlepay.GooglePayEnvironment;
+import com.judopay.model.googlepay.GooglePayShippingAddressParameters;
+
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import static com.judopay.JudoKt.JUDO_ERROR;
+import static com.judopay.JudoKt.JUDO_OPTIONS;
+import static com.judopay.JudoKt.JUDO_RECEIPT;
+import static com.judopay.JudoKt.PAYMENT_ERROR;
+import static com.judopay.JudoKt.PAYMENT_SUCCESS;
+import static com.judopay.model.googlepay.GooglePayEnvironment.*;
 
-import static com.judopay.Judo.GPAY_REQUEST;
-import static com.judopay.Judo.IDEAL_PAYMENT;
-import static com.judopay.Judo.JUDO_OPTIONS;
-import static com.judopay.Judo.JUDO_RECEIPT;
-import static com.judopay.Judo.LIVE;
-import static com.judopay.Judo.PAYMENT_METHOD;
-import static com.judopay.Judo.PAYMENT_REQUEST;
-import static com.judopay.Judo.PRE_AUTH_REQUEST;
-import static com.judopay.Judo.RESULT_CANCELED;
-import static com.judopay.Judo.RESULT_DECLINED;
-import static com.judopay.Judo.RESULT_ERROR;
-import static com.judopay.Judo.RESULT_SUCCESS;
-import static com.judopay.Judo.SANDBOX;
+public class JudoReactNativeModule extends ReactContextBaseJavaModule {
 
-public class JudoReactNativeModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
-    private static final String JUDO_ERROR = "JUDO_ERROR";
-    private static final String JUDO_USER_CANCELLED = "JUDO_USER_CANCELLED";
-    private static final String INVALID_CONFIGURATION = "Configuration error";
+    // ------------------------------------------------------------
+    // MARK: Constants
+    // ------------------------------------------------------------
 
-    private Promise promise;
-    private ReadableMap options;
-    private Disposable disposable;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final ActivityEventListener activityEventListener = new BaseActivityEventListener() {
+    private static final int JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1;
 
+    // ------------------------------------------------------------
+    // MARK: Variables
+    // ------------------------------------------------------------
+
+    private Promise transactionPromise;
+    private final ActivityEventListener listener = new BaseActivityEventListener() {
         @Override
-        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
-            if (promise == null) {
-                return;
+        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+
+            if (resultCode == PAYMENT_ERROR) {
+                ApiError error = data.getParcelableExtra(JUDO_ERROR);
+                String codeError = Integer.toString(error.getCode());
+                transactionPromise.reject(codeError, error.getMessage());
             }
 
-            if (requestCode == PAYMENT_REQUEST || requestCode == PRE_AUTH_REQUEST || requestCode == PAYMENT_METHOD || requestCode == IDEAL_PAYMENT) {
-                switch (resultCode) {
-                    case RESULT_SUCCESS:
-                        Receipt receipt = intent.getParcelableExtra(JUDO_RECEIPT);
-                        if (receipt != null) {
-                            WritableMap result;
-                            if (requestCode == IDEAL_PAYMENT) {
-                                result = convert(receipt.getOrderDetails());
-                            } else {
-                                result = convert(receipt);
-                            }
-                            promise.resolve(result);
-                        } else {
-                            promise.reject(JUDO_ERROR, "Something went wrong");
-                        }
-                        break;
-                    case RESULT_CANCELED:
-                        promise.reject(JUDO_USER_CANCELLED, "User cancelled");
-                        break;
-                    case RESULT_ERROR:
-                        Receipt errorReceipt = intent.getParcelableExtra(JUDO_RECEIPT);
-                        if (errorReceipt != null) {
-                            promise.reject(JUDO_ERROR, errorReceipt.getMessage());
-                        } else {
-                            promise.reject(JUDO_ERROR, "Something went wrong");
-                        }
-                        break;
-                    case RESULT_DECLINED:
-                        Receipt declinedReceipt = intent.getParcelableExtra(JUDO_RECEIPT);
-                        if (declinedReceipt != null) {
-                            WritableMap userInfo = convert(declinedReceipt);
-                            promise.reject(JUDO_ERROR, userInfo);
-                        } else {
-                            promise.reject(JUDO_ERROR, "Something went wrong");
-                        }
-                        break;
-                }
-                promise = null;
-            } else if (requestCode == GPAY_REQUEST) {
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        PaymentData paymentData = PaymentData.getFromIntent(intent);
-                        if (paymentData != null) {
-                            Judo judo = getJudo(options);
-                            if (judo == null) {
-                                promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-                                promise = null;
-                            } else {
-                                GooglePayRequest googlePayRequest = GooglePaymentUtils.createGooglePayRequest(judo, paymentData);
-                                handleGooglePayRequest(googlePayRequest);
-                            }
-                        } else {
-                            promise.reject(JUDO_ERROR, "Google Pay error. No payment data.");
-                            promise = null;
-                        }
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        promise.reject(JUDO_USER_CANCELLED, "User cancelled");
-                        promise = null;
-                        break;
-                    case AutoResolveHelper.RESULT_ERROR:
-                        Status status = AutoResolveHelper.getStatusFromIntent(intent);
-                        if (status != null) {
-                            promise.reject(JUDO_ERROR, String.format(Locale.US, "Google Pay error. Code: %d", status.getStatusCode()));
-                        } else {
-                            promise.reject(JUDO_ERROR, "Google Pay error");
-                        }
-                        promise = null;
-                        break;
-                }
+            if (resultCode == PAYMENT_SUCCESS) {
+                Receipt receipt = data.getParcelableExtra(JUDO_RECEIPT);
+                transactionPromise.resolve(receipt);
             }
+
+            transactionPromise = null;
         }
     };
-    private PaymentsClient googlePayClient;
 
-    @SuppressWarnings("WeakerAccess")
-    public JudoReactNativeModule(ReactApplicationContext reactContext) {
-        super(reactContext);
-        reactContext.addLifecycleEventListener(this);
-        reactContext.addActivityEventListener(activityEventListener);
+    // ------------------------------------------------------------
+    // MARK: Initializer
+    // ------------------------------------------------------------
+
+    JudoReactNativeModule(ReactApplicationContext context) {
+        super(context);
+        context.addActivityEventListener(listener);
     }
+
+    // ------------------------------------------------------------
+    // MARK: SDK Methods
+    // ------------------------------------------------------------
+
+    @ReactMethod
+    @SuppressWarnings("unused")
+    public void invokeTransaction(ReadableMap options, Promise promise) {
+        Judo configuration = getTransactionConfiguration(options);
+        startJudoActivity(configuration, promise);
+    }
+
+    @ReactMethod
+    @SuppressWarnings("unused")
+    public void invokeGooglePay(ReadableMap options, Promise promise) {
+        Judo configuration = getGoogleTransactionConfiguration(options);
+        startJudoActivity(configuration, promise);
+    }
+
+    @ReactMethod
+    @SuppressWarnings("unused")
+    public void invokePaymentMethodScreen(ReadableMap options, Promise promise) {
+        Judo configuration = getPaymentMethodsConfiguration(options);
+        startJudoActivity(configuration, promise);
+    }
+
+    private void startJudoActivity(Judo configuration, Promise promise) {
+        transactionPromise = promise;
+
+        Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
+
+        Intent intent = new Intent(currentActivity, JudoActivity.class);
+        intent.putExtra(JUDO_OPTIONS, configuration);
+
+        currentActivity.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE);
+    }
+
+    // ------------------------------------------------------------
+    // MARK: Helper methods
+    // ------------------------------------------------------------
+
+    private Judo getTransactionConfiguration(ReadableMap options) {
+        PaymentWidgetType widgetType = getWidgetType(options);
+        return getJudoConfiguration(widgetType, options);
+    }
+
+    private Judo getGoogleTransactionConfiguration(ReadableMap options) {
+        int transactionMode = options.getInt("transactionMode");
+
+        if (transactionMode == 0) {
+            return getJudoConfiguration(PaymentWidgetType.GOOGLE_PAY, options);
+        }
+
+        return getJudoConfiguration(PaymentWidgetType.PRE_AUTH_GOOGLE_PAY, options);
+    }
+
+    private Judo getPaymentMethodsConfiguration(ReadableMap options) {
+        int transactionMode = options.getInt("transactionMode");
+
+        if (transactionMode == 0) {
+            return getJudoConfiguration(PaymentWidgetType.PAYMENT_METHODS, options);
+        }
+
+        return getJudoConfiguration(PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS, options);
+    }
+
+    private Judo getJudoConfiguration(PaymentWidgetType type, ReadableMap options) {
+        String token = options.getString("token");
+        String secret = options.getString("secret");
+        Boolean isSandboxed = options.getBoolean("sandboxed");
+
+        String judoId = getJudoId(options);
+        String siteId = getSiteId(options);
+
+        Amount amount = getAmount(options);
+        Reference reference = getReference(options);
+        CardNetwork[] cardNetworks = getCardNetworks(options);
+        PaymentMethod[] paymentMethods = getPaymentMethods(options);
+        UiConfiguration uiConfiguration = getUIConfiguration(options);
+
+        GooglePayConfiguration googlePayConfiguration = getGooglePayConfiguration(options);
+
+        return new Judo.Builder(type)
+                .setApiToken(token)
+                .setApiSecret(secret)
+                .setIsSandboxed(isSandboxed)
+                .setJudoId(judoId)
+                .setSiteId(siteId)
+                .setAmount(amount)
+                .setReference(reference)
+                .setSupportedCardNetworks(cardNetworks)
+                .setPaymentMethods(paymentMethods)
+                .setUiConfiguration(uiConfiguration)
+                .setGooglePayConfiguration(googlePayConfiguration)
+                .build();
+    }
+
+    private PaymentWidgetType getWidgetType(ReadableMap options) {
+        int transactionType = options.getInt("transactionType");
+        switch (transactionType) {
+            case 1:
+                return PaymentWidgetType.PRE_AUTH_CARD_PAYMENT;
+            case 2:
+                return PaymentWidgetType.CREATE_CARD_TOKEN;
+            case 3:
+                return PaymentWidgetType.CHECK_CARD;
+            case 4:
+                return PaymentWidgetType.SAVE_CARD;
+            default:
+                return PaymentWidgetType.CARD_PAYMENT;
+        }
+    }
+
+    private String getJudoId(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        return configurations.getString("judoId");
+    }
+
+    private Amount getAmount(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        ReadableMap amount = configurations.getMap("amount");
+
+        String amountValue = amount.getString("value");
+        String currencyValue = amount.getString("currency");
+        Currency currency = Currency.valueOf(currencyValue);
+
+        return new Amount.Builder()
+                .setAmount(amountValue)
+                .setCurrency(currency)
+                .build();
+    }
+
+    private Reference getReference(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        ReadableMap reference = configurations.getMap("reference");
+
+        String consumerReference = reference.getString("consumerReference");
+        String paymentReference = reference.getString("paymentReference");
+
+        ReadableMap metadata = reference.getMap("metadata");
+        HashMap metadataMap = metadata.toHashMap();
+
+        Bundle metadataBundle = new Bundle();
+
+        for (Object o : metadataMap.entrySet()) {
+            Map.Entry element = (Map.Entry) o;
+            metadataBundle.putString(element.getKey().toString(), element.getValue().toString());
+        }
+
+        return new Reference.Builder()
+                .setConsumerReference(consumerReference)
+                .setPaymentReference(paymentReference)
+                .setMetaData(metadataBundle)
+                .build();
+    }
+
+    private String getSiteId(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        return configurations.getString("siteId");
+    }
+
+    private CardNetwork[] getCardNetworks(ReadableMap options) {
+
+        int CARD_VISA = 1;
+        int CARD_MASTERCARD = 1 << 1;
+        int CARD_MAESTRO = 1 << 2;
+        int CARD_AMEX = 1 << 3;
+        int CARD_CHINAUNIONPAY = 1 << 4;
+        int CARD_JCB = 1 << 5;
+        int CARD_DISCOVER = 1 << 6;
+        int CARD_DINERSCLUB = 1 << 7;
+        int CARD_ALL = 1 << 8;
+
+        ReadableMap configurations = options.getMap("configuration");
+        int cardNetworkValue = configurations.getInt("supportedCardNetworks");
+
+        ArrayList<CardNetwork> supportedNetworks = new ArrayList<>();
+
+        if ((cardNetworkValue & CARD_ALL) == CARD_ALL) {
+            supportedNetworks.add(CardNetwork.VISA);
+            supportedNetworks.add(CardNetwork.MASTERCARD);
+            supportedNetworks.add(CardNetwork.MAESTRO);
+            supportedNetworks.add(CardNetwork.AMEX);
+            supportedNetworks.add(CardNetwork.CHINA_UNION_PAY);
+            supportedNetworks.add(CardNetwork.JCB);
+            supportedNetworks.add(CardNetwork.DISCOVER);
+            supportedNetworks.add(CardNetwork.DINERS_CLUB);
+
+            return supportedNetworks.toArray(new CardNetwork[0]);
+        }
+
+        if ((cardNetworkValue & CARD_VISA) == CARD_VISA) {
+            supportedNetworks.add(CardNetwork.VISA);
+        }
+
+        if ((cardNetworkValue & CARD_MASTERCARD) == CARD_MASTERCARD) {
+            supportedNetworks.add(CardNetwork.MASTERCARD);
+        }
+
+        if ((cardNetworkValue & CARD_MAESTRO) == CARD_MAESTRO) {
+            supportedNetworks.add(CardNetwork.MAESTRO);
+        }
+
+        if ((cardNetworkValue & CARD_AMEX) == CARD_AMEX) {
+            supportedNetworks.add(CardNetwork.AMEX);
+        }
+
+        if ((cardNetworkValue & CARD_CHINAUNIONPAY) == CARD_CHINAUNIONPAY) {
+            supportedNetworks.add(CardNetwork.CHINA_UNION_PAY);
+        }
+
+        if ((cardNetworkValue & CARD_JCB) == CARD_JCB) {
+            supportedNetworks.add(CardNetwork.JCB);
+        }
+
+        if ((cardNetworkValue & CARD_DISCOVER) == CARD_DISCOVER) {
+            supportedNetworks.add(CardNetwork.DISCOVER);
+        }
+
+        if ((cardNetworkValue & CARD_DINERSCLUB) == CARD_DINERSCLUB) {
+            supportedNetworks.add(CardNetwork.DINERS_CLUB);
+        }
+
+        return supportedNetworks.toArray(new CardNetwork[0]);
+    }
+
+    private PaymentMethod[] getPaymentMethods(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        int paymentMethodValue = configurations.getInt("paymentMethods");
+
+        int METHOD_CARD = 1;
+        int METHOD_GOOGLE_PAY = 1 << 2;
+        int METHOD_IDEAL = 1 << 3;
+        int METHOD_ALL = 1 << 4;
+
+        ArrayList<PaymentMethod> paymentMethods = new ArrayList<>();
+
+        if ((paymentMethodValue & METHOD_ALL) == METHOD_ALL) {
+            paymentMethods.add(PaymentMethod.CARD);
+            paymentMethods.add(PaymentMethod.GOOGLE_PAY);
+            paymentMethods.add(PaymentMethod.IDEAL);
+            return paymentMethods.toArray(new PaymentMethod[0]);
+        }
+
+        if ((paymentMethodValue & METHOD_CARD) == METHOD_CARD) {
+            paymentMethods.add(PaymentMethod.CARD);
+        }
+
+        if ((paymentMethodValue & METHOD_GOOGLE_PAY) == METHOD_GOOGLE_PAY) {
+            paymentMethods.add(PaymentMethod.GOOGLE_PAY);
+        }
+
+        if ((paymentMethodValue & METHOD_IDEAL) == METHOD_IDEAL) {
+            paymentMethods.add(PaymentMethod.IDEAL);
+        }
+
+        return paymentMethods.toArray(new PaymentMethod[0]);
+    }
+
+    private UiConfiguration getUIConfiguration(ReadableMap options) {
+        ReadableMap configurations = options.getMap("configuration");
+        ReadableMap uiConfiguration = configurations.getMap("uiConfiguration");
+        Boolean isAVSEnabled = uiConfiguration.getBoolean("isAVSEnabled");
+        return new UiConfiguration.Builder()
+                .setAvsEnabled(isAVSEnabled)
+                .build();
+    }
+
+    private GooglePayConfiguration getGooglePayConfiguration(ReadableMap options) {
+
+        ReadableMap configuration = options.getMap("configuration");
+        ReadableMap googlePayConfig = configuration.getMap("googlePayConfiguration");
+
+        String countryCode = googlePayConfig.getString("countryCode");
+
+        int environmentValue = googlePayConfig.getInt("environment");
+
+        GooglePayEnvironment environment = (environmentValue == 0) ? TEST : PRODUCTION;
+
+        Boolean isEmailRequired = googlePayConfig.getBoolean("isEmailRequired");
+        Boolean isBillingAddressRequired = googlePayConfig.getBoolean("isBillingAddressRequired");
+        Boolean isShippingAddressRequired = googlePayConfig.getBoolean("isShippingAddressRequired");
+
+        ReadableMap billingFormatMap = googlePayConfig.getMap("billingAddressParameters");
+        GooglePayBillingAddressParameters billingParameters = getBillingParameters(billingFormatMap);
+
+        ReadableMap shippingFormatMap = googlePayConfig.getMap("shippingAddressParameters");
+        GooglePayShippingAddressParameters shippingParameters = getShippingParameters(shippingFormatMap);
+
+        return new GooglePayConfiguration.Builder()
+                .setTransactionCountryCode(countryCode)
+                .setEnvironment(environment)
+                .setIsEmailRequired(isEmailRequired)
+                .setIsBillingAddressRequired(isBillingAddressRequired)
+                .setBillingAddressParameters(billingParameters)
+                .setIsShippingAddressRequired(isShippingAddressRequired)
+                .setShippingAddressParameters(shippingParameters)
+                .build();
+    }
+
+    private GooglePayBillingAddressParameters getBillingParameters(ReadableMap formatMap) {
+        int addressFormatValue = formatMap.getInt("addressFormat");
+
+        GooglePayAddressFormat addressFormat = (addressFormatValue == 0)
+                ? GooglePayAddressFormat.MIN
+                : GooglePayAddressFormat.FULL;
+
+        Boolean isPhoneNumberRequired = formatMap.getBoolean("isPhoneNumberRequired");
+        return new GooglePayBillingAddressParameters(addressFormat, isPhoneNumberRequired);
+    }
+
+    private GooglePayShippingAddressParameters getShippingParameters(ReadableMap formatMap) {
+
+        ReadableArray billingParameters = formatMap.getArray("allowedCountryCodes");
+        String[] billingParametersArray = billingParameters.toArrayList().toArray(new String[0]);
+
+        Boolean isPhoneNumberRequired = formatMap.getBoolean("isPhoneNumberRequired");
+        return new GooglePayShippingAddressParameters(billingParametersArray, isPhoneNumberRequired);
+    }
+
+    // ------------------------------------------------------------
+    // MARK: React Native methods
+    // ------------------------------------------------------------
 
     @Nonnull
     @Override
     public String getName() {
         return "RNJudo";
-    }
-
-    @Override
-    public void onHostResume() {
-        // Activity `onResume`
-    }
-
-    @Override
-    public void onHostPause() {
-        // Activity `onPause`
-    }
-
-    @Override
-    public void onHostDestroy() {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-            disposable = null;
-        }
-    }
-
-    private void handleGooglePayRequest(GooglePayRequest googlePayRequest) {
-        Judo judo = getJudo(options);
-        if (judo == null) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            promise = null;
-            return;
-        }
-        final JudoApiService apiService = judo.getApiService(Objects.requireNonNull(getCurrentActivity()));
-        Single<Receipt> apiRequest;
-        if (options.getInt("transactionType") == 1) {
-            apiRequest = apiService.googlePayPreAuth(googlePayRequest);
-        } else {
-            apiRequest = apiService.googlePayPayment(googlePayRequest);
-        }
-
-        disposable = apiRequest
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(receipt -> {
-                    if (receipt.isSuccess()) {
-                        promise.resolve(convert(receipt));
-                    } else {
-                        promise.reject(JUDO_ERROR, receipt.getErrorExplanation());
-                    }
-                    promise = null;
-                }, error -> {
-                    promise.reject(JUDO_ERROR, error.getLocalizedMessage());
-                    promise = null;
-                });
-
-    }
-
-    private WritableMap convert(Receipt receipt) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        WritableMap result = new WritableNativeMap();
-        result.putString("result", receipt.getResult());
-        result.putString("message", receipt.getMessage());
-        if (receipt.getErrorCategory() != null) {
-            result.putInt("errorCategory", receipt.getErrorCategory());
-        } else {
-            result.putString("errorCategory", null);
-        }
-        result.putString("errorExplanation", receipt.getErrorExplanation());
-        result.putString("errorResolution", receipt.getErrorResolution());
-        result.putString("errorCode", receipt.getErrorCode());
-
-        if (receipt.getJudoID() != null) {
-            result.putInt("judoId", receipt.getJudoID().intValue());
-        } else {
-            result.putString("judoId", "");
-        }
-        result.putString("receiptId", receipt.getReceiptId());
-        result.putString("originalReceiptId", receipt.getOriginalReceiptId());
-        result.putString("partnerServiceFee", receipt.getPartnerServiceFee());
-        result.putString("yourPaymentReference", receipt.getYourPaymentReference());
-        result.putString("type", receipt.getType());
-        result.putString("createdAt", sdf.format(receipt.getCreatedAt()));
-        result.putString("merchantName", receipt.getMerchantName());
-        result.putString("appearsOnStatementAs", receipt.getAppearsOnStatementAs());
-        result.putString("originalAmount", receipt.getOriginalAmount().toString());
-        result.putString("netAmount", receipt.getNetAmount().toString());
-        result.putString("amount", receipt.getAmount().toString());
-        result.putString("currency", receipt.getCurrency());
-        result.putMap("cardDetails", convert(receipt.getCardDetails()));
-        result.putMap("consumer", convert(receipt.getConsumer()));
-        result.putMap("risks", convert(receipt.getRisks()));
-        return result;
-    }
-
-    private WritableMap convert(CardToken cardDetail) {
-        WritableMap result = new WritableNativeMap();
-        result.putString("endDate", cardDetail.getEndDate());
-        //noinspection SpellCheckingInspection
-        result.putString("cardLastfour", cardDetail.getLastFour());
-        result.putString("cardToken", cardDetail.getToken());
-        result.putInt("cardType", cardDetail.getType());
-        result.putString("cardScheme", cardDetail.getScheme());
-        result.putString("cardFunding", cardDetail.getFunding());
-        result.putString("cardCategory", cardDetail.getCategory());
-        result.putString("cardCountry", cardDetail.getCountry());
-        result.putString("bank", cardDetail.getBank());
-        return result;
-    }
-
-    private WritableMap convert(Consumer consumer) {
-        WritableMap result = new WritableNativeMap();
-        result.putString("consumerToken", consumer.getConsumerToken());
-        result.putString("yourConsumerReference", consumer.getYourConsumerReference());
-        return result;
-    }
-
-    private WritableMap convert(Risks risks) {
-        if (risks == null) {
-            return null;
-        }
-        WritableMap result = new WritableNativeMap();
-        result.putString("postCodeCheck", risks.getPostCodeCheck());
-        return result;
-    }
-
-    private WritableMap convert(OrderDetails orderDetails) {
-        if (orderDetails == null) {
-            return null;
-        }
-        WritableMap result = new WritableNativeMap();
-        result.putString("orderId", orderDetails.getOrderId());
-        result.putString("orderStatus", orderDetails.getOrderStatus().name());
-        result.putString("orderFailureReason", orderDetails.getOrderFailureReason());
-        result.putString("timestamp", orderDetails.getTimestamp());
-        return result;
-    }
-
-    private Judo getJudo(ReadableMap options) {
-        Bundle bundle = new Bundle();
-        ReadableMap metadataMap = options.getMap("metaData");
-        if (metadataMap != null) {
-            for (String keyName : metadataMap.toHashMap().keySet()) {
-                bundle.putString(keyName, metadataMap.getString(keyName));
-            }
-        }
-
-        EnumSet<PaymentMethod> paymentMethodEnumSet = EnumSet.allOf(PaymentMethod.class);
-        if (options.hasKey("paymentMethods")) {
-            int paymentMethods = options.getInt("paymentMethods");
-            switch (paymentMethods) {
-                case 1:
-                    paymentMethodEnumSet = EnumSet.of(PaymentMethod.CREATE_PAYMENT);
-                    break;
-                case 2:
-                    paymentMethodEnumSet = EnumSet.of(PaymentMethod.GPAY_PAYMENT);
-                    break;
-            }
-        }
-
-        String judoId = options.getString("judoId");
-        if (judoId == null) {
-            return null;
-        }
-
-        String siteId = options.getString("siteId");
-        boolean idealEnabled = siteId != null && !siteId.isEmpty();
-
-        Judo.Builder judoBuilder = new Judo.Builder()
-                .setJudoId(judoId)
-                .setSiteId(siteId)
-                .setIdealEnabled(idealEnabled)
-                .setApiToken(options.getString("token"))
-                .setApiSecret(options.getString("secret"))
-                .setEnvironment(options.getBoolean("isSandbox") ? SANDBOX : LIVE)
-                .setAmount(options.getString("amount"))
-                .setCurrency(options.getString("currency"))
-                .setConsumerReference(options.getString("consumerReference"))
-                .setPaymentReference(options.getString("paymentReference"))
-                .setMetaData(bundle)
-                .setPaymentMethod(paymentMethodEnumSet);
-        if (options.hasKey("requireContactDetails")) {
-            judoBuilder.setGPayRequireContactDetails(options.getBoolean("requireContactDetails"));
-        }
-        if (options.hasKey("requireBillingDetails")) {
-            judoBuilder.setGPayRequireBillingDetails(options.getBoolean("requireBillingDetails"));
-        }
-        if (options.hasKey("requireShippingDetails")) {
-            judoBuilder.setGPayRequireShippingDetails(options.getBoolean("requireShippingDetails"));
-        }
-
-        try {
-            return judoBuilder.build();
-        } catch (JudoIdInvalidError e) {
-            return null;
-        }
-    }
-
-    private boolean isOptionsInvalid(ReadableMap options) {
-        String judoId = options.getString("judoId");
-
-        if (judoId == null) {
-            return true;
-        }
-        if (isEmpty(options.getString("token"))) {
-            return true;
-        }
-        if (isEmpty(options.getString("secret"))) {
-            return true;
-        }
-        if (isEmpty(options.getString("amount"))) {
-            return true;
-        }
-        if (isEmpty(options.getString("currency"))) {
-            return true;
-        }
-        if (isEmpty(options.getString("consumerReference"))) {
-            return true;
-        }
-        return isEmpty(options.getString("paymentReference"));
-    }
-
-    private boolean isEmpty(String s) {
-        return s == null || s.isEmpty();
-    }
-
-    @SuppressWarnings("unused")
-    @ReactMethod
-    public void makePayment(ReadableMap options, Promise promise) {
-        if (isOptionsInvalid(options)) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        Judo judo = getJudo(options);
-        if (judo == null) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        this.promise = promise;
-        this.options = options;
-
-        Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
-        Intent intent = new Intent(currentActivity, PaymentActivity.class);
-        intent.putExtra(JUDO_OPTIONS, judo);
-        currentActivity.startActivityForResult(intent, PAYMENT_REQUEST);
-    }
-
-    @SuppressWarnings("unused")
-    @ReactMethod
-    public void makePreAuth(ReadableMap options, Promise promise) {
-        if (isOptionsInvalid(options)) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        Judo judo = getJudo(options);
-        if (judo == null) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        this.promise = promise;
-        this.options = options;
-
-        Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
-        Intent intent = new Intent(currentActivity, PreAuthActivity.class);
-        intent.putExtra(JUDO_OPTIONS, judo);
-        currentActivity.startActivityForResult(intent, PRE_AUTH_REQUEST);
-    }
-
-    @SuppressWarnings("unused")
-    @ReactMethod
-    public void showPaymentMethods(ReadableMap options, Promise promise) {
-        if (isOptionsInvalid(options.getMap("judoConfig"))) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        Judo judo = getJudo(options.getMap("judoConfig"));
-        if (judo == null) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        WritableMap flattenOptions = new WritableNativeMap();
-        flattenOptions.merge(options.getMap("judoConfig"));
-        flattenOptions.merge(options.getMap("judoGooglePayConfig"));
-        flattenOptions.merge(options.getMap("judoPaymentMethodsConfig"));
-        this.promise = promise;
-        this.options = flattenOptions;
-
-        Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
-        Intent intent = new Intent(currentActivity, PaymentMethodActivity.class);
-        intent.putExtra(JUDO_OPTIONS, judo);
-        intent.putExtra(Judo.GPAY_PREAUTH, this.options.getInt("transactionType") == 1);
-        currentActivity.startActivityForResult(intent, PAYMENT_METHOD);
-    }
-
-    @SuppressWarnings("unused")
-    @ReactMethod
-    public void makeIDEALPayment(ReadableMap options, Promise promise) {
-        if (isOptionsInvalid(options)) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        Judo judo = getJudo(options);
-        if (judo == null) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        this.promise = promise;
-        this.options = options;
-
-        Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
-        Intent intent = new Intent(currentActivity, IdealPaymentActivity.class);
-        intent.putExtra(JUDO_OPTIONS, judo);
-        currentActivity.startActivityForResult(intent, IDEAL_PAYMENT);
-    }
-
-    @SuppressWarnings("unused")
-    @ReactMethod
-    public void canUseGooglePay(ReadableMap options, final Promise promise) {
-        boolean isTestEnv = options.getBoolean("googlePayTestEnvironment");
-        initGooglePayClient(isTestEnv);
-        GooglePaymentUtils.checkIsReadyGooglePay(googlePayClient, promise::resolve);
-    }
-
-    @SuppressWarnings("unused")
-    @ReactMethod
-    public void makeGooglePayPayment(ReadableMap options, final Promise promise) {
-        if (isOptionsInvalid(options.getMap("judoConfig"))) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        Judo judo = getJudo(options.getMap("judoConfig"));
-        if (judo == null) {
-            promise.reject(JUDO_ERROR, INVALID_CONFIGURATION);
-            return;
-        }
-        WritableMap flattenOptions = new WritableNativeMap();
-        flattenOptions.merge(options.getMap("judoConfig"));
-        flattenOptions.merge(options.getMap("judoGooglePayConfig"));
-        this.promise = promise;
-        this.options = flattenOptions;
-
-        boolean isTestEnv = this.options.getBoolean("googlePayTestEnvironment");
-        initGooglePayClient(isTestEnv);
-
-        PaymentDataRequest paymentDataRequest = GooglePaymentUtils.createDefaultPaymentDataRequest(judo);
-        final Task<PaymentData> taskDefaultPaymentData = googlePayClient.loadPaymentData(paymentDataRequest);
-        AutoResolveHelper.resolveTask(
-                taskDefaultPaymentData,
-                Objects.requireNonNull(getCurrentActivity()),
-                GPAY_REQUEST);
-    }
-
-    private void initGooglePayClient(boolean isTestEnv) {
-        if (googlePayClient == null) {
-            googlePayClient = GooglePaymentUtils.getGooglePayPaymentsClient(Objects.requireNonNull(getCurrentActivity()),
-                    isTestEnv ? WalletConstants.ENVIRONMENT_TEST : WalletConstants.ENVIRONMENT_PRODUCTION);
-        }
     }
 }
