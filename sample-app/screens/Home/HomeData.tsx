@@ -1,5 +1,5 @@
 import { HomeListItem, HomeListType } from './HomeProps'
-import { Platform } from 'react-native'
+import { PlatformType } from '../../helpers/Platform';
 
 const applePayment: HomeListItem = {
     "title": "Apple Pay payment",
@@ -54,8 +54,8 @@ export const HomeScreenData = {
                     "subtitle": "to be stored for future transactions",
                     "type": HomeListType.SaveCard
                 } as HomeListItem,
-                Platform.OS == "ios" ? applePayment : googlePayment,
-                Platform.OS == "ios" ? applePreAuth : googlePreAuth,
+                PlatformType.isIOS ? applePayment : googlePayment,
+                PlatformType.isIOS ? applePreAuth : googlePreAuth,
                 {
                     "title": "Payment method",
                     "subtitle": "with default payment methods",
