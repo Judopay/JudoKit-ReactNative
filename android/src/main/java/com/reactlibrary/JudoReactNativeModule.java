@@ -107,7 +107,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
         startJudoActivity(configuration, promise);
     }
 
-    public void startJudoActivity(Judo configuration, Promise promise) {
+    private void startJudoActivity(Judo configuration, Promise promise) {
         transactionPromise = promise;
 
         Activity currentActivity = Objects.requireNonNull(getCurrentActivity());
@@ -294,7 +294,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
 
         ArrayList<CardNetwork> supportedNetworks = new ArrayList<>();
 
-        if ((cardNetworkValue & CARD_ALL) == 1 << 8) {
+        if ((cardNetworkValue & CARD_ALL) == CARD_ALL) {
             supportedNetworks.add(CardNetwork.VISA);
             supportedNetworks.add(CardNetwork.MASTERCARD);
             supportedNetworks.add(CardNetwork.MAESTRO);
@@ -307,35 +307,35 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
             return supportedNetworks.toArray(new CardNetwork[0]);
         }
 
-        if ((cardNetworkValue & CARD_VISA) == 1) {
+        if ((cardNetworkValue & CARD_VISA) == CARD_VISA) {
             supportedNetworks.add(CardNetwork.VISA);
         }
 
-        if ((cardNetworkValue & CARD_MASTERCARD) == 1 << 1) {
+        if ((cardNetworkValue & CARD_MASTERCARD) == CARD_MASTERCARD) {
             supportedNetworks.add(CardNetwork.MASTERCARD);
         }
 
-        if ((cardNetworkValue & CARD_MAESTRO) == 1 << 2) {
+        if ((cardNetworkValue & CARD_MAESTRO) == CARD_MAESTRO) {
             supportedNetworks.add(CardNetwork.MAESTRO);
         }
 
-        if ((cardNetworkValue & CARD_AMEX) == 1 << 3) {
+        if ((cardNetworkValue & CARD_AMEX) == CARD_AMEX) {
             supportedNetworks.add(CardNetwork.AMEX);
         }
 
-        if ((cardNetworkValue & CARD_CHINAUNIONPAY) == 1 << 4) {
+        if ((cardNetworkValue & CARD_CHINAUNIONPAY) == CARD_CHINAUNIONPAY) {
             supportedNetworks.add(CardNetwork.CHINA_UNION_PAY);
         }
 
-        if ((cardNetworkValue & CARD_JCB) == 1 << 5) {
+        if ((cardNetworkValue & CARD_JCB) == CARD_JCB) {
             supportedNetworks.add(CardNetwork.JCB);
         }
 
-        if ((cardNetworkValue & CARD_DISCOVER) == 1 << 6) {
+        if ((cardNetworkValue & CARD_DISCOVER) == CARD_DISCOVER) {
             supportedNetworks.add(CardNetwork.DISCOVER);
         }
 
-        if ((cardNetworkValue & CARD_DINERSCLUB) == 1 << 7) {
+        if ((cardNetworkValue & CARD_DINERSCLUB) == CARD_DINERSCLUB) {
             supportedNetworks.add(CardNetwork.DINERS_CLUB);
         }
 
@@ -353,22 +353,22 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
 
         ArrayList<PaymentMethod> paymentMethods = new ArrayList<>();
 
-        if ((paymentMethodValue & METHOD_ALL) == 1 << 4) {
+        if ((paymentMethodValue & METHOD_ALL) == METHOD_ALL) {
             paymentMethods.add(PaymentMethod.CARD);
             paymentMethods.add(PaymentMethod.GOOGLE_PAY);
             paymentMethods.add(PaymentMethod.IDEAL);
             return paymentMethods.toArray(new PaymentMethod[0]);
         }
 
-        if ((paymentMethodValue & METHOD_CARD) == 1) {
+        if ((paymentMethodValue & METHOD_CARD) == METHOD_CARD) {
             paymentMethods.add(PaymentMethod.CARD);
         }
 
-        if ((paymentMethodValue & METHOD_GOOGLE_PAY) == 1 << 2) {
+        if ((paymentMethodValue & METHOD_GOOGLE_PAY) == METHOD_GOOGLE_PAY) {
             paymentMethods.add(PaymentMethod.GOOGLE_PAY);
         }
 
-        if ((paymentMethodValue & METHOD_IDEAL) == 1 << 3) {
+        if ((paymentMethodValue & METHOD_IDEAL) == METHOD_IDEAL) {
             paymentMethods.add(PaymentMethod.IDEAL);
         }
 
