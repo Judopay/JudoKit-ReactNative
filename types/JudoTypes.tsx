@@ -36,7 +36,7 @@ export interface JudoAmount {
 export interface JudoReference {
     consumerReference: string,
     paymentReference: string,
-    metadata?: Map<String, String>,
+    metadata?: Record<string, string>,
 }
 
 export interface JudoAddress {

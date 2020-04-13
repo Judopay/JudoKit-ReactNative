@@ -13,6 +13,7 @@ import com.judopay.model.googlepay.GooglePayAddressFormat
 import com.judopay.model.googlepay.GooglePayBillingAddressParameters
 import com.judopay.model.googlepay.GooglePayEnvironment
 import com.judopay.model.googlepay.GooglePayShippingAddressParameters
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -264,48 +265,137 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
                 .build()
     }
 
-    private fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration {
-        val configuration = options.getMap("configuration")
-        val googlePayConfig = configuration!!.getMap("googlePayConfiguration")
-        val countryCode = googlePayConfig!!.getString("countryCode")
-        val environmentValue = googlePayConfig.getInt("environment")
-        val environment = if (environmentValue == 0) GooglePayEnvironment.TEST else GooglePayEnvironment.PRODUCTION
-        val isEmailRequired = googlePayConfig.getBoolean("isEmailRequired")
-        val isBillingAddressRequired = googlePayConfig.getBoolean("isBillingAddressRequired")
-        val isShippingAddressRequired = googlePayConfig.getBoolean("isShippingAddressRequired")
-        val billingFormatMap = googlePayConfig.getMap("billingAddressParameters")
-        val billingParameters = getBillingParameters(billingFormatMap)
-        val shippingFormatMap = googlePayConfig.getMap("shippingAddressParameters")
-        val shippingParameters = getShippingParameters(shippingFormatMap)
-        return GooglePayConfiguration.Builder()
+    private fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration? {
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val googlePayConfiguration = try {
+            configuration?.getMap("googlePayConfiguration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val countryCode = try {
+            googlePayConfiguration?.getString("countryCode")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val environmentValue = try {
+            googlePayConfiguration?.getInt("environment")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val environment = when (environmentValue) {
+            0 -> GooglePayEnvironment.TEST
+            else -> GooglePayEnvironment.PRODUCTION
+        }
+
+        val isEmailRequired = try {
+            googlePayConfiguration?.getBoolean("isEmailRequired")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val isBillingAddressRequired = try {
+            googlePayConfiguration?.getBoolean("isBillingAddressRequired")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val isShippingAddressRequired = try {
+            googlePayConfiguration?.getBoolean("isShippingAddressRequired")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val billingFormatMap = try {
+            googlePayConfiguration?.getMap("billingAddressParameters")
+        } catch (_: Exception) {
+            null
+        }
+
+        val billingParameters = billingFormatMap?.let {
+            getBillingParameters(billingFormatMap)
+        }
+
+        val shippingFormatMap = try {
+            googlePayConfiguration?.getMap("shippingAddressParameters")
+        } catch (_: Exception) {
+            null
+        }
+
+        val shippingParameters = shippingFormatMap?.let {
+            getShippingParameters(shippingFormatMap)
+        }
+
+        var builder = GooglePayConfiguration.Builder()
                 .setTransactionCountryCode(countryCode)
                 .setEnvironment(environment)
                 .setIsEmailRequired(isEmailRequired)
                 .setIsBillingAddressRequired(isBillingAddressRequired)
-                .setBillingAddressParameters(billingParameters)
                 .setIsShippingAddressRequired(isShippingAddressRequired)
-                .setShippingAddressParameters(shippingParameters)
-                .build()
+
+        billingParameters.let {
+            builder = builder.setBillingAddressParameters(billingParameters)
+        }
+
+        shippingParameters.let {
+            builder = builder.setShippingAddressParameters(shippingParameters)
+        }
+
+        return builder.build()
     }
 
-    private fun getBillingParameters(formatMap: ReadableMap?): GooglePayBillingAddressParameters {
-        val addressFormatValue = formatMap!!.getInt("addressFormat")
-        val addressFormat = if (addressFormatValue == 0) GooglePayAddressFormat.MIN else GooglePayAddressFormat.FULL
-        val isPhoneNumberRequired = formatMap.getBoolean("isPhoneNumberRequired")
+    private fun getBillingParameters(formatMap: ReadableMap): GooglePayBillingAddressParameters? {
+
+        val isPhoneNumberRequired = try {
+            formatMap.getBoolean("isPhoneNumberRequired")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val addressFormatValue = try {
+            formatMap.getInt("addressFormat")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val addressFormat = when (addressFormatValue) {
+            0 -> GooglePayAddressFormat.MIN
+            else -> GooglePayAddressFormat.FULL
+        }
+
         return GooglePayBillingAddressParameters(addressFormat, isPhoneNumberRequired)
     }
 
-    private fun getShippingParameters(formatMap: ReadableMap?): GooglePayShippingAddressParameters {
-        val billingParameters = formatMap!!.getArray("allowedCountryCodes")
+    private fun getShippingParameters(formatMap: ReadableMap): GooglePayShippingAddressParameters? {
 
-        val billingParameterList: MutableList<String> = ArrayList();
-
-        billingParameters?.toArrayList()?.forEach {
-            if (it is String) billingParameterList.add(it)
+        val isPhoneNumberRequired = try {
+            formatMap.getBoolean("isPhoneNumberRequired")
+        } catch (_: Exception) {
+            return null
         }
 
-        val isPhoneNumberRequired = formatMap.getBoolean("isPhoneNumberRequired")
-        return GooglePayShippingAddressParameters(billingParameterList.toTypedArray(), isPhoneNumberRequired)
+        val allowedCountryCodeList = try {
+            formatMap.getArray("allowedCountryCodes")?.toArrayList()
+        } catch (_: Exception) {
+            null
+        }
+
+        var allowedCountryCodes: Array<String>? = null
+
+        allowedCountryCodeList?.let {
+            val countryList = allowedCountryCodeList.mapNotNull { it as String }
+            allowedCountryCodes = countryList.toTypedArray()
+        }
+
+        return GooglePayShippingAddressParameters(allowedCountryCodes, isPhoneNumberRequired)
     }
 
     // ------------------------------------------------------------
@@ -316,16 +406,18 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         return "RNJudo"
     }
 
+    // ------------------------------------------------------------
+    // MARK: Constants
+    // ------------------------------------------------------------
+
     companion object {
-        // ------------------------------------------------------------
-        // MARK: Constants
-        // ------------------------------------------------------------
         private const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
     }
 
     // ------------------------------------------------------------
     // MARK: Initializer
     // ------------------------------------------------------------
+
     init {
         context.addActivityEventListener(listener)
     }
