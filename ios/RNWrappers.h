@@ -73,7 +73,7 @@
  *
  * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
  *
- * @returns a configured JPConfiguration instance
+ * @returns a configured CardNetwork instance
  */
 + (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration;
 
