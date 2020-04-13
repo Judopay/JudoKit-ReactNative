@@ -1,5 +1,5 @@
 import { HomeListItem, HomeListType } from './HomeProps'
-import { PlatformType } from '../../helpers/Platform';
+import { isIos } from '../../helpers/utils';
 
 const applePayment: HomeListItem = {
     "title": "Apple Pay payment",
@@ -54,8 +54,8 @@ export const HomeScreenData = {
                     "subtitle": "to be stored for future transactions",
                     "type": HomeListType.SaveCard
                 } as HomeListItem,
-                PlatformType.isIOS ? applePayment : googlePayment,
-                PlatformType.isIOS ? applePreAuth : googlePreAuth,
+                isIos ? applePayment : googlePayment,
+                isIos ? applePreAuth : googlePreAuth,
                 {
                     "title": "Payment method",
                     "subtitle": "with default payment methods",
