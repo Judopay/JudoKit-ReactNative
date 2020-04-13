@@ -1,29 +1,30 @@
 package com.reactlibrary;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.annotation.Nonnull;
 
 @SuppressWarnings("unused")
 public class JudoReactNativePackage implements ReactPackage {
 
-    @Nonnull
+    @NonNull
     @Override
-    public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
-        return Collections.singletonList(new JudoReactNativeModule(reactContext));
+    public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
+        List<NativeModule> modules = new ArrayList<>();
+        modules.add(new JudoReactNativeModule(reactContext));
+        return modules;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public List<ViewManager> createViewManagers(@Nonnull ReactApplicationContext reactContext) {
-        return Collections.singletonList(
-                new RNGooglePayButtonManager()
-        );
+    public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
+        return Collections.emptyList();
     }
 }

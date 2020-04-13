@@ -35,8 +35,8 @@
 NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
     IOSPaymentMethodCard = 1 << 0,
     IOSPaymentMethodApplePay = 1 << 1,
-    IOSPaymentMethodIDEAL = 1 << 2,
-    IOSPaymentMethodAll = 1 << 3,
+    IOSPaymentMethodIDEAL = 1 << 3,
+    IOSPaymentMethodAll = 1 << 4,
 };
 
 NS_OPTIONS(NSUInteger, IOSCardNetwork) {
@@ -120,12 +120,10 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
     }
 
     if (supportedNetworksBitmask & IOSCardNetworkVisa) {
-        RCTLog(@"ADDING VISA");
         supportedCardNetworks |= CardNetworkVisa;
     }
 
     if (supportedNetworksBitmask & IOSCardNetworkMastercard) {
-        RCTLog(@"ADDING MASTERCARD");
         supportedCardNetworks |= CardNetworkMasterCard;
     }
 
@@ -134,7 +132,6 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
     }
 
     if (supportedNetworksBitmask & IOSCardNetworkAmex) {
-        RCTLog(@"ADDING AMEX");
         supportedCardNetworks |= CardNetworkAMEX;
     }
 

@@ -32,4 +32,15 @@ export type {
   JudoShippingMethod,
 } from './types/JudoApplePayTypes';
 
+export {
+  JudoAddressFormat,
+  JudoGooglePayEnvironment,
+} from './types/JudoGooglePayTypes';
+
+export type {
+  JudoGooglePayConfiguration,
+  JudoBillingAddressParameters,
+  JudoShippingAddressParameters,
+} from './types/JudoGooglePayTypes';
+
 export default JudoPay;
