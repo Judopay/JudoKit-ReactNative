@@ -2,6 +2,7 @@ package com.reactlibrary;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.BaseActivityEventListener;
@@ -30,6 +31,9 @@ import com.judopay.model.googlepay.GooglePayEnvironment;
 import com.judopay.model.googlepay.GooglePayShippingAddressParameters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -220,10 +224,20 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
         String consumerReference = reference.getString("consumerReference");
         String paymentReference = reference.getString("paymentReference");
 
-        // TODO: MAP METADATA BUNDLE ?
+        ReadableMap metadata = reference.getMap("metadata");
+        HashMap metadataMap = metadata.toHashMap();
+
+        Bundle metadataBundle = new Bundle();
+
+        for (Object o : metadataMap.entrySet()) {
+            Map.Entry element = (Map.Entry) o;
+            metadataBundle.putString(element.getKey().toString(), element.getValue().toString());
+        }
+
         return new Reference.Builder()
                 .setConsumerReference(consumerReference)
                 .setPaymentReference(paymentReference)
+                .setMetaData(metadataBundle)
                 .build();
     }
 
