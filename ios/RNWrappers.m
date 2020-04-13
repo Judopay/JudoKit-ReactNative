@@ -158,7 +158,6 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
 // MARK: - Helper methods
 //---------------------------------------------------
 
-
 + (JPAmount *)amountFromConfiguration:(NSDictionary *)configuration {
   NSDictionary *amountDictionary = [RCTConvert NSDictionary:configuration[@"amount"]];
   NSString *amount = amountDictionary[@"value"];
