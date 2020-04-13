@@ -41,59 +41,59 @@ RCT_REMAP_METHOD(invokeTransaction,
                  properties:(NSDictionary *)properties
                  invokePaymentWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-
-  JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
-  TransactionType type = [RNWrappers transactionTypeFromProperties:properties];
-  JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-
-  [judoKit invokeTransactionWithType:type
-                       configuration:configuration
-                          completion:^(JPResponse *response, NSError *error) {
-    if (error) {
-      reject(@"JUDO_ERROR", @"Transaction failed", error);
-      return;
-    }
-    resolve(response);
-  }];
+    
+    JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
+    TransactionType type = [RNWrappers transactionTypeFromProperties:properties];
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+    
+    [judoKit invokeTransactionWithType:type
+                         configuration:configuration
+                            completion:^(JPResponse *response, NSError *error) {
+        if (error) {
+            reject(@"JUDO_ERROR", @"Transaction failed", error);
+            return;
+        }
+        resolve(response);
+    }];
 }
 
 RCT_REMAP_METHOD(invokeApplePay,
                  properties:(NSDictionary *)properties
                  invokeApplePayWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-
-  JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
-  TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-  JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-
-  [judoKit invokeApplePayWithMode:mode
-                    configuration:configuration
-                       completion:^(JPResponse *response, NSError *error) {
-    if (error) {
-      reject(@"JUDO_ERROR", @"Transaction failed", error);
-      return;
-    }
-    resolve(response);
-  }];
+    
+    JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
+    TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+    
+    [judoKit invokeApplePayWithMode:mode
+                      configuration:configuration
+                         completion:^(JPResponse *response, NSError *error) {
+        if (error) {
+            reject(@"JUDO_ERROR", @"Transaction failed", error);
+            return;
+        }
+        resolve(response);
+    }];
 }
 
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  properties:(NSDictionary *)properties
                  invokePaymentMethodScreenWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-
-  JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
-  TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-  JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-
+    
+    JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
+    TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+    
     [judoKit invokePaymentMethodScreenWithMode:mode
                                  configuration:configuration
                                     completion:^(JPResponse *response, NSError *error) {
-      if (error) {
-        reject(@"JUDO_ERROR", @"Transaction failed", error);
-        return;
-      }
-      resolve(response);
+        if (error) {
+            reject(@"JUDO_ERROR", @"Transaction failed", error);
+            return;
+        }
+        resolve(response);
     }];
 }
 
@@ -102,11 +102,11 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
 //----------------------------------------------
 
 - (dispatch_queue_t)methodQueue {
-  return dispatch_get_main_queue();
+    return dispatch_get_main_queue();
 }
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+    return YES;
 }
 
 @end
