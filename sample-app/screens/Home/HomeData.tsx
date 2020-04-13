@@ -1,4 +1,29 @@
 import { HomeListItem, HomeListType } from './HomeProps'
+import { isIos } from '../../helpers/utils';
+
+const applePayment: HomeListItem = {
+    "title": "Apple Pay payment",
+    "subtitle": "with a wallet card",
+    "type": HomeListType.ApplePay
+}
+
+const applePreAuth: HomeListItem = {
+    "title": "Apple Pay pre-auth",
+    "subtitle": "with a wallet card",
+    "type": HomeListType.ApplePreAuth
+}
+
+const googlePayment: HomeListItem = {
+    "title": "Google Pay payment",
+    "subtitle": "with a wallet card",
+    "type": HomeListType.GooglePay
+}
+
+const googlePreAuth: HomeListItem = {
+    "title": "Google Pay pre-auth",
+    "subtitle": "with a wallet card",
+    "type": HomeListType.GooglePreAuth
+}
 
 export const HomeScreenData = {
     list: [
@@ -29,16 +54,8 @@ export const HomeScreenData = {
                     "subtitle": "to be stored for future transactions",
                     "type": HomeListType.SaveCard
                 } as HomeListItem,
-                {
-                    "title": "Apple Pay payment",
-                    "subtitle": "with a wallet card",
-                    "type": HomeListType.ApplePay
-                } as HomeListItem,
-                {
-                    "title": "Apple Pay pre-auth",
-                    "subtitle": "with a wallet card",
-                    "type": HomeListType.ApplePreAuth
-                } as HomeListItem,
+                isIos ? applePayment : googlePayment,
+                isIos ? applePreAuth : googlePreAuth,
                 {
                     "title": "Payment method",
                     "subtitle": "with default payment methods",

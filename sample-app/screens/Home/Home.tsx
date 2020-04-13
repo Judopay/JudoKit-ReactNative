@@ -45,6 +45,14 @@ export default class Home extends Component {
     this.displayApplePaySheet(JudoTransactionMode.PreAuth);
   }
 
+  async invokeGooglePay() {
+    this.displayGooglePaySheet(JudoTransactionMode.Payment);
+  }
+
+  async invokeGooglePreAuth() {
+    this.displayGooglePaySheet(JudoTransactionMode.PreAuth);
+  }
+
   async invokePaymentMethods() {
     this.displayPaymentMethod(JudoTransactionMode.Payment);
   }
@@ -54,18 +62,43 @@ export default class Home extends Component {
   }
 
   async invokeTransaction(type: JudoTransactionType) {
-    const judo = new JudoPay('token', 'secret');
-    const response = await judo.invokeTransaction(type, configuration);
-  }
-
-  async displayPaymentMethod(mode: JudoTransactionMode) {
-    const judo = new JudoPay('token', 'secret');
-    const response = await judo.invokePaymentMethodScreen(mode, configuration);
+    try {
+      const judo = new JudoPay('token', 'secret');
+      const response = await judo.invokeTransaction(type, configuration);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
-    const judo = new JudoPay('token', 'secret');
-    const response = await judo.invokeApplePay(mode, configuration);
+    try {
+      const judo = new JudoPay('token', 'secret');
+      const response = await judo.invokeApplePay(mode, configuration);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async displayGooglePaySheet(mode: JudoTransactionMode) {
+    try {
+      const judo = new JudoPay('token', 'secret');
+      const response = await judo.invokeGooglePay(mode, configuration);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async displayPaymentMethod(mode: JudoTransactionMode) {
+    try {
+      const judo = new JudoPay('token', 'secret');
+      const response = await judo.invokePaymentMethodScreen(mode, configuration);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   handleListItemPressed(item: HomeListItem) {
@@ -85,6 +118,18 @@ export default class Home extends Component {
           break
         case HomeListType.SaveCard:
           this.invokeSaveCard()
+          break
+        case HomeListType.ApplePay:
+          this.invokeApplePay()
+          break
+        case HomeListType.ApplePreAuth:
+          this.invokeApplePreAuth()
+          break
+        case HomeListType.GooglePay:
+          this.invokeGooglePay()
+          break
+        case HomeListType.GooglePreAuth:
+          this.invokeGooglePreAuth()
           break
         case HomeListType.PaymentMethods:
           this.invokePaymentMethods()

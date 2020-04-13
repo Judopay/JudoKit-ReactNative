@@ -43,6 +43,18 @@ class JudoPay {
         return response;
     }
 
+    public async invokeGooglePay(
+        mode: JudoTransactionMode,
+        configuration: JudoConfiguration
+    ): Promise<JudoResponse> {
+
+        const params = this.generateTransactionModeParameters(mode, configuration);
+        const judoPay = NativeModules.RNJudo;
+
+        const response = await judoPay.invokeGooglePay(params);
+        return response;
+    }
+
     public async invokePaymentMethodScreen(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
