@@ -3,7 +3,6 @@ package com.reactlibrary
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.facebook.react.bridge.*
 import com.judopay.*
 import com.judopay.api.error.ApiError
@@ -15,10 +14,17 @@ import com.judopay.model.googlepay.GooglePayBillingAddressParameters
 import com.judopay.model.googlepay.GooglePayEnvironment
 import com.judopay.model.googlepay.GooglePayShippingAddressParameters
 import java.lang.Exception
-import java.util.*
 import kotlin.collections.ArrayList
 
 class JudoReactNativeModule internal constructor(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
+
+    // ------------------------------------------------------------
+    // MARK: Constants
+    // ------------------------------------------------------------
+
+    companion object {
+        private const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
+    }
 
     // ------------------------------------------------------------
     // MARK: Variables
@@ -33,7 +39,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             if (resultCode == PAYMENT_ERROR) {
                 val error: ApiError? = data.getParcelableExtra(JUDO_ERROR)
                 error?.let {
-                    transactionPromise?.reject(error.code.toString(), error.message.toString())
+                    transactionPromise?.reject(error.code.toString(), error.message)
                 }
             }
 
@@ -48,25 +54,36 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     }
 
     // ------------------------------------------------------------
+    // MARK: Initializer
+    // ------------------------------------------------------------
+
+    init {
+        context.addActivityEventListener(listener)
+    }
+
+    // ------------------------------------------------------------
     // MARK: SDK Methods
     // ------------------------------------------------------------
 
     @ReactMethod
     fun invokeTransaction(options: ReadableMap, promise: Promise) {
-        val configuration = getTransactionConfiguration(options)
-        startJudoActivity(configuration, promise)
+        getTransactionConfiguration(options)?.let {
+            startJudoActivity(it, promise)
+        }
     }
 
     @ReactMethod
     fun invokeGooglePay(options: ReadableMap, promise: Promise) {
-        val configuration = getGoogleTransactionConfiguration(options)
-        startJudoActivity(configuration, promise)
+        getGoogleTransactionConfiguration(options)?.let {
+            startJudoActivity(it, promise)
+        }
     }
 
     @ReactMethod
     fun invokePaymentMethodScreen(options: ReadableMap, promise: Promise) {
-        val configuration = getPaymentMethodsConfiguration(options)
-        startJudoActivity(configuration, promise)
+        getPaymentMethodsConfiguration(options)?.let {
+            startJudoActivity(it, promise)
+        }
     }
 
     private fun startJudoActivity(configuration: Judo, promise: Promise) {
@@ -82,55 +99,109 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     // MARK: Helper methods
     // ------------------------------------------------------------
 
-    private fun getTransactionConfiguration(options: ReadableMap): Judo {
+    private fun getTransactionConfiguration(options: ReadableMap): Judo? {
         val widgetType = getWidgetType(options)
         return getJudoConfiguration(widgetType, options)
     }
 
-    private fun getGoogleTransactionConfiguration(options: ReadableMap): Judo {
-        val transactionMode = options.getInt("transactionMode")
-        return if (transactionMode == 0) {
-            getJudoConfiguration(PaymentWidgetType.GOOGLE_PAY, options)
-        } else getJudoConfiguration(PaymentWidgetType.PRE_AUTH_GOOGLE_PAY, options)
+    private fun getGoogleTransactionConfiguration(options: ReadableMap): Judo? {
+
+        val transactionMode = try {
+            options.getInt("transactionMode")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val type = when (transactionMode) {
+            0 -> PaymentWidgetType.GOOGLE_PAY
+            else -> PaymentWidgetType.PRE_AUTH_GOOGLE_PAY
+        }
+
+        return getJudoConfiguration(type, options)
     }
 
-    private fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
-        val transactionMode = options.getInt("transactionMode")
-        return if (transactionMode == 0) {
-            getJudoConfiguration(PaymentWidgetType.PAYMENT_METHODS, options)
-        } else getJudoConfiguration(PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS, options)
+    private fun getPaymentMethodsConfiguration(options: ReadableMap): Judo? {
+
+        val transactionMode = try {
+            options.getInt("transactionMode")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val type = when (transactionMode) {
+            0 -> PaymentWidgetType.PAYMENT_METHODS
+            else -> PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS
+        }
+
+        return getJudoConfiguration(type, options)
     }
 
-    private fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap): Judo {
-        val token = options.getString("token")
-        val secret = options.getString("secret")
-        val isSandboxed = options.getBoolean("sandboxed")
-        val judoId = getJudoId(options)
-        val siteId = getSiteId(options)
-        val amount = getAmount(options)
-        val reference = getReference(options)
-        val cardNetworks = getCardNetworks(options)
-        val paymentMethods = getPaymentMethods(options)
-        val uiConfiguration = getUIConfiguration(options)
-        val googlePayConfiguration = getGooglePayConfiguration(options)
-        return Judo.Builder(type)
+    private fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap): Judo? {
+
+        val token = try {
+            options.getString("token")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val secret = try {
+            options.getString("secret")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val isSandboxed = try {
+            options.getBoolean("sandboxed")
+        } catch (_: Exception) {
+            return null
+        }
+
+        var builder = Judo.Builder(type)
                 .setApiToken(token)
                 .setApiSecret(secret)
                 .setIsSandboxed(isSandboxed)
-                .setJudoId(judoId)
-                .setSiteId(siteId)
-                .setAmount(amount)
-                .setReference(reference)
-                .setSupportedCardNetworks(cardNetworks)
-                .setPaymentMethods(paymentMethods)
-                .setUiConfiguration(uiConfiguration)
-                .setGooglePayConfiguration(googlePayConfiguration)
-                .build()
+
+        getJudoId(options)?.let {
+            builder = builder.setJudoId(it)
+        }
+
+        getSiteId(options)?.let {
+            builder = builder.setSiteId(it)
+        }
+
+        getAmount(options)?.let {
+            builder = builder.setAmount(it)
+        }
+
+        getReference(options)?.let {
+            builder = builder.setReference(it)
+        }
+
+        getCardNetworks(options)?.let {
+            builder = builder.setSupportedCardNetworks(it)
+        }
+
+        getPaymentMethods(options)?.let {
+            builder = builder.setPaymentMethods(it)
+        }
+
+        getUIConfiguration(options)?.let {
+            builder = builder.setUiConfiguration(it)
+        }
+
+        getPrimaryAccountDetails(options)?.let {
+            builder = builder.setPrimaryAccountDetails(it)
+        }
+
+        getGooglePayConfiguration(options)?.let {
+            builder = builder.setGooglePayConfiguration(it)
+        }
+
+        return builder.build()
     }
 
     private fun getWidgetType(options: ReadableMap): PaymentWidgetType {
-        val transactionType = options.getInt("transactionType")
-        return when (transactionType) {
+        return when (options.getInt("transactionType")) {
             1 -> PaymentWidgetType.PRE_AUTH_CARD_PAYMENT
             2 -> PaymentWidgetType.CREATE_CARD_TOKEN
             3 -> PaymentWidgetType.CHECK_CARD
@@ -140,95 +211,186 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     }
 
     private fun getJudoId(options: ReadableMap): String? {
-        val configurations = options.getMap("configuration")
-        return configurations!!.getString("judoId")
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        return try {
+            configuration?.getString("judoId")
+        } catch (_: Exception) {
+            null
+        }
     }
 
-    private fun getAmount(options: ReadableMap): Amount {
-        val configurations = options.getMap("configuration")
-        val amount = configurations!!.getMap("amount")
-        val amountValue = amount!!.getString("value")
-        val currencyValue = amount.getString("currency")
-        val currency = Currency.valueOf(currencyValue!!)
+    private fun getAmount(options: ReadableMap): Amount? {
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val amount = try {
+            configuration?.getMap("amount")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val amountValue = try {
+            amount?.getString("value")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val currencyValue = try {
+            amount?.getString("currency")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val currency = when (currencyValue) {
+            null -> Currency.GBP
+            else -> Currency.valueOf(currencyValue)
+        }
+
         return Amount.Builder()
                 .setAmount(amountValue)
                 .setCurrency(currency)
                 .build()
     }
 
-    private fun getReference(options: ReadableMap): Reference {
-        val configurations = options.getMap("configuration")
-        val reference = configurations!!.getMap("reference")
-        val consumerReference = reference!!.getString("consumerReference")
-        val paymentReference = reference.getString("paymentReference")
-        val metadata = reference.getMap("metadata")
-        val metadataMap: HashMap<*, *> = metadata!!.toHashMap()
-        val metadataBundle = Bundle()
-        for (o in metadataMap.entries) {
-            val element = o as Map.Entry<*, *>
-            metadataBundle.putString(element.key.toString(), element.value.toString())
+    private fun getReference(options: ReadableMap): Reference? {
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
         }
-        return Reference.Builder()
+
+        val reference = try {
+            configuration?.getMap("reference")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val consumerReference = try {
+            reference?.getString("consumerReference")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val paymentReference = try {
+            reference?.getString("paymentReference")
+        } catch (_: Exception) {
+            null
+        }
+
+        val metadata = try {
+            reference?.getMap("metadata")
+        } catch (_: Exception) {
+            null
+        }
+
+        var builder = Reference.Builder()
                 .setConsumerReference(consumerReference)
                 .setPaymentReference(paymentReference)
-                .setMetaData(metadataBundle)
-                .build()
+
+        metadata?.let {
+            val bundle = Bundle()
+            metadata.toHashMap().forEach {
+                bundle.putString(it.key, it.value.toString())
+            }
+            builder = builder.setMetaData(bundle)
+        }
+
+        return builder.build()
     }
 
     private fun getSiteId(options: ReadableMap): String? {
-        val configurations = options.getMap("configuration")
-        return configurations!!.getString("siteId")
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        return try {
+            configuration?.getString("siteId")
+        } catch (_: Exception) {
+            null
+        }
     }
 
-    private fun getCardNetworks(options: ReadableMap): Array<CardNetwork> {
-        val CARD_VISA = 1
-        val CARD_MASTERCARD = 1 shl 1
-        val CARD_MAESTRO = 1 shl 2
-        val CARD_AMEX = 1 shl 3
-        val CARD_CHINAUNIONPAY = 1 shl 4
-        val CARD_JCB = 1 shl 5
-        val CARD_DISCOVER = 1 shl 6
-        val CARD_DINERSCLUB = 1 shl 7
-        val CARD_ALL = 1 shl 8
-        val configurations = options.getMap("configuration")
-        val cardNetworkValue = configurations!!.getInt("supportedCardNetworks")
-        val supportedNetworks = ArrayList<CardNetwork>()
-        if (cardNetworkValue and CARD_ALL == CARD_ALL) {
-            supportedNetworks.add(CardNetwork.VISA)
-            supportedNetworks.add(CardNetwork.MASTERCARD)
-            supportedNetworks.add(CardNetwork.MAESTRO)
-            supportedNetworks.add(CardNetwork.AMEX)
-            supportedNetworks.add(CardNetwork.CHINA_UNION_PAY)
-            supportedNetworks.add(CardNetwork.JCB)
-            supportedNetworks.add(CardNetwork.DISCOVER)
-            supportedNetworks.add(CardNetwork.DINERS_CLUB)
-            return supportedNetworks.toTypedArray()
+    private fun getCardNetworks(options: ReadableMap): Array<CardNetwork>? {
+
+        val cardVisa = 1
+        val cardMastercard = 1 shl 1
+        val cardMaestro = 1 shl 2
+        val cardAmex = 1 shl 3
+        val cardChinaUnionPay = 1 shl 4
+        val cardJcb = 1 shl 5
+        val cardDiscover = 1 shl 6
+        val cardDinersClub = 1 shl 7
+        val cardsAll = 1 shl 8
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
         }
-        if (cardNetworkValue and CARD_VISA == CARD_VISA) {
-            supportedNetworks.add(CardNetwork.VISA)
+
+        val cardNetworkValue = try {
+            configuration?.getInt("supportedCardNetworks")
+        } catch (_: Exception) {
+            return null
         }
-        if (cardNetworkValue and CARD_MASTERCARD == CARD_MASTERCARD) {
-            supportedNetworks.add(CardNetwork.MASTERCARD)
+
+        var supportedNetworks: MutableList<CardNetwork>? = null
+
+        cardNetworkValue?.let {
+            
+            supportedNetworks = ArrayList()
+
+            if (cardNetworkValue and cardVisa == cardVisa) {
+                supportedNetworks?.add(CardNetwork.VISA)
+            }
+
+            if (cardNetworkValue and cardMastercard == cardMastercard) {
+                supportedNetworks?.add(CardNetwork.MASTERCARD)
+            }
+
+            if (cardNetworkValue and cardMaestro == cardMaestro) {
+                supportedNetworks?.add(CardNetwork.MAESTRO)
+            }
+
+            if (cardNetworkValue and cardAmex == cardAmex) {
+                supportedNetworks?.add(CardNetwork.AMEX)
+            }
+
+            if (cardNetworkValue and cardChinaUnionPay == cardChinaUnionPay) {
+                supportedNetworks?.add(CardNetwork.CHINA_UNION_PAY)
+            }
+
+            if (cardNetworkValue and cardJcb == cardJcb) {
+                supportedNetworks?.add(CardNetwork.JCB)
+            }
+
+            if (cardNetworkValue and cardDiscover == cardDiscover) {
+                supportedNetworks?.add(CardNetwork.DISCOVER)
+            }
+
+            if (cardNetworkValue and cardDinersClub == cardDinersClub) {
+                supportedNetworks?.add(CardNetwork.DINERS_CLUB)
+            }
+
+            if (cardNetworkValue and cardsAll == cardsAll) {
+                return CardNetwork.values()
+            }
         }
-        if (cardNetworkValue and CARD_MAESTRO == CARD_MAESTRO) {
-            supportedNetworks.add(CardNetwork.MAESTRO)
-        }
-        if (cardNetworkValue and CARD_AMEX == CARD_AMEX) {
-            supportedNetworks.add(CardNetwork.AMEX)
-        }
-        if (cardNetworkValue and CARD_CHINAUNIONPAY == CARD_CHINAUNIONPAY) {
-            supportedNetworks.add(CardNetwork.CHINA_UNION_PAY)
-        }
-        if (cardNetworkValue and CARD_JCB == CARD_JCB) {
-            supportedNetworks.add(CardNetwork.JCB)
-        }
-        if (cardNetworkValue and CARD_DISCOVER == CARD_DISCOVER) {
-            supportedNetworks.add(CardNetwork.DISCOVER)
-        }
-        if (cardNetworkValue and CARD_DINERSCLUB == CARD_DINERSCLUB) {
-            supportedNetworks.add(CardNetwork.DINERS_CLUB)
-        }
-        return supportedNetworks.toTypedArray()
+        return supportedNetworks?.toTypedArray()
     }
 
     private fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
@@ -245,29 +407,35 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             return null
         }
 
-        val paymentMethods = ArrayList<PaymentMethod>()
+        var paymentMethods: ArrayList<PaymentMethod>? = null
 
         val cardPaymentValue = 1
         val googlePaymentValue = 1 shl 2
         val idealPaymentValue = 1 shl 3
+        val allPaymentValues = 1 shl 4
 
         paymentMethodValue?.let {
 
-            when {
-                (paymentMethodValue and cardPaymentValue) == cardPaymentValue -> {
-                    paymentMethods.add(PaymentMethod.CARD)
-                }
-                (paymentMethodValue and googlePaymentValue) == googlePaymentValue -> {
-                    paymentMethods.add(PaymentMethod.GOOGLE_PAY)
-                }
-                (paymentMethodValue and idealPaymentValue) == idealPaymentValue -> {
-                    paymentMethods.add(PaymentMethod.IDEAL)
-                }
-                else -> return PaymentMethod.values()
+            paymentMethods = ArrayList()
+
+            if (paymentMethodValue and cardPaymentValue == cardPaymentValue) {
+                paymentMethods?.add(PaymentMethod.CARD)
+            }
+
+            if (paymentMethodValue and googlePaymentValue == googlePaymentValue) {
+                paymentMethods?.add(PaymentMethod.GOOGLE_PAY)
+            }
+
+            if (paymentMethodValue and idealPaymentValue == idealPaymentValue) {
+                paymentMethods?.add(PaymentMethod.IDEAL)
+            }
+
+            if (paymentMethodValue and allPaymentValues == allPaymentValues) {
+                return PaymentMethod.values()
             }
         }
 
-        return paymentMethods.toTypedArray()
+        return paymentMethods?.toTypedArray()
     }
 
     private fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
@@ -293,6 +461,51 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         return UiConfiguration.Builder()
                 .setAvsEnabled(isAVSEnabled)
                 .build()
+    }
+
+    private fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetails? {
+
+        val configuration = try {
+            options.getMap("configuration")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val primaryAccountDetails = try {
+            configuration?.getMap("primaryAccountDetails")
+        } catch (_: Exception) {
+            return null
+        }
+
+        val name = try {
+            primaryAccountDetails?.getString("name")
+        } catch (_: Exception) {
+            null
+        }
+
+        val accountNumber = try {
+            primaryAccountDetails?.getString("accountNumber")
+        } catch (_: Exception) {
+            null
+        }
+
+        val dateOfBirth = try {
+            primaryAccountDetails?.getString("dateOfBirth")
+        } catch (_: Exception) {
+            null
+        }
+
+        val postCode = try {
+            primaryAccountDetails?.getString("postCode")
+        } catch (_: Exception) {
+            null
+        }
+
+        return PrimaryAccountDetails.Builder()
+                .setName(name)
+                .setAccountNumber(accountNumber)
+                .setDateOfBirth(dateOfBirth)
+                .setPostCode(postCode).build()
     }
 
     private fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration? {
@@ -434,21 +647,5 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
     override fun getName(): String {
         return "RNJudo"
-    }
-
-    // ------------------------------------------------------------
-    // MARK: Constants
-    // ------------------------------------------------------------
-
-    companion object {
-        private const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
-    }
-
-    // ------------------------------------------------------------
-    // MARK: Initializer
-    // ------------------------------------------------------------
-
-    init {
-        context.addActivityEventListener(listener)
     }
 }
