@@ -205,57 +205,12 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
 
         String amountValue = amount.getString("value");
         String currencyValue = amount.getString("currency");
-        Currency currency = getCurrency(currencyValue);
+        Currency currency = Currency.valueOf(currencyValue);
 
         return new Amount.Builder()
                 .setAmount(amountValue)
                 .setCurrency(currency)
                 .build();
-    }
-
-    private Currency getCurrency(String value) {
-        switch (value) {
-            case "AED":
-                return Currency.AED;
-            case "AUD":
-                return Currency.AUD;
-            case "BRL":
-                return Currency.BRL;
-            case "CAD":
-                return Currency.CAD;
-            case "CHF":
-                return Currency.CHF;
-            case "DKK":
-                return Currency.DKK;
-            case "EUR":
-                return Currency.EUR;
-            case "HKD":
-                return Currency.HKD;
-            case "HUF":
-                return Currency.HUF;
-            case "JPY":
-                return Currency.JPY;
-            case "NOK":
-                return Currency.NOK;
-            case "NZD":
-                return Currency.NZD;
-            case "PLN":
-                return Currency.PLN;
-            case "SAR":
-                return Currency.SAR;
-            case "SEK":
-                return Currency.SEK;
-            case "SGD":
-                return Currency.SGD;
-            case "QAR":
-                return Currency.QAR;
-            case "USD":
-                return Currency.USD;
-            case "ZAR":
-                return Currency.ZAR;
-            default:
-                return Currency.GBP;
-        }
     }
 
     private Reference getReference(ReadableMap options) {
