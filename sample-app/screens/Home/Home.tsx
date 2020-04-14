@@ -4,6 +4,7 @@ import { store, storageKey } from '../../helpers/AsyncStore'
 import { HomeScreenData } from './HomeData'
 import { HomeListItem, HomeListType } from './HomeProps'
 import AsyncStorage from '@react-native-community/async-storage'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
   StatusBar,
@@ -15,7 +16,12 @@ import {
   SafeAreaView,
 } from 'react-native'
 
-import JudoPay, { JudoTransactionType, JudoTransactionMode } from 'judo-react-native'
+import JudoPay, {
+  JudoTransactionType,
+  JudoTransactionMode,
+  JudoPaymentMethod,
+  JudoCardNetwork
+} from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults';
 
 export default class Home extends Component {
@@ -24,7 +30,8 @@ export default class Home extends Component {
     configuration: configuration,
     token: '<TOKEN>',
     secret: '<SECRET>',
-    isSandboxed: true
+    isSandboxed: true,
+    spinner: false
   };
 
   componentDidMount() {
@@ -35,6 +42,7 @@ export default class Home extends Component {
   }
 
   async getData() {
+    this.setState({ spinner: true })
     try {
       const value = await AsyncStorage.getItem(storageKey)
       if (value !== null) {
@@ -57,22 +65,70 @@ export default class Home extends Component {
         configuration.siteId = settings.list[0].data[2].value as string
         configuration.amount.value = settings.list[1].data[0].value as string
         configuration.amount.currency = settings.list[1].data[1].value as string
-        // judoOptions.amount = settings.list[1].data[0].value as string
-        // judoOptions.currency = settings.list[1].data[1].valueArray[0] as string
-        // var googlePayOptions = this.state.googlePayOptions
-        // googlePayOptions.googlePayTestEnvironment = settings.list[2].data[0].value as boolean
-        // googlePayOptions.requireShippingDetails = settings.list[2].data[3].value as boolean
-        // googlePayOptions.requireContactDetails = settings.list[2].data[5].value as boolean
+
+        configuration.paymentMethods = this.parsePaymentMethods(settings.list[2].data[1].valueArray)
+        configuration.supportedCardNetworks = this.parseCardNetworks(settings.list[2].data[2].valueArray)
         this.setState({
           configuration: configuration,
           secret: secret,
           token: token,
           isSandbox: isSandboxed
+        }, () => {
+          this.setState({ spinner: false })
         })
+      } else {
+        this.setState({ spinner: false })
       }
     } catch(e) {
       console.log("getData() error " + e)
+      this.setState({ spinner: false })
     }
+  }
+
+  parsePaymentMethods(values: Array<String>): JudoPaymentMethod {
+    var paymentMethods = JudoPaymentMethod.All
+    if (values.includes('CARD')) {
+      paymentMethods |= JudoPaymentMethod.Card
+    }
+    if (values.includes('APPLE_PAY')) {
+      paymentMethods |= JudoPaymentMethod.ApplePay
+    }
+    if (values.includes('GOOGLE_PAY')) {
+      paymentMethods |= JudoPaymentMethod.GooglePay
+    }
+    if (values.includes('IDEAL')) {
+      paymentMethods |= JudoPaymentMethod.iDEAL
+    }
+    return paymentMethods
+  }
+
+  parseCardNetworks(values: Array<String>): JudoCardNetwork {
+    var cardNetworks = JudoCardNetwork.All
+    if (values.includes('AMEX')) {
+      cardNetworks |= JudoCardNetwork.Amex
+    }
+    if (values.includes('CHINA_UNION_PAY')) {
+      cardNetworks |= JudoCardNetwork.ChinaUnionPay
+    }
+    if (values.includes('DINERS_CLUB')) {
+      cardNetworks |= JudoCardNetwork.DinersClub
+    }
+    if (values.includes('DISCOVER')) {
+      cardNetworks |= JudoCardNetwork.Discover
+    }
+    if (values.includes('JCB')) {
+      cardNetworks |= JudoCardNetwork.JCB
+    }
+    if (values.includes('MAESTRO')) {
+      cardNetworks |= JudoCardNetwork.Maestro
+    }
+    if (values.includes('MASTERCARD')) {
+      cardNetworks |= JudoCardNetwork.Mastercard
+    }
+    if (values.includes('VISA')) {
+      cardNetworks |= JudoCardNetwork.Visa
+    }
+    return cardNetworks
   }
 
   async invokePayment() {
@@ -223,6 +279,11 @@ export default class Home extends Component {
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
         <View style={styles.container}>
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+          />
           <SectionList
             sections={HomeScreenData.list}
             keyExtractor={(item, index) => item.title + index}
@@ -260,5 +321,8 @@ const styles = StyleSheet.create({
     marginStart: 10,
     marginEnd: 10,
     marginBottom: 10
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   }
 })

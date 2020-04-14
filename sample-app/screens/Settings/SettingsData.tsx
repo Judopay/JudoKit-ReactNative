@@ -55,8 +55,9 @@ export const Payments = {
         {
             "data": [
                 { "entry": "Card", "value": "CARD" } as PickerItem,
-                { "entry": "iDeal", "value": "IDEAL" } as PickerItem,
-                { "entry": "Apple Pay", "value": "APPLE_PAY" } as PickerItem
+                { "entry": "Apple Pay", "value": "APPLE_PAY" } as PickerItem,
+                { "entry": "GooglePay", "value": "GOOGLE_PAY" } as PickerItem,
+                { "entry": "iDEAL", "value": "IDEAL" } as PickerItem,
             ]
         }
     ]
