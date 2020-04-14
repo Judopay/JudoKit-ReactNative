@@ -87,47 +87,23 @@ export default class Home extends Component {
 
   parsePaymentMethods(values: Array<String>): JudoPaymentMethod {
     var paymentMethods = JudoPaymentMethod.All
-    if (values.includes('CARD')) {
-      paymentMethods |= JudoPaymentMethod.Card
-    }
-    if (values.includes('APPLE_PAY')) {
-      paymentMethods |= JudoPaymentMethod.ApplePay
-    }
-    if (values.includes('GOOGLE_PAY')) {
-      paymentMethods |= JudoPaymentMethod.GooglePay
-    }
-    if (values.includes('IDEAL')) {
-      paymentMethods |= JudoPaymentMethod.iDEAL
-    }
+    if (values.includes('CARD')) paymentMethods |= JudoPaymentMethod.Card
+    if (values.includes('APPLE_PAY')) paymentMethods |= JudoPaymentMethod.ApplePay
+    if (values.includes('GOOGLE_PAY')) paymentMethods |= JudoPaymentMethod.GooglePay
+    if (values.includes('IDEAL')) paymentMethods |= JudoPaymentMethod.iDEAL
     return paymentMethods
   }
 
   parseCardNetworks(values: Array<String>): JudoCardNetwork {
     var cardNetworks = JudoCardNetwork.All
-    if (values.includes('AMEX')) {
-      cardNetworks |= JudoCardNetwork.Amex
-    }
-    if (values.includes('CHINA_UNION_PAY')) {
-      cardNetworks |= JudoCardNetwork.ChinaUnionPay
-    }
-    if (values.includes('DINERS_CLUB')) {
-      cardNetworks |= JudoCardNetwork.DinersClub
-    }
-    if (values.includes('DISCOVER')) {
-      cardNetworks |= JudoCardNetwork.Discover
-    }
-    if (values.includes('JCB')) {
-      cardNetworks |= JudoCardNetwork.JCB
-    }
-    if (values.includes('MAESTRO')) {
-      cardNetworks |= JudoCardNetwork.Maestro
-    }
-    if (values.includes('MASTERCARD')) {
-      cardNetworks |= JudoCardNetwork.Mastercard
-    }
-    if (values.includes('VISA')) {
-      cardNetworks |= JudoCardNetwork.Visa
-    }
+    if (values.includes('AMEX')) cardNetworks |= JudoCardNetwork.Amex
+    if (values.includes('CHINA_UNION_PAY')) cardNetworks |= JudoCardNetwork.ChinaUnionPay
+    if (values.includes('DINERS_CLUB')) cardNetworks |= JudoCardNetwork.DinersClub
+    if (values.includes('DISCOVER')) cardNetworks |= JudoCardNetwork.Discover
+    if (values.includes('JCB')) cardNetworks |= JudoCardNetwork.JCB
+    if (values.includes('MAESTRO')) cardNetworks |= JudoCardNetwork.Maestro
+    if (values.includes('MASTERCARD')) cardNetworks |= JudoCardNetwork.Mastercard
+    if (values.includes('VISA')) cardNetworks |= JudoCardNetwork.Visa
     return cardNetworks
   }
 
