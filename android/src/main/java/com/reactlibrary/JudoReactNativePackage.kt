@@ -9,9 +9,7 @@ import java.util.*
 @Suppress("unused")
 class JudoReactNativePackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        val modules: MutableList<NativeModule> = ArrayList()
-        modules.add(JudoReactNativeModule(reactContext))
-        return modules
+        return listOf(JudoReactNativeModule(reactContext))
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
