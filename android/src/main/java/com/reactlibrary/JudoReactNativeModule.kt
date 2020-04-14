@@ -197,7 +197,11 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             builder = builder.setGooglePayConfiguration(it)
         }
 
-        return builder.build()
+        return try {
+            builder.build()
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun getWidgetType(options: ReadableMap): PaymentWidgetType {
@@ -256,10 +260,12 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             else -> Currency.valueOf(currencyValue)
         }
 
-        return Amount.Builder()
+        return try { Amount.Builder()
                 .setAmount(amountValue)
                 .setCurrency(currency)
-                .build()
+                .build() } catch (_: Exception) {
+            null
+        }
     }
 
     private fun getReference(options: ReadableMap): Reference? {
@@ -306,7 +312,11 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             builder = builder.setMetaData(bundle)
         }
 
-        return builder.build()
+        return try {
+            builder.build()
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun getSiteId(options: ReadableMap): String? {
@@ -458,9 +468,11 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             return null
         }
 
-        return UiConfiguration.Builder()
+        return try { UiConfiguration.Builder()
                 .setAvsEnabled(isAVSEnabled)
-                .build()
+                .build() } catch (_: Exception) {
+            null
+        }
     }
 
     private fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetails? {
@@ -501,11 +513,13 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             null
         }
 
-        return PrimaryAccountDetails.Builder()
+        return try { PrimaryAccountDetails.Builder()
                 .setName(name)
                 .setAccountNumber(accountNumber)
                 .setDateOfBirth(dateOfBirth)
-                .setPostCode(postCode).build()
+                .setPostCode(postCode).build() } catch (_: Exception) {
+            null
+        }
     }
 
     private fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration? {
@@ -592,7 +606,11 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             builder = builder.setShippingAddressParameters(shippingParameters)
         }
 
-        return builder.build()
+        return try {
+            builder.build()
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun getBillingParameters(formatMap: ReadableMap): GooglePayBillingAddressParameters? {
