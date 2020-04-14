@@ -1,6 +1,9 @@
+
 import React, { Component } from 'react'
+import { store, storageKey } from '../../helpers/AsyncStore'
 import { HomeScreenData } from './HomeData'
 import { HomeListItem, HomeListType } from './HomeProps'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import {
   StatusBar,
@@ -16,6 +19,61 @@ import JudoPay, { JudoTransactionType, JudoTransactionMode } from 'judo-react-na
 import configuration from '../../helpers/JudoDefaults';
 
 export default class Home extends Component {
+
+  state = {
+    configuration: configuration,
+    token: '<TOKEN>',
+    secret: '<SECRET>',
+    isSandboxed: true
+  };
+
+  componentDidMount() {
+    store.subscribe(() => {
+      this.getData()
+    })
+    this.getData()
+  }
+
+  async getData() {
+    try {
+      const value = await AsyncStorage.getItem(storageKey)
+      if (value !== null) {
+        const settings = JSON.parse(value)
+        console.log("settings " + JSON.stringify(settings)) //TODO REMOVE
+        var isSandboxed = this.state.isSandboxed
+        var token = this.state.token
+        var secret = this.state.secret
+        var configuration = this.state.configuration
+        isSandboxed = settings.list[0].data[0].value as boolean
+        let tokenValue = settings.list[0].data[3].value as string
+        if (tokenValue) {
+          token = tokenValue
+        }
+        let secretValue = settings.list[0].data[4].value as string
+        if (secretValue) {
+          secret = secretValue
+        }
+        configuration.judoId = settings.list[0].data[1].value as string
+        configuration.siteId = settings.list[0].data[2].value as string
+        configuration.amount.value = settings.list[1].data[0].value as string
+        configuration.amount.currency = settings.list[1].data[1].value as string
+        // judoOptions.amount = settings.list[1].data[0].value as string
+        // judoOptions.currency = settings.list[1].data[1].valueArray[0] as string
+        // var googlePayOptions = this.state.googlePayOptions
+        // googlePayOptions.googlePayTestEnvironment = settings.list[2].data[0].value as boolean
+        // googlePayOptions.requireShippingDetails = settings.list[2].data[3].value as boolean
+        // googlePayOptions.requireContactDetails = settings.list[2].data[5].value as boolean
+        this.setState({
+          configuration: configuration,
+          secret: secret,
+          token: token,
+          isSandbox: isSandboxed
+        })
+      }
+    } catch(e) {
+      console.log("getData() error " + e)
+    }
+  }
 
   async invokePayment() {
     this.invokeTransaction(JudoTransactionType.Payment);
@@ -63,8 +121,9 @@ export default class Home extends Component {
 
   async invokeTransaction(type: JudoTransactionType) {
     try {
-      const judo = new JudoPay('token', 'secret');
-      const response = await judo.invokeTransaction(type, configuration);
+      const judo = new JudoPay(this.state.token, this.state.secret);
+      judo.isSandboxed = this.state.isSandboxed
+      const response = await judo.invokeTransaction(type, this.state.configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -73,8 +132,9 @@ export default class Home extends Component {
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay('token', 'secret');
-      const response = await judo.invokeApplePay(mode, configuration);
+      const judo = new JudoPay(this.state.token, this.state.secret);
+      judo.isSandboxed = this.state.isSandboxed
+      const response = await judo.invokeApplePay(mode, this.state.configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -83,8 +143,9 @@ export default class Home extends Component {
 
   async displayGooglePaySheet(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay('token', 'secret');
-      const response = await judo.invokeGooglePay(mode, configuration);
+      const judo = new JudoPay(this.state.token, this.state.secret);
+      judo.isSandboxed = this.state.isSandboxed
+      const response = await judo.invokeGooglePay(mode, this.state.configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -93,8 +154,9 @@ export default class Home extends Component {
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay('token', 'secret');
-      const response = await judo.invokePaymentMethodScreen(mode, configuration);
+      const judo = new JudoPay(this.state.token, this.state.secret);
+      judo.isSandboxed = this.state.isSandboxed
+      const response = await judo.invokePaymentMethodScreen(mode, this.state.configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
