@@ -9,7 +9,8 @@
     "test": "jest",
     "clean": "rm -rf node_modules && rm -rf ./ios/build && rm -rf ./android/app/build",
     "postinstall": "cd ios && pod install && cd ..",
-    "update-ios": "cd ios && pod update JudoKitObjC && cd .."
+    "update-ios": "cd ios && pod update JudoKitObjC && cd ..",
+    "lint": "tsc && eslint '*/**/*.{js,ts,tsx}' --quiet"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.8.1",
