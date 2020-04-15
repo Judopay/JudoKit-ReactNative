@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { storageKey, store } from '../../helpers/AsyncStore'
 import Dialog from "react-native-dialog"
 import AsyncStorage from '@react-native-community/async-storage'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
   SettingsData,
@@ -32,7 +33,8 @@ export default class Settings extends Component {
   state = {
     settingsData: SettingsData,
     settingSelected: {} as SettingsListItem,
-    textPickerVisible: false
+    textPickerVisible: false,
+    spinner: false
   }
 
   /**
@@ -47,8 +49,11 @@ export default class Settings extends Component {
   }
 
   async storeData(data: any) {
+    this.setState({ spinner: true })
     try {
-      await AsyncStorage.setItem(storageKey, JSON.stringify(data)).then()
+      await AsyncStorage.setItem(storageKey, JSON.stringify(data)).then(() => {
+        this.setState({ spinner: false })
+      })
     } catch (e) {
       console.log("store data error " + e.message)
     }
@@ -155,7 +160,6 @@ export default class Settings extends Component {
         underlayColor='gray'
         onPress={() => { this.handlePickerItemPressed(item, settingsItem) }}
       >
-
         <View style={[styles.listItem, { marginLeft: 0, marginRight: 0 }]}>
           <Text style={styles.title}>{item.entry}</Text>
           {settingsItem.valueArray!.indexOf(item.value, 0) > -1 || settingsItem.value == item.value
@@ -204,6 +208,11 @@ export default class Settings extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
+        <Spinner
+          visible={this.state.spinner}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         <SectionList
           sections={this.state.settingsData.list}
           keyExtractor={(item, index) => item.title + index}
@@ -269,5 +278,8 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 15,
     width: 300
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   }
 });

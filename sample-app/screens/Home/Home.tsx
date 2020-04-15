@@ -1,6 +1,9 @@
+
 import React, { Component } from 'react'
-import { HomeScreenData } from './HomeData'
+import { store } from '../../helpers/AsyncStore'
+import { HomeScreenData, getStoredData } from './HomeData'
 import { HomeListItem, HomeListType } from './HomeProps'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
   StatusBar,
@@ -12,10 +15,40 @@ import {
   SafeAreaView,
 } from 'react-native'
 
-import JudoPay, { JudoTransactionType, JudoTransactionMode } from 'judo-react-native'
+import JudoPay, {
+  JudoTransactionType,
+  JudoTransactionMode
+} from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults';
 
 export default class Home extends Component {
+
+  state = {
+    configuration: configuration,
+    token: '<TOKEN>',
+    secret: '<SECRET>',
+    isSandboxed: true,
+    spinner: false
+  };
+
+  componentDidMount() {
+    store.subscribe(() => {
+       this.getConfiguration()
+    })
+    this.getConfiguration()
+  }
+
+  componentWillUnmount() {
+    store.dispatch({ type: '' })
+  }
+
+  async getConfiguration() {
+    this.setState({ spinner: true })
+    let configuration = await getStoredData(this.state)
+    this.setState(configuration, () => {
+      this.setState({ spinner: false })
+    })
+  }
 
   async invokePayment() {
     this.invokeTransaction(JudoTransactionType.Payment);
@@ -63,8 +96,9 @@ export default class Home extends Component {
 
   async invokeTransaction(type: JudoTransactionType) {
     try {
-      const judo = new JudoPay('token', 'secret');
-      const response = await judo.invokeTransaction(type, configuration);
+      const judo = new JudoPay(this.state.token, this.state.secret);
+      judo.isSandboxed = this.state.isSandboxed
+      const response = await judo.invokeTransaction(type, this.state.configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -73,8 +107,9 @@ export default class Home extends Component {
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay('token', 'secret');
-      const response = await judo.invokeApplePay(mode, configuration);
+      const judo = new JudoPay(this.state.token, this.state.secret);
+      judo.isSandboxed = this.state.isSandboxed
+      const response = await judo.invokeApplePay(mode, this.state.configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -83,8 +118,9 @@ export default class Home extends Component {
 
   async displayGooglePaySheet(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay('token', 'secret');
-      const response = await judo.invokeGooglePay(mode, configuration);
+      const judo = new JudoPay(this.state.token, this.state.secret);
+      judo.isSandboxed = this.state.isSandboxed
+      const response = await judo.invokeGooglePay(mode, this.state.configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -93,8 +129,9 @@ export default class Home extends Component {
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay('token', 'secret');
-      const response = await judo.invokePaymentMethodScreen(mode, configuration);
+      const judo = new JudoPay(this.state.token, this.state.secret);
+      judo.isSandboxed = this.state.isSandboxed
+      const response = await judo.invokePaymentMethodScreen(mode, this.state.configuration);
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -102,42 +139,40 @@ export default class Home extends Component {
   }
 
   handleListItemPressed(item: HomeListItem) {
-    {
-      switch (item.type) {
-        case HomeListType.Payment:
-          this.invokePayment()
-          break
-        case HomeListType.PreAuth:
-          this.invokePreAuth()
-          break
-        case HomeListType.RegisterCard:
-          this.invokeRegisterCard()
-          break
-        case HomeListType.CheckCard:
-          this.invokeCheckCard()
-          break
-        case HomeListType.SaveCard:
-          this.invokeSaveCard()
-          break
-        case HomeListType.ApplePay:
-          this.invokeApplePay()
-          break
-        case HomeListType.ApplePreAuth:
-          this.invokeApplePreAuth()
-          break
-        case HomeListType.GooglePay:
-          this.invokeGooglePay()
-          break
-        case HomeListType.GooglePreAuth:
-          this.invokeGooglePreAuth()
-          break
-        case HomeListType.PaymentMethods:
-          this.invokePaymentMethods()
-          break
-        case HomeListType.PreAuthMethods:
-          this.invokePreAuthMethods()
-          break
-      }
+    switch (item.type) {
+      case HomeListType.Payment:
+        this.invokePayment()
+        break
+      case HomeListType.PreAuth:
+        this.invokePreAuth()
+        break
+      case HomeListType.RegisterCard:
+        this.invokeRegisterCard()
+        break
+      case HomeListType.CheckCard:
+        this.invokeCheckCard()
+        break
+      case HomeListType.SaveCard:
+        this.invokeSaveCard()
+        break
+      case HomeListType.ApplePay:
+        this.invokeApplePay()
+        break
+      case HomeListType.ApplePreAuth:
+        this.invokeApplePreAuth()
+        break
+      case HomeListType.GooglePay:
+        this.invokeGooglePay()
+        break
+      case HomeListType.GooglePreAuth:
+        this.invokeGooglePreAuth()
+        break
+      case HomeListType.PaymentMethods:
+        this.invokePaymentMethods()
+        break
+      case HomeListType.PreAuthMethods:
+        this.invokePreAuthMethods()
+        break
     }
   }
 
@@ -161,6 +196,11 @@ export default class Home extends Component {
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
         <View style={styles.container}>
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+          />
           <SectionList
             sections={HomeScreenData.list}
             keyExtractor={(item, index) => item.title + index}
@@ -198,5 +238,8 @@ const styles = StyleSheet.create({
     marginStart: 10,
     marginEnd: 10,
     marginBottom: 10
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   }
 })
