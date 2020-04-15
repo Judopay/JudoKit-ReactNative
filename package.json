@@ -3,13 +3,13 @@
   "title": "Judopay React Native module",
   "version": "2.1.0",
   "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
-  "main": "index.tsx",
+  "main": "JudoPay.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "tsc && eslint '*/**/*.{js,ts,tsx}' --quiet"
   },
   "files": [
-    "index.js",
+    "JudoPay.tsx",
     "android/src/main/AndroidManifest.xml",
     "android/src/main/java/",
     "android/build.gradle",

@@ -180,16 +180,20 @@ export default class Settings extends Component {
     if (settingsItem.type == SettingsPickType.TextPicker) {
       return (
         <Dialog.Input
+          style={{ color: 'black' }}
           wrapperStyle={styles.inputDialog}
           onChangeText={(text: string) => { this.handleDialogTextInputChange(text) }} />
       )
     } else {
       return (
-        <SectionList
-          sections={this.getPickerDataList(settingsItem)}
-          keyExtractor={(item) => item.value}
-          renderItem={({ item }) => this.getPickerListItem(item, settingsItem)}
-        />
+        <View style={{ height: 350}}>
+          <SectionList
+            style={{ marginLeft: 10, marginRight: 10 }}
+            sections={this.getPickerDataList(settingsItem)}
+            keyExtractor={(item) => item.value}
+            renderItem={({ item }) => this.getPickerListItem(item, settingsItem)}
+          />
+       </View>
       )
     }
   }

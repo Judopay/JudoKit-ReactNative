@@ -13,9 +13,13 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
+import com.readystatesoftware.chuck.ChuckInterceptor;
+
 import com.judopay.Judo;
 import com.judopay.JudoActivity;
 import com.judopay.api.error.ApiError;
+import com.judopay.api.factory.JudoApiCallAdapterFactory;
+import com.judopay.api.factory.JudoApiServiceFactory;
 import com.judopay.api.model.response.Receipt;
 import com.judopay.model.Amount;
 import com.judopay.model.CardNetwork;
@@ -31,6 +35,7 @@ import com.judopay.model.googlepay.GooglePayEnvironment;
 import com.judopay.model.googlepay.GooglePayShippingAddressParameters;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -84,6 +89,7 @@ public class JudoReactNativeModule extends ReactContextBaseJavaModule {
     JudoReactNativeModule(ReactApplicationContext context) {
         super(context);
         context.addActivityEventListener(listener);
+        JudoApiServiceFactory.setExternalInterceptors(Arrays.asList(new ChuckInterceptor(context)));
     }
 
     // ------------------------------------------------------------
