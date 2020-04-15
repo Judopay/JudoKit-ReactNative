@@ -1,5 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
+  - CocoaDebug (1.2.5)
   - DeviceDNA (0.1.6)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
@@ -10,7 +11,6 @@ PODS:
     - React-Core (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/turbomodule/core (= 0.61.5)
-  - FLEX (4.0.0)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -243,10 +243,10 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - CocoaDebug
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
-  - FLEX
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - "JudoKitObjC (from `git@github.com:Judopay/JudoKitObjC.git`, branch `develop-v2`)"
@@ -284,8 +284,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - CocoaDebug
     - DeviceDNA
-    - FLEX
     - PayCardsRecognizer
     - TrustKit
 
@@ -365,11 +365,11 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  CocoaDebug: 7446061b7ec181a102ad7dfac4535a5adc824e6d
   DeviceDNA: 06c4c1af198fc8b44711d10bed39e0a8638b490d
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
-  FLEX: 3fb1e8096b230a08a5d4d5f3c2992b84399a6abf
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   JudoKitObjC: b8f131c987e2fb23c51a637f336da20f9db6e3db
@@ -403,6 +403,6 @@ SPEC CHECKSUMS:
   TrustKit: 073855e3adecd317417bda4ac9e9ac54a2e3b9f2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: af780404bdb4775d166e2a443df002754f553331
+PODFILE CHECKSUM: 1fa5f9e49670beb6c9ad36672905a3d3b749c5cd
 
 COCOAPODS: 1.9.1

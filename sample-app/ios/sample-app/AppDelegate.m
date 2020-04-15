@@ -10,7 +10,8 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import "FLEXManager.h"
+
+@import CocoaDebug;
 
 @implementation AppDelegate
 
@@ -28,7 +29,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  [[FLEXManager sharedManager] showExplorer];
+
+  [CocoaDebug enable];
+  
   return YES;
 }
 
