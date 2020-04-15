@@ -10,6 +10,7 @@ import {
   Text,
   View,
   SafeAreaView,
+  Alert,
 } from 'react-native'
 
 import JudoPay, { JudoTransactionType, JudoTransactionMode } from 'judo-react-native'
@@ -67,8 +68,7 @@ export default class Home extends Component {
       const response = await judo.invokeTransaction(type, configuration);
       console.log(response)
     } catch (error) {
-      console.log(error)
-    }
+      Alert.alert("Error", error.message)    }
   }
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
@@ -77,8 +77,7 @@ export default class Home extends Component {
       const response = await judo.invokeApplePay(mode, configuration);
       console.log(response)
     } catch (error) {
-      console.log(error)
-    }
+      Alert.alert("Error", error.message)    }
   }
 
   async displayGooglePaySheet(mode: JudoTransactionMode) {
@@ -87,8 +86,7 @@ export default class Home extends Component {
       const response = await judo.invokeGooglePay(mode, configuration);
       console.log(response)
     } catch (error) {
-      console.log(error)
-    }
+      Alert.alert("Error", error.message)    }
   }
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
@@ -97,8 +95,7 @@ export default class Home extends Component {
       const response = await judo.invokePaymentMethodScreen(mode, configuration);
       console.log(response)
     } catch (error) {
-      console.log(error)
-    }
+      Alert.alert("Error", error.message)    }
   }
 
   handleListItemPressed(item: HomeListItem) {

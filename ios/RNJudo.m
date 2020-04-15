@@ -25,6 +25,7 @@
 #import "RNJudo.h"
 #import "RNWrappers.h"
 #import "RNApplePayWrappers.h"
+#import "RNTypeValidation.h"
 
 #import <React/RCTConvert.h>
 #import <JudoKitObjC/JudoKitObjC.h>
@@ -44,17 +45,22 @@ RCT_REMAP_METHOD(invokeTransaction,
     
     JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
     TransactionType type = [RNWrappers transactionTypeFromProperties:properties];
-    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-    
-    [judoKit invokeTransactionWithType:type
-                         configuration:configuration
-                            completion:^(JPResponse *response, NSError *error) {
-        if (error) {
-            reject(@"JUDO_ERROR", @"Transaction failed", error);
-            return;
-        }
-        resolve(response);
-    }];
+    NSString* isConfigValid = [RNTypeValidation isConfigurationValid: properties];
+    if (!isConfigValid) {
+        JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+        
+        [judoKit invokeTransactionWithType:type
+                             configuration:configuration
+                                completion:^(JPResponse *response, NSError *error) {
+            if (error) {
+                reject(@"JUDO_ERROR", @"Transaction failed",  error);
+                return;
+            }
+            resolve(response);
+        }];
+    } else {
+        reject(@"JUDO_ERROR", isConfigValid, [NSError judoJudoIdMissingError]);
+    }
 }
 
 RCT_REMAP_METHOD(invokeApplePay,
@@ -64,17 +70,24 @@ RCT_REMAP_METHOD(invokeApplePay,
     
     JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
     TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
     
-    [judoKit invokeApplePayWithMode:mode
-                      configuration:configuration
-                         completion:^(JPResponse *response, NSError *error) {
-        if (error) {
-            reject(@"JUDO_ERROR", @"Transaction failed", error);
-            return;
-        }
-        resolve(response);
-    }];
+    NSString* isConfigValid = [RNTypeValidation isApplePayConfigurationValid: properties];
+    if (!isConfigValid) {
+        JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+        
+        [judoKit invokeApplePayWithMode:mode
+                          configuration:configuration
+                             completion:^(JPResponse *response, NSError *error) {
+            if (error) {
+                reject(@"JUDO_ERROR", @"Transaction failed", error);
+                return;
+            }
+            resolve(response);
+        }];
+        
+    } else {
+        reject(@"JUDO_ERROR", isConfigValid, [NSError judoJudoIdMissingError]);
+    }
 }
 
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
