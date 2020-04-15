@@ -1,9 +1,8 @@
 
 import React, { Component } from 'react'
-import { store, storageKey } from '../../helpers/AsyncStore'
-import { HomeScreenData } from './HomeData'
+import { store } from '../../helpers/AsyncStore'
+import { HomeScreenData, getStoredData } from './HomeData'
 import { HomeListItem, HomeListType } from './HomeProps'
-import AsyncStorage from '@react-native-community/async-storage'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
@@ -18,9 +17,7 @@ import {
 
 import JudoPay, {
   JudoTransactionType,
-  JudoTransactionMode,
-  JudoPaymentMethod,
-  JudoCardNetwork
+  JudoTransactionMode
 } from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults';
 
@@ -36,75 +33,21 @@ export default class Home extends Component {
 
   componentDidMount() {
     store.subscribe(() => {
-      this.getData()
+       this.getConfiguration()
     })
-    this.getData()
+    this.getConfiguration()
   }
 
-  async getData() {
+  componentWillUnmount() {
+    store.dispatch({ type: '' })
+  }
+
+  async getConfiguration() {
     this.setState({ spinner: true })
-    try {
-      const value = await AsyncStorage.getItem(storageKey)
-      if (value !== null) {
-        const settings = JSON.parse(value)
-        console.log("settings " + JSON.stringify(settings)) //TODO REMOVE
-        var isSandboxed = this.state.isSandboxed
-        var token = this.state.token
-        var secret = this.state.secret
-        var configuration = this.state.configuration
-        isSandboxed = settings.list[0].data[0].value as boolean
-        let tokenValue = settings.list[0].data[3].value as string
-        if (tokenValue) {
-          token = tokenValue
-        }
-        let secretValue = settings.list[0].data[4].value as string
-        if (secretValue) {
-          secret = secretValue
-        }
-        configuration.judoId = settings.list[0].data[1].value as string
-        configuration.siteId = settings.list[0].data[2].value as string
-        configuration.amount.value = settings.list[1].data[0].value as string
-        configuration.amount.currency = settings.list[1].data[1].value as string
-
-        configuration.paymentMethods = this.parsePaymentMethods(settings.list[2].data[1].valueArray)
-        configuration.supportedCardNetworks = this.parseCardNetworks(settings.list[2].data[2].valueArray)
-        this.setState({
-          configuration: configuration,
-          secret: secret,
-          token: token,
-          isSandbox: isSandboxed
-        }, () => {
-          this.setState({ spinner: false })
-        })
-      } else {
-        this.setState({ spinner: false })
-      }
-    } catch(e) {
-      console.log("getData() error " + e)
+    let configuration = await getStoredData(this.state)
+    this.setState(configuration, () => {
       this.setState({ spinner: false })
-    }
-  }
-
-  parsePaymentMethods(values: Array<String>): JudoPaymentMethod {
-    var paymentMethods = JudoPaymentMethod.All
-    if (values.includes('CARD')) paymentMethods |= JudoPaymentMethod.Card
-    if (values.includes('APPLE_PAY')) paymentMethods |= JudoPaymentMethod.ApplePay
-    if (values.includes('GOOGLE_PAY')) paymentMethods |= JudoPaymentMethod.GooglePay
-    if (values.includes('IDEAL')) paymentMethods |= JudoPaymentMethod.iDEAL
-    return paymentMethods
-  }
-
-  parseCardNetworks(values: Array<String>): JudoCardNetwork {
-    var cardNetworks = JudoCardNetwork.All
-    if (values.includes('AMEX')) cardNetworks |= JudoCardNetwork.Amex
-    if (values.includes('CHINA_UNION_PAY')) cardNetworks |= JudoCardNetwork.ChinaUnionPay
-    if (values.includes('DINERS_CLUB')) cardNetworks |= JudoCardNetwork.DinersClub
-    if (values.includes('DISCOVER')) cardNetworks |= JudoCardNetwork.Discover
-    if (values.includes('JCB')) cardNetworks |= JudoCardNetwork.JCB
-    if (values.includes('MAESTRO')) cardNetworks |= JudoCardNetwork.Maestro
-    if (values.includes('MASTERCARD')) cardNetworks |= JudoCardNetwork.Mastercard
-    if (values.includes('VISA')) cardNetworks |= JudoCardNetwork.Visa
-    return cardNetworks
+    })
   }
 
   async invokePayment() {
@@ -196,42 +139,40 @@ export default class Home extends Component {
   }
 
   handleListItemPressed(item: HomeListItem) {
-    {
-      switch (item.type) {
-        case HomeListType.Payment:
-          this.invokePayment()
-          break
-        case HomeListType.PreAuth:
-          this.invokePreAuth()
-          break
-        case HomeListType.RegisterCard:
-          this.invokeRegisterCard()
-          break
-        case HomeListType.CheckCard:
-          this.invokeCheckCard()
-          break
-        case HomeListType.SaveCard:
-          this.invokeSaveCard()
-          break
-        case HomeListType.ApplePay:
-          this.invokeApplePay()
-          break
-        case HomeListType.ApplePreAuth:
-          this.invokeApplePreAuth()
-          break
-        case HomeListType.GooglePay:
-          this.invokeGooglePay()
-          break
-        case HomeListType.GooglePreAuth:
-          this.invokeGooglePreAuth()
-          break
-        case HomeListType.PaymentMethods:
-          this.invokePaymentMethods()
-          break
-        case HomeListType.PreAuthMethods:
-          this.invokePreAuthMethods()
-          break
-      }
+    switch (item.type) {
+      case HomeListType.Payment:
+        this.invokePayment()
+        break
+      case HomeListType.PreAuth:
+        this.invokePreAuth()
+        break
+      case HomeListType.RegisterCard:
+        this.invokeRegisterCard()
+        break
+      case HomeListType.CheckCard:
+        this.invokeCheckCard()
+        break
+      case HomeListType.SaveCard:
+        this.invokeSaveCard()
+        break
+      case HomeListType.ApplePay:
+        this.invokeApplePay()
+        break
+      case HomeListType.ApplePreAuth:
+        this.invokeApplePreAuth()
+        break
+      case HomeListType.GooglePay:
+        this.invokeGooglePay()
+        break
+      case HomeListType.GooglePreAuth:
+        this.invokeGooglePreAuth()
+        break
+      case HomeListType.PaymentMethods:
+        this.invokePaymentMethods()
+        break
+      case HomeListType.PreAuthMethods:
+        this.invokePreAuthMethods()
+        break
     }
   }
 
