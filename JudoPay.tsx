@@ -7,6 +7,26 @@ import {
     JudoResponse
 } from './types/JudoTypes';
 
+ export {
+   JudoTransactionType,
+   JudoTransactionMode,
+   JudoPaymentMethod,
+   JudoCardNetwork,
+ } from './types/JudoTypes';
+
+ export {
+   JudoPaymentSummaryItemType,
+   JudoMerchantCapability,
+   JudoContactField,
+   JudoShippingType,
+   JudoReturnedInfo,
+ } from './types/JudoApplePayTypes';
+
+ export {
+   JudoAddressFormat,
+   JudoGooglePayEnvironment,
+ } from './types/JudoGooglePayTypes';
+
 class JudoPay {
 
     public isSandboxed: boolean = true;

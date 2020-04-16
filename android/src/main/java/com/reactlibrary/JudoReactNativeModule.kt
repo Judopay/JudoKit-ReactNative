@@ -16,6 +16,9 @@ import com.judopay.model.googlepay.GooglePayShippingAddressParameters
 import java.lang.Error
 import java.lang.Exception
 import kotlin.collections.ArrayList
+import com.readystatesoftware.chuck.ChuckInterceptor;
+import com.judopay.api.factory.JudoApiCallAdapterFactory;
+import com.judopay.api.factory.JudoApiServiceFactory;
 
 const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
 
@@ -60,6 +63,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
     init {
         context.addActivityEventListener(listener)
+        JudoApiServiceFactory.externalInterceptors = (listOf(ChuckInterceptor(context)))
     }
 
     // ------------------------------------------------------------
