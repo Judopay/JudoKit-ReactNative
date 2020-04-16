@@ -25,35 +25,14 @@
 #import "RNWrappers.h"
 #import "RNApplePayWrappers.h"
 #import <React/RCTConvert.h>
+#import "RNTypes.h"
 
 @implementation RNWrappers
 
 //---------------------------------------------------
-// MARK: - Bitmasks & Enums
-//---------------------------------------------------
-
-NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
-    IOSPaymentMethodCard = 1 << 0,
-    IOSPaymentMethodApplePay = 1 << 1,
-    IOSPaymentMethodIDEAL = 1 << 3,
-    IOSPaymentMethodAll = 1 << 4,
-};
-
-NS_OPTIONS(NSUInteger, IOSCardNetwork) {
-    IOSCardNetworkVisa = 1 << 0,
-    IOSCardNetworkMastercard = 1 << 1,
-    IOSCardNetworkMaestro = 1 << 2,
-    IOSCardNetworkAmex = 1 << 3,
-    IOSCardNetworkChinaUnionPay = 1 << 4,
-    IOSCardNetworkJCB = 1 << 5,
-    IOSCardNetworkDiscover = 1 << 6,
-    IOSCardNetworkDinersClub = 1 << 7,
-    IOSCardNetworkAll = 1 << 8,
-};
-
-//---------------------------------------------------
 // MARK: - Public methods
 //---------------------------------------------------
+
 
 + (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
     NSString *token = [RCTConvert NSString:properties[@"token"]];

@@ -9,12 +9,12 @@ import {
   TouchableHighlight,
   Text,
   View,
-  SafeAreaView,
-  Alert,
+  SafeAreaView
 } from 'react-native'
 
 import JudoPay, { JudoTransactionType, JudoTransactionMode } from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults';
+import { showMessage } from '../../helpers/utils';
 
 export default class Home extends Component {
 
@@ -68,7 +68,8 @@ export default class Home extends Component {
       const response = await judo.invokeTransaction(type, configuration);
       console.log(response)
     } catch (error) {
-      Alert.alert("Error", error.message)    }
+      showMessage("Error", error.message)  
+      }
   }
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
@@ -77,7 +78,8 @@ export default class Home extends Component {
       const response = await judo.invokeApplePay(mode, configuration);
       console.log(response)
     } catch (error) {
-      Alert.alert("Error", error.message)    }
+      showMessage("Error", error.message)  
+      }
   }
 
   async displayGooglePaySheet(mode: JudoTransactionMode) {
@@ -86,7 +88,8 @@ export default class Home extends Component {
       const response = await judo.invokeGooglePay(mode, configuration);
       console.log(response)
     } catch (error) {
-      Alert.alert("Error", error.message)    }
+      showMessage("Error", error.message) 
+       }
   }
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
@@ -95,7 +98,8 @@ export default class Home extends Component {
       const response = await judo.invokePaymentMethodScreen(mode, configuration);
       console.log(response)
     } catch (error) {
-      Alert.alert("Error", error.message)    }
+      showMessage("Error", error.message) 
+       }
   }
 
   handleListItemPressed(item: HomeListItem) {

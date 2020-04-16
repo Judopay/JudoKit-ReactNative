@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 *
 * @returns  nil if all propeties of the provided dictionary are of the correct type or the failure reason as a NSString
 */
-+ (nullable NSString *)isConfigurationValid:(NSDictionary *) properties;
++ (nullable NSString *)isConfigurationValid:(NSDictionary *)properties;
 
 /**
 * A method that checks if the provided dictionary with apple pay configurations has the righ propertiest type.
@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 *
 * @returns  nil if all propeties of the provided dictionary are of the correct type  or the failure reason as a NSString
 */
-+ (nullable NSString *)isApplePayConfigurationValid: (NSMutableDictionary *) properties;
++ (nullable NSString *)isApplePayConfigurationValid:(NSMutableDictionary *)properties;
 
 @end
 

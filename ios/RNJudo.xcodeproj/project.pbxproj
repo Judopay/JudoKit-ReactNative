@@ -33,6 +33,7 @@
 		52090E65244067FD00AE3352 /* RNWrappers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNWrappers.m; sourceTree = "<group>"; };
 		824F3B61244743ED005229E3 /* RNTypeValidation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNTypeValidation.h; sourceTree = "<group>"; };
 		824F3B62244743ED005229E3 /* RNTypeValidation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTypeValidation.m; sourceTree = "<group>"; };
+		82FF801E2448A9EE002A72CF /* RNTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTypes.h; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNJudo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNJudo.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNJudo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNJudo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,6 +60,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				82FF801E2448A9EE002A72CF /* RNTypes.h */,
 				824F3B61244743ED005229E3 /* RNTypeValidation.h */,
 				824F3B62244743ED005229E3 /* RNTypeValidation.m */,
 				52090E64244067FD00AE3352 /* RNWrappers.h */,

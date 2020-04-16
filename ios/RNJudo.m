@@ -46,7 +46,6 @@ RCT_REMAP_METHOD(invokeTransaction,
     JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
     TransactionType type = [RNWrappers transactionTypeFromProperties:properties];
     NSString* isConfigValid = [RNTypeValidation isConfigurationValid: properties];
-    if (!isConfigValid) {
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
         
         [judoKit invokeTransactionWithType:type
@@ -58,9 +57,7 @@ RCT_REMAP_METHOD(invokeTransaction,
             }
             resolve(response);
         }];
-    } else {
-        reject(@"JUDO_ERROR", isConfigValid, [NSError judoJudoIdMissingError]);
-    }
+    
 }
 
 RCT_REMAP_METHOD(invokeApplePay,
@@ -86,7 +83,7 @@ RCT_REMAP_METHOD(invokeApplePay,
         }];
         
     } else {
-        reject(@"JUDO_ERROR", isConfigValid, [NSError judoJudoIdMissingError]);
+        reject(@"JUDO_ERROR", isConfigValid, [NSError judoParameterError]);
     }
 }
 

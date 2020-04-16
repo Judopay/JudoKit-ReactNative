@@ -25,41 +25,9 @@
 #import "RNApplePayWrappers.h"
 #import "RNWrappers.h"
 #import <React/RCTConvert.h>
+#import "RNTypes.h"
 
 @implementation RNApplePayWrappers
-
-//---------------------------------------------------
-// MARK: - Bitmasks & Enums
-//---------------------------------------------------
-
-NS_OPTIONS(NSUInteger, IOSApplePayCapability) {
-    IOSApplePayCapability3DS = 1 << 0,
-    IOSApplePayCapabilityEMV = 1 << 1,
-    IOSApplePayCapabilityCredit = 1 << 2,
-    IOSApplePayCapabilityDebit = 1 << 3,
-    IOSApplePayCapabilityAll = 1 << 4,
-};
-
-NS_OPTIONS(NSUInteger, IOSAppleContactField) {
-    IOSAppleContactFieldPostalAddress = 1 << 0,
-    IOSAppleContactFieldPhone = 1 << 1,
-    IOSAppleContactFieldEmail = 1 << 2,
-    IOSAppleContactFieldName = 1 << 3,
-    IOSAppleContactFieldAll = 1 << 4,
-};
-
-NS_OPTIONS(NSUInteger, IOSAppleReturnedInfo) {
-    IOSAppleReturnedInfoBilling = 1 << 0,
-    IOSAppleReturnedInfoShipping = 1 << 1,
-    IOSAppleReturnedInfoAll = 1 << 2,
-};
-
-NS_ENUM(NSUInteger, IOSShippingType) {
-    IOSShippingTypeShipping,
-    IOSShippingTypeDelivery,
-    IOSShippingTypeStorePickup,
-    IOSShippingTypeServicePickup,
-};
 
 //---------------------------------------------------
 // MARK: - Public methods
