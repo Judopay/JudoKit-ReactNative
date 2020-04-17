@@ -6,7 +6,7 @@ import {
 const response: JudoResponse = {
   receiptId: "receiptId",
   yourPaymentReference: "paymentRef",
-  type: "string",
+  type: "payment",
   createdAt: "12345678",
   result: "response_result",
   message: "response_message",
