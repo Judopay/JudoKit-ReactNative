@@ -16,7 +16,7 @@ test('JudoPay after init has isSandboxed = true', () => {
   expect(judoPay.isSandboxed).toBe(true);
 });
 
-test('invokeTransaction test', async () => {
+test('invokeTransaction will return mocked JudoResponse', async () => {
   const judoPay = new JudoPay("token", "secret")
 
   const data = await judoPay.invokeTransaction(JudoTransactionType.Payment, configuration)
