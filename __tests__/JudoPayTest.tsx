@@ -1,13 +1,26 @@
-// @flow
 import 'react-native'
 import React from 'react'
-import JudoPay from '../JudoPay';
+import JudoPay from '../JudoPay'
+import configuration from './JudoTestDefaults'
+import {
+  NativeModules,
+} from 'react-native';
 
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer'
-
+import {
+    JudoTransactionType
+} from '../types/JudoTypes';
 
 test('JudoPay after init has isSandboxed = true', () => {
-  const judoPay = new JudoPay("ta", "atsh")
+  const judoPay = new JudoPay("token", "secret")
+
   expect(judoPay.isSandboxed).toBe(true);
 });
+
+test('invokeTransaction test', async () => {
+  const judoPay = new JudoPay("token", "secret")
+
+  const data = await judoPay.invokeTransaction(JudoTransactionType.Payment, configuration)
+
+  expect(data.amount).toEqual("s")
+  expect.assertions(1);
+})
