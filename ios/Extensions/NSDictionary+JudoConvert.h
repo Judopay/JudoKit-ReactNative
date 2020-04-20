@@ -1,6 +1,6 @@
 //
-//  RNTypeValidation.h
-//  RNJudo
+//  NSDictionary+JudoConvert.h
+//  RNJudopay
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
 //
@@ -26,25 +26,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTypeValidation : NSObject
+@interface NSDictionary (JudoConvert)
 
-/**
-* A method that checks if the provided dictionary with configurations has the right properties type.
-*
-* @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
-*
-* @returns  nil if all propeties of the provided dictionary are of the correct type or the failure reason as a NSString
-*/
-+ (nullable NSString *)isConfigurationValid:(NSDictionary *)properties;
+- (nonnull NSDictionary *)dictionaryForKey:(nonnull NSString *)key;
+- (nullable NSDictionary *)optionalDictionaryForKey:(nonnull NSString *)key;
 
-/**
-* A method that checks if the provided dictionary with apple pay configurations has the righ propertiest type.
-*
-* @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
-*
-* @returns  nil if all propeties of the provided dictionary are of the correct type  or the failure reason as a NSString
-*/
-+ (nullable NSString *)isApplePayConfigurationValid:(NSMutableDictionary *)properties;
+- (nonnull NSArray *)arrayForKey:(nonnull NSString *)key;
+- (nullable NSArray *)optionalArrayForKey:(nonnull NSString *)key;
+
+- (nonnull NSString *)stringForKey:(nonnull NSString *)key;
+- (nullable NSString *)optionalStringForKey:(nonnull NSString *)key;
+
+- (nonnull NSNumber *)numberForKey:(nonnull NSString *)key;
+- (nullable NSNumber *)optionalNumberForKey:(nonnull NSString *)key;
+
+- (nonnull NSNumber *)boolForKey:(nonnull NSString *)key;
+- (nullable NSNumber *)optionalBoolForKey:(nonnull NSString *)key;
+
+- (nonnull NSNumber *)intForKey:(nonnull NSString *)key;
+- (nullable NSNumber *)optionalIntForKey:(nonnull NSString *)key;
 
 @end
 

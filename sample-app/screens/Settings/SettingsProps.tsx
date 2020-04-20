@@ -16,7 +16,7 @@ export type SettingsListItem = {
     subtitle: string,
     type: SettingsPickType,
     value: any,
-    valueArray?: [string],
+    valueArray?: string[],
     pickItems?: SettingsPickArray
 }
 
