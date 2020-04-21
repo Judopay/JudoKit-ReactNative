@@ -19,47 +19,47 @@ import { showMessage } from '../../helpers/utils';
 export default class Home extends Component {
 
   async invokePayment() {
-    this.invokeTransaction(JudoTransactionType.Payment);
+    await this.invokeTransaction(JudoTransactionType.Payment);
   }
 
   async invokePreAuth() {
-    this.invokeTransaction(JudoTransactionType.PreAuth);
+    await this.invokeTransaction(JudoTransactionType.PreAuth);
   }
 
   async invokeRegisterCard() {
-    this.invokeTransaction(JudoTransactionType.RegisterCard);
+    await this.invokeTransaction(JudoTransactionType.RegisterCard);
   }
 
   async invokeCheckCard() {
-    this.invokeTransaction(JudoTransactionType.CheckCard);
+    await this.invokeTransaction(JudoTransactionType.CheckCard);
   }
 
   async invokeSaveCard() {
-    this.invokeTransaction(JudoTransactionType.SaveCard);
+    await this.invokeTransaction(JudoTransactionType.SaveCard);
   }
 
   async invokeApplePay() {
-    this.displayApplePaySheet(JudoTransactionMode.Payment);
+    await this.displayApplePaySheet(JudoTransactionMode.Payment);
   }
 
   async invokeApplePreAuth() {
-    this.displayApplePaySheet(JudoTransactionMode.PreAuth);
+    await this.displayApplePaySheet(JudoTransactionMode.PreAuth);
   }
 
   async invokeGooglePay() {
-    this.displayGooglePaySheet(JudoTransactionMode.Payment);
+    await this.displayGooglePaySheet(JudoTransactionMode.Payment);
   }
 
   async invokeGooglePreAuth() {
-    this.displayGooglePaySheet(JudoTransactionMode.PreAuth);
+    await this.displayGooglePaySheet(JudoTransactionMode.PreAuth);
   }
 
   async invokePaymentMethods() {
-    this.displayPaymentMethod(JudoTransactionMode.Payment);
+    await this.displayPaymentMethod(JudoTransactionMode.Payment);
   }
 
   async invokePreAuthMethods() {
-    this.displayPaymentMethod(JudoTransactionMode.PreAuth);
+    await this.displayPaymentMethod(JudoTransactionMode.PreAuth);
   }
 
   async invokeTransaction(type: JudoTransactionType) {
@@ -68,8 +68,8 @@ export default class Home extends Component {
       const response = await judo.invokeTransaction(type, configuration);
       console.log(response)
     } catch (error) {
-      showMessage("Error", error.message)  
-      }
+      await showMessage("Error", error.message)
+    }
   }
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
@@ -78,8 +78,8 @@ export default class Home extends Component {
       const response = await judo.invokeApplePay(mode, configuration);
       console.log(response)
     } catch (error) {
-      showMessage("Error", error.message)  
-      }
+      await showMessage("Error", error.message)
+    }
   }
 
   async displayGooglePaySheet(mode: JudoTransactionMode) {
@@ -88,8 +88,8 @@ export default class Home extends Component {
       const response = await judo.invokeGooglePay(mode, configuration);
       console.log(response)
     } catch (error) {
-      showMessage("Error", error.message) 
-       }
+      await showMessage("Error", error.message)
+    }
   }
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
@@ -98,8 +98,8 @@ export default class Home extends Component {
       const response = await judo.invokePaymentMethodScreen(mode, configuration);
       console.log(response)
     } catch (error) {
-      showMessage("Error", error.message) 
-       }
+      await showMessage("Error", error.message)
+    }
   }
 
   handleListItemPressed(item: HomeListItem) {

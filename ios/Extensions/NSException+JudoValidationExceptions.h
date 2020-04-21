@@ -1,6 +1,6 @@
 //
-//  RNApplePayWrappers.h
-//  JudoPay
+//  NSException+JudoValidationExceptions.h
+//  RNJudopay
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
 //
@@ -22,18 +22,16 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <JudoKitObjC/JudoKitObjC.h>
+#import <Foundation/Foundation.h>
 
-@interface RNApplePayWrappers : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-/**
- * A method that returns a configured JPApplePayConfiguration instance based on the passed dictionary parameters.
- * The JPApplePayConfiguration instance sets the required parameters for making Apple Pay transactions as well as customizing the payment flow
- *
- * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
- *
- * @returns a configured JPApplePayConfiguration instance
- */
-+ (JPApplePayConfiguration *)applePayConfigurationFromConfiguration:(NSDictionary *)configuration;
+@interface NSException (JudoValidationExceptions)
+
++ (nonnull NSException *)exceptionUndefinedConfigurationWithKey:(nonnull NSString *)key;
++ (nonnull NSException *)exceptionNilConfigurationWithKey:(nonnull NSString *)key;
++ (nonnull NSException *)exceptionUnexpectedClassOfConfigurationWithKey:(nonnull NSString *)key andClass:(Class)aClass;
 
 @end
+
+NS_ASSUME_NONNULL_END

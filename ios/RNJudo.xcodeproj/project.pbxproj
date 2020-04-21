@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		52090E6324405E8800AE3352 /* RNApplePayWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 52090E6224405E8800AE3352 /* RNApplePayWrappers.m */; };
-		52090E66244067FD00AE3352 /* RNWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 52090E65244067FD00AE3352 /* RNWrappers.m */; };
-		824F3B63244743ED005229E3 /* RNTypeValidation.m in Sources */ = {isa = PBXBuildFile; fileRef = 824F3B62244743ED005229E3 /* RNTypeValidation.m */; };
+		44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */; };
+		44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
+		44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907A244E491B009DF232 /* RNApplePayWrappers.m */; };
+		44B2907F244E491B009DF232 /* RNWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907B244E491B009DF232 /* RNWrappers.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNJudo.m */; };
 /* End PBXBuildFile section */
 
@@ -27,12 +28,14 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNJudo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNJudo.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		52090E6124405E8800AE3352 /* RNApplePayWrappers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNApplePayWrappers.h; sourceTree = "<group>"; };
-		52090E6224405E8800AE3352 /* RNApplePayWrappers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNApplePayWrappers.m; sourceTree = "<group>"; };
-		52090E64244067FD00AE3352 /* RNWrappers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNWrappers.h; sourceTree = "<group>"; };
-		52090E65244067FD00AE3352 /* RNWrappers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNWrappers.m; sourceTree = "<group>"; };
-		824F3B61244743ED005229E3 /* RNTypeValidation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNTypeValidation.h; sourceTree = "<group>"; };
-		824F3B62244743ED005229E3 /* RNTypeValidation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTypeValidation.m; sourceTree = "<group>"; };
+		44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSException+JudoValidationExceptions.m"; sourceTree = "<group>"; };
+		44B29074244E491A009DF232 /* NSDictionary+JudoConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JudoConvert.h"; sourceTree = "<group>"; };
+		44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JudoConvert.m"; sourceTree = "<group>"; };
+		44B29076244E491A009DF232 /* NSException+JudoValidationExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSException+JudoValidationExceptions.h"; sourceTree = "<group>"; };
+		44B29078244E491B009DF232 /* RNApplePayWrappers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNApplePayWrappers.h; sourceTree = "<group>"; };
+		44B29079244E491B009DF232 /* RNWrappers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNWrappers.h; sourceTree = "<group>"; };
+		44B2907A244E491B009DF232 /* RNApplePayWrappers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNApplePayWrappers.m; sourceTree = "<group>"; };
+		44B2907B244E491B009DF232 /* RNWrappers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNWrappers.m; sourceTree = "<group>"; };
 		82FF801E2448A9EE002A72CF /* RNTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTypes.h; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNJudo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNJudo.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNJudo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNJudo.m; sourceTree = "<group>"; };
@@ -57,16 +60,34 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		44B29072244E491A009DF232 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */,
+				44B29074244E491A009DF232 /* NSDictionary+JudoConvert.h */,
+				44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */,
+				44B29076244E491A009DF232 /* NSException+JudoValidationExceptions.h */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		44B29077244E491B009DF232 /* Wrappers */ = {
+			isa = PBXGroup;
+			children = (
+				44B29078244E491B009DF232 /* RNApplePayWrappers.h */,
+				44B29079244E491B009DF232 /* RNWrappers.h */,
+				44B2907A244E491B009DF232 /* RNApplePayWrappers.m */,
+				44B2907B244E491B009DF232 /* RNWrappers.m */,
+			);
+			path = Wrappers;
+			sourceTree = "<group>";
+		};
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				44B29072244E491A009DF232 /* Extensions */,
+				44B29077244E491B009DF232 /* Wrappers */,
 				82FF801E2448A9EE002A72CF /* RNTypes.h */,
-				824F3B61244743ED005229E3 /* RNTypeValidation.h */,
-				824F3B62244743ED005229E3 /* RNTypeValidation.m */,
-				52090E64244067FD00AE3352 /* RNWrappers.h */,
-				52090E65244067FD00AE3352 /* RNWrappers.m */,
-				52090E6124405E8800AE3352 /* RNApplePayWrappers.h */,
-				52090E6224405E8800AE3352 /* RNApplePayWrappers.m */,
 				B3E7B5881CC2AC0600A0062D /* RNJudo.h */,
 				B3E7B5891CC2AC0600A0062D /* RNJudo.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
@@ -130,10 +151,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44B2907F244E491B009DF232 /* RNWrappers.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */,
-				52090E6324405E8800AE3352 /* RNApplePayWrappers.m in Sources */,
-				824F3B63244743ED005229E3 /* RNTypeValidation.m in Sources */,
-				52090E66244067FD00AE3352 /* RNWrappers.m in Sources */,
+				44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */,
+				44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */,
+				44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

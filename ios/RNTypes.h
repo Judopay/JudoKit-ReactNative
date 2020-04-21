@@ -22,6 +22,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#define BitmaskContains(bitmask, value) (((bitmask) & (value)) == (value))
+
 typedef NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
     IOSPaymentMethodCard = 1 << 0,
     IOSPaymentMethodApplePay = 1 << 1,

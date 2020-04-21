@@ -22,13 +22,19 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#import <JudoKitObjC/JudoKitObjC.h>
+
 #import "RNJudo.h"
 #import "RNWrappers.h"
 #import "RNApplePayWrappers.h"
-#import "RNTypeValidation.h"
 
-#import <React/RCTConvert.h>
-#import <JudoKitObjC/JudoKitObjC.h>
+static NSString *kJudoPromiseRejectionCode = @"JUDO_ERROR";
+
+typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
+    JudoSDKInvocationTypeTransaction,
+    JudoSDKInvocationTypeApplePay,
+    JudoSDKInvocationTypePaymentMethods
+};
 
 @implementation RNJudo
 
@@ -42,69 +48,66 @@ RCT_REMAP_METHOD(invokeTransaction,
                  properties:(NSDictionary *)properties
                  invokePaymentWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
-    JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
-    TransactionType type = [RNWrappers transactionTypeFromProperties:properties];
-    NSString* isConfigValid = [RNTypeValidation isConfigurationValid: properties];
-        JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-        
-        [judoKit invokeTransactionWithType:type
-                             configuration:configuration
-                                completion:^(JPResponse *response, NSError *error) {
-            if (error) {
-                reject(@"JUDO_ERROR", @"Transaction failed",  error);
-                return;
-            }
-            resolve(response);
-        }];
-    
+    [self invokeSDKWithType:JudoSDKInvocationTypeTransaction withProperties:properties resolver:resolve andRejecter:reject];
 }
 
 RCT_REMAP_METHOD(invokeApplePay,
                  properties:(NSDictionary *)properties
                  invokeApplePayWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
-    JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
-    TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-    
-    NSString* isConfigValid = [RNTypeValidation isApplePayConfigurationValid: properties];
-    if (!isConfigValid) {
-        JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-        
-        [judoKit invokeApplePayWithMode:mode
-                          configuration:configuration
-                             completion:^(JPResponse *response, NSError *error) {
-            if (error) {
-                reject(@"JUDO_ERROR", @"Transaction failed", error);
-                return;
-            }
-            resolve(response);
-        }];
-        
-    } else {
-        reject(@"JUDO_ERROR", isConfigValid, [NSError judoParameterError]);
-    }
+    [self invokeSDKWithType:JudoSDKInvocationTypeApplePay withProperties:properties resolver:resolve andRejecter:reject];
 }
 
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  properties:(NSDictionary *)properties
                  invokePaymentMethodScreenWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
-    JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
-    TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-    
-    [judoKit invokePaymentMethodScreenWithMode:mode
-                                 configuration:configuration
-                                    completion:^(JPResponse *response, NSError *error) {
-        if (error) {
-            reject(@"JUDO_ERROR", @"Transaction failed", error);
-            return;
+    [self invokeSDKWithType:JudoSDKInvocationTypePaymentMethods withProperties:properties resolver:resolve andRejecter:reject];
+}
+
+- (void)invokeSDKWithType:(JudoSDKInvocationType)invocationType
+           withProperties:(NSDictionary *)properties
+                 resolver:(RCTPromiseResolveBlock)resolve
+              andRejecter:(RCTPromiseRejectBlock)reject {
+    @try {
+        JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
+        JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+        JudoCompletionBlock completion = ^(JPResponse *response, NSError *error) {
+            if (error) {
+                reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
+            } else {
+                resolve(response);
+            }
+        };
+
+        switch (invocationType) {
+            case JudoSDKInvocationTypeTransaction: {
+                TransactionType type = [RNWrappers transactionTypeFromProperties:properties];
+                [judoKit invokeTransactionWithType:type configuration:configuration completion:completion];
+                break;
+            }
+                
+            case JudoSDKInvocationTypeApplePay: {
+                TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
+                [judoKit invokeApplePayWithMode:mode configuration:configuration completion:completion];
+                break;
+            }
+                
+            case JudoSDKInvocationTypePaymentMethods: {
+                TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
+                [judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:completion];
+                break;
+            }
+                
+            default:
+                @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                               reason:@"Unsupported invocation type."
+                                             userInfo:nil];
         }
-        resolve(response);
-    }];
+    } @catch (NSException *exception) {
+        NSString *message = exception.reason;
+        reject(kJudoPromiseRejectionCode, message, [NSError judoParameterError]);
+    }
 }
 
 //----------------------------------------------
