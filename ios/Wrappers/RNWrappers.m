@@ -144,8 +144,8 @@
 
 + (JPReference *)referenceFromConfiguration:(NSDictionary *)configuration {
     NSDictionary *dictionary = [configuration dictionaryForKey:@"reference"];
-    NSString *consumerReference = [dictionary optionalStringForKey:@"consumerReference"];
-    NSString *paymentReference = [dictionary optionalStringForKey:@"paymentReference"];
+    NSString *consumerReference = [dictionary stringForKey:@"consumerReference"];
+    NSString *paymentReference = [dictionary stringForKey:@"paymentReference"];
     
     JPReference *reference = [[JPReference alloc] initWithConsumerReference:consumerReference
                                                            paymentReference:paymentReference];
@@ -193,8 +193,8 @@
         return uiConfiguration;
     }
     
-    NSNumber *isAVSEnabled = [dictionary optionalBoolForKey:@"isAVSEnabled"];
-    NSNumber *shouldDisplayAmount = [dictionary optionalBoolForKey:@"shouldDisplayAmount"];
+    NSNumber *isAVSEnabled = [dictionary boolForKey:@"isAVSEnabled"];
+    NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldDisplayAmount"];
     
     uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
     uiConfiguration.shouldDisplayAmount = shouldDisplayAmount.boolValue;

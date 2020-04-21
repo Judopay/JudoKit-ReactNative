@@ -1,6 +1,6 @@
-import {NativeModules} from 'react-native';
+import { NativeModules } from 'react-native';
 
-import {JudoConfiguration, JudoResponse, JudoTransactionMode, JudoTransactionType} from './types/JudoTypes';
+import { JudoConfiguration, JudoResponse, JudoTransactionMode, JudoTransactionType } from './types/JudoTypes';
 
 class JudoPay {
 
