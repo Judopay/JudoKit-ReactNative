@@ -360,7 +360,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   JudoKitObjC:
-    :commit: c16ee5c9669baed3959c2eb36a3a0e3c35eaf0d7
+    :commit: 158158b5052bc64b88296ca0149977171a1ac5eb
     :git: "git@github.com:Judopay/JudoKitObjC.git"
 
 SPEC CHECKSUMS:
@@ -372,7 +372,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  JudoKitObjC: b8f131c987e2fb23c51a637f336da20f9db6e3db
+  JudoKitObjC: fc659a2d67db3ef22b18ef4014fb9005531bc048
   PayCardsRecognizer: 2e4d1b2fdd5f1528fb56064a91e1d58a1af7a2db
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320

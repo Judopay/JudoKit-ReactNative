@@ -24,42 +24,10 @@
 
 #import "RNApplePayWrappers.h"
 #import "RNWrappers.h"
-#import <React/RCTConvert.h>
+#import "RNTypes.h"
+#import "NSDictionary+JudoConvert.h"
 
 @implementation RNApplePayWrappers
-
-//---------------------------------------------------
-// MARK: - Bitmasks & Enums
-//---------------------------------------------------
-
-NS_OPTIONS(NSUInteger, IOSApplePayCapability) {
-    IOSApplePayCapability3DS = 1 << 0,
-    IOSApplePayCapabilityEMV = 1 << 1,
-    IOSApplePayCapabilityCredit = 1 << 2,
-    IOSApplePayCapabilityDebit = 1 << 3,
-    IOSApplePayCapabilityAll = 1 << 4,
-};
-
-NS_OPTIONS(NSUInteger, IOSAppleContactField) {
-    IOSAppleContactFieldPostalAddress = 1 << 0,
-    IOSAppleContactFieldPhone = 1 << 1,
-    IOSAppleContactFieldEmail = 1 << 2,
-    IOSAppleContactFieldName = 1 << 3,
-    IOSAppleContactFieldAll = 1 << 4,
-};
-
-NS_OPTIONS(NSUInteger, IOSAppleReturnedInfo) {
-    IOSAppleReturnedInfoBilling = 1 << 0,
-    IOSAppleReturnedInfoShipping = 1 << 1,
-    IOSAppleReturnedInfoAll = 1 << 2,
-};
-
-NS_ENUM(NSUInteger, IOSShippingType) {
-    IOSShippingTypeShipping,
-    IOSShippingTypeDelivery,
-    IOSShippingTypeStorePickup,
-    IOSShippingTypeServicePickup,
-};
 
 //---------------------------------------------------
 // MARK: - Public methods
@@ -67,31 +35,28 @@ NS_ENUM(NSUInteger, IOSShippingType) {
 
 + (JPApplePayConfiguration *)applePayConfigurationFromConfiguration:(NSDictionary *)configuration {
     
-    NSDictionary *appleConfigurationDict = configuration[@"applePayConfiguration"];
+    NSDictionary *dictionary = [configuration dictionaryForKey:@"applePayConfiguration"];
     
-    NSString *merchantId = appleConfigurationDict[@"merchantId"];
-    NSString *currency = configuration[@"amount"][@"currency"];
-    NSString *countryCode = appleConfigurationDict[@"countryCode"];
-    
-    NSArray *paymentSummaryItems = [RNApplePayWrappers summaryItemsFromAppleConfiguration:appleConfigurationDict];
+    NSString *merchantId = [dictionary stringForKey:@"merchantId"];
+    NSString *currency = [[configuration dictionaryForKey:@"amount"] stringForKey:@"currency"];
+    NSString *countryCode = [dictionary stringForKey:@"countryCode"];
+    NSNumber *billingFieldNumber = [dictionary numberForKey:@"requiredBillingContactFields"];
+    NSNumber *shippingFieldNumber = [dictionary numberForKey:@"requiredShippingContactFields"];
+
+    NSArray *paymentSummaryItems = [RNApplePayWrappers summaryItemsFromAppleConfiguration:dictionary];
     
     JPApplePayConfiguration *appleConfiguration = [[JPApplePayConfiguration alloc] initWithMerchantId:merchantId
                                                                                              currency:currency
                                                                                           countryCode:countryCode
                                                                                   paymentSummaryItems:paymentSummaryItems];
     
-    appleConfiguration.merchantCapabilities = [RNApplePayWrappers merchantCapabilitiesFromAppleConfiguration:appleConfigurationDict];
+    appleConfiguration.merchantCapabilities = [RNApplePayWrappers merchantCapabilitiesFromAppleConfiguration:dictionary];
     appleConfiguration.supportedCardNetworks = [RNWrappers cardNetworksFromConfiguration:configuration];
-    appleConfiguration.shippingMethods = [RNApplePayWrappers shippingMethodsFromAppleConfiguration:appleConfigurationDict];
-    appleConfiguration.shippingType = [RNApplePayWrappers shippingTypeFromDictionary:appleConfigurationDict];
-    
-    NSNumber *billingFieldNumber = appleConfigurationDict[@"requiredBillingContactFields"];
+    appleConfiguration.shippingMethods = [RNApplePayWrappers shippingMethodsFromAppleConfiguration:dictionary];
+    appleConfiguration.shippingType = [RNApplePayWrappers shippingTypeFromDictionary:dictionary];
     appleConfiguration.requiredBillingContactFields = [RNApplePayWrappers contactFieldsFromContactFieldValue:billingFieldNumber.intValue];
-    
-    NSNumber *shippingFieldNumber = appleConfigurationDict[@"requiredShippingContactFields"];
     appleConfiguration.requiredShippingContactFields = [RNApplePayWrappers contactFieldsFromContactFieldValue:shippingFieldNumber.intValue];
-    
-    appleConfiguration.returnedContactInfo = [RNApplePayWrappers returnedInfoFromAppleConfiguration:appleConfigurationDict];
+    appleConfiguration.returnedContactInfo = [RNApplePayWrappers returnedInfoFromAppleConfiguration:dictionary];
     
     return appleConfiguration;
 }
@@ -102,7 +67,7 @@ NS_ENUM(NSUInteger, IOSShippingType) {
 
 + (NSArray<JPPaymentSummaryItem *> *)summaryItemsFromAppleConfiguration:(NSDictionary *)appleConfiguration {
     
-    NSArray *summaryItemsArray = appleConfiguration[@"paymentSummaryItems"];
+    NSArray *summaryItemsArray = [appleConfiguration arrayForKey:@"paymentSummaryItems"];
     NSMutableArray<JPPaymentSummaryItem *> *summaryItems = [NSMutableArray new];
     
     for (NSDictionary *summaryItemDict in summaryItemsArray) {
@@ -114,38 +79,44 @@ NS_ENUM(NSUInteger, IOSShippingType) {
 }
 
 + (JPPaymentSummaryItem *)summaryItemFromDictionary:(NSDictionary *)dictionary {
-    NSString *label = dictionary[@"label"];
-    NSString *amountString = dictionary[@"amount"];
-    NSDecimalNumber *amount = [NSDecimalNumber decimalNumberWithString:amountString];
-    NSNumber *type = dictionary[@"type"];
     
-    return [JPPaymentSummaryItem itemWithLabel:label
-                                        amount:amount
-                                          type:type.intValue];
+    NSString *label = [dictionary stringForKey:@"label"];
+    NSString *amountString = [dictionary stringForKey:@"amount"];
+    NSNumber *type = [dictionary optionalNumberForKey:@"type"];
+
+    NSDecimalNumber *amount = [NSDecimalNumber decimalNumberWithString:amountString];
+    
+    if (!type) {
+        return [JPPaymentSummaryItem itemWithLabel:label amount:amount];
+    }
+    
+    return [JPPaymentSummaryItem itemWithLabel:label amount:amount type:type.intValue];
 }
 
 + (MerchantCapability)merchantCapabilitiesFromAppleConfiguration:(NSDictionary *)appleConfiguration {
-    NSNumber *selectedCapabilitiesNumber = appleConfiguration[@"merchantCapabilities"];
-    int selectedCapabilitiesValue = selectedCapabilitiesNumber.intValue;
-    MerchantCapability capabilities = 0;
     
-    if (selectedCapabilitiesValue & IOSApplePayCapabilityAll) {
+    NSNumber *selectedCapabilitiesNumber = [appleConfiguration numberForKey:@"merchantCapabilities"];
+    int bitmask = selectedCapabilitiesNumber.intValue;
+        
+    if (BitmaskContains(bitmask, IOSApplePayCapabilityAll)) {
         return MerchantCapability3DS | MerchantCapabilityEMV | MerchantCapabilityCredit | MerchantCapabilityDebit;
     }
     
-    if (selectedCapabilitiesValue & IOSApplePayCapability3DS) {
+    MerchantCapability capabilities = 0;
+
+    if (BitmaskContains(bitmask, IOSApplePayCapability3DS)) {
         capabilities |= MerchantCapability3DS;
     }
     
-    if (selectedCapabilitiesValue & IOSApplePayCapabilityEMV) {
+    if (BitmaskContains(bitmask, IOSApplePayCapabilityEMV)) {
         capabilities |= MerchantCapabilityEMV;
     }
     
-    if (selectedCapabilitiesValue & IOSApplePayCapabilityCredit) {
+    if (BitmaskContains(bitmask, IOSApplePayCapabilityCredit)) {
         capabilities |= MerchantCapabilityCredit;
     }
     
-    if (selectedCapabilitiesValue & IOSApplePayCapabilityDebit) {
+    if (BitmaskContains(bitmask, IOSApplePayCapabilityDebit)) {
         capabilities |= MerchantCapabilityDebit;
     }
     
@@ -153,7 +124,8 @@ NS_ENUM(NSUInteger, IOSShippingType) {
 }
 
 + (NSArray<PaymentShippingMethod *> *)shippingMethodsFromAppleConfiguration:(NSDictionary *)appleConfiguration {
-    NSArray *shippingMethodsArray = appleConfiguration[@"shippingMethods"];
+    
+    NSArray *shippingMethodsArray = [appleConfiguration optionalArrayForKey:@"shippingMethods"];
     NSMutableArray *mappedShippingMethods = [NSMutableArray new];
     
     for (NSDictionary *shippingMethodDict in shippingMethodsArray) {
@@ -166,11 +138,11 @@ NS_ENUM(NSUInteger, IOSShippingType) {
 
 + (PaymentShippingMethod *)shippingMethodFromDictionary:(NSDictionary *)dictionary {
     
-    NSString *identifier = dictionary[@"identifier"];
-    NSString *detail = dictionary[@"detail"];
-    NSString *label = dictionary[@"label"];
-    NSString *amountString = dictionary[@"amount"];
-    NSNumber *typeNumber = dictionary[@"type"];
+    NSString *identifier = [dictionary stringForKey:@"identifier"];
+    NSString *detail = [dictionary stringForKey:@"detail"];
+    NSString *label = [dictionary stringForKey:@"label"];
+    NSString *amountString = [dictionary stringForKey:@"amount"];
+    NSNumber *typeNumber = [dictionary numberForKey:@"type"];
     
     return [[PaymentShippingMethod alloc] initWithIdentifier:identifier
                                                       detail:detail
@@ -180,10 +152,10 @@ NS_ENUM(NSUInteger, IOSShippingType) {
 }
 
 + (PaymentShippingType)shippingTypeFromDictionary:(NSDictionary *)dictionary {
-    NSNumber *shippingTypeNumber = dictionary[@"shippingType"];
-    enum IOSShippingType shippingType = shippingTypeNumber.intValue;
     
-    switch (shippingType) {
+    NSNumber *shippingTypeNumber = [dictionary numberForKey:@"shippingType"];
+    
+    switch (shippingTypeNumber.intValue) {
         case IOSShippingTypeDelivery:
             return ShippingTypeDelivery;
         case IOSShippingTypeShipping:
@@ -192,29 +164,34 @@ NS_ENUM(NSUInteger, IOSShippingType) {
             return ShippingTypeStorePickup;
         case IOSShippingTypeServicePickup:
             return ShippingTypeServicePickup;
+        default:
+            @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                           reason:@"Invalid shippingType provided."
+                                         userInfo:nil];
     }
 }
 
-+ (ContactField)contactFieldsFromContactFieldValue:(int)contactFieldValue {
-    ContactField contactFields = 0;
++ (ContactField)contactFieldsFromContactFieldValue:(int)bitmask {
     
-    if (contactFieldValue & IOSAppleContactFieldAll) {
+    ContactField contactFields = ContactFieldNone;
+    
+    if (BitmaskContains(bitmask, IOSAppleContactFieldAll)) {
         return ContactFieldAll;
     }
     
-    if (contactFieldValue & IOSAppleContactFieldPostalAddress) {
+    if (BitmaskContains(bitmask, IOSAppleContactFieldPostalAddress)) {
         contactFields |= ContactFieldPostalAddress;
     }
     
-    if (contactFieldValue & IOSAppleContactFieldEmail) {
+    if (BitmaskContains(bitmask, IOSAppleContactFieldEmail)) {
         contactFields |= ContactFieldEmail;
     }
     
-    if (contactFieldValue & IOSAppleContactFieldName) {
+    if (BitmaskContains(bitmask, IOSAppleContactFieldName)) {
         contactFields |= ContactFieldName;
     }
     
-    if (contactFieldValue & IOSAppleContactFieldPhone) {
+    if (BitmaskContains(bitmask, IOSAppleContactFieldPhone)) {
         contactFields |= ContactFieldPhone;
     }
     
@@ -223,19 +200,20 @@ NS_ENUM(NSUInteger, IOSShippingType) {
 
 + (ReturnedInfo)returnedInfoFromAppleConfiguration:(NSDictionary *)appleConfiguration {
     
-    ReturnedInfo returnedInfo = 0;
-    NSNumber *returnedInfoNumber = appleConfiguration[@"returnedInfo"];
-    int returnedInfoValue = returnedInfoNumber.intValue;
+    NSNumber *returnedInfoNumber = [appleConfiguration numberForKey:@"returnedInfo"];
+    int bitmask = returnedInfoNumber.intValue;
     
-    if (returnedInfoValue & IOSAppleReturnedInfoAll) {
+    if (BitmaskContains(bitmask, IOSAppleReturnedInfoAll)) {
         return ReturnedInfoAll;
     }
     
-    if (returnedInfoValue & IOSAppleReturnedInfoBilling) {
+    ReturnedInfo returnedInfo = ReturnedInfoNone;
+
+    if (BitmaskContains(bitmask, IOSAppleReturnedInfoBilling)) {
         returnedInfo |= ReturnedInfoBillingContacts;
     }
     
-    if (returnedInfoValue & IOSAppleReturnedInfoShipping) {
+    if (BitmaskContains(bitmask, IOSAppleReturnedInfoShipping)) {
         returnedInfo |= ReturnedInfoShippingContacts;
     }
     

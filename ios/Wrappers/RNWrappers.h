@@ -71,7 +71,7 @@
  * A method that returns the correct CardNetwork values based on the passed dictionary parameters.
  * CardNetwork is a bitmask that allows selection of multiple card networks. Once set, only these networks would be accepted.
  *
- * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
+ * @param configuration - an NSDictionary that contains the complete configuration properties set by the merchant
  *
  * @returns a configured CardNetwork instance
  */

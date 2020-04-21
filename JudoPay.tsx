@@ -1,11 +1,6 @@
 import { NativeModules } from 'react-native';
 
-import {
-    JudoTransactionType,
-    JudoTransactionMode,
-    JudoConfiguration,
-    JudoResponse
-} from './types/JudoTypes';
+import { JudoConfiguration, JudoResponse, JudoTransactionMode, JudoTransactionType } from './types/JudoTypes';
 
  export {
    JudoTransactionType,
@@ -31,8 +26,8 @@ class JudoPay {
 
     public isSandboxed: boolean = true;
 
-    private token: string;
-    private secret: string;
+    private readonly token: string;
+    private readonly secret: string;
 
     constructor(token: string, secret: string) {
         this.token = token;
@@ -43,54 +38,38 @@ class JudoPay {
         type: JudoTransactionType,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-
         const params = this.generateTransactionTypeParameters(type, configuration);
-        const judoPay = NativeModules.RNJudo;
-
-        const response = await judoPay.invokeTransaction(params);
-        return response;
+        return await NativeModules.RNJudo.invokeTransaction(params);
     }
 
     public async invokeApplePay(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-
         const params = this.generateTransactionModeParameters(mode, configuration);
-        const judoPay = NativeModules.RNJudo;
-
-        const response = await judoPay.invokeApplePay(params);
-        return response;
+        return await NativeModules.RNJudo.invokeApplePay(params);
     }
 
     public async invokeGooglePay(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-
         const params = this.generateTransactionModeParameters(mode, configuration);
-        const judoPay = NativeModules.RNJudo;
-
-        const response = await judoPay.invokeGooglePay(params);
-        return response;
+        return await NativeModules.RNJudo.invokeGooglePay(params);
     }
 
     public async invokePaymentMethodScreen(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-
         const params = this.generateTransactionModeParameters(mode, configuration);
-        const judoPay = NativeModules.RNJudo;
-
-        const response = await judoPay.invokePaymentMethodScreen(params);
-        return response;
+        return await NativeModules.RNJudo.invokePaymentMethodScreen(params);
     }
 
-    private generateTransactionTypeParameters(
+    private generateTransactionTypeParameters = (
         type: JudoTransactionType,
         configuration: JudoConfiguration
-    ): Record<string, any> {
+    ): Record<string, any> => {
         return {
             'token': this.token,
             'secret': this.secret,
@@ -100,10 +79,10 @@ class JudoPay {
         }
     }
 
-    private generateTransactionModeParameters(
+    private generateTransactionModeParameters = (
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
-    ): any {
+    ): Record<string, any> => {
         return {
             'token': this.token,
             'secret': this.secret,

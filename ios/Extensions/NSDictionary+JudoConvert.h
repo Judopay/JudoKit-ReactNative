@@ -1,6 +1,6 @@
 //
-//  RNApplePayWrappers.h
-//  JudoPay
+//  NSDictionary+JudoConvert.h
+//  RNJudopay
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
 //
@@ -22,18 +22,30 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <JudoKitObjC/JudoKitObjC.h>
+#import <Foundation/Foundation.h>
 
-@interface RNApplePayWrappers : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-/**
- * A method that returns a configured JPApplePayConfiguration instance based on the passed dictionary parameters.
- * The JPApplePayConfiguration instance sets the required parameters for making Apple Pay transactions as well as customizing the payment flow
- *
- * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
- *
- * @returns a configured JPApplePayConfiguration instance
- */
-+ (JPApplePayConfiguration *)applePayConfigurationFromConfiguration:(NSDictionary *)configuration;
+@interface NSDictionary (JudoConvert)
+
+- (nonnull NSDictionary *)dictionaryForKey:(nonnull NSString *)key;
+- (nullable NSDictionary *)optionalDictionaryForKey:(nonnull NSString *)key;
+
+- (nonnull NSArray *)arrayForKey:(nonnull NSString *)key;
+- (nullable NSArray *)optionalArrayForKey:(nonnull NSString *)key;
+
+- (nonnull NSString *)stringForKey:(nonnull NSString *)key;
+- (nullable NSString *)optionalStringForKey:(nonnull NSString *)key;
+
+- (nonnull NSNumber *)numberForKey:(nonnull NSString *)key;
+- (nullable NSNumber *)optionalNumberForKey:(nonnull NSString *)key;
+
+- (nonnull NSNumber *)boolForKey:(nonnull NSString *)key;
+- (nullable NSNumber *)optionalBoolForKey:(nonnull NSString *)key;
+
+- (nonnull NSNumber *)intForKey:(nonnull NSString *)key;
+- (nullable NSNumber *)optionalIntForKey:(nonnull NSString *)key;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -24,41 +24,19 @@
 
 #import "RNWrappers.h"
 #import "RNApplePayWrappers.h"
-#import <React/RCTConvert.h>
+#import "RNTypes.h"
+#import "NSDictionary+JudoConvert.h"
 
 @implementation RNWrappers
-
-//---------------------------------------------------
-// MARK: - Bitmasks & Enums
-//---------------------------------------------------
-
-NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
-    IOSPaymentMethodCard = 1 << 0,
-    IOSPaymentMethodApplePay = 1 << 1,
-    IOSPaymentMethodIDEAL = 1 << 3,
-    IOSPaymentMethodAll = 1 << 4,
-};
-
-NS_OPTIONS(NSUInteger, IOSCardNetwork) {
-    IOSCardNetworkVisa = 1 << 0,
-    IOSCardNetworkMastercard = 1 << 1,
-    IOSCardNetworkMaestro = 1 << 2,
-    IOSCardNetworkAmex = 1 << 3,
-    IOSCardNetworkChinaUnionPay = 1 << 4,
-    IOSCardNetworkJCB = 1 << 5,
-    IOSCardNetworkDiscover = 1 << 6,
-    IOSCardNetworkDinersClub = 1 << 7,
-    IOSCardNetworkAll = 1 << 8,
-};
 
 //---------------------------------------------------
 // MARK: - Public methods
 //---------------------------------------------------
 
 + (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
-    NSString *token = [RCTConvert NSString:properties[@"token"]];
-    NSString *secret = [RCTConvert NSString:properties[@"secret"]];
-    BOOL isSandboxed = [RCTConvert BOOL:properties[@"sandboxed"]];
+    NSString *token = [properties stringForKey:@"token"];
+    NSString *secret = [properties stringForKey:@"secret"];
+    BOOL isSandboxed = [properties boolForKey:@"sandboxed"];
     
     JudoKit *judoKit = [[JudoKit alloc] initWithToken:token secret:secret];
     judoKit.isSandboxed = isSandboxed;
@@ -67,8 +45,7 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
 }
 
 + (TransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
-    
-    int intType = [RCTConvert int:properties[@"transactionType"]];
+    int type = [properties intForKey:@"transactionType"].intValue;
     
     NSArray<NSNumber *> *availableTypes = @[
         @(TransactionTypePayment),
@@ -78,19 +55,19 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
         @(TransactionTypeSaveCard)
     ];
     
-    return availableTypes[intType].intValue;
+    return availableTypes[type].intValue;
 }
 
 + (TransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
-    int intType = [RCTConvert int:properties[@"transactionMode"]];
+    int intType = [properties intForKey:@"transactionMode"].intValue;
     return intType == 0 ? TransactionModePayment : TransactionModePreAuth;
 }
 
 + (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
     
-    NSDictionary *configurationDict = properties[@"configuration"];
+    NSDictionary *configurationDict = [properties dictionaryForKey:@"configuration"];
     
-    NSString *judoId = [RCTConvert NSString:configurationDict[@"judoId"]];
+    NSString *judoId = [configurationDict stringForKey:@"judoId"];
     JPAmount *amount = [RNWrappers amountFromConfiguration:configurationDict];
     JPReference *reference = [RNWrappers referenceFromConfiguration:configurationDict];
     
@@ -98,7 +75,7 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
                                                                       amount:amount
                                                                    reference:reference];
     
-    configuration.siteId = [RCTConvert NSString:configurationDict[@"siteId"]];
+    configuration.siteId = [configurationDict optionalStringForKey:@"siteId"];
     configuration.uiConfiguration = [RNWrappers uiConfigurationFromConfiguration:configurationDict];
     configuration.supportedCardNetworks = [RNWrappers cardNetworksFromConfiguration:configurationDict];
     configuration.primaryAccountDetails = [RNWrappers accountDetailsFromConfiguration:configurationDict];
@@ -110,48 +87,48 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
 }
 
 + (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration {
+        
+    int bitmask = [configuration intForKey:@"supportedCardNetworks"].intValue;
     
-    CardNetwork supportedCardNetworks = CardNetworkUnknown;
-    
-    int supportedNetworksBitmask = [RCTConvert int:configuration[@"supportedCardNetworks"]];
-    
-    if (supportedNetworksBitmask & IOSCardNetworkAll) {
+    if (BitmaskContains(bitmask, IOSCardNetworkAll)) {
         return CardNetworksAll;
     }
     
-    if (supportedNetworksBitmask & IOSCardNetworkVisa) {
-        supportedCardNetworks |= CardNetworkVisa;
+    CardNetwork networks = CardNetworkUnknown;
+
+    if (BitmaskContains(bitmask, IOSCardNetworkVisa)) {
+        networks |= CardNetworkVisa;
     }
     
-    if (supportedNetworksBitmask & IOSCardNetworkMastercard) {
-        supportedCardNetworks |= CardNetworkMasterCard;
+    if (BitmaskContains(bitmask, IOSCardNetworkMastercard)) {
+        networks |= CardNetworkMasterCard;
     }
     
-    if (supportedNetworksBitmask & IOSCardNetworkMaestro) {
-        supportedCardNetworks |= CardNetworkMaestro;
+    if (BitmaskContains(bitmask, IOSCardNetworkMaestro)) {
+        networks |= CardNetworkMaestro;
     }
     
-    if (supportedNetworksBitmask & IOSCardNetworkAmex) {
-        supportedCardNetworks |= CardNetworkAMEX;
+    if (BitmaskContains(bitmask, IOSCardNetworkAmex)) {
+        networks |= CardNetworkAMEX;
     }
     
-    if (supportedNetworksBitmask & IOSCardNetworkChinaUnionPay) {
-        supportedCardNetworks |= CardNetworkChinaUnionPay;
+    if (BitmaskContains(bitmask, IOSCardNetworkChinaUnionPay)) {
+        networks |= CardNetworkChinaUnionPay;
     }
     
-    if (supportedNetworksBitmask & IOSCardNetworkJCB) {
-        supportedCardNetworks |= CardNetworkJCB;
+    if (BitmaskContains(bitmask, IOSCardNetworkJCB)) {
+        networks |= CardNetworkJCB;
     }
     
-    if (supportedNetworksBitmask & IOSCardNetworkDiscover) {
-        supportedCardNetworks |= CardNetworkDiscover;
+    if (BitmaskContains(bitmask, IOSCardNetworkDiscover)) {
+        networks |= CardNetworkDiscover;
     }
     
-    if (supportedNetworksBitmask & IOSCardNetworkDinersClub) {
-        supportedCardNetworks |= CardNetworkDinersClub;
+    if (BitmaskContains(bitmask, IOSCardNetworkDinersClub)) {
+        networks |= CardNetworkDinersClub;
     }
     
-    return supportedCardNetworks;
+    return networks;
 }
 
 //---------------------------------------------------
@@ -159,43 +136,42 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
 //---------------------------------------------------
 
 + (JPAmount *)amountFromConfiguration:(NSDictionary *)configuration {
-    NSDictionary *amountDictionary = [RCTConvert NSDictionary:configuration[@"amount"]];
-    NSString *amount = amountDictionary[@"value"];
-    NSString *currency = amountDictionary[@"currency"];
+    NSDictionary *dictionary = [configuration dictionaryForKey:@"amount"];
+    NSString *amount = [dictionary stringForKey:@"value"];
+    NSString *currency = [dictionary stringForKey:@"currency"];
     return [JPAmount amount:amount currency:currency];
 }
 
 + (JPReference *)referenceFromConfiguration:(NSDictionary *)configuration {
-    NSDictionary *referenceDictionary = [RCTConvert NSDictionary:configuration[@"reference"]];
-    NSString *consumerReference = referenceDictionary[@"consumerReference"];
-    NSString *paymentReference = referenceDictionary[@"paymentReference"];
-    NSDictionary *metadata = referenceDictionary[@"metadata"];
+    NSDictionary *dictionary = [configuration dictionaryForKey:@"reference"];
+    NSString *consumerReference = [dictionary stringForKey:@"consumerReference"];
+    NSString *paymentReference = [dictionary stringForKey:@"paymentReference"];
     
     JPReference *reference = [[JPReference alloc] initWithConsumerReference:consumerReference
                                                            paymentReference:paymentReference];
-    reference.metaData = metadata;
+    
+    reference.metaData = [dictionary optionalDictionaryForKey:@"metadata"];
     return reference;
 }
 
 + (NSArray<JPPaymentMethod *> *)paymentMethodsFromConfiguration:(NSDictionary *)configuration {
+    int bitmask = [configuration intForKey:@"paymentMethods"].intValue;
     
-    NSMutableArray<JPPaymentMethod *> *paymentMethods = [NSMutableArray new];
-    
-    int paymentMethodsBitmask = [RCTConvert int:configuration[@"paymentMethods"]];
-    
-    if (paymentMethodsBitmask & IOSPaymentMethodAll) {
+    if (BitmaskContains(bitmask, IOSPaymentMethodAll)) {
         return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal];
     }
     
-    if (paymentMethodsBitmask & IOSPaymentMethodCard) {
+    NSMutableArray<JPPaymentMethod *> *paymentMethods = [NSMutableArray new];
+
+    if (BitmaskContains(bitmask, IOSPaymentMethodCard)) {
         [paymentMethods addObject:JPPaymentMethod.card];
     }
     
-    if (paymentMethodsBitmask & IOSPaymentMethodApplePay) {
+    if (BitmaskContains(bitmask, IOSPaymentMethodApplePay)) {
         [paymentMethods addObject:JPPaymentMethod.applePay];
     }
     
-    if (paymentMethodsBitmask & IOSPaymentMethodIDEAL) {
+    if (BitmaskContains(bitmask, IOSPaymentMethodIDEAL)) {
         [paymentMethods addObject:JPPaymentMethod.iDeal];
     }
     
@@ -203,17 +179,27 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
 }
 
 + (JPAddress *)cardAddressFromConfiguration:(NSDictionary *)configuration {
-    NSDictionary *addressDictionary = configuration[@"cardAddress"];
+    NSDictionary *addressDictionary = [configuration optionalDictionaryForKey:@"cardAddress"];
     return [[JPAddress alloc] initWithDictionary:addressDictionary];
 }
 
 + (JPUIConfiguration *)uiConfigurationFromConfiguration:(NSDictionary *)configuration {
-    NSDictionary *uiConfigurationDictionary = configuration[@"uiConfiguration"];
     JPUIConfiguration *uiConfiguration = [JPUIConfiguration new];
+
+    NSDictionary *dictionary = [configuration optionalDictionaryForKey:@"uiConfiguration"];
     
-    uiConfiguration.isAVSEnabled = [RCTConvert BOOL:uiConfigurationDictionary[@"isAVSEnabled"]];
-    uiConfiguration.shouldDisplayAmount = [RCTConvert BOOL:uiConfigurationDictionary[@"shouldDisplayAmount"]];
-    uiConfiguration.theme = [self themeFromUIConfiguration:uiConfigurationDictionary];
+    if (!dictionary) {
+        // Keep the default configurations
+        return uiConfiguration;
+    }
+    
+    NSNumber *isAVSEnabled = [dictionary boolForKey:@"isAVSEnabled"];
+    NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldDisplayAmount"];
+    
+    uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
+    uiConfiguration.shouldDisplayAmount = shouldDisplayAmount.boolValue;
+    
+    uiConfiguration.theme = [self themeFromUIConfiguration:dictionary];
     
     return uiConfiguration;
 }
@@ -224,7 +210,7 @@ NS_OPTIONS(NSUInteger, IOSCardNetwork) {
 }
 
 + (JPPrimaryAccountDetails *)accountDetailsFromConfiguration:(NSDictionary *)configuration {
-    NSDictionary *accountDetailsDictionary = configuration[@"primaryAccountDetails"];
+    NSDictionary *accountDetailsDictionary = [configuration optionalDictionaryForKey:@"primaryAccountDetails"];
     return [JPPrimaryAccountDetails detailsFromDictionary:accountDetailsDictionary];
 }
 
