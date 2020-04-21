@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { storageKey, store } from '../../helpers/AsyncStore'
-import Dialog from "react-native-dialog"
+import Dialog from 'react-native-dialog'
 import AsyncStorage from '@react-native-community/async-storage'
 import Spinner from 'react-native-loading-spinner-overlay'
 
@@ -84,7 +84,7 @@ export default class Settings extends Component {
   * Action handlers
   */
   handleDialogTextInputChange(text: string) {
-    var item = this.state.settingSelected
+    const item = this.state.settingSelected;
     item.value = text
     this.setState({ item })
   }
@@ -95,14 +95,15 @@ export default class Settings extends Component {
   }
 
   handlePickerItemPressed(item: PickerItem, settingsItem: SettingsListItem) {
+    let settingItem;
     if (settingsItem.type == SettingsPickType.SinglePicker) {
-      var settingItem = this.state.settingSelected
+      settingItem = this.state.settingSelected;
       settingItem.value = item.value
       settingItem.subtitle = item.entry
       this.setState({ settingItem })
       this.handleDialogCloseAction()
     } else {
-      var settingItem = this.state.settingSelected
+      settingItem = this.state.settingSelected;
       const index = settingItem.valueArray!.indexOf(item.value, 0);
       if (index > -1) {
         settingItem.valueArray!.splice(index, 1);
@@ -219,14 +220,14 @@ export default class Settings extends Component {
           renderItem={({ item }) => this.getSettingsListItem(item)}
           renderSectionHeader={({ section: { title } }) => (
             <View>
-              <View style={styles.separator}></View>
+              <View style={styles.separator}/>
               <Text style={styles.header}>{title}</Text>
             </View>
           )}
         />
         <View>
           <Dialog.Container visible={this.state.textPickerVisible}>
-            <Dialog.Title children={`${this.state.settingSelected.title}`}></Dialog.Title>
+            <Dialog.Title children={`${this.state.settingSelected.title}`}/>
             {this.getPickerType(this.state.settingSelected)}
             <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
             <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />

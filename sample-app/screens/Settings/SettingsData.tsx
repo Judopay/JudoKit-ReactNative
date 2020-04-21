@@ -115,7 +115,7 @@ export var SettingsData = {
                     "type": SettingsPickType.SinglePicker,
                     "value": "EUR",
                     "pickItems": SettingsPickArray.Currencies,
-                    "valueArray": Array()
+                    "valueArray": []
                 } as SettingsListItem
             ]
         },
@@ -127,7 +127,7 @@ export var SettingsData = {
                     "subtitle": "Visa, Master card, Amex, JCB, Discover",
                     "type": SettingsPickType.MultiPicker,
                     "value": "",
-                    "valueArray": new Array("VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"),
+                    "valueArray": ["VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"],
                     "pickItems": SettingsPickArray.CardNetworks
                 } as SettingsListItem,
                 {
@@ -135,7 +135,7 @@ export var SettingsData = {
                     "subtitle": "Card, iDeal",
                     "type": SettingsPickType.MultiPicker,
                     "value": "",
-                    "valueArray": new Array("CARD", "IDEAL"),
+                    "valueArray": ["CARD", "IDEAL"],
                     "pickItems": SettingsPickArray.Payment
                 } as SettingsListItem
             ]
