@@ -452,7 +452,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             }
 
     private val ReadableMap.name: String?
-        get() = if(primaryAccountDetails.hasKey("name")!!) {
+        get() = if(primaryAccountDetails?.hasKey("name")!!) {
                 primaryAccountDetails?.getString("name")
             } else {
                 null
