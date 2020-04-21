@@ -22,4 +22,7 @@ const response: JudoResponse = {
 
 NativeModules.RNJudo = {
   invokeTransaction: jest.fn(() => Promise.resolve(response)),
+  invokeApplePay: jest.fn(() => Promise.resolve(response)),
+  invokeGooglePay: jest.fn(() => Promise.resolve(response)),
+  invokePaymentMethodScreen: jest.fn(() => Promise.resolve(response))
 };
