@@ -1,6 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - CocoaDebug (1.2.3)
+  - CocoaDebug (1.2.5)
   - DeviceDNA (0.1.6)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
