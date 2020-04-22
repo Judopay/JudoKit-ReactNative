@@ -21,6 +21,7 @@ import com.judopay.api.factory.JudoApiCallAdapterFactory;
 import com.judopay.api.factory.JudoApiServiceFactory;
 
 const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
+const val JUDO_PROMISE_REJECTION_CODE = "JUDO_ERROR"
 
 class JudoReactNativeModule internal constructor(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
 
@@ -75,8 +76,8 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         try {
             val judo = getTransactionConfiguration(options)
             startJudoActivity(judo, promise)
-        } catch (error: Error) {
-            promise.reject(error)
+        } catch (error: Exception) {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
         }
     }
 
@@ -85,8 +86,8 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         try {
             val judo = getGoogleTransactionConfiguration(options)
             startJudoActivity(judo, promise)
-        } catch (error: Error) {
-            promise.reject(error)
+        } catch (error: Exception) {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
         }
     }
 
@@ -95,17 +96,15 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         try {
             val judo = getPaymentMethodsConfiguration(options)
             startJudoActivity(judo, promise)
-        } catch (error: Error) {
-            promise.reject(error)
+        } catch (error: Exception) {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
         }
     }
 
-    private fun startJudoActivity(configuration: Judo?, promise: Promise) {
+    private fun startJudoActivity(configuration: Judo, promise: Promise) {
         transactionPromise = promise
-
         val intent = Intent(currentActivity, JudoActivity::class.java)
         intent.putExtra(JUDO_OPTIONS, configuration)
-
         currentActivity?.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE)
     }
 
@@ -113,12 +112,12 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     // MARK: Helper methods
     // ------------------------------------------------------------
 
-    private fun getTransactionConfiguration(options: ReadableMap): Judo? {
+    private fun getTransactionConfiguration(options: ReadableMap): Judo {
         val widgetType = getWidgetType(options)
         return getJudoConfiguration(widgetType, options)
     }
 
-    private fun getGoogleTransactionConfiguration(options: ReadableMap): Judo? {
+    private fun getGoogleTransactionConfiguration(options: ReadableMap): Judo {
         val type = when (options.transactionMode) {
             0 -> PaymentWidgetType.GOOGLE_PAY
             else -> PaymentWidgetType.PRE_AUTH_GOOGLE_PAY
@@ -126,7 +125,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         return getJudoConfiguration(type, options)
     }
 
-    private fun getPaymentMethodsConfiguration(options: ReadableMap): Judo? {
+    private fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
         val type = when (options.transactionMode) {
             0 -> PaymentWidgetType.PAYMENT_METHODS
             else -> PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS
@@ -134,8 +133,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         return getJudoConfiguration(type, options)
     }
 
-    private fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap): Judo? {
-
+    private fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap): Judo {
         val amount = getAmount(options)
         val reference = getReference(options)
         val cardNetworks = getCardNetworks(options)
@@ -143,25 +141,20 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         val uiConfiguration = getUIConfiguration(options)
         val primaryAccountDetails = getPrimaryAccountDetails(options)
         val googlePayConfiguration = getGooglePayConfiguration(options)
-
-        return try {
-            Judo.Builder(type)
-                    .setApiToken(options.token)
-                    .setApiSecret(options.secret)
-                    .setIsSandboxed(options.isSandboxed)
-                    .setJudoId(options.judoId)
-                    .setSiteId(options.siteId)
-                    .setAmount(amount)
-                    .setReference(reference)
-                    .setSupportedCardNetworks(cardNetworks)
-                    .setPaymentMethods(paymentMethods)
-                    .setUiConfiguration(uiConfiguration)
-                    .setPrimaryAccountDetails(primaryAccountDetails)
-                    .setGooglePayConfiguration(googlePayConfiguration)
-                    .build()
-        } catch (_: Exception) {
-            null
-        }
+        return Judo.Builder(type)
+                .setApiToken(options.token)
+                .setApiSecret(options.secret)
+                .setIsSandboxed(options.isSandboxed)
+                .setJudoId(options.judoId)
+                .setSiteId(options.siteId)
+                .setAmount(amount)
+                .setReference(reference)
+                .setSupportedCardNetworks(cardNetworks)
+                .setPaymentMethods(paymentMethods)
+                .setUiConfiguration(uiConfiguration)
+                .setPrimaryAccountDetails(primaryAccountDetails)
+                .setGooglePayConfiguration(googlePayConfiguration)
+                .build()
     }
 
     private fun getWidgetType(options: ReadableMap) = when (options.getInt("transactionType")) {
@@ -172,20 +165,15 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         else -> PaymentWidgetType.CARD_PAYMENT
     }
 
-    private fun getAmount(options: ReadableMap): Amount? {
+    private fun getAmount(options: ReadableMap): Amount {
         val currency = when (val currencyValue = options.currencyValue) {
             null -> Currency.GBP
             else -> Currency.valueOf(currencyValue)
         }
-
-        return try {
-            Amount.Builder()
-                    .setAmount(options.amountValue)
-                    .setCurrency(currency)
-                    .build()
-        } catch (_: Exception) {
-            null
-        }
+        return Amount.Builder()
+                .setAmount(options.amountValue)
+                .setCurrency(currency)
+                .build()
     }
 
     private fun getReference(options: ReadableMap): Reference? {
@@ -203,11 +191,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             builder = builder.setMetaData(bundle)
         }
 
-        return try {
-            builder.build()
-        } catch (_: Exception) {
-            null
-        }
+        return builder.build()
     }
 
     private fun getCardNetworks(options: ReadableMap): Array<CardNetwork>? {
@@ -277,7 +261,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         val idealPaymentValue = 1 shl 3
         val allPaymentValues = 1 shl 4
 
-
         val paymentMethodValue = options.paymentMethodValue
         paymentMethodValue?.let {
 
@@ -304,26 +287,23 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     }
 
     private fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
-        return try {
+        return if (options.uiConfiguration != null) {
             UiConfiguration.Builder()
                     .setAvsEnabled(options.isAVSEnabled)
+                    .setShouldDisplayAmount(options.shouldDisplayAmount)
                     .build()
-        } catch (_: Exception) {
+        } else {
             null
         }
     }
 
     private fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetails? {
-        return try {
-            PrimaryAccountDetails.Builder()
-                    .setName(options.name)
-                    .setAccountNumber(options.accountName)
-                    .setDateOfBirth(options.dateOfBirth)
-                    .setPostCode(options.postCode)
-                    .build()
-        } catch (_: Exception) {
-            null
-        }
+        return PrimaryAccountDetails.Builder()
+                .setName(options.name)
+                .setAccountNumber(options.accountName)
+                .setDateOfBirth(options.dateOfBirth)
+                .setPostCode(options.postCode)
+                .build()
     }
 
     private fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration? {
@@ -336,7 +316,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         val billingParameters = getBillingParameters(options)
         val shippingParameters = getShippingParameters(options)
 
-        return try {
+        return if (options.googlePayConfiguration != null) {
             GooglePayConfiguration.Builder()
                     .setTransactionCountryCode(options.countryCode)
                     .setEnvironment(environment)
@@ -346,7 +326,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
                     .setIsShippingAddressRequired(options.isShippingAddressRequired)
                     .setShippingAddressParameters(shippingParameters)
                     .build()
-        } catch (_: Exception) {
+        } else {
             null
         }
     }
@@ -377,248 +357,195 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     // ------------------------------------------------------------
 
     private val ReadableMap.configuration: ReadableMap?
-        get() = try {
-            getMap("configuration")
-        } catch (_: Exception) {
-            null
-        }
+        get() = getMap("configuration")
 
     private val ReadableMap.transactionMode: Int?
-        get() = try {
-            getInt("transactionMode")
-        } catch (_: Exception) {
-            null
-        }
+        get() = getInt("transactionMode")
 
     private val ReadableMap.token: String?
-        get() = try {
-            getString("token")
-        } catch (_: Exception) {
-            null
-        }
+        get() = getString("token")
 
     private val ReadableMap.secret: String?
-        get() = try {
-            getString("secret")
-        } catch (_: Exception) {
-            null
-        }
+        get() = getString("secret")
 
     private val ReadableMap.isSandboxed: Boolean?
-        get() = try {
-            getBoolean("sandboxed")
-        } catch (_: Exception) {
-            null
-        }
+        get() = getBoolean("sandboxed")
 
     private val ReadableMap.judoId: String?
-        get() = try {
-            configuration?.getString("judoId")
-        } catch (_: Exception) {
-            null
-        }
+        get() = configuration?.getString("judoId")
 
     private val ReadableMap.siteId: String?
-        get() = try {
-            configuration?.getString("siteId")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = configuration?.hasKey("siteId") ?: false
+            if (hasKey) {
+                return configuration?.getString("siteId")
+            }
+            return null
         }
 
     private val ReadableMap.amount: ReadableMap?
-        get() = try {
-            configuration?.getMap("amount")
-        } catch (_: Exception) {
-            null
-        }
+        get() = configuration?.getMap("amount")
 
     private val ReadableMap.amountValue: String?
-        get() = try {
-            amount?.getString("value")
-        } catch (_: Exception) {
-            null
-        }
+        get() = amount?.getString("value")
 
     private val ReadableMap.currencyValue: String?
-        get() = try {
-            amount?.getString("currency")
-        } catch (_: Exception) {
-            null
-        }
+        get() = amount?.getString("currency")
 
     private val ReadableMap.reference: ReadableMap?
-        get() = try {
-            configuration?.getMap("reference")
-        } catch (_: Exception) {
-            null
-        }
+        get() = configuration?.getMap("reference")
 
     private val ReadableMap.consumerReference: String?
-        get() = try {
-            reference?.getString("consumerReference")
-        } catch (_: Exception) {
-            null
-        }
+        get() = reference?.getString("consumerReference")
 
     private val ReadableMap.paymentReference: String?
-        get() = try {
-            reference?.getString("paymentReference")
-        } catch (_: Exception) {
-            null
-        }
+        get() = reference?.getString("paymentReference")
 
     private val ReadableMap.metadata: ReadableMap?
-        get() = try {
-            reference?.getMap("metadata")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = reference?.hasKey("metadata") ?: false
+            if (hasKey) {
+                return reference?.getMap("metadata")
+            }
+            return null
         }
 
     private val ReadableMap.cardNetworkValue: Int?
-        get() = try {
-            configuration?.getInt("supportedCardNetworks")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = configuration?.hasKey("supportedCardNetworks") ?: false
+            if (hasKey) {
+                return configuration?.getInt("supportedCardNetworks")
+            }
+            return null
         }
 
     private val ReadableMap.paymentMethodValue: Int?
-        get() = try {
-            configuration?.getInt("paymentMethods")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = configuration?.hasKey("paymentMethods") ?: false
+            if (hasKey) {
+                return configuration?.getInt("paymentMethods")
+            }
+            return null
         }
 
     private val ReadableMap.uiConfiguration: ReadableMap?
-        get() = try {
-            configuration?.getMap("uiConfiguration")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = configuration?.hasKey("uiConfiguration") ?: false
+            if (hasKey) {
+                return configuration?.getMap("uiConfiguration")
+            }
+            return null
         }
 
     private val ReadableMap.isAVSEnabled: Boolean?
-        get() = try {
-            uiConfiguration?.getBoolean("isAVSEnabled")
-        } catch (_: Exception) {
-            null
-        }
+        get() = uiConfiguration?.getBoolean("isAVSEnabled")
+
+    private val ReadableMap.shouldDisplayAmount: Boolean?
+        get() = uiConfiguration?.getBoolean("shouldDisplayAmount")
 
     private val ReadableMap.primaryAccountDetails: ReadableMap?
-        get() = try {
-            configuration?.getMap("primaryAccountDetails")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = configuration?.hasKey("primaryAccountDetails") ?: false
+            if (hasKey) {
+                return configuration?.getMap("primaryAccountDetails")
+            }
+            return null
         }
 
     private val ReadableMap.name: String?
-        get() = try {
-            primaryAccountDetails?.getString("name")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = primaryAccountDetails?.hasKey("name") ?: false
+            if (hasKey) {
+                return primaryAccountDetails?.getString("name")
+            }
+            return null
         }
 
     private val ReadableMap.accountName: String?
-        get() = try {
-            primaryAccountDetails?.getString("accountName")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = primaryAccountDetails?.hasKey("name") ?: false
+            if (hasKey) {
+                return primaryAccountDetails?.getString("name")
+            }
+            return null
         }
 
     private val ReadableMap.dateOfBirth: String?
-        get() = try {
-            primaryAccountDetails?.getString("dateOfBirth")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = primaryAccountDetails?.hasKey("dateOfBirth") ?: false
+            if (hasKey) {
+                return primaryAccountDetails?.getString("dateOfBirth")
+            }
+            return null
         }
 
     private val ReadableMap.postCode: String?
-        get() = try {
-            primaryAccountDetails?.getString("postCode")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = primaryAccountDetails?.hasKey("postCode") ?: false
+            if (hasKey) {
+                return primaryAccountDetails?.getString("postCode")
+            }
+            return null
         }
 
     private val ReadableMap.googlePayConfiguration: ReadableMap?
-        get() = try {
-            configuration?.getMap("googlePayConfiguration")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = configuration?.hasKey("googlePayConfiguration") ?: false
+            if (hasKey) {
+                return configuration?.getMap("googlePayConfiguration")
+            }
+            return null
         }
 
     private val ReadableMap.countryCode: String?
-        get() = try {
-            googlePayConfiguration?.getString("countryCode")
-        } catch (_: Exception) {
-            null
-        }
+        get() = googlePayConfiguration?.getString("countryCode")
 
     private val ReadableMap.environmentValue: Int?
-        get() = try {
-            googlePayConfiguration?.getInt("environmentValue")
-        } catch (_: Exception) {
-            null
-        }
+        get() = googlePayConfiguration?.getInt("environment")
 
     private val ReadableMap.isEmailRequired: Boolean?
-        get() = try {
-            googlePayConfiguration?.getBoolean("isEmailRequired")
-        } catch (_: Exception) {
-            null
-        }
+        get() = googlePayConfiguration?.getBoolean("isEmailRequired")
 
     private val ReadableMap.isBillingAddressRequired: Boolean?
-        get() = try {
-            googlePayConfiguration?.getBoolean("isBillingAddressRequired")
-        } catch (_: Exception) {
-            null
-        }
+        get() = googlePayConfiguration?.getBoolean("isBillingAddressRequired")
 
     private val ReadableMap.isShippingAddressRequired: Boolean?
-        get() = try {
-            googlePayConfiguration?.getBoolean("isShippingAddressRequired")
-        } catch (_: Exception) {
-            null
-        }
+        get() = googlePayConfiguration?.getBoolean("isShippingAddressRequired")
 
     private val ReadableMap.billingAddressParameters: ReadableMap?
-        get() = try {
-            googlePayConfiguration?.getMap("billingAddressParameters")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = googlePayConfiguration?.hasKey("billingAddressParameters") ?: false
+            if (hasKey) {
+                return googlePayConfiguration?.getMap("billingAddressParameters")
+            }
+            return null
         }
 
     private val ReadableMap.shippingAddressParameters: ReadableMap?
-        get() = try {
-            googlePayConfiguration?.getMap("shippingAddressParameters")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = googlePayConfiguration?.hasKey("shippingAddressParameters") ?: false
+            if (hasKey) {
+                return googlePayConfiguration?.getMap("shippingAddressParameters")
+            }
+            return null
         }
 
     private val ReadableMap.isBillingPhoneNumberRequired: Boolean?
-        get() = try {
-            billingAddressParameters?.getBoolean("isPhoneNumberRequired")
-        } catch (_: Exception) {
-            null
-        }
+        get() = billingAddressParameters?.getBoolean("isPhoneNumberRequired")
 
     private val ReadableMap.addressFormat: Int?
-        get() = try {
-            billingAddressParameters?.getInt("addressFormat")
-        } catch (_: Exception) {
-            null
-        }
+        get() = billingAddressParameters?.getInt("addressFormat")
 
     private val ReadableMap.isShippingPhoneNumberRequired: Boolean?
-        get() = try {
-            shippingAddressParameters?.getBoolean("isPhoneNumberRequired")
-        } catch (_: Exception) {
-            null
-        }
+        get() = shippingAddressParameters?.getBoolean("isPhoneNumberRequired")
 
     private val ReadableMap.allowedCountryCodeList: ReadableArray?
-        get() = try {
-            shippingAddressParameters?.getArray("allowedCountryCodes")
-        } catch (_: Exception) {
-            null
+        get() {
+            val hasKey = shippingAddressParameters?.hasKey("allowedCountryCodes") ?: false
+            if (hasKey) {
+                return shippingAddressParameters?.getArray("allowedCountryCodes")
+            }
+            return null
         }
 
     // ------------------------------------------------------------
