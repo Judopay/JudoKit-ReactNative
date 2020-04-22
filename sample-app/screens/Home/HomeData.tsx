@@ -72,6 +72,11 @@ export const HomeScreenData = {
                     "subtitle": "with default preauth methods",
                     "type": HomeListType.PreAuthMethods
                 } as HomeListItem,
+                {
+                  "title": "Payment methods",
+                  "subtitle": "with sever to server method",
+                  "type": HomeListType.ServerToServer
+                } as HomeListItem,
             ]
         }
     ]

@@ -10,6 +10,7 @@ export enum HomeListType {
     GooglePreAuth,
     PaymentMethods,
     PreAuthMethods,
+    ServerToServer,
 }
 
 export type HomeListItem = {
