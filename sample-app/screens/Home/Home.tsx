@@ -95,6 +95,10 @@ export default class Home extends Component {
     await this.displayPaymentMethod(JudoTransactionMode.PreAuth);
   }
 
+  async invokeServerToServerPayment() {
+    await this.displayPaymentMethod(JudoTransactionMode.ServerToServer);
+  }
+
   async invokeTransaction(type: JudoTransactionType) {
     try {
       const judo = new JudoPay(this.state.token, this.state.secret);
@@ -173,6 +177,9 @@ export default class Home extends Component {
         break
       case HomeListType.PreAuthMethods:
         this.invokePreAuthMethods()
+        break
+      case HomeListType.ServerToServer:
+        this.invokeServerToServerPayment()
         break
     }
   }

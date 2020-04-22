@@ -60,7 +60,13 @@
 
 + (TransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
     int intType = [properties intForKey:@"transactionMode"].intValue;
-    return intType == 0 ? TransactionModePayment : TransactionModePreAuth;
+    NSArray<NSNumber *> *availableModes = @[
+        @(TransactionModePayment),
+        @(TransactionModePreAuth),
+        @(TransactionModeServerToServer)
+    ];
+    
+    return availableModes[intType].intValue;
 }
 
 + (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
