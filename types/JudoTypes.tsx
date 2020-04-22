@@ -25,7 +25,8 @@ export enum JudoTransactionType {
 
 export enum JudoTransactionMode {
     Payment,
-    PreAuth
+    PreAuth,
+    ServerToServer,
 }
 
 export interface JudoAmount {
