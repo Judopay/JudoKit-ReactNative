@@ -365,7 +365,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  CocoaDebug: 7446061b7ec181a102ad7dfac4535a5adc824e6d
+  CocoaDebug: 543366e31583fe40a1a30f53afa974f50030d5e2
   DeviceDNA: 06c4c1af198fc8b44711d10bed39e0a8638b490d
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
