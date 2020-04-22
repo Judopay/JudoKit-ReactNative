@@ -114,7 +114,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
     private fun getTransactionConfiguration(options: ReadableMap): Judo {
         val widgetType = getWidgetType(options)
-        return  getJudoConfiguration(widgetType, options)
+        return getJudoConfiguration(widgetType, options)
     }
 
     private fun getGoogleTransactionConfiguration(options: ReadableMap): Judo {
@@ -122,7 +122,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             0 -> PaymentWidgetType.GOOGLE_PAY
             else -> PaymentWidgetType.PRE_AUTH_GOOGLE_PAY
         }
-        return  getJudoConfiguration(type, options)
+        return getJudoConfiguration(type, options)
     }
 
     private fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
@@ -289,23 +289,23 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     }
 
     private fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
-        return if(options.uiConfiguration != null) {
-                UiConfiguration.Builder()
-                        .setAvsEnabled(options.isAVSEnabled)
-                        .setShouldDisplayAmount(options.shouldDisplayAmount)
-                        .build()
-            } else {
-                null
-            }
+        return if (options.uiConfiguration != null) {
+            UiConfiguration.Builder()
+                    .setAvsEnabled(options.isAVSEnabled)
+                    .setShouldDisplayAmount(options.shouldDisplayAmount)
+                    .build()
+        } else {
+            null
+        }
     }
 
     private fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetails? {
         return PrimaryAccountDetails.Builder()
-                    .setName(options.name)
-                    .setAccountNumber(options.accountName)
-                    .setDateOfBirth(options.dateOfBirth)
-                    .setPostCode(options.postCode)
-                    .build()
+                .setName(options.name)
+                .setAccountNumber(options.accountName)
+                .setDateOfBirth(options.dateOfBirth)
+                .setPostCode(options.postCode)
+                .build()
     }
 
     private fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration? {
@@ -318,18 +318,18 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         val billingParameters = getBillingParameters(options)
         val shippingParameters = getShippingParameters(options)
 
-        return if(options.googlePayConfiguration !=  null) {
-                GooglePayConfiguration.Builder()
-                        .setTransactionCountryCode(options.countryCode)
-                        .setEnvironment(environment)
-                        .setIsEmailRequired(options.isEmailRequired)
-                        .setIsBillingAddressRequired(options.isBillingAddressRequired)
-                        .setBillingAddressParameters(billingParameters)
-                        .setIsShippingAddressRequired(options.isShippingAddressRequired)
-                        .setShippingAddressParameters(shippingParameters)
-                        .build()
-            } else {
-                null
+        return if (options.googlePayConfiguration != null) {
+            GooglePayConfiguration.Builder()
+                    .setTransactionCountryCode(options.countryCode)
+                    .setEnvironment(environment)
+                    .setIsEmailRequired(options.isEmailRequired)
+                    .setIsBillingAddressRequired(options.isBillingAddressRequired)
+                    .setBillingAddressParameters(billingParameters)
+                    .setIsShippingAddressRequired(options.isShippingAddressRequired)
+                    .setShippingAddressParameters(shippingParameters)
+                    .build()
+        } else {
+            null
         }
     }
 
@@ -380,14 +380,14 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     private val ReadableMap.judoId: String?
         get() = configuration?.getString("judoId")
 
-
-
     private val ReadableMap.siteId: String?
-        get() = if(configuration?.hasKey("siteId")!!) {
-                configuration?.getString("siteId")
-            } else {
-                null
+        get() {
+            val hasKey = configuration?.hasKey("siteId") ?: false
+            if (hasKey) {
+                return configuration?.getString("siteId")
             }
+            return null
+        }
 
     private val ReadableMap.amount: ReadableMap?
         get() = configuration?.getMap("amount")
@@ -410,81 +410,101 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
 
     private val ReadableMap.metadata: ReadableMap?
-        get() = if (reference?.hasKey("metadata")!!) {
-                reference?.getMap("metadata")
-            } else {
-                null
+        get() {
+            val hasKey = reference?.hasKey("metadata") ?: false
+            if (hasKey) {
+                return reference?.getMap("metadata")
             }
+            return null
+        }
 
     private val ReadableMap.cardNetworkValue: Int?
-        get() = if(configuration?.hasKey("supportedCardNetworks")!!) {
-                configuration?.getInt("supportedCardNetworks")
-            } else {
-                null
+        get() {
+            val hasKey = configuration?.hasKey("supportedCardNetworks") ?: false
+            if (hasKey) {
+                return configuration?.getInt("supportedCardNetworks")
             }
+            return null
+        }
 
     private val ReadableMap.paymentMethodValue: Int?
-        get() = if(configuration?.hasKey("paymentMethods")!!) {
-                configuration?.getInt("paymentMethods")
-            } else {
-                null
+        get() {
+            val hasKey = configuration?.hasKey("paymentMethods") ?: false
+            if (hasKey) {
+                return configuration?.getInt("paymentMethods")
             }
+            return null
+        }
 
     private val ReadableMap.uiConfiguration: ReadableMap?
-        get() = if(configuration?.hasKey("uiConfiguration")!!) {
-                configuration?.getMap("uiConfiguration")
-            } else {
-                null
+        get() {
+            val hasKey = configuration?.hasKey("uiConfiguration") ?: false
+            if (hasKey) {
+                return configuration?.getMap("uiConfiguration")
             }
+            return null
+        }
 
     private val ReadableMap.isAVSEnabled: Boolean?
         get() = uiConfiguration?.getBoolean("isAVSEnabled")
 
 
     private val ReadableMap.shouldDisplayAmount: Boolean?
-        get() =  uiConfiguration?.getBoolean("shouldDisplayAmount")
+        get() = uiConfiguration?.getBoolean("shouldDisplayAmount")
 
     private val ReadableMap.primaryAccountDetails: ReadableMap?
-        get() = if(configuration?.hasKey("primaryAccountDetails")!!) {
-                configuration?.getMap("primaryAccountDetails")
-            } else {
-                null
+        get() {
+            val hasKey = configuration?.hasKey("primaryAccountDetails") ?: false
+            if (hasKey) {
+                return configuration?.getMap("primaryAccountDetails")
             }
+            return null
+        }
 
     private val ReadableMap.name: String?
-        get() = if(primaryAccountDetails?.hasKey("name")!!) {
-                primaryAccountDetails?.getString("name")
-            } else {
-                null
+        get() {
+            val hasKey = primaryAccountDetails?.hasKey("name") ?: false
+            if (hasKey) {
+                return primaryAccountDetails?.getString("name")
             }
+            return null
+        }
 
     private val ReadableMap.accountName: String?
-        get() = if(primaryAccountDetails?.hasKey("name")!!) {
-                primaryAccountDetails?.getString("name")
-            } else {
-                null
+        get() {
+            val hasKey = primaryAccountDetails?.hasKey("name") ?: false
+            if (hasKey) {
+                return primaryAccountDetails?.getString("name")
             }
+            return null
+        }
 
     private val ReadableMap.dateOfBirth: String?
-        get() = if(primaryAccountDetails?.hasKey("dateOfBirth")!!) {
-                primaryAccountDetails?.getString("dateOfBirth")
-            } else {
-                null
+        get() {
+            val hasKey = primaryAccountDetails?.hasKey("dateOfBirth") ?: false
+            if (hasKey) {
+                return primaryAccountDetails?.getString("dateOfBirth")
             }
+            return null
+        }
 
     private val ReadableMap.postCode: String?
-        get() = if(primaryAccountDetails?.hasKey("postCode")!!) {
-                primaryAccountDetails?.getString("postCode")
-            } else {
-                null
+        get() {
+            val hasKey = primaryAccountDetails?.hasKey("postCode") ?: false
+            if (hasKey) {
+                return primaryAccountDetails?.getString("postCode")
             }
+            return null
+        }
 
     private val ReadableMap.googlePayConfiguration: ReadableMap?
-        get() = if(configuration?.hasKey("googlePayConfiguration")!!     ) {
-                configuration?.getMap("googlePayConfiguration")
-            } else {
-                null
+        get() {
+            val hasKey = configuration?.hasKey("googlePayConfiguration") ?: false
+            if (hasKey) {
+                return configuration?.getMap("googlePayConfiguration")
             }
+            return null
+        }
 
     private val ReadableMap.countryCode: String?
         get() = googlePayConfiguration?.getString("countryCode")
@@ -503,18 +523,22 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         get() = googlePayConfiguration?.getBoolean("isShippingAddressRequired")
 
     private val ReadableMap.billingAddressParameters: ReadableMap?
-        get() = if(googlePayConfiguration?.hasKey("billingAddressParameters")!!) {
-                googlePayConfiguration?.getMap("billingAddressParameters")
-            } else {
-                null
+        get() {
+            val hasKey = googlePayConfiguration?.hasKey("billingAddressParameters") ?: false
+            if (hasKey) {
+                return googlePayConfiguration?.getMap("billingAddressParameters")
             }
+            return null
+        }
 
     private val ReadableMap.shippingAddressParameters: ReadableMap?
-        get() = if(googlePayConfiguration?.hasKey("shippingAddressParameters")!!) {
-                googlePayConfiguration?.getMap("shippingAddressParameters")
-            } else {
-                null
+        get() {
+            val hasKey = googlePayConfiguration?.hasKey("shippingAddressParameters") ?: false
+            if (hasKey) {
+                return googlePayConfiguration?.getMap("shippingAddressParameters")
             }
+            return null
+        }
 
     private val ReadableMap.isBillingPhoneNumberRequired: Boolean?
         get() = billingAddressParameters?.getBoolean("isPhoneNumberRequired")
@@ -527,11 +551,13 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         get() = shippingAddressParameters?.getBoolean("isPhoneNumberRequired")
 
     private val ReadableMap.allowedCountryCodeList: ReadableArray?
-        get() = if(shippingAddressParameters?.hasKey("allowedCountryCodes")!!) {
-                shippingAddressParameters?.getArray("allowedCountryCodes")
-            } else {
-                null
+        get() {
+            val hasKey = shippingAddressParameters?.hasKey("allowedCountryCodes") ?: false
+            if (hasKey) {
+                return shippingAddressParameters?.getArray("allowedCountryCodes")
             }
+            return null
+        }
 
     // ------------------------------------------------------------
     // MARK: React Native methods
