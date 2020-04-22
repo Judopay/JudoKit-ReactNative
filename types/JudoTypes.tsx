@@ -55,7 +55,30 @@ export interface JudoUIConfiguration {
 }
 
 export interface JudoTheme {
-    // TODO: Add theming options
+    largeTitleFont: string,
+    largeTitleSize: number,
+    titleFont: string,
+    titleSize: number,
+    headlineFont: string,
+    headlineSize: number,
+    headlineLightFont: string,
+    headlineLightSize: number,
+    bodyFont: string,
+    bodySize: number,
+    bodyBoldFont: string,
+    bodyBoldSize: number,
+    captionFont: string,
+    captionSize: number,
+    captionBoldFont: string,
+    captionBoldSize: number,
+    jpBlackColor: string,
+    jpDarkGrayColor: string,
+    jpGrayColor: string,
+    jpLightGrayColor: string,
+    jpRedColor: string,
+    jpWhiteColor: string,
+    buttonColor: string,
+    buttonTitleColor: string
 }
 
 export enum JudoPaymentMethod {
