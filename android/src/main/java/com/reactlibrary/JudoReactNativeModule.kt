@@ -131,7 +131,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             else -> PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS
         }
         return getJudoConfiguration(type, options)
-
     }
 
     private fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap): Judo {
@@ -262,7 +261,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         val idealPaymentValue = 1 shl 3
         val allPaymentValues = 1 shl 4
 
-
         val paymentMethodValue = options.paymentMethodValue
         paymentMethodValue?.let {
 
@@ -361,21 +359,17 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     private val ReadableMap.configuration: ReadableMap?
         get() = getMap("configuration")
 
-
     private val ReadableMap.transactionMode: Int?
         get() = getInt("transactionMode")
 
     private val ReadableMap.token: String?
         get() = getString("token")
 
-
     private val ReadableMap.secret: String?
         get() = getString("secret")
 
-
     private val ReadableMap.isSandboxed: Boolean?
         get() = getBoolean("sandboxed")
-
 
     private val ReadableMap.judoId: String?
         get() = configuration?.getString("judoId")
@@ -392,7 +386,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     private val ReadableMap.amount: ReadableMap?
         get() = configuration?.getMap("amount")
 
-
     private val ReadableMap.amountValue: String?
         get() = amount?.getString("value")
 
@@ -407,7 +400,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
     private val ReadableMap.paymentReference: String?
         get() = reference?.getString("paymentReference")
-
 
     private val ReadableMap.metadata: ReadableMap?
         get() {
@@ -447,7 +439,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
     private val ReadableMap.isAVSEnabled: Boolean?
         get() = uiConfiguration?.getBoolean("isAVSEnabled")
-
 
     private val ReadableMap.shouldDisplayAmount: Boolean?
         get() = uiConfiguration?.getBoolean("shouldDisplayAmount")
@@ -512,7 +503,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     private val ReadableMap.environmentValue: Int?
         get() = googlePayConfiguration?.getInt("environment")
 
-
     private val ReadableMap.isEmailRequired: Boolean?
         get() = googlePayConfiguration?.getBoolean("isEmailRequired")
 
@@ -545,7 +535,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
     private val ReadableMap.addressFormat: Int?
         get() = billingAddressParameters?.getInt("addressFormat")
-
 
     private val ReadableMap.isShippingPhoneNumberRequired: Boolean?
         get() = shippingAddressParameters?.getBoolean("isPhoneNumberRequired")
