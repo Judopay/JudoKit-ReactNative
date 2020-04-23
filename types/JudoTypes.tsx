@@ -79,7 +79,9 @@ export interface JudoTheme {
     jpRedColor: string,
     jpWhiteColor: string,
     buttonColor: string,
-    buttonTitleColor: string
+    buttonTitleColor: string,
+    backButtonImage: string,
+    buttonCornerRadius: number
 }
 
 export enum JudoPaymentMethod {

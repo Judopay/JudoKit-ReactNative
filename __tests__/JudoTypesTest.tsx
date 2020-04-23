@@ -68,7 +68,9 @@ const judoTheme: JudoTheme = {
   jpRedColor: "#ff0000",
   jpWhiteColor: "#ff0000",
   buttonColor: "#ff0000",
-  buttonTitleColor: "#ff0000"
+  buttonTitleColor: "#ff0000",
+  backButtonImage: "image_name",
+  buttonCornerRadius: 5
 }
 
 const judoUIConfiguration: JudoUIConfiguration = {
@@ -146,12 +148,12 @@ test('check JudoTransactionType model fields', () => {
 });
 
 test('check JudoTransactionMode model fields', () => {
-  expect(Object.keys(JudoTransactionMode)).toStrictEqual(["0", "1",
-  "Payment", "PreAuth"])
+  expect(Object.keys(JudoTransactionMode)).toStrictEqual(["0", "1", "2",
+  "Payment", "PreAuth", "ServerToServer"])
 });
 
 test('check JudoTheme model fields', () => {
-  expect(Object.keys(judoTheme).length).toBe(24)
+  expect(Object.keys(judoTheme).length).toBe(26)
 });
 
 test('check JudoCardNetwork enum keys/values', () => {
