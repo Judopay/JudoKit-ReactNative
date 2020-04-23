@@ -59,7 +59,9 @@ const theme: JudoTheme = {
     jpRedColor: "#E21900",
     jpWhiteColor: "#FFFFFF",
     buttonColor: "#999999",
-    buttonTitleColor: "#000000"
+    buttonTitleColor: "#000000",
+    backButtonImage: "back-button.png",
+    buttonCornerRadius: 5
 }
 
 const uiConfiguration: JudoUIConfiguration = {

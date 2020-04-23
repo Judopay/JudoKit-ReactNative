@@ -236,7 +236,7 @@
 
     theme.captionBold = [UIFont fontWithName:[dictionary stringForKey:@"captionBoldFont"]
                                         size:[[dictionary numberForKey:@"captionBoldSize"] doubleValue]];
-
+    
     theme.jpBlackColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpBlackColor"]];
     theme.jpDarkGrayColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpDarkGrayColor"]];
     theme.jpGrayColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpGrayColor"]];
@@ -245,6 +245,8 @@
     theme.jpWhiteColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpWhiteColor"]];
     theme.buttonColor = [UIColor colorFromHexString:[dictionary stringForKey:@"buttonColor"]];
     theme.buttonTitleColor = [UIColor colorFromHexString:[dictionary stringForKey:@"buttonTitleColor"]];
+    theme.backButtonImage = [UIImage imageNamed:[dictionary stringForKey:@"back-button.png"]];
+    theme.buttonCornerRadius = [[dictionary numberForKey:@"buttonCornerRadius"] doubleValue];
     return theme;
 }
 

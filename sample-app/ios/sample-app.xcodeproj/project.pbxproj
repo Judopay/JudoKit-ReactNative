@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* exampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* exampleTests.m */; };
+		010BB40F24519BF90058CC53 /* back-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 010BB40E24519BF90058CC53 /* back-button.png */; };
 		01C8748124505B260035A1C1 /* Quicksand-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 01C8748024505B260035A1C1 /* Quicksand-Light.otf */; };
 		01E2A60824507E1B00ACBAF6 /* Quicksand-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 01E2A60724507E1A00ACBAF6 /* Quicksand-Bold.otf */; };
 		01E2A60A24507E2300ACBAF6 /* Quicksand-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 01E2A60924507E2300ACBAF6 /* Quicksand-Italic.otf */; };
@@ -288,6 +289,7 @@
 		00E356EE1AD99517003FC87E /* sample-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "sample-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* exampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exampleTests.m; sourceTree = "<group>"; };
+		010BB40E24519BF90058CC53 /* back-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-button.png"; sourceTree = "<group>"; };
 		015CECA6234F5E4A00D6FBED /* libswiftObjectiveC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftObjectiveC.tbd; path = usr/lib/swift/libswiftObjectiveC.tbd; sourceTree = SDKROOT; };
 		017D32AD234B2AD3009E8FDD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		01C8748024505B260035A1C1 /* Quicksand-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quicksand-Light.otf"; sourceTree = "<group>"; };
@@ -528,6 +530,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				010BB40E24519BF90058CC53 /* back-button.png */,
 				01E2A60B24507E2700ACBAF6 /* Quicksand-Regular.otf */,
 				01E2A60924507E2300ACBAF6 /* Quicksand-Italic.otf */,
 				01E2A60724507E1A00ACBAF6 /* Quicksand-Bold.otf */,
@@ -974,6 +977,7 @@
 				01E2A60824507E1B00ACBAF6 /* Quicksand-Bold.otf in Resources */,
 				01E2A60A24507E2300ACBAF6 /* Quicksand-Italic.otf in Resources */,
 				01E2A60C24507E2700ACBAF6 /* Quicksand-Regular.otf in Resources */,
+				010BB40F24519BF90058CC53 /* back-button.png in Resources */,
 				01C8748124505B260035A1C1 /* Quicksand-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
