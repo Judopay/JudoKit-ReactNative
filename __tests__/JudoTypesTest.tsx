@@ -44,13 +44,38 @@ const judoAddress: JudoAddress = {
   countryCode: "country Code"
 }
 
+const judoTheme: JudoTheme = {
+  largeTitleFont: "fontName",
+  largeTitleSize: 99,
+  titleFont: "fontName",
+  titleSize: 22,
+  headlineFont: "fontName",
+  headlineSize: 33,
+  headlineLightFont: "fontName",
+  headlineLightSize: 44,
+  bodyFont: "fontName",
+  bodySize: 55,
+  bodyBoldFont: "fontName",
+  bodyBoldSize: 66,
+  captionFont: "fontName",
+  captionSize: 77,
+  captionBoldFont: "fontName",
+  captionBoldSize: 88,
+  jpBlackColor: "#ff0000",
+  jpDarkGrayColor: "#ff0000",
+  jpGrayColor: "#ff0000",
+  jpLightGrayColor: "#ff0000",
+  jpRedColor: "#ff0000",
+  jpWhiteColor: "#ff0000",
+  buttonColor: "#ff0000",
+  buttonTitleColor: "#ff0000"
+}
+
 const judoUIConfiguration: JudoUIConfiguration = {
   isAVSEnabled: true,
   shouldDisplayAmount: false,
-  theme: {},
+  theme: judoTheme,
 }
-
-const judoTheme: JudoTheme = {}
 
 test('check JudoResponse model fields', () => {
   const judoResponse: JudoResponse = {
@@ -125,8 +150,8 @@ test('check JudoTransactionMode model fields', () => {
   "Payment", "PreAuth"])
 });
 
-test('check JudoTheme is empty', () => {
-  expect(Object.keys(judoTheme).length).toBe(0)
+test('check JudoTheme model fields', () => {
+  expect(Object.keys(judoTheme).length).toBe(24)
 });
 
 test('check JudoCardNetwork enum keys/values', () => {
