@@ -128,7 +128,9 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     private fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
         val type = when (options.transactionMode) {
             0 -> PaymentWidgetType.PAYMENT_METHODS
-            else -> PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS
+            1 -> PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS
+            2 -> PaymentWidgetType.SERVER_TO_SERVER_PAYMENT_METHODS
+            else -> PaymentWidgetType.PAYMENT_METHODS
         }
         return getJudoConfiguration(type, options)
     }
