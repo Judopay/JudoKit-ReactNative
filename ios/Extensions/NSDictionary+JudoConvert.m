@@ -76,22 +76,22 @@
 }
 
 - (id)objectForKey:(NSString *)key shouldBeInstanceOfClass:(Class)aClass andNonNil:(BOOL)forceNonNil {
-    
+
     if ([self.allKeys containsObject:key]) {
-        
+
         id object = [self objectForKey:key andInstanceOfClass:aClass];
 
         if (!object && forceNonNil) {
             @throw [NSException exceptionNilConfigurationWithKey:key];
         }
-        
+
         return object;
     }
 
     if (forceNonNil) {
         @throw [NSException exceptionUndefinedConfigurationWithKey:key];
     }
-    
+
     return nil;
 }
 
@@ -105,8 +105,23 @@
     if ([object isKindOfClass:aClass]) {
         return object;
     }
-    
+
     @throw [NSException exceptionUnexpectedClassOfConfigurationWithKey:key andClass:aClass];
+}
+
+- (nonnull NSString *)hexColorForKey:(nonnull NSString *)key {
+    id object = [self stringForKey:key];
+
+    if (!object || [object isKindOfClass:NSNull.class]) {
+        return nil;
+    }
+    NSString *regexPattern = @"#[A-Fa-f0-9]{6}$";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexPattern options:0 error:nil];
+    if ([regex matchesInString:object options:NSMatchingAnchored range:NSMakeRange(0, [object length])].count) {
+        return object;
+    }
+
+    @throw [NSException exceptionUnexpectedFormatConfigurationWithKey:key expectedFormat:@"#xxxxxx"];
 }
 
 @end

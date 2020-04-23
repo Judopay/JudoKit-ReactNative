@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nonnull NSNumber *)intForKey:(nonnull NSString *)key;
 - (nullable NSNumber *)optionalIntForKey:(nonnull NSString *)key;
 
+- (nonnull NSString *)hexColorForKey:(nonnull NSString *)key;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -51,5 +51,12 @@ NSExceptionName const JPUnexpectedTypeConfigurationException;
                                  userInfo:nil];
 }
 
++ (NSException *)exceptionUnexpectedFormatConfigurationWithKey:(nonnull NSString *)key expectedFormat:(nonnull NSString *)format {
+    NSString *reason = [NSString stringWithFormat:@"Judo configuration property '%@' should be formatted '%@'.", key, format];
+    return [NSException exceptionWithName:JPUnexpectedTypeConfigurationException
+                                   reason:reason
+                                 userInfo:nil];
+}
+
 
 @end

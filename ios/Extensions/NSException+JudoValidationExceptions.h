@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (nonnull NSException *)exceptionUndefinedConfigurationWithKey:(nonnull NSString *)key;
 + (nonnull NSException *)exceptionNilConfigurationWithKey:(nonnull NSString *)key;
 + (nonnull NSException *)exceptionUnexpectedClassOfConfigurationWithKey:(nonnull NSString *)key andClass:(Class)aClass;
++ (NSException *)exceptionUnexpectedFormatConfigurationWithKey:(nonnull NSString *)key expectedFormat:(nonnull NSString *)format;
 
 @end
 

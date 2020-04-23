@@ -238,21 +238,22 @@
                                      size:[[dictionary numberForKey:@"bodyBoldSize"] doubleValue]];
 
     theme.caption = [UIFont fontWithName:[dictionary stringForKey:@"captionFont"]
-                                    size:[[dictionary optionalNumberForKey:@"captionSize"] doubleValue]];
+                                    size:[[dictionary numberForKey:@"captionSize"] doubleValue]];
 
     theme.captionBold = [UIFont fontWithName:[dictionary stringForKey:@"captionBoldFont"]
                                         size:[[dictionary numberForKey:@"captionBoldSize"] doubleValue]];
     
-    theme.jpBlackColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpBlackColor"]];
-    theme.jpDarkGrayColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpDarkGrayColor"]];
-    theme.jpGrayColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpGrayColor"]];
-    theme.jpLightGrayColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpLightGrayColor"]];
-    theme.jpRedColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpRedColor"]];
-    theme.jpWhiteColor = [UIColor colorFromHexString:[dictionary stringForKey:@"jpWhiteColor"]];
-    theme.buttonColor = [UIColor colorFromHexString:[dictionary stringForKey:@"buttonColor"]];
-    theme.buttonTitleColor = [UIColor colorFromHexString:[dictionary stringForKey:@"buttonTitleColor"]];
-    theme.backButtonImage = [UIImage imageNamed:[dictionary stringForKey:@"back-button.png"]];
+    theme.jpBlackColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpBlackColor"]];
+    theme.jpDarkGrayColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpDarkGrayColor"]];
+    theme.jpGrayColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpGrayColor"]];
+    theme.jpLightGrayColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpLightGrayColor"]];
+    theme.jpRedColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpRedColor"]];
+    theme.jpWhiteColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpWhiteColor"]];
+    theme.buttonColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"buttonColor"]];
+    theme.buttonTitleColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"buttonTitleColor"]];
+    theme.backButtonImage = [UIImage imageNamed:[dictionary stringForKey:@"backButtonImage"]];
     theme.buttonCornerRadius = [[dictionary numberForKey:@"buttonCornerRadius"] doubleValue];
+    
     return theme;
 }
 
