@@ -1,6 +1,6 @@
 //
 //  NSDictionary+JudoConvert.m
-//  RNJudopay
+//  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
 //
