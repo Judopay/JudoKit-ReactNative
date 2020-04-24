@@ -111,10 +111,7 @@
 
 - (nonnull NSString *)hexColorForKey:(nonnull NSString *)key {
     id object = [self stringForKey:key];
-
-    if (!object || [object isKindOfClass:NSNull.class]) {
-        return nil;
-    }
+    
     NSString *regexPattern = @"#[A-Fa-f0-9]{6}$";
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexPattern options:0 error:nil];
     if ([regex matchesInString:object options:NSMatchingAnchored range:NSMakeRange(0, [object length])].count) {
