@@ -36,7 +36,32 @@ const cardAddress: JudoAddress = {
 }
 
 const theme: JudoTheme = {
-    //TODO: Nothing here yet
+    largeTitleFont: "Quicksand-Bold",
+    largeTitleSize: 18,
+    titleFont: "Quicksand-Italic",
+    titleSize: 16,
+    headlineFont: "Quicksand-Regular",
+    headlineSize: 15,
+    headlineLightFont: "Quicksand-Regular",
+    headlineLightSize: 15,
+    bodyFont: "Quicksand-Regular",
+    bodySize: 15,
+    bodyBoldFont: "Quicksand-Bold",
+    bodyBoldSize: 17,
+    captionFont: "Quicksand-Regular",
+    captionSize: 18,
+    captionBoldFont: "Quicksand-Light",
+    captionBoldSize: 16,
+    jpBlackColor: "#262626",
+    jpDarkGrayColor: "#999999",
+    jpGrayColor: "#E5E5E5",
+    jpLightGrayColor: "#F6F6F6",
+    jpRedColor: "#E21900",
+    jpWhiteColor: "#FFFFFF",
+    buttonColor: "#999999",
+    buttonTitleColor: "#000000",
+    backButtonImage: "back-button.png",
+    buttonCornerRadius: 5
 }
 
 const uiConfiguration: JudoUIConfiguration = {

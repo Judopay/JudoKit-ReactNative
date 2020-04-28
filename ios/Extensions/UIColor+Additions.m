@@ -1,5 +1,5 @@
 //
-//  NSException+JudoValidationExceptions.h
+//  UIColor+Additions.m
 //  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
@@ -22,17 +22,20 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "UIColor+Additions.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation UIColor (Additions)
 
-@interface NSException (JudoValidationExceptions)
-
-+ (nonnull NSException *)exceptionUndefinedConfigurationWithKey:(nonnull NSString *)key;
-+ (nonnull NSException *)exceptionNilConfigurationWithKey:(nonnull NSString *)key;
-+ (nonnull NSException *)exceptionUnexpectedClassOfConfigurationWithKey:(nonnull NSString *)key andClass:(Class)aClass;
-+ (nonnull NSException *)exceptionUnexpectedFormatConfigurationWithKey:(nonnull NSString *)key expectedFormat:(nonnull NSString *)format;
+/**
+ * A method which returns an UIImage based on a HEX value
+ */
++ (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01C87483245069650035A1C1 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C87482245069650035A1C1 /* UIColor+Additions.m */; };
 		44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */; };
 		44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
 		44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907A244E491B009DF232 /* RNApplePayWrappers.m */; };
@@ -27,6 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		01C87482245069650035A1C1 /* UIColor+Additions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Additions.m"; sourceTree = "<group>"; };
+		01C87484245069DD0035A1C1 /* UIColor+Additions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Additions.h"; sourceTree = "<group>"; };
 		134814201AA4EA6300B7C361 /* libRNJudo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNJudo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSException+JudoValidationExceptions.m"; sourceTree = "<group>"; };
 		44B29074244E491A009DF232 /* NSDictionary+JudoConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JudoConvert.h"; sourceTree = "<group>"; };
@@ -67,6 +70,8 @@
 				44B29074244E491A009DF232 /* NSDictionary+JudoConvert.h */,
 				44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */,
 				44B29076244E491A009DF232 /* NSException+JudoValidationExceptions.h */,
+				01C87482245069650035A1C1 /* UIColor+Additions.m */,
+				01C87484245069DD0035A1C1 /* UIColor+Additions.h */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -121,7 +126,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1020;
-				ORGANIZATIONNAME = Facebook;
+				ORGANIZATIONNAME = "Alternative Payments Ltd";
 				TargetAttributes = {
 					58B511DA1A9E6C8500147676 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -156,6 +161,7 @@
 				44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */,
 				44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */,
 				44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */,
+				01C87483245069650035A1C1 /* UIColor+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

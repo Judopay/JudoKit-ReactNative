@@ -1,6 +1,6 @@
 //
 //  NSException+JudoValidationExceptions.h
-//  RNJudopay
+//  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
 //
@@ -46,6 +46,13 @@ NSExceptionName const JPUnexpectedTypeConfigurationException;
 
 + (NSException *)exceptionUnexpectedClassOfConfigurationWithKey:(nonnull NSString *)key andClass:(Class)aClass {
     NSString *reason = [NSString stringWithFormat:@"Judo configuration property '%@' should be of type '%@'.", key, NSStringFromClass(aClass)];
+    return [NSException exceptionWithName:JPUnexpectedTypeConfigurationException
+                                   reason:reason
+                                 userInfo:nil];
+}
+
++ (NSException *)exceptionUnexpectedFormatConfigurationWithKey:(nonnull NSString *)key expectedFormat:(nonnull NSString *)format {
+    NSString *reason = [NSString stringWithFormat:@"Judo configuration property '%@' should be formatted '%@'.", key, format];
     return [NSException exceptionWithName:JPUnexpectedTypeConfigurationException
                                    reason:reason
                                  userInfo:nil];

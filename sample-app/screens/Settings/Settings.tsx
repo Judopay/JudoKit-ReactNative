@@ -161,11 +161,11 @@ export default class Settings extends Component {
         underlayColor='gray'
         onPress={() => { this.handlePickerItemPressed(item, settingsItem) }}
       >
-        <View style={[styles.listItem, { marginLeft: 0, marginRight: 0 }]}>
-          <Text style={styles.title}>{item.entry}</Text>
+        <View style={[styles.listItem, { paddingLeft: 10 }]}>
+          <Text style={[styles.title, { fontSize: 16 }]}>{item.entry}</Text>
           {settingsItem.valueArray!.indexOf(item.value, 0) > -1 || settingsItem.value == item.value
             ? <Image
-              style={{ width: 30, height: 30, alignItems: 'center', padding: 10 }}
+              style={{ width: 10, height: 10, alignItems: 'center', padding: 10 }}
               source={require('../../resources/ic_check.png')} />
             : <View />}
         </View>
@@ -193,7 +193,6 @@ export default class Settings extends Component {
       return (
         <View style={{ height: 350}}>
           <SectionList
-            style={{ marginLeft: 10, marginRight: 10 }}
             sections={this.getPickerDataList(settingsItem)}
             keyExtractor={(item) => item.value}
             renderItem={({ item }) => this.getPickerListItem(item, settingsItem)}
@@ -250,10 +249,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItem: {
-    marginLeft: 20,
+    paddingLeft: 20,
     marginVertical: 8,
     marginTop: 10,
-    marginRight: 10,
+    paddingRight: 10,
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between'
@@ -273,8 +272,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    color: '#000',
-    width: 250
+    color: '#000'
   },
   subtitle: {
     fontSize: 15,

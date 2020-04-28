@@ -1,6 +1,6 @@
 //
 //  RNApplePayWrappers.m
-//  JudoPay
+//  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
 //

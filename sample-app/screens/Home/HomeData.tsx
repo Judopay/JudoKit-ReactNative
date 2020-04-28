@@ -124,7 +124,7 @@ export const getStoredData = async (state: any): Promise<object> => {
   }
 }
 
-const parsePaymentMethods = (values: Array<String>): JudoPaymentMethod => {
+const parsePaymentMethods = (values: string[]): JudoPaymentMethod => {
   var paymentMethods = 0
   if (values.includes('CARD')) paymentMethods |= JudoPaymentMethod.Card
   if (values.includes('APPLE_PAY')) paymentMethods |= JudoPaymentMethod.ApplePay
@@ -133,7 +133,7 @@ const parsePaymentMethods = (values: Array<String>): JudoPaymentMethod => {
   return paymentMethods
 }
 
-const parseCardNetworks = (values: Array<String>): JudoCardNetwork => {
+const parseCardNetworks = (values: string[]): JudoCardNetwork => {
   var cardNetworks = 0
   if (values.includes('AMEX')) cardNetworks |= JudoCardNetwork.Amex
   if (values.includes('CHINA_UNION_PAY')) cardNetworks |= JudoCardNetwork.ChinaUnionPay
