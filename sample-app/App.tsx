@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './screens/Home/Home'
 import Settings from './screens/Settings/Settings'
+import Receipt from './screens/Receipt/Receipt'
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,16 @@ function App() {
           name="Settings"
           component={Settings}
           options={() => ({
+            headerStyle: {
+              backgroundColor: '#5623e4',
+            },
+            headerTintColor: '#fff',
+          })}
+        />
+        <Stack.Screen
+          name="Receipt"
+          component={Receipt}
+          options={({ navigation }) => ({
             headerStyle: {
               backgroundColor: '#5623e4',
             },

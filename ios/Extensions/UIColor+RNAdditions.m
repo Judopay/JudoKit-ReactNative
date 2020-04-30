@@ -23,9 +23,9 @@
 //  SOFTWARE.
 
 #import <UIKit/UIKit.h>
-#import "UIColor+Additions.h"
+#import "UIColor+RNAdditions.h"
 
-@implementation UIColor (Additions)
+@implementation UIColor (RNAdditions)
 
 /**
  * A method which returns an UIImage based on a HEX value

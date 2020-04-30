@@ -26,7 +26,7 @@
 #import "RNApplePayWrappers.h"
 #import "RNTypes.h"
 #import "NSDictionary+JudoConvert.h"
-#import "UIColor+Additions.h"
+#import "UIColor+RNAdditions.h"
 
 @implementation RNWrappers
 

@@ -25,7 +25,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIColor (Additions)
+@interface UIColor (RNAdditions)
 
 /**
  * A method which returns an UIImage based on a HEX value

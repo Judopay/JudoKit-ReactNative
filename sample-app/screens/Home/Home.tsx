@@ -17,7 +17,8 @@ import {
 
 import JudoPay, {
   JudoTransactionType,
-  JudoTransactionMode
+  JudoTransactionMode,
+  JudoResponse
 } from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults';
 import { showMessage } from '../../helpers/utils';
@@ -104,6 +105,9 @@ export default class Home extends Component {
       const judo = new JudoPay(this.state.token, this.state.secret);
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeTransaction(type, this.state.configuration);
+      if (response != null) {
+        this.props.navigation.navigate('Receipt', { receipt: response })
+      }
       console.log(response)
     } catch (error) {
       await showMessage("Error", error.message)
@@ -115,6 +119,9 @@ export default class Home extends Component {
       const judo = new JudoPay(this.state.token, this.state.secret);
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeApplePay(mode, this.state.configuration);
+      if (response != null) {
+        this.props.navigation.navigate('Receipt', { receipt: response })
+      }
       console.log(response)
     } catch (error) {
       await showMessage("Error", error.message)
@@ -126,6 +133,9 @@ export default class Home extends Component {
       const judo = new JudoPay(this.state.token, this.state.secret);
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeGooglePay(mode, this.state.configuration);
+      if (response != null) {
+        this.props.navigation.navigate('Receipt', { receipt: response })
+      }
       console.log(response)
     } catch (error) {
       await showMessage("Error", error.message)
@@ -137,6 +147,9 @@ export default class Home extends Component {
       const judo = new JudoPay(this.state.token, this.state.secret);
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokePaymentMethodScreen(mode, this.state.configuration);
+      if (response != null) {
+        this.props.navigation.navigate('Receipt', { receipt: response })
+      }
       console.log(response)
     } catch (error) {
       await showMessage("Error", error.message)
