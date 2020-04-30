@@ -10,13 +10,12 @@ import {
   SafeAreaView,
   Image
 } from 'react-native'
-// import { ReceiptScreenData } from './ReceiptData'
 import { ReceiptListItem } from './ReceiptProps'
 
 export default class Receipt extends Component {
 
   handleListItemPressed(item: ReceiptListItem) {
-    this.props.navigation.push('Receipt', { receipt: item.object })
+    this.props.navigation.push('Receipt', { receipt: item.value })
   }
 
   getListItem(item: ReceiptListItem) {
@@ -37,48 +36,33 @@ export default class Receipt extends Component {
         :
           <View>
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.subtitle}>{item.subtitle}</Text>
+            <Text style={styles.subtitle}>{item.value.toString()}</Text>
             <View style={styles.separator} />
           </View>
       }
       </TouchableHighlight>
-    );
+    )
   }
 
   getReceiptList(hash: Object) {
-    console.log("keys " + JSON.stringify(hash))
     const items: Array<ReceiptListItem> = []
     for (let [key, value] of Object.entries(hash)) {
-      var expandable = true
-      var subtitile = ""
-      var object = value
-      if (!(value instanceof Object)) {
-        expandable = false
-        subtitile = value.toString()
-      }
-      let item: ReceiptListItem = {
+      items.push({
         title: key,
-        subtitle: subtitile,
-        expandable: expandable,
-        object: object
-      }
-      items.push(item)
+        value: value,
+        expandable: value instanceof Object
+      } as ReceiptListItem)
     }
-    return [{
-      data: items
-    }]
+    return [{ data: items }]
   }
 
   render() {
-    const params = this.props.route.params
-    const receipt = params.receipt
-
     return (
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
         <View style={styles.container}>
           <SectionList
-            sections={this.getReceiptList(receipt)}
+            sections={this.getReceiptList(this.props.route.params.receipt)}
             keyExtractor={(item, index) => item.title + index}
             renderItem={({ item }) => this.getListItem(item)}
           />
