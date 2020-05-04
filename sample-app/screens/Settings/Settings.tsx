@@ -185,6 +185,7 @@ export default class Settings extends Component {
     if (settingsItem.type == SettingsPickType.TextPicker) {
       return (
         <Dialog.Input
+          defaultValue={settingsItem.value}
           style={{ color: 'black' }}
           wrapperStyle={styles.inputDialog}
           onChangeText={(text: string) => { this.handleDialogTextInputChange(text) }} />

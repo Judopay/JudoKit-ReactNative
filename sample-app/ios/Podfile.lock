@@ -1,7 +1,7 @@
 PODS:
   - boost-for-react-native (1.63.0)
   - CocoaDebug (1.2.5)
-  - DeviceDNA (0.1.6)
+  - DeviceDNA (1.1.2)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
   - FBReactNativeSpec (0.61.5):
@@ -228,7 +228,7 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNCAsyncStorage (1.9.0):
     - React
-  - RNCMaskedView (0.1.9):
+  - RNCMaskedView (0.1.10):
     - React
   - RNGestureHandler (1.6.1):
     - React
@@ -237,7 +237,7 @@ PODS:
     - React
   - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.5.0):
+  - RNScreens (2.7.0):
     - React
   - TrustKit (1.6.5)
   - Yoga (1.14.0)
@@ -360,13 +360,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   JudoKitObjC:
-    :commit: 158158b5052bc64b88296ca0149977171a1ac5eb
+    :commit: 2771fff81463394836dbec374b8d11e0a306eaa7
     :git: "git@github.com:Judopay/JudoKitObjC.git"
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaDebug: 7446061b7ec181a102ad7dfac4535a5adc824e6d
-  DeviceDNA: 06c4c1af198fc8b44711d10bed39e0a8638b490d
+  DeviceDNA: 3e72fd28d345a5aa6f218af4287cb46dc74b62cb
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
@@ -395,11 +395,11 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCAsyncStorage: 453cd7c335ec9ba3b877e27d02238956b76f3268
-  RNCMaskedView: 71fc32d971f03b7f03d6ab6b86b730c4ee64f5b6
+  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNJudopay: 09ead9760b86c100830e065030807764b1f6fce2
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
-  RNScreens: ac02d0e4529f08ced69f5580d416f968a6ec3a1d
+  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
   TrustKit: 073855e3adecd317417bda4ac9e9ac54a2e3b9f2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
