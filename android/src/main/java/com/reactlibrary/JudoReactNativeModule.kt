@@ -5,20 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import com.facebook.react.bridge.*
 import com.judopay.*
-import com.judopay.api.error.ApiError
-import com.judopay.api.model.response.Receipt
 import com.judopay.model.*
 import com.judopay.model.Currency
 import com.judopay.model.googlepay.GooglePayAddressFormat
 import com.judopay.model.googlepay.GooglePayBillingAddressParameters
 import com.judopay.model.googlepay.GooglePayEnvironment
 import com.judopay.model.googlepay.GooglePayShippingAddressParameters
-import java.lang.Error
 import java.lang.Exception
 import kotlin.collections.ArrayList
-import com.readystatesoftware.chuck.ChuckInterceptor;
-import com.judopay.api.factory.JudoApiCallAdapterFactory;
-import com.judopay.api.factory.JudoApiServiceFactory;
 
 const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
 const val JUDO_PROMISE_REJECTION_CODE = "JUDO_ERROR"
@@ -41,15 +35,15 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
             when (resultCode) {
                 PAYMENT_ERROR -> {
-                    val error: ApiError? = data.getParcelableExtra(JUDO_ERROR)
+                    val error: JudoError? = data.getParcelableExtra(JUDO_ERROR)
                     error?.let {
-                        transactionPromise?.reject(error.code.toString(), error.message)
+                        transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, error.message)
                     }
                 }
                 PAYMENT_SUCCESS -> {
-                    val receipt: Receipt? = data.getParcelableExtra(JUDO_RECEIPT)
-                    receipt?.let {
-                        transactionPromise?.resolve(receipt)
+                    val result: JudoResult? = data.getParcelableExtra(JUDO_RESULT)
+                    result?.let {
+                        transactionPromise?.resolve(result)
                     }
                 }
             }
@@ -64,7 +58,6 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
 
     init {
         context.addActivityEventListener(listener)
-        JudoApiServiceFactory.externalInterceptors = (listOf(ChuckInterceptor(context)))
     }
 
     // ------------------------------------------------------------
