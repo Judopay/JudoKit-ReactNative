@@ -8,20 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		01C87483245069650035A1C1 /* UIColor+RNAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C87482245069650035A1C1 /* UIColor+RNAdditions.m */; };
-		44674007246433F50012DB4C /* RNJudoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44674006246433F50012DB4C /* RNJudoTests.swift */; };
-		44674009246433F50012DB4C /* libRNJudo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 134814201AA4EA6300B7C361 /* libRNJudo.a */; };
-		4467401124643D2A0012DB4C /* XCJudoConvertCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4467401024643D2A0012DB4C /* XCJudoConvertCase.m */; };
+		057717333D873855624E3693 /* Pods_RNJudo_RNJudoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3E64B8CB1A30B7E79AA57E /* Pods_RNJudo_RNJudoTests.framework */; };
+		302793852464861A00436747 /* RNJudoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 302793842464861A00436747 /* RNJudoTests.m */; };
+		302793872464861A00436747 /* libRNJudo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 134814201AA4EA6300B7C361 /* libRNJudo.a */; };
+		302793912464863A00436747 /* MockConfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 3027938D2464863900436747 /* MockConfiguration.json */; };
+		302793922464863A00436747 /* RNApplePayWrappersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3027938E2464863A00436747 /* RNApplePayWrappersTests.m */; };
+		302793932464863A00436747 /* RNMocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 3027938F2464863A00436747 /* RNMocks.m */; };
+		302793942464867B00436747 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
+		3027939624648BAE00436747 /* NSException+JudoValidationExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */; };
+		3027939A2464AFA100436747 /* RNWrappersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 302793992464AFA100436747 /* RNWrappersTests.m */; };
 		44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */; };
 		44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
 		44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907A244E491B009DF232 /* RNApplePayWrappers.m */; };
 		44B2907F244E491B009DF232 /* RNWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907B244E491B009DF232 /* RNWrappers.m */; };
 		4B0010D5C8FFA3EA4AF4C56A /* Pods_RNJudo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B6CAE04B116E6423A5F317C /* Pods_RNJudo.framework */; };
-		78F6798A86B90A10FCA83B32 /* Pods_RNJudo_RNJudoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3E64B8CB1A30B7E79AA57E /* Pods_RNJudo_RNJudoTests.framework */; };
 		B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNJudo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4467400A246433F50012DB4C /* PBXContainerItemProxy */ = {
+		302793882464861A00436747 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 58B511D31A9E6C8500147676 /* Project object */;
 			proxyType = 1;
@@ -47,12 +52,16 @@
 		01C87484245069DD0035A1C1 /* UIColor+RNAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+RNAdditions.h"; sourceTree = "<group>"; };
 		134814201AA4EA6300B7C361 /* libRNJudo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNJudo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		279C05BF7E27DDBE62E491FC /* Pods-RNJudo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo.release.xcconfig"; path = "Target Support Files/Pods-RNJudo/Pods-RNJudo.release.xcconfig"; sourceTree = "<group>"; };
+		302793822464861900436747 /* RNJudoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNJudoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		302793842464861A00436747 /* RNJudoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNJudoTests.m; sourceTree = "<group>"; };
+		302793862464861A00436747 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3027938D2464863900436747 /* MockConfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockConfiguration.json; sourceTree = "<group>"; };
+		3027938E2464863A00436747 /* RNApplePayWrappersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNApplePayWrappersTests.m; sourceTree = "<group>"; };
+		3027938F2464863A00436747 /* RNMocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNMocks.m; sourceTree = "<group>"; };
+		302793902464863A00436747 /* RNMocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNMocks.h; sourceTree = "<group>"; };
+		302793992464AFA100436747 /* RNWrappersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNWrappersTests.m; sourceTree = "<group>"; };
 		3791EF88F1241A3EA85263C5 /* Pods-RNJudo-RNJudoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo-RNJudoTests.release.xcconfig"; path = "Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests.release.xcconfig"; sourceTree = "<group>"; };
-		44674004246433F50012DB4C /* RNJudoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNJudoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		44674006246433F50012DB4C /* RNJudoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNJudoTests.swift; sourceTree = "<group>"; };
 		44674008246433F50012DB4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4467400F246438E20012DB4C /* RNJudoTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNJudoTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		4467401024643D2A0012DB4C /* XCJudoConvertCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XCJudoConvertCase.m; sourceTree = "<group>"; };
 		44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSException+JudoValidationExceptions.m"; sourceTree = "<group>"; };
 		44B29074244E491A009DF232 /* NSDictionary+JudoConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JudoConvert.h"; sourceTree = "<group>"; };
 		44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JudoConvert.m"; sourceTree = "<group>"; };
@@ -71,12 +80,12 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		44674001246433F50012DB4C /* Frameworks */ = {
+		3027937F2464861900436747 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44674009246433F50012DB4C /* libRNJudo.a in Frameworks */,
-				78F6798A86B90A10FCA83B32 /* Pods_RNJudo_RNJudoTests.framework in Frameworks */,
+				302793872464861A00436747 /* libRNJudo.a in Frameworks */,
+				057717333D873855624E3693 /* Pods_RNJudo_RNJudoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,13 +108,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		302793832464861A00436747 /* RNJudoTests */ = {
+			isa = PBXGroup;
+			children = (
+				302793842464861A00436747 /* RNJudoTests.m */,
+				302793862464861A00436747 /* Info.plist */,
+			);
+			path = RNJudoTests;
+			sourceTree = "<group>";
+		};
 		44674005246433F50012DB4C /* RNJudoTests */ = {
 			isa = PBXGroup;
 			children = (
-				44674006246433F50012DB4C /* RNJudoTests.swift */,
+				302793992464AFA100436747 /* RNWrappersTests.m */,
+				3027938D2464863900436747 /* MockConfiguration.json */,
+				3027938E2464863A00436747 /* RNApplePayWrappersTests.m */,
+				302793902464863A00436747 /* RNMocks.h */,
+				3027938F2464863A00436747 /* RNMocks.m */,
 				44674008246433F50012DB4C /* Info.plist */,
-				4467400F246438E20012DB4C /* RNJudoTests-Bridging-Header.h */,
-				4467401024643D2A0012DB4C /* XCJudoConvertCase.m */,
 			);
 			path = RNJudoTests;
 			sourceTree = "<group>";
@@ -143,10 +163,11 @@
 				B3E7B5881CC2AC0600A0062D /* RNJudo.h */,
 				B3E7B5891CC2AC0600A0062D /* RNJudo.m */,
 				44674005246433F50012DB4C /* RNJudoTests */,
+				302793832464861A00436747 /* RNJudoTests */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				9B6791AF87E7C37C6CE084D2 /* Pods */,
-				44674004246433F50012DB4C /* RNJudoTests.xctest */,
 				9DA5B1B63B800FC15D705334 /* Frameworks */,
+				302793822464861900436747 /* RNJudoTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -173,24 +194,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		44674003246433F50012DB4C /* RNJudoTests */ = {
+		302793812464861900436747 /* RNJudoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4467400E246433F50012DB4C /* Build configuration list for PBXNativeTarget "RNJudoTests" */;
+			buildConfigurationList = 3027938A2464861A00436747 /* Build configuration list for PBXNativeTarget "RNJudoTests" */;
 			buildPhases = (
-				D5FB1A056C803D3C882BE968 /* [CP] Check Pods Manifest.lock */,
-				44674000246433F50012DB4C /* Sources */,
-				44674001246433F50012DB4C /* Frameworks */,
-				44674002246433F50012DB4C /* Resources */,
-				810E3786CFFAFECC2FB831E3 /* [CP] Embed Pods Frameworks */,
+				7D2EAE7C3219DF6E39C7B41D /* [CP] Check Pods Manifest.lock */,
+				3027937E2464861900436747 /* Sources */,
+				3027937F2464861900436747 /* Frameworks */,
+				302793802464861900436747 /* Resources */,
+				4ADC37DC29341F8C7537DB78 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				4467400B246433F50012DB4C /* PBXTargetDependency */,
+				302793892464861A00436747 /* PBXTargetDependency */,
 			);
 			name = RNJudoTests;
 			productName = RNJudoTests;
-			productReference = 44674004246433F50012DB4C /* RNJudoTests.xctest */;
+			productReference = 302793822464861900436747 /* RNJudoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		58B511DA1A9E6C8500147676 /* RNJudo */ = {
@@ -221,8 +242,9 @@
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Alternative Payments Ltd";
 				TargetAttributes = {
-					44674003246433F50012DB4C = {
+					302793812464861900436747 = {
 						CreatedOnToolsVersion = 11.4.1;
+						DevelopmentTeam = 95V535S6TQ;
 						ProvisioningStyle = Automatic;
 					};
 					58B511DA1A9E6C8500147676 = {
@@ -244,23 +266,24 @@
 			projectRoot = "";
 			targets = (
 				58B511DA1A9E6C8500147676 /* RNJudo */,
-				44674003246433F50012DB4C /* RNJudoTests */,
+				302793812464861900436747 /* RNJudoTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		44674002246433F50012DB4C /* Resources */ = {
+		302793802464861900436747 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				302793912464863A00436747 /* MockConfiguration.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		810E3786CFFAFECC2FB831E3 /* [CP] Embed Pods Frameworks */ = {
+		4ADC37DC29341F8C7537DB78 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -328,6 +351,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7D2EAE7C3219DF6E39C7B41D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNJudo-RNJudoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D311BCF1C891389BB979943E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -350,37 +395,19 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D5FB1A056C803D3C882BE968 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RNJudo-RNJudoTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		44674000246433F50012DB4C /* Sources */ = {
+		3027937E2464861900436747 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4467401124643D2A0012DB4C /* XCJudoConvertCase.m in Sources */,
-				44674007246433F50012DB4C /* RNJudoTests.swift in Sources */,
+				302793852464861A00436747 /* RNJudoTests.m in Sources */,
+				3027939A2464AFA100436747 /* RNWrappersTests.m in Sources */,
+				302793922464863A00436747 /* RNApplePayWrappersTests.m in Sources */,
+				302793942464867B00436747 /* NSDictionary+JudoConvert.m in Sources */,
+				3027939624648BAE00436747 /* NSException+JudoValidationExceptions.m in Sources */,
+				302793932464863A00436747 /* RNMocks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,15 +427,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4467400B246433F50012DB4C /* PBXTargetDependency */ = {
+		302793892464861A00436747 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 58B511DA1A9E6C8500147676 /* RNJudo */;
-			targetProxy = 4467400A246433F50012DB4C /* PBXContainerItemProxy */;
+			targetProxy = 302793882464861A00436747 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		4467400C246433F50012DB4C /* Debug */ = {
+		3027938B2464861A00436747 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 519A0EFB9F5FC707B83D5CEA /* Pods-RNJudo-RNJudoTests.debug.xcconfig */;
 			buildSettings = {
@@ -420,23 +447,20 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 95V535S6TQ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = RNJudoTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.judo.RNJudoTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.judopay.RNJudoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "RNJudoTests/RNJudoTests-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		4467400D246433F50012DB4C /* Release */ = {
+		3027938C2464861A00436747 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3791EF88F1241A3EA85263C5 /* Pods-RNJudo-RNJudoTests.release.xcconfig */;
 			buildSettings = {
@@ -449,16 +473,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 95V535S6TQ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = RNJudoTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.judo.RNJudoTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.judopay.RNJudoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "RNJudoTests/RNJudoTests-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -601,11 +623,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4467400E246433F50012DB4C /* Build configuration list for PBXNativeTarget "RNJudoTests" */ = {
+		3027938A2464861A00436747 /* Build configuration list for PBXNativeTarget "RNJudoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4467400C246433F50012DB4C /* Debug */,
-				4467400D246433F50012DB4C /* Release */,
+				3027938B2464861A00436747 /* Debug */,
+				3027938C2464861A00436747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
