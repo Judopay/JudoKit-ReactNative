@@ -37,13 +37,6 @@ NSExceptionName const JPUnexpectedTypeConfigurationException;
                                  userInfo:nil];
 }
 
-+ (NSException *)exceptionNilConfigurationWithKey:(nonnull NSString *)key {
-    NSString *reason = [NSString stringWithFormat:@"Judo configuration property '%@' should not be null.", key];
-    return [NSException exceptionWithName:JPNullConfigurationException
-                                   reason:reason
-                                 userInfo:nil];
-}
-
 + (NSException *)exceptionUnexpectedClassOfConfigurationWithKey:(nonnull NSString *)key andClass:(Class)aClass {
     NSString *reason = [NSString stringWithFormat:@"Judo configuration property '%@' should be of type '%@'.", key, NSStringFromClass(aClass)];
     return [NSException exceptionWithName:JPUnexpectedTypeConfigurationException

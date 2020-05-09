@@ -26,20 +26,103 @@
 
 @interface NSDictionary (JudoConvert)
 
+/**
+ * A method that extracts an [NSDictionary] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the NSDictionary instance
+ *
+ * @return a non-nullable NSDictionary instance
+ */
 - (nonnull NSDictionary *)dictionaryForKey:(nonnull NSString *)key;
+
+/**
+ * A method that extracts an optional [NSDictionary] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the NSDictionary instance
+ *
+ * @return a nullable NSDictionary instance
+ */
 - (nullable NSDictionary *)optionalDictionaryForKey:(nonnull NSString *)key;
 
+/**
+ * A method that extracts an [NSArray] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the NSArray instance
+ *
+ * @return a non-nullable NSArray instance
+ */
 - (nonnull NSArray *)arrayForKey:(nonnull NSString *)key;
+
+/**
+ * A method that extracts an optional [NSArray] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the NSArray instance
+ *
+ * @return a nullable NSArray instance
+ */
 - (nullable NSArray *)optionalArrayForKey:(nonnull NSString *)key;
 
+/**
+ * A method that extracts an [NSString] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the NSString instance
+ *
+ * @return a non-nullable NSString instance
+ */
 - (nonnull NSString *)stringForKey:(nonnull NSString *)key;
+
+/**
+ * A method that extracts an optional [NSString] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the NSString instance
+ *
+ * @return a nullable NSString instance
+ */
 - (nullable NSString *)optionalStringForKey:(nonnull NSString *)key;
 
+/**
+ * A method that extracts an [NSNumber] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the NSNumber instance
+ *
+ * @return a non-nullable NSNumber instance
+ */
 - (nonnull NSNumber *)numberForKey:(nonnull NSString *)key;
+
+/**
+ * A method that extracts an optional [NSNumber] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the NSNumber instance
+ *
+ * @return a nullable NSNumber instance
+ */
 - (nullable NSNumber *)optionalNumberForKey:(nonnull NSString *)key;
 
+/**
+ * A method that extracts an [Bool NSNumber] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the Bool NSNumber instance
+ *
+ * @return a non-nullable Bool NSNumber instance
+ */
 - (nonnull NSNumber *)boolForKey:(nonnull NSString *)key;
+
+/**
+ * A method that extracts an optional [Bool NSNumber] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the Bool NSNumber instance
+ *
+ * @return a nullable Bool NSNumber instance
+ */
 - (nullable NSNumber *)optionalBoolForKey:(nonnull NSString *)key;
 
+/**
+ * A method that extracts a valid [HEX Color NSString] instance from the dictionary and throws if failed
+ *
+ * @param key - the key used to find the HEX NSString instance
+ *
+ * @return a non-nullable HEX NSString instance
+ */
 - (nonnull NSString *)hexColorForKey:(nonnull NSString *)key;
+
 @end

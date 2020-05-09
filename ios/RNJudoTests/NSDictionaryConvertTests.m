@@ -428,6 +428,7 @@
  */
 - (void)test_OnMissingHEXString_ThrowError {
     NSMutableDictionary *mockDictionary = [NSMutableDictionary new];
+    mockDictionary[@"example-key"] = [NSNull new];
     XCTAssertThrows([mockDictionary hexColorForKey:@"example-key"]);
 }
 

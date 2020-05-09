@@ -28,8 +28,12 @@
 @interface UIColor (RNAdditions)
 
 /**
- * A method which returns an UIImage based on a HEX value
+ * A method which returns an UIColor instance based on a HEX value
+ *
+ * @param hexString - the HEX string value that describes the color
+ *
+ * @returns a nonnull UIColor instance
  */
-+ (UIColor *)colorFromHexString:(NSString *)hexString;
++ (nonnull UIColor *)colorFromHexString:(nonnull NSString *)hexString;
 
 @end

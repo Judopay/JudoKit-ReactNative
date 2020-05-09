@@ -70,13 +70,7 @@
 - (id)objectForKey:(NSString *)key shouldBeInstanceOfClass:(Class)aClass andNonNil:(BOOL)forceNonNil {
 
     if ([self.allKeys containsObject:key]) {
-
         id object = [self objectForKey:key andInstanceOfClass:aClass];
-
-        if (!object && forceNonNil) {
-            @throw [NSException exceptionNilConfigurationWithKey:key];
-        }
-
         return object;
     }
 
