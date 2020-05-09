@@ -1,7 +1,7 @@
 {
     "token": "example-token",
     "secret": "example-secret",
-    "sandboxed": 1,
+    "sandboxed": true,
     "transactionType": 0,
     "configuration": {
         "judoId": "example-judo-id",
@@ -23,11 +23,11 @@
             "line3": "example-line-3",
             "postCode": "example-post-code",
             "town": "example-town",
-            "countryCode": "example-country-code"
+            "countryCode": 12
         },
         "uiConfiguration": {
-            "isAVSEnabled": 0,
-            "shouldDisplayAmount": 1,
+            "isAVSEnabled": false,
+            "shouldDisplayAmount": true,
             "theme": {
                 "largeTitleFont": "Avenir",
                 "largeTitleSize": 20,

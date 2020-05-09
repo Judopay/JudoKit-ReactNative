@@ -124,7 +124,6 @@
  * THEN:  an 'invalid payment summary item elements' exception should be thrown
  */
 - (void)test_OnInvalidPaymentSummaryItemElements_ThrowError {
-    //TODO: Test case not implemented. Exception is thrown but for another reason.
     NSDictionary *config = [self configurationByChangingValue:@[@"hello"] forKey:@"paymentSummaryItems"];
     XCTAssertThrows([RNApplePayWrappers applePayConfigurationFromConfiguration:config]);
 }
@@ -467,7 +466,6 @@
  */
 - (void)test_OnInvalidShippingMethodElements_ThrowError {
     NSDictionary *config = [self configurationByChangingValue:@[@"hello"] forKey:@"shippingMethods"];
-    //TODO: Test case not implemented. Exception is thrown but for another reason.
     XCTAssertThrows([RNApplePayWrappers applePayConfigurationFromConfiguration:config]);
 }
 
