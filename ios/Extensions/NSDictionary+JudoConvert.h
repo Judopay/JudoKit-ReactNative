@@ -24,8 +24,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface NSDictionary (JudoConvert)
 
 - (nonnull NSDictionary *)dictionaryForKey:(nonnull NSString *)key;
@@ -43,10 +41,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (nonnull NSNumber *)boolForKey:(nonnull NSString *)key;
 - (nullable NSNumber *)optionalBoolForKey:(nonnull NSString *)key;
 
-- (nonnull NSNumber *)intForKey:(nonnull NSString *)key;
-- (nullable NSNumber *)optionalIntForKey:(nonnull NSString *)key;
-
 - (nonnull NSString *)hexColorForKey:(nonnull NSString *)key;
 @end
-
-NS_ASSUME_NONNULL_END

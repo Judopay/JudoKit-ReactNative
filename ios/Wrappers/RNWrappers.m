@@ -46,7 +46,7 @@
 }
 
 + (TransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
-    int type = [properties intForKey:@"transactionType"].intValue;
+    int type = [properties numberForKey:@"transactionType"].intValue;
 
     NSArray<NSNumber *> *availableTypes = @[
         @(TransactionTypePayment),
@@ -60,7 +60,7 @@
 }
 
 + (TransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
-    int intType = [properties intForKey:@"transactionMode"].intValue;
+    int intType = [properties numberForKey:@"transactionMode"].intValue;
     NSArray<NSNumber *> *availableModes = @[
         @(TransactionModePayment),
         @(TransactionModePreAuth),
@@ -94,7 +94,7 @@
 
 + (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration {
 
-    int bitmask = [configuration intForKey:@"supportedCardNetworks"].intValue;
+    int bitmask = [configuration numberForKey:@"supportedCardNetworks"].intValue;
 
     if (BitmaskContains(bitmask, IOSCardNetworkAll)) {
         return CardNetworksAll;
@@ -161,7 +161,7 @@
 }
 
 + (NSArray<JPPaymentMethod *> *)paymentMethodsFromConfiguration:(NSDictionary *)configuration {
-    int bitmask = [configuration intForKey:@"paymentMethods"].intValue;
+    int bitmask = [configuration numberForKey:@"paymentMethods"].intValue;
 
     if (BitmaskContains(bitmask, IOSPaymentMethodAll)) {
         return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal];
@@ -190,7 +190,7 @@
                                       line2:[addressDictionary optionalStringForKey:@"line2"]
                                       line3:[addressDictionary optionalStringForKey:@"line3"]
                                        town:[addressDictionary optionalStringForKey:@"town"]
-                                countryCode:[addressDictionary optionalIntForKey:@"countryCode"]
+                                countryCode:[addressDictionary optionalNumberForKey:@"countryCode"]
                                    postCode:[addressDictionary optionalStringForKey:@"postCode"]];
 }
 

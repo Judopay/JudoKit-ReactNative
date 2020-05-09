@@ -67,14 +67,6 @@
     return [self objectForKey:key shouldBeInstanceOfClass:@(YES).class andNonNil:NO];
 }
 
-- (NSNumber *)intForKey:(NSString *)key {
-    return [self objectForKey:key shouldBeInstanceOfClass:@(1).class andNonNil:YES];
-}
-
-- (NSNumber *)optionalIntForKey:(NSString *)key {
-    return [self objectForKey:key shouldBeInstanceOfClass:@(1).class andNonNil:NO];
-}
-
 - (id)objectForKey:(NSString *)key shouldBeInstanceOfClass:(Class)aClass andNonNil:(BOOL)forceNonNil {
 
     if ([self.allKeys containsObject:key]) {
