@@ -654,7 +654,7 @@
 - (void)test_OnSupportedCardNetworkValue1_SetVisa {
     NSDictionary *props = [self propertiesWithConfigurationValue:@1 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworkVisa);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeVisa);
 }
 
 /*
@@ -667,7 +667,7 @@
 - (void)test_OnSupportedCardNetworkValue2_SetMasterCard {
     NSDictionary *props = [self propertiesWithConfigurationValue:@2 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworkMasterCard);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeMasterCard);
 }
 
 /*
@@ -680,7 +680,7 @@
 - (void)test_OnSupportedCardNetworkValue4_SetMaestro {
     NSDictionary *props = [self propertiesWithConfigurationValue:@4 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworkMaestro);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeMaestro);
 }
 
 /*
@@ -693,7 +693,7 @@
 - (void)test_OnSupportedCardNetworkValue8_SetAMEX {
     NSDictionary *props = [self propertiesWithConfigurationValue:@8 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworkAMEX);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeAMEX);
 }
 
 /*
@@ -706,7 +706,7 @@
 - (void)test_OnSupportedCardNetworkValue16_SetChinaUnionPay {
     NSDictionary *props = [self propertiesWithConfigurationValue:@16 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworkChinaUnionPay);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeChinaUnionPay);
 }
 
 /*
@@ -719,7 +719,7 @@
 - (void)test_OnSupportedCardNetworkValue32_SetJCB {
     NSDictionary *props = [self propertiesWithConfigurationValue:@32 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworkJCB);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeJCB);
 }
 
 /*
@@ -732,7 +732,7 @@
 - (void)test_OnSupportedCardNetworkValue64_SetDiscover {
     NSDictionary *props = [self propertiesWithConfigurationValue:@64 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworkDiscover);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeDiscover);
 }
 
 /*
@@ -745,7 +745,7 @@
 - (void)test_OnSupportedCardNetworkValue128_SetDinersClub {
     NSDictionary *props = [self propertiesWithConfigurationValue:@128 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworkDinersClub);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeDinersClub);
 }
 
 /*
@@ -758,7 +758,7 @@
 - (void)test_OnSupportedCardNetworkValue256_SetAll {
     NSDictionary *props = [self propertiesWithConfigurationValue:@256 forKey:@"supportedCardNetworks"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.supportedCardNetworks, CardNetworksAll);
+    XCTAssertEqual(config.supportedCardNetworks, JPCardNetworkTypeAll);
 }
 
 /*

@@ -45,26 +45,26 @@
     return judoKit;
 }
 
-+ (TransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
++ (JPTransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
     int type = [properties numberForKey:@"transactionType"].intValue;
 
     NSArray<NSNumber *> *availableTypes = @[
-        @(TransactionTypePayment),
-        @(TransactionTypePreAuth),
-        @(TransactionTypeRegisterCard),
-        @(TransactionTypeCheckCard),
-        @(TransactionTypeSaveCard)
+        @(JPTransactionTypePayment),
+        @(JPTransactionTypePreAuth),
+        @(JPTransactionTypeRegisterCard),
+        @(JPTransactionTypeCheckCard),
+        @(JPTransactionTypeSaveCard)
     ];
 
     return availableTypes[type].intValue;
 }
 
-+ (TransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
++ (JPTransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
     int intType = [properties numberForKey:@"transactionMode"].intValue;
     NSArray<NSNumber *> *availableModes = @[
-        @(TransactionModePayment),
-        @(TransactionModePreAuth),
-        @(TransactionModeServerToServer)
+        @(JPTransactionModePayment),
+        @(JPTransactionModePreAuth),
+        @(JPTransactionModeServerToServer)
     ];
     
     return availableModes[intType].intValue;
@@ -92,46 +92,46 @@
     return configuration;
 }
 
-+ (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration {
++ (JPCardNetworkType)cardNetworksFromConfiguration:(NSDictionary *)configuration {
 
     int bitmask = [configuration numberForKey:@"supportedCardNetworks"].intValue;
 
     if (BitmaskContains(bitmask, IOSCardNetworkAll)) {
-        return CardNetworksAll;
+        return JPCardNetworkTypeAll;
     }
 
-    CardNetwork networks = CardNetworkUnknown;
+    JPCardNetworkType networks = JPCardNetworkTypeUnknown;
 
     if (BitmaskContains(bitmask, IOSCardNetworkVisa)) {
-        networks |= CardNetworkVisa;
+        networks |= JPCardNetworkTypeVisa;
     }
 
     if (BitmaskContains(bitmask, IOSCardNetworkMastercard)) {
-        networks |= CardNetworkMasterCard;
+        networks |= JPCardNetworkTypeMasterCard;
     }
 
     if (BitmaskContains(bitmask, IOSCardNetworkMaestro)) {
-        networks |= CardNetworkMaestro;
+        networks |= JPCardNetworkTypeMaestro;
     }
 
     if (BitmaskContains(bitmask, IOSCardNetworkAmex)) {
-        networks |= CardNetworkAMEX;
+        networks |= JPCardNetworkTypeAMEX;
     }
 
     if (BitmaskContains(bitmask, IOSCardNetworkChinaUnionPay)) {
-        networks |= CardNetworkChinaUnionPay;
+        networks |= JPCardNetworkTypeChinaUnionPay;
     }
 
     if (BitmaskContains(bitmask, IOSCardNetworkJCB)) {
-        networks |= CardNetworkJCB;
+        networks |= JPCardNetworkTypeJCB;
     }
 
     if (BitmaskContains(bitmask, IOSCardNetworkDiscover)) {
-        networks |= CardNetworkDiscover;
+        networks |= JPCardNetworkTypeDiscover;
     }
 
     if (BitmaskContains(bitmask, IOSCardNetworkDinersClub)) {
-        networks |= CardNetworkDinersClub;
+        networks |= JPCardNetworkTypeDinersClub;
     }
 
     return networks;

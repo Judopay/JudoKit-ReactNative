@@ -234,7 +234,7 @@
 - (void)test_OnMerchantCapabilityValueZero_Enable3DS {
     NSDictionary *config = [self configurationByChangingValue:@0 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.merchantCapabilities, MerchantCapability3DS);
+    XCTAssertEqual(appleConfig.merchantCapabilities, JPMerchantCapability3DS);
 }
 
 /*
@@ -247,7 +247,7 @@
 - (void)test_OnMerchantCapabilityValueOne_EnableEMV {
     NSDictionary *config = [self configurationByChangingValue:@2 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.merchantCapabilities, MerchantCapabilityEMV);
+    XCTAssertEqual(appleConfig.merchantCapabilities, JPMerchantCapabilityEMV);
 }
 
 /*
@@ -260,7 +260,7 @@
 - (void)test_OnMerchantCapabilityValueOne_EnableCredit {
     NSDictionary *config = [self configurationByChangingValue:@4 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.merchantCapabilities, MerchantCapabilityCredit);
+    XCTAssertEqual(appleConfig.merchantCapabilities, JPMerchantCapabilityCredit);
 }
 
 /*
@@ -273,7 +273,7 @@
 - (void)test_OnMerchantCapabilityValueOne_EnableDebit {
     NSDictionary *config = [self configurationByChangingValue:@8 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.merchantCapabilities, MerchantCapabilityDebit);
+    XCTAssertEqual(appleConfig.merchantCapabilities, JPMerchantCapabilityDebit);
 }
 
 /*
@@ -286,7 +286,7 @@
 - (void)test_OnMerchantCapabilityValueOne_EnableAll {
     NSDictionary *config = [self configurationByChangingValue:@16 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    int value = MerchantCapability3DS | MerchantCapabilityEMV | MerchantCapabilityCredit | MerchantCapabilityDebit;
+    int value = JPMerchantCapability3DS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
     XCTAssertEqual(appleConfig.merchantCapabilities, value);
 }
 
@@ -312,7 +312,7 @@
 - (void)test_OnRequiredBillingFieldsValueOne_SetPostalCode {
     NSDictionary *config = [self configurationByChangingValue:@1 forKey:@"requiredBillingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredBillingContactFields, ContactFieldPostalAddress);
+    XCTAssertEqual(appleConfig.requiredBillingContactFields, JPContactFieldPostalAddress);
 }
 
 /*
@@ -325,7 +325,7 @@
 - (void)test_OnRequiredBillingFieldsValueTwo_SetPhone {
     NSDictionary *config = [self configurationByChangingValue:@2 forKey:@"requiredBillingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredBillingContactFields, ContactFieldPhone);
+    XCTAssertEqual(appleConfig.requiredBillingContactFields, JPContactFieldPhone);
 }
 
 /*
@@ -338,7 +338,7 @@
 - (void)test_OnRequiredBillingFieldsValueFour_SetEmail {
     NSDictionary *config = [self configurationByChangingValue:@4 forKey:@"requiredBillingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredBillingContactFields, ContactFieldEmail);
+    XCTAssertEqual(appleConfig.requiredBillingContactFields, JPContactFieldEmail);
 }
 
 /*
@@ -351,7 +351,7 @@
 - (void)test_OnRequiredBillingFieldsValueEight_SetName {
     NSDictionary *config = [self configurationByChangingValue:@8 forKey:@"requiredBillingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredBillingContactFields, ContactFieldName);
+    XCTAssertEqual(appleConfig.requiredBillingContactFields, JPContactFieldName);
 }
 
 /*
@@ -364,7 +364,7 @@
 - (void)test_OnRequiredBillingFieldsValueSixteen_SetName {
     NSDictionary *config = [self configurationByChangingValue:@16 forKey:@"requiredBillingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredBillingContactFields, ContactFieldAll);
+    XCTAssertEqual(appleConfig.requiredBillingContactFields, JPContactFieldAll);
 }
 
 /*
@@ -389,7 +389,7 @@
 - (void)test_OnRequiredShippingFieldsValueOne_SetPostalCode {
     NSDictionary *config = [self configurationByChangingValue:@1 forKey:@"requiredShippingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredShippingContactFields, ContactFieldPostalAddress);
+    XCTAssertEqual(appleConfig.requiredShippingContactFields, JPContactFieldPostalAddress);
 }
 
 /*
@@ -402,7 +402,7 @@
 - (void)test_OnRequiredShippingFieldsValueTwo_SetPhone {
     NSDictionary *config = [self configurationByChangingValue:@2 forKey:@"requiredShippingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredShippingContactFields, ContactFieldPhone);
+    XCTAssertEqual(appleConfig.requiredShippingContactFields, JPContactFieldPhone);
 }
 
 /*
@@ -415,7 +415,7 @@
 - (void)test_OnRequiredShippingFieldsValueFour_SetEmail {
     NSDictionary *config = [self configurationByChangingValue:@4 forKey:@"requiredShippingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredShippingContactFields, ContactFieldEmail);
+    XCTAssertEqual(appleConfig.requiredShippingContactFields, JPContactFieldEmail);
 }
 
 /*
@@ -428,7 +428,7 @@
 - (void)test_OnRequiredShippingFieldsValueEight_SetName {
     NSDictionary *config = [self configurationByChangingValue:@8 forKey:@"requiredShippingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredShippingContactFields, ContactFieldName);
+    XCTAssertEqual(appleConfig.requiredShippingContactFields, JPContactFieldName);
 }
 
 /*
@@ -441,7 +441,7 @@
 - (void)test_OnRequiredShippingFieldsValueSixteen_SetName {
     NSDictionary *config = [self configurationByChangingValue:@16 forKey:@"requiredShippingContactFields"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.requiredShippingContactFields, ContactFieldAll);
+    XCTAssertEqual(appleConfig.requiredShippingContactFields, JPContactFieldAll);
 }
 
 
@@ -643,7 +643,7 @@
 - (void)test_OnShippingTypeValueZero_SetShipping {
     NSDictionary *config = [self configurationByChangingValue:@0 forKey:@"shippingType"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.shippingType, ShippingTypeShipping);
+    XCTAssertEqual(appleConfig.shippingType, JPShippingTypeShipping);
 }
 
 /*
@@ -656,7 +656,7 @@
 - (void)test_OnShippingTypeValueOne_SetDelivery {
     NSDictionary *config = [self configurationByChangingValue:@1 forKey:@"shippingType"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.shippingType, ShippingTypeDelivery);
+    XCTAssertEqual(appleConfig.shippingType, JPShippingTypeDelivery);
 }
 
 /*
@@ -669,7 +669,7 @@
 - (void)test_OnShippingTypeValueTwo_SetStorePickup {
     NSDictionary *config = [self configurationByChangingValue:@2 forKey:@"shippingType"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.shippingType, ShippingTypeStorePickup);
+    XCTAssertEqual(appleConfig.shippingType, JPShippingTypeStorePickup);
 }
 
 /*
@@ -682,7 +682,7 @@
 - (void)test_OnShippingTypeValueThree_SetServicePickup {
     NSDictionary *config = [self configurationByChangingValue:@3 forKey:@"shippingType"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.shippingType, ShippingTypeServicePickup);
+    XCTAssertEqual(appleConfig.shippingType, JPShippingTypeServicePickup);
 }
 
 /*
@@ -707,7 +707,7 @@
 - (void)test_OnReturnedInfoValueZero_SetBilling {
     NSDictionary *config = [self configurationByChangingValue:@1 forKey:@"returnedInfo"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.returnedContactInfo, ReturnedInfoBillingContacts);
+    XCTAssertEqual(appleConfig.returnedContactInfo, JPReturnedInfoBillingContacts);
 }
 
 /*
@@ -720,7 +720,7 @@
 - (void)test_OnReturnedInfoValueOne_SetShipping {
     NSDictionary *config = [self configurationByChangingValue:@2 forKey:@"returnedInfo"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.returnedContactInfo, ReturnedInfoShippingContacts);
+    XCTAssertEqual(appleConfig.returnedContactInfo, JPReturnedInfoShippingContacts);
 }
 
 /*
@@ -733,7 +733,7 @@
 - (void)test_OnReturnedInfoValueOne_SetAll {
     NSDictionary *config = [self configurationByChangingValue:@4 forKey:@"returnedInfo"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.returnedContactInfo, ReturnedInfoAll);
+    XCTAssertEqual(appleConfig.returnedContactInfo, JPReturnedInfoAll);
 }
 
 #pragma mark - Helpers

@@ -93,31 +93,31 @@
     return [JPPaymentSummaryItem itemWithLabel:label amount:amount type:type.intValue];
 }
 
-+ (MerchantCapability)merchantCapabilitiesFromAppleConfiguration:(NSDictionary *)appleConfiguration {
++ (JPMerchantCapability)merchantCapabilitiesFromAppleConfiguration:(NSDictionary *)appleConfiguration {
     
     NSNumber *selectedCapabilitiesNumber = [appleConfiguration numberForKey:@"merchantCapabilities"];
     int bitmask = selectedCapabilitiesNumber.intValue;
         
     if (BitmaskContains(bitmask, IOSApplePayCapabilityAll)) {
-        return MerchantCapability3DS | MerchantCapabilityEMV | MerchantCapabilityCredit | MerchantCapabilityDebit;
+        return JPMerchantCapability3DS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
     }
     
-    MerchantCapability capabilities = 0;
+    JPMerchantCapability capabilities = 0;
 
     if (BitmaskContains(bitmask, IOSApplePayCapability3DS)) {
-        capabilities |= MerchantCapability3DS;
+        capabilities |= JPMerchantCapability3DS;
     }
     
     if (BitmaskContains(bitmask, IOSApplePayCapabilityEMV)) {
-        capabilities |= MerchantCapabilityEMV;
+        capabilities |= JPMerchantCapabilityEMV;
     }
     
     if (BitmaskContains(bitmask, IOSApplePayCapabilityCredit)) {
-        capabilities |= MerchantCapabilityCredit;
+        capabilities |= JPMerchantCapabilityCredit;
     }
     
     if (BitmaskContains(bitmask, IOSApplePayCapabilityDebit)) {
-        capabilities |= MerchantCapabilityDebit;
+        capabilities |= JPMerchantCapabilityDebit;
     }
     
     return capabilities;
@@ -151,19 +151,19 @@
                                                         type:typeNumber.intValue];
 }
 
-+ (PaymentShippingType)shippingTypeFromDictionary:(NSDictionary *)dictionary {
++ (JPPaymentShippingType)shippingTypeFromDictionary:(NSDictionary *)dictionary {
     
     NSNumber *shippingTypeNumber = [dictionary numberForKey:@"shippingType"];
     
     switch (shippingTypeNumber.intValue) {
         case IOSShippingTypeDelivery:
-            return ShippingTypeDelivery;
+            return JPShippingTypeDelivery;
         case IOSShippingTypeShipping:
-            return ShippingTypeShipping;
+            return JPShippingTypeShipping;
         case IOSShippingTypeStorePickup:
-            return ShippingTypeStorePickup;
+            return JPShippingTypeStorePickup;
         case IOSShippingTypeServicePickup:
-            return ShippingTypeServicePickup;
+            return JPShippingTypeServicePickup;
         default:
             @throw [NSException exceptionWithName:NSInvalidArgumentException
                                            reason:@"Invalid shippingType provided."
@@ -171,50 +171,50 @@
     }
 }
 
-+ (ContactField)contactFieldsFromContactFieldValue:(int)bitmask {
++ (JPContactField)contactFieldsFromContactFieldValue:(int)bitmask {
     
-    ContactField contactFields = ContactFieldNone;
+    JPContactField contactFields = JPContactFieldNone;
     
     if (BitmaskContains(bitmask, IOSAppleContactFieldAll)) {
-        return ContactFieldAll;
+        return JPContactFieldAll;
     }
     
     if (BitmaskContains(bitmask, IOSAppleContactFieldPostalAddress)) {
-        contactFields |= ContactFieldPostalAddress;
+        contactFields |= JPContactFieldPostalAddress;
     }
     
     if (BitmaskContains(bitmask, IOSAppleContactFieldEmail)) {
-        contactFields |= ContactFieldEmail;
+        contactFields |= JPContactFieldEmail;
     }
     
     if (BitmaskContains(bitmask, IOSAppleContactFieldName)) {
-        contactFields |= ContactFieldName;
+        contactFields |= JPContactFieldName;
     }
     
     if (BitmaskContains(bitmask, IOSAppleContactFieldPhone)) {
-        contactFields |= ContactFieldPhone;
+        contactFields |= JPContactFieldPhone;
     }
     
     return contactFields;
 }
 
-+ (ReturnedInfo)returnedInfoFromAppleConfiguration:(NSDictionary *)appleConfiguration {
++ (JPReturnedInfo)returnedInfoFromAppleConfiguration:(NSDictionary *)appleConfiguration {
     
     NSNumber *returnedInfoNumber = [appleConfiguration numberForKey:@"returnedInfo"];
     int bitmask = returnedInfoNumber.intValue;
     
     if (BitmaskContains(bitmask, IOSAppleReturnedInfoAll)) {
-        return ReturnedInfoAll;
+        return JPReturnedInfoAll;
     }
     
-    ReturnedInfo returnedInfo = ReturnedInfoNone;
+    JPReturnedInfo returnedInfo = JPReturnedInfoNone;
 
     if (BitmaskContains(bitmask, IOSAppleReturnedInfoBilling)) {
-        returnedInfo |= ReturnedInfoBillingContacts;
+        returnedInfo |= JPReturnedInfoBillingContacts;
     }
     
     if (BitmaskContains(bitmask, IOSAppleReturnedInfoShipping)) {
-        returnedInfo |= ReturnedInfoShippingContacts;
+        returnedInfo |= JPReturnedInfoShippingContacts;
     }
     
     return returnedInfo;

@@ -4,7 +4,7 @@ target 'RNJudo' do
   use_frameworks!
 
   # Pods for RNJudo
-  pod 'JudoKitObjC', :git => "git@github.com:Judopay/JudoKit-iOS.git", :branch => "develop"
+  pod "JudoKit-iOS", '~> 1.0.0'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -40,3 +40,4 @@ target 'RNJudo' do
   end
 
 end
+ 
