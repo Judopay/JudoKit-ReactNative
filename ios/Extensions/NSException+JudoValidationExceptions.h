@@ -24,15 +24,37 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface NSException (JudoValidationExceptions)
 
+/**
+ * An exception which triggers when the value for a specified dictionary key is not defined
+ *
+ * @param key - the key of the undefined value
+ *
+ * @returns a nonnull NSException instance
+ */
 + (nonnull NSException *)exceptionUndefinedConfigurationWithKey:(nonnull NSString *)key;
-+ (nonnull NSException *)exceptionNilConfigurationWithKey:(nonnull NSString *)key;
-+ (nonnull NSException *)exceptionUnexpectedClassOfConfigurationWithKey:(nonnull NSString *)key andClass:(Class)aClass;
-+ (nonnull NSException *)exceptionUnexpectedFormatConfigurationWithKey:(nonnull NSString *)key expectedFormat:(nonnull NSString *)format;
+
+/**
+ * An exception which triggers when the value for a specified dictionary key does not match the desired type
+ *
+ * @param key - the key of the undefined value
+ * @param class - the expected class type
+ *
+ * @returns a nonnull NSException instance
+ */
++ (nonnull NSException *)exceptionUnexpectedClassOfConfigurationWithKey:(nonnull NSString *)key
+                                                               andClass:(nonnull Class)aClass;
+
+/**
+ * An exception which triggers when the value for a specified dictionary key does not match the desired format
+ *
+ * @param key - the key of the undefined value
+ * @param format - the expected NSString format
+ *
+ * @returns a nonnull NSException instance
+ */
++ (nonnull NSException *)exceptionUnexpectedFormatConfigurationWithKey:(nonnull NSString *)key
+                                                        expectedFormat:(nonnull NSString *)format;
 
 @end
-
-NS_ASSUME_NONNULL_END

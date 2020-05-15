@@ -46,7 +46,7 @@
 }
 
 + (TransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
-    int type = [properties intForKey:@"transactionType"].intValue;
+    int type = [properties numberForKey:@"transactionType"].intValue;
 
     NSArray<NSNumber *> *availableTypes = @[
         @(TransactionTypePayment),
@@ -60,7 +60,7 @@
 }
 
 + (TransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
-    int intType = [properties intForKey:@"transactionMode"].intValue;
+    int intType = [properties numberForKey:@"transactionMode"].intValue;
     NSArray<NSNumber *> *availableModes = @[
         @(TransactionModePayment),
         @(TransactionModePreAuth),
@@ -73,7 +73,7 @@
 + (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
 
     NSDictionary *configurationDict = [properties dictionaryForKey:@"configuration"];
-
+    
     NSString *judoId = [configurationDict stringForKey:@"judoId"];
     JPAmount *amount = [RNWrappers amountFromConfiguration:configurationDict];
     JPReference *reference = [RNWrappers referenceFromConfiguration:configurationDict];
@@ -94,7 +94,7 @@
 
 + (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration {
 
-    int bitmask = [configuration intForKey:@"supportedCardNetworks"].intValue;
+    int bitmask = [configuration numberForKey:@"supportedCardNetworks"].intValue;
 
     if (BitmaskContains(bitmask, IOSCardNetworkAll)) {
         return CardNetworksAll;
@@ -161,7 +161,7 @@
 }
 
 + (NSArray<JPPaymentMethod *> *)paymentMethodsFromConfiguration:(NSDictionary *)configuration {
-    int bitmask = [configuration intForKey:@"paymentMethods"].intValue;
+    int bitmask = [configuration numberForKey:@"paymentMethods"].intValue;
 
     if (BitmaskContains(bitmask, IOSPaymentMethodAll)) {
         return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal];
@@ -186,7 +186,12 @@
 
 + (JPAddress *)cardAddressFromConfiguration:(NSDictionary *)configuration {
     NSDictionary *addressDictionary = [configuration optionalDictionaryForKey:@"cardAddress"];
-    return [[JPAddress alloc] initWithDictionary:addressDictionary];
+    return [[JPAddress alloc] initWithLine1:[addressDictionary optionalStringForKey:@"line1"]
+                                      line2:[addressDictionary optionalStringForKey:@"line2"]
+                                      line3:[addressDictionary optionalStringForKey:@"line3"]
+                                       town:[addressDictionary optionalStringForKey:@"town"]
+                                countryCode:[addressDictionary optionalNumberForKey:@"countryCode"]
+                                   postCode:[addressDictionary optionalStringForKey:@"postCode"]];
 }
 
 + (JPUIConfiguration *)uiConfigurationFromConfiguration:(NSDictionary *)configuration {
@@ -259,7 +264,14 @@
 
 + (JPPrimaryAccountDetails *)accountDetailsFromConfiguration:(NSDictionary *)configuration {
     NSDictionary *accountDetailsDictionary = [configuration optionalDictionaryForKey:@"primaryAccountDetails"];
-    return [JPPrimaryAccountDetails detailsFromDictionary:accountDetailsDictionary];
+    
+    JPPrimaryAccountDetails *details = [JPPrimaryAccountDetails new];
+    details.name = [accountDetailsDictionary optionalStringForKey:@"name"];
+    details.accountNumber = [accountDetailsDictionary optionalStringForKey:@"accountNumber"];
+    details.dateOfBirth = [accountDetailsDictionary optionalStringForKey:@"dateOfBirth"];
+    details.postCode = [accountDetailsDictionary optionalStringForKey:@"postCode"];
+    
+    return details;
 }
 
 @end
