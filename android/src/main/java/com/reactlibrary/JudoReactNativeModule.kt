@@ -51,11 +51,9 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
         }
     }
 
-    private fun startJudoActivity(configuration: Judo, promise: Promise) {
-        currentActivity?.let {
-            listener.transactionPromise = promise
-            val intent = configuration.toJudoActivityIntent(it)
-            it.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE)
-        }
+    private fun startJudoActivity(configuration: Judo, promise: Promise) = currentActivity?.let {
+        listener.transactionPromise = promise
+        val intent = configuration.toJudoActivityIntent(it)
+        it.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE)
     }
 }
