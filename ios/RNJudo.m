@@ -22,7 +22,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <JudoKitObjC/JudoKitObjC.h>
+@import JudoKit_iOS;
 
 #import "RNJudo.h"
 #import "RNWrappers.h"
@@ -72,7 +72,7 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
     @try {
         JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-        JudoCompletionBlock completion = ^(JPResponse *response, NSError *error) {
+        JPCompletionBlock completion = ^(JPResponse *response, NSError *error) {
             if (error) {
                 reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
             } else {
@@ -82,19 +82,19 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
 
         switch (invocationType) {
             case JudoSDKInvocationTypeTransaction: {
-                TransactionType type = [RNWrappers transactionTypeFromProperties:properties];
+                JPTransactionType type = [RNWrappers transactionTypeFromProperties:properties];
                 [judoKit invokeTransactionWithType:type configuration:configuration completion:completion];
                 break;
             }
                 
             case JudoSDKInvocationTypeApplePay: {
-                TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
+                JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
                 [judoKit invokeApplePayWithMode:mode configuration:configuration completion:completion];
                 break;
             }
                 
             case JudoSDKInvocationTypePaymentMethods: {
-                TransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
+                JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
                 [judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:completion];
                 break;
             }
@@ -105,8 +105,11 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
                                              userInfo:nil];
         }
     } @catch (NSException *exception) {
-        NSString *message = exception.reason;
-        reject(kJudoPromiseRejectionCode, message, [NSError judoParameterError]);
+        NSError *error = [[NSError alloc] initWithDomain:exception.name
+                                                    code:0
+                                                userInfo:exception.userInfo];
+        
+        reject(kJudoPromiseRejectionCode, exception.reason, error);
     }
 }
 

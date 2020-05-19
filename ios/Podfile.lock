@@ -1,6 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - DeviceDNA (1.0.0)
+  - DeviceDNA (1.1.2)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
   - FBReactNativeSpec (0.61.5):
@@ -20,7 +20,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - JudoKitObjC (8.2.1):
+  - JudoKit-iOS (1.0.0):
     - DeviceDNA
     - PayCardsRecognizer
     - TrustKit
@@ -232,7 +232,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - "JudoKitObjC (from `git@github.com:Judopay/JudoKit-iOS.git`, branch `develop`)"
+  - JudoKit-iOS (~> 1.0.0)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -261,6 +261,7 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - DeviceDNA
+    - JudoKit-iOS
     - PayCardsRecognizer
     - TrustKit
 
@@ -275,9 +276,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
-  JudoKitObjC:
-    :branch: develop
-    :git: "git@github.com:Judopay/JudoKit-iOS.git"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -319,20 +317,15 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
-CHECKOUT OPTIONS:
-  JudoKitObjC:
-    :commit: 79f741e029545a94e3be06823c7058845d0a6e20
-    :git: "git@github.com:Judopay/JudoKit-iOS.git"
-
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DeviceDNA: 1cd85946ce5b9a56d16f1ddb96e8c4eea58e27a0
+  DeviceDNA: 3e72fd28d345a5aa6f218af4287cb46dc74b62cb
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  JudoKitObjC: fc659a2d67db3ef22b18ef4014fb9005531bc048
+  JudoKit-iOS: 43cfb6f99e0f7dd2016b8761a2f3036e86b75d7d
   PayCardsRecognizer: 2e4d1b2fdd5f1528fb56064a91e1d58a1af7a2db
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -356,6 +349,6 @@ SPEC CHECKSUMS:
   TrustKit: 073855e3adecd317417bda4ac9e9ac54a2e3b9f2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 55460e4816ec32e8e3af3e993ef71ec937ce2bd4
+PODFILE CHECKSUM: 332a9715d67f6a3c97ec92ea03a2ab2cc1a56bf2
 
 COCOAPODS: 1.9.1

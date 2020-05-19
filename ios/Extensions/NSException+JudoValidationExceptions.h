@@ -39,7 +39,7 @@
  * An exception which triggers when the value for a specified dictionary key does not match the desired type
  *
  * @param key - the key of the undefined value
- * @param class - the expected class type
+ * @param aClass - the expected class type
  *
  * @returns a nonnull NSException instance
  */
