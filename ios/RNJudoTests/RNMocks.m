@@ -1,5 +1,5 @@
 //
-//  UIColor+Additions.m
+//  RNMocks.m
 //  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
@@ -22,18 +22,26 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#import "RNMocks.h"
 
-#import <UIKit/UIKit.h>
+@implementation RNMocks
 
-@interface UIColor (RNAdditions)
++ (NSMutableDictionary *)properties {
+    NSBundle *testBundle = [NSBundle bundleForClass:RNMocks.class];
+    NSString *filePath = [testBundle pathForResource:@"MockConfiguration" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData:data
+                                                                options:kNilOptions
+                                                                  error:nil];
+    return [json mutableCopy];
+}
 
-/**
- * A method which returns an UIColor instance based on a HEX value
- *
- * @param hexString - the HEX string value that describes the color
- *
- * @returns a nonnull UIColor instance
- */
-+ (nonnull UIColor *)colorFromHexString:(nonnull NSString *)hexString;
++ (NSMutableDictionary *)configuration {
+    return [RNMocks.properties[@"configuration"] mutableCopy];
+}
+
++ (NSMutableDictionary *)applePayConfiguration {
+    return [RNMocks.configuration[@"applePayConfiguration"] mutableCopy];
+}
 
 @end

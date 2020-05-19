@@ -1,5 +1,5 @@
 //
-//  UIColor+Additions.m
+//  RNMocks.h
 //  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
@@ -22,18 +22,23 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#import <Foundation/Foundation.h>
 
-#import <UIKit/UIKit.h>
-
-@interface UIColor (RNAdditions)
+@interface RNMocks : NSObject
 
 /**
- * A method which returns an UIColor instance based on a HEX value
- *
- * @param hexString - the HEX string value that describes the color
- *
- * @returns a nonnull UIColor instance
+ * A reference to the mocked payment properties defined in the MockConfiguration.json file
  */
-+ (nonnull UIColor *)colorFromHexString:(nonnull NSString *)hexString;
++ (NSMutableDictionary *)properties;
+
+/**
+ * A reference to the mocked payment configuration defined in the MockConfiguration.json file
+ */
++ (NSMutableDictionary *)configuration;
+
+/**
+ * A reference to the mocked Apple Pay configuration defined in the MockConfiguration.json file
+ */
++ (NSMutableDictionary *)applePayConfiguration;
 
 @end

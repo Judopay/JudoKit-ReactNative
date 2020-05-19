@@ -25,6 +25,10 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+
+// TODO: Temp
+        maven { url "http://pay.cards/maven" }
+
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")

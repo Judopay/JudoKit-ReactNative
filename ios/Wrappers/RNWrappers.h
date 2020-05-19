@@ -23,7 +23,7 @@
 //  SOFTWARE.
 
 
-#import <JudoKitObjC/JudoKitObjC.h>
+@import JudoKit_iOS;
 
 @interface RNWrappers : NSObject
 
@@ -45,7 +45,7 @@
  *
  * @returns a TransactionType value
  */
-+ (TransactionType)transactionTypeFromProperties:(NSDictionary *)properties;
++ (JPTransactionType)transactionTypeFromProperties:(NSDictionary *)properties;
 
 /**
  * A method that returns the correct TransactionMode value based on the passed dictionary parameters
@@ -55,7 +55,7 @@
  *
  * @returns a TransactionMode value
  */
-+ (TransactionMode)transactionModeFromProperties:(NSDictionary *)properties;
++ (JPTransactionMode)transactionModeFromProperties:(NSDictionary *)properties;
 
 /**
  * A method that returns a configured JPConfiguration instance based on the passed dictionary parameters.
@@ -75,6 +75,6 @@
  *
  * @returns a configured CardNetwork instance
  */
-+ (CardNetwork)cardNetworksFromConfiguration:(NSDictionary *)configuration;
++ (JPCardNetworkType)cardNetworksFromConfiguration:(NSDictionary *)configuration;
 
 @end
