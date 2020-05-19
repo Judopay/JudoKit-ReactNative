@@ -1,0 +1,205 @@
+package com.reactlibrary
+
+import android.content.Context
+import android.content.Intent
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableMap
+import com.judokit.android.JUDO_OPTIONS
+import com.judokit.android.Judo
+import com.judokit.android.JudoActivity
+
+internal val ReadableMap.configuration: ReadableMap?
+    get() = getMap("configuration")
+
+internal val ReadableMap.transactionMode: Int?
+    get() = getInt("transactionMode")
+
+internal val ReadableMap.token: String?
+    get() = getString("token")
+
+internal val ReadableMap.secret: String?
+    get() = getString("secret")
+
+internal val ReadableMap.isSandboxed: Boolean?
+    get() = getBoolean("sandboxed")
+
+internal val ReadableMap.judoId: String?
+    get() = configuration?.getString("judoId")
+
+internal val ReadableMap.siteId: String?
+    get() {
+        val hasKey = configuration?.hasKey("siteId") ?: false
+        if (hasKey) {
+            return configuration?.getString("siteId")
+        }
+        return null
+    }
+
+internal val ReadableMap.amount: ReadableMap?
+    get() = configuration?.getMap("amount")
+
+internal val ReadableMap.amountValue: String?
+    get() = amount?.getString("value")
+
+internal val ReadableMap.currencyValue: String?
+    get() = amount?.getString("currency")
+
+internal val ReadableMap.reference: ReadableMap?
+    get() = configuration?.getMap("reference")
+
+internal val ReadableMap.consumerReference: String?
+    get() = reference?.getString("consumerReference")
+
+internal val ReadableMap.paymentReference: String?
+    get() = reference?.getString("paymentReference")
+
+internal val ReadableMap.metadata: ReadableMap?
+    get() {
+        val hasKey = reference?.hasKey("metadata") ?: false
+        if (hasKey) {
+            return reference?.getMap("metadata")
+        }
+        return null
+    }
+
+internal val ReadableMap.cardNetworkValue: Int?
+    get() {
+        val hasKey = configuration?.hasKey("supportedCardNetworks") ?: false
+        if (hasKey) {
+            return configuration?.getInt("supportedCardNetworks")
+        }
+        return null
+    }
+
+internal val ReadableMap.paymentMethodValue: Int?
+    get() {
+        val hasKey = configuration?.hasKey("paymentMethods") ?: false
+        if (hasKey) {
+            return configuration?.getInt("paymentMethods")
+        }
+        return null
+    }
+
+internal val ReadableMap.uiConfiguration: ReadableMap?
+    get() {
+        val hasKey = configuration?.hasKey("uiConfiguration") ?: false
+        if (hasKey) {
+            return configuration?.getMap("uiConfiguration")
+        }
+        return null
+    }
+
+internal val ReadableMap.isAVSEnabled: Boolean?
+    get() = uiConfiguration?.getBoolean("isAVSEnabled")
+
+internal val ReadableMap.shouldDisplayAmount: Boolean?
+    get() = uiConfiguration?.getBoolean("shouldDisplayAmount")
+
+internal val ReadableMap.primaryAccountDetails: ReadableMap?
+    get() {
+        val hasKey = configuration?.hasKey("primaryAccountDetails") ?: false
+        if (hasKey) {
+            return configuration?.getMap("primaryAccountDetails")
+        }
+        return null
+    }
+
+internal val ReadableMap.name: String?
+    get() {
+        val hasKey = primaryAccountDetails?.hasKey("name") ?: false
+        if (hasKey) {
+            return primaryAccountDetails?.getString("name")
+        }
+        return null
+    }
+
+internal val ReadableMap.accountNumber: String?
+    get() {
+        val hasKey = primaryAccountDetails?.hasKey("accountNumber") ?: false
+        if (hasKey) {
+            return primaryAccountDetails?.getString("accountNumber")
+        }
+        return null
+    }
+
+internal val ReadableMap.dateOfBirth: String?
+    get() {
+        val hasKey = primaryAccountDetails?.hasKey("dateOfBirth") ?: false
+        if (hasKey) {
+            return primaryAccountDetails?.getString("dateOfBirth")
+        }
+        return null
+    }
+
+internal val ReadableMap.postCode: String?
+    get() {
+        val hasKey = primaryAccountDetails?.hasKey("postCode") ?: false
+        if (hasKey) {
+            return primaryAccountDetails?.getString("postCode")
+        }
+        return null
+    }
+
+internal val ReadableMap.googlePayConfiguration: ReadableMap?
+    get() {
+        val hasKey = configuration?.hasKey("googlePayConfiguration") ?: false
+        if (hasKey) {
+            return configuration?.getMap("googlePayConfiguration")
+        }
+        return null
+    }
+
+internal val ReadableMap.countryCode: String?
+    get() = googlePayConfiguration?.getString("countryCode")
+
+internal val ReadableMap.environmentValue: Int?
+    get() = googlePayConfiguration?.getInt("environment")
+
+internal val ReadableMap.isEmailRequired: Boolean?
+    get() = googlePayConfiguration?.getBoolean("isEmailRequired")
+
+internal val ReadableMap.isBillingAddressRequired: Boolean?
+    get() = googlePayConfiguration?.getBoolean("isBillingAddressRequired")
+
+internal val ReadableMap.isShippingAddressRequired: Boolean?
+    get() = googlePayConfiguration?.getBoolean("isShippingAddressRequired")
+
+internal val ReadableMap.billingAddressParameters: ReadableMap?
+    get() {
+        val hasKey = googlePayConfiguration?.hasKey("billingAddressParameters") ?: false
+        if (hasKey) {
+            return googlePayConfiguration?.getMap("billingAddressParameters")
+        }
+        return null
+    }
+
+internal val ReadableMap.shippingAddressParameters: ReadableMap?
+    get() {
+        val hasKey = googlePayConfiguration?.hasKey("shippingAddressParameters") ?: false
+        if (hasKey) {
+            return googlePayConfiguration?.getMap("shippingAddressParameters")
+        }
+        return null
+    }
+
+internal val ReadableMap.isBillingPhoneNumberRequired: Boolean?
+    get() = billingAddressParameters?.getBoolean("isPhoneNumberRequired")
+
+internal val ReadableMap.addressFormat: Int?
+    get() = billingAddressParameters?.getInt("addressFormat")
+
+internal val ReadableMap.isShippingPhoneNumberRequired: Boolean?
+    get() = shippingAddressParameters?.getBoolean("isPhoneNumberRequired")
+
+internal val ReadableMap.allowedCountryCodeList: ReadableArray?
+    get() {
+        val hasKey = shippingAddressParameters?.hasKey("allowedCountryCodes") ?: false
+        if (hasKey) {
+            return shippingAddressParameters?.getArray("allowedCountryCodes")
+        }
+        return null
+    }
+
+fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
+    Intent(packageContext, JudoActivity::class.java)
+        .also { it.putExtra(JUDO_OPTIONS, this) }
