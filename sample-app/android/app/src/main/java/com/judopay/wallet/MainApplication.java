@@ -6,7 +6,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.judopay.api.factory.JudoApiServiceFactory;
+import com.judokit.android.api.factory.JudoApiServiceFactory;
 import com.reactlibrary.JudoReactNativePackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.readystatesoftware.chuck.ChuckInterceptor;
