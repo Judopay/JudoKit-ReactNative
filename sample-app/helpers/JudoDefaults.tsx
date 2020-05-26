@@ -67,6 +67,8 @@ const theme: JudoTheme = {
 const uiConfiguration: JudoUIConfiguration = {
     isAVSEnabled: false,
     shouldDisplayAmount: true,
+    isPayButtonAmountVisible: true,
+    isCV2Enabled: false,
     theme: theme,
 }
 
