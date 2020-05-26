@@ -151,13 +151,13 @@ export var SettingsData = {
                     "value": false,
                 } as SettingsListItem,
                 {
-                    "title": "Display amount on the Payment/PreAuth button",
+                    "title": "Show Payment/PreAuth button amount",
                     "subtitle": "Payment/PreAuth buttons will now display the amount & currency",
                     "type": SettingsPickType.Switch,
                     "value": true,
                 } as SettingsListItem,
                 {
-                    "title": "Display amount on the Payment Method screen",
+                    "title": "Show Payment Method screen amount",
                     "subtitle": "The amount will be visible on the Payment Method screen",
                     "type": SettingsPickType.Switch,
                     "value": true,
