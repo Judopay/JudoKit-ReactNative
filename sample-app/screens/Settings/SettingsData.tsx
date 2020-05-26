@@ -120,7 +120,7 @@ export var SettingsData = {
             ]
         },
         {
-            "title": "Others",
+            "title": "Customizations",
             "data": [
                 {
                     "title": "Supported card networks",
@@ -137,7 +137,31 @@ export var SettingsData = {
                     "value": "",
                     "valueArray": ["CARD", "IDEAL"],
                     "pickItems": SettingsPickArray.Payment
-                } as SettingsListItem
+                } as SettingsListItem,
+                {
+                    "title": "Toggle Address Verification System",
+                    "subtitle": "Payments require country and postal code information",
+                    "type": SettingsPickType.Switch,
+                    "value": false,
+                } as SettingsListItem,
+                {
+                    "title": "Toggle CV2",
+                    "subtitle": "Token payments require CV2 to complete",
+                    "type": SettingsPickType.Switch,
+                    "value": false,
+                } as SettingsListItem,
+                {
+                    "title": "Display amount on the Payment/PreAuth button",
+                    "subtitle": "Payment/PreAuth buttons will now display the amount & currency",
+                    "type": SettingsPickType.Switch,
+                    "value": true,
+                } as SettingsListItem,
+                {
+                    "title": "Display amount on the Payment Method screen",
+                    "subtitle": "The amount will be visible on the Payment Method screen",
+                    "type": SettingsPickType.Switch,
+                    "value": true,
+                } as SettingsListItem,
             ]
         }
     ]

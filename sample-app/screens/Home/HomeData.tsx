@@ -109,6 +109,12 @@ export const getStoredData = async (state: any): Promise<object> => {
           amount: {
             value: settings.list[1].data[0].value as string,
             currency: settings.list[1].data[1].value as string
+          },
+          uiConfiguration: {
+            isAVSEnabled: settings.list[2].data[2].value,
+            isCV2Enabled: settings.list[2].data[3].value,
+            isPaymentButtonAmountVisible: settings.list[2].data[4].value,
+            shouldDisplayAmount: settings.list[2].data[5].value,
           }
         },
         secret: secret,
