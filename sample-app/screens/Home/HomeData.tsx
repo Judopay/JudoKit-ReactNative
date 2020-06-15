@@ -112,9 +112,9 @@ export const getStoredData = async (state: any): Promise<object> => {
           },
           uiConfiguration: {
             isAVSEnabled: settings.list[2].data[2].value,
-            isCV2Enabled: settings.list[2].data[3].value,
-            isPaymentButtonAmountVisible: settings.list[2].data[4].value,
-            shouldDisplayAmount: settings.list[2].data[5].value,
+            shouldPaymentMethodsVerifySecurityCode: settings.list[2].data[3].value,
+            shouldPaymentButtonDisplayAmount: settings.list[2].data[4].value,
+            shouldPaymentMethodsDisplayAmount: settings.list[2].data[5].value,
           }
         },
         secret: secret,

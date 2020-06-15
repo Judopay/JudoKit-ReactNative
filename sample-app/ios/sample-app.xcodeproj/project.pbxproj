@@ -1182,9 +1182,9 @@
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Manager.storyboard",
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Network.storyboard",
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/NetworkCell.xib",
-				"${PODS_ROOT}/JudoKitObjC/Resources/icons.bundle",
-				"${PODS_ROOT}/JudoKitObjC/Resources/resources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKitObjC/JudoKitObjC.bundle",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/icons.bundle",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/resources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit-iOS.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -1366,7 +1366,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/NetworkCell.nib",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icons.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/resources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKitObjC.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKit-iOS.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -528,13 +528,13 @@
 /*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [shouldDisplayAmount] property of the [uiConfiguration] dictionary is not an integer
+* WHEN:  the [shouldPaymentMethodsDisplayAmount] property of the [uiConfiguration] dictionary is not an integer
 *
 * THEN:  an 'invalid amount display setting' exception should be thrown
 */
 - (void)test_OnInvalidUIConfigurationDisplayAmount_ThrowError {
     NSDictionary *props = [self propertiesWithConfigurationValue:@"hello"
-                                                          forKey:@"shouldDisplayAmount"
+                                                          forKey:@"shouldPaymentMethodsDisplayAmount"
                                                 orDictionaryName:@"uiConfiguration"];
     XCTAssertThrows([RNWrappers configurationFromProperties:props]);
 }
@@ -542,33 +542,32 @@
 /*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [isPayButtonAmountVisible] property of the [uiConfiguration] dictionary is not an integer
+* WHEN:  the [shouldPaymentButtonDisplayAmount] property of the [uiConfiguration] dictionary is not an integer
 *
 * THEN:  an 'invalid payment button amount display setting' exception should be thrown
 */
 - (void)test_OnInvalidUIConfigurationPayButtonAmountVisibility_ThrowError {
     NSDictionary *props = [self propertiesWithConfigurationValue:@"hello"
-                                                          forKey:@"isPayButtonAmountVisible"
+                                                          forKey:@"shouldPaymentButtonDisplayAmount"
                                                 orDictionaryName:@"uiConfiguration"];
 
-    // TODO: Add this once native side is implemented
-    // XCTAssertThrows([RNWrappers configurationFromProperties:props]);
+    XCTAssertThrows([RNWrappers configurationFromProperties:props]);
 }
 
 /*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [isCV2Enabled] property of the [uiConfiguration] dictionary is not an integer
+* WHEN:  the [shouldPaymentMethodsVerifySecurityCode] property of the [uiConfiguration] dictionary is 
+*        not an integer
 *
-* THEN:  an 'invalid CV2 enabled type' exception should be thrown
+* THEN:  an 'invalid secure code check setting type' exception should be thrown
 */
 - (void)test_OnInvalidUIConfigurationCV2EnabledType_ThrowError {
     NSDictionary *props = [self propertiesWithConfigurationValue:@"hello"
-                                                          forKey:@"isCV2Enabled"
+                                                          forKey:@"shouldPaymentMethodsVerifySecurityCode"
                                                 orDictionaryName:@"uiConfiguration"];
 
-    // TODO: Add this once native side is implemented
-    // XCTAssertThrows([RNWrappers configurationFromProperties:props]);
+    XCTAssertThrows([RNWrappers configurationFromProperties:props]);
 }
 
 /*

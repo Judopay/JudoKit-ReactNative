@@ -69,11 +69,9 @@ class HelpersKtTest {
 
         // uiConfigurationMock
         every { uiConfigurationMock.getBoolean("isAVSEnabled") } returns true
-        every { uiConfigurationMock.getBoolean("shouldDisplayAmount") } returns true
-
-        // TODO: Add this once native side is finished
-        // every { uiConfigurationMock.getBoolean("isPayButtonAmountVisible") } returns true
-        // every { uiConfigurationMock.getBoolean("isCV2Enabled") } returns true
+        every { uiConfigurationMock.getBoolean("shouldPaymentMethodsDisplayAmount") } returns true
+        every { uiConfigurationMock.getBoolean("shouldPaymentButtonDisplayAmount") } returns true
+        every { uiConfigurationMock.getBoolean("shouldPaymentMethodsVerifySecurityCode") } returns true
 
         every { configurationMock.hasKey("uiConfiguration") } returns true
         every { configurationMock.getMap("uiConfiguration") } returns uiConfigurationMock

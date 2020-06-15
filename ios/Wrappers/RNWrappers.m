@@ -205,16 +205,14 @@
     }
 
     NSNumber *isAVSEnabled = [dictionary boolForKey:@"isAVSEnabled"];
-    NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldDisplayAmount"];
-    NSNumber *isPayButtonAmountVisible = [dictionary boolForKey:@"isPayButtonAmountVisible"];
-    NSNumber *isCV2Enabled = [dictionary boolForKey:@"isCV2Enabled"];
+    NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldPaymentMethodsDisplayAmount"];
+    NSNumber *isPayButtonAmountVisible = [dictionary boolForKey:@"shouldPaymentButtonDisplayAmount"];
+    NSNumber *isSecureCodeCheckEnabled = [dictionary boolForKey:@"shouldPaymentMethodsVerifySecurityCode"];
 
     uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
-    uiConfiguration.shouldDisplayAmount = shouldDisplayAmount.boolValue;
-    
-    //TODO: Add once native side is finished
-    //uiConfiguration.isPayButtonAmountVisible = isPayButtonAmountVisible.boolValue;
-    //uiConfiguration.isCV2Enabled = isCV2Enabled.boolValue;
+    uiConfiguration.shouldPaymentMethodsDisplayAmount = shouldDisplayAmount.boolValue;
+    uiConfiguration.shouldPaymentButtonDisplayAmount = isPayButtonAmountVisible.boolValue;
+    uiConfiguration.shouldPaymentMethodsVerifySecurityCode = isSecureCodeCheckEnabled.boolValue;
 
     uiConfiguration.theme = [self themeFromUIConfiguration:dictionary];
 

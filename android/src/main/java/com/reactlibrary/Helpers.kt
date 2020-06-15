@@ -196,10 +196,9 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
     return if (options.uiConfiguration != null) {
         UiConfiguration.Builder()
             .setAvsEnabled(options.isAVSEnabled)
-            .setShouldDisplayAmount(options.shouldDisplayAmount)
-            // TODO: Add this once the native side is finished
-            // .setIsPayButtonAmountVisible(options.isPayButtonAmountVisible)
-            // .setCV2Enabled(options.isCV2Enabled)
+            .setShouldPaymentMethodsDisplayAmount(options.shouldPaymentMethodsDisplayAmount)
+            .shouldPaymentButtonDisplayAmount(options.shouldPaymentButtonDisplayAmount)
+            .shouldPaymentMethodsVerifySecurityCode(options.shouldPaymentMethodsVerifySecurityCode)
             .build()
     } else {
         null

@@ -51,9 +51,9 @@ export interface JudoAddress {
 
 export interface JudoUIConfiguration {
     isAVSEnabled: boolean,
-    shouldDisplayAmount: boolean,
-    isPayButtonAmountVisible: boolean,
-    isCV2Enabled: boolean,
+    shouldPaymentMethodsDisplayAmount: boolean,
+    shouldPaymentButtonDisplayAmount: boolean,
+    shouldPaymentMethodsVerifySecurityCode: boolean,
     theme?: JudoTheme,
 }
 

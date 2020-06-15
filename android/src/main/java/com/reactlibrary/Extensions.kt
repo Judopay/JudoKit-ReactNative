@@ -92,8 +92,14 @@ internal val ReadableMap.uiConfiguration: ReadableMap?
 internal val ReadableMap.isAVSEnabled: Boolean?
     get() = uiConfiguration?.getBoolean("isAVSEnabled")
 
-internal val ReadableMap.shouldDisplayAmount: Boolean?
-    get() = uiConfiguration?.getBoolean("shouldDisplayAmount")
+internal val ReadableMap.shouldPaymentMethodsDisplayAmount: Boolean?
+    get() = uiConfiguration?.getBoolean("shouldPaymentMethodsDisplayAmount")
+
+internal val ReadableMap.shouldPaymentButtonDisplayAmount: Boolean?
+    get() = uiConfiguration?.getBoolean("shouldPaymentButtonDisplayAmount")
+
+internal val ReadableMap.shouldPaymentMethodsVerifySecurityCode: Boolean?
+    get() = uiConfiguration?.getBoolean("shouldPaymentMethodsVerifySecurityCode")
 
 internal val ReadableMap.primaryAccountDetails: ReadableMap?
     get() {

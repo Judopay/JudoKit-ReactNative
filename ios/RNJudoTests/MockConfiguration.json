@@ -27,7 +27,9 @@
         },
         "uiConfiguration": {
             "isAVSEnabled": false,
-            "shouldDisplayAmount": true,
+            "shouldPaymentMethodsDisplayAmount": true,
+            "shouldPaymentButtonDisplayAmount": true,
+            "shouldPaymentMethodsVerifySecurityCode": false,
             "theme": {
                 "largeTitleFont": "Avenir",
                 "largeTitleSize": 20,
@@ -102,4 +104,3 @@
         }
     }
 }
-

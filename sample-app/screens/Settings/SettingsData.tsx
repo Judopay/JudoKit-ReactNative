@@ -124,7 +124,7 @@ export var SettingsData = {
             "data": [
                 {
                     "title": "Supported card networks",
-                    "subtitle": "Visa, Master card, Amex, JCB, Discover",
+                    "subtitle": "Visa, MasterCard, Amex, JCB, Discover",
                     "type": SettingsPickType.MultiPicker,
                     "value": "",
                     "valueArray": ["VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"],
@@ -145,8 +145,8 @@ export var SettingsData = {
                     "value": false,
                 } as SettingsListItem,
                 {
-                    "title": "Toggle CV2",
-                    "subtitle": "Token payments require CV2 to complete",
+                    "title": "Toggle Security Code validation",
+                    "subtitle": "Token payments require security code validation to complete",
                     "type": SettingsPickType.Switch,
                     "value": false,
                 } as SettingsListItem,
@@ -157,7 +157,7 @@ export var SettingsData = {
                     "value": true,
                 } as SettingsListItem,
                 {
-                    "title": "Show Payment Method screen amount",
+                    "title": "Show Payment Methods Screen amount",
                     "subtitle": "The amount will be visible on the Payment Method screen",
                     "type": SettingsPickType.Switch,
                     "value": true,
