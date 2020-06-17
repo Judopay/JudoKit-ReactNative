@@ -137,6 +137,18 @@
 			path = RNJudoTests;
 			sourceTree = "<group>";
 		};
+		44ACBFB12499157E00524BEF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				44B29072244E491A009DF232 /* Extensions */,
+				44B29077244E491B009DF232 /* Wrappers */,
+				82FF801E2448A9EE002A72CF /* RNTypes.h */,
+				B3E7B5881CC2AC0600A0062D /* RNJudo.h */,
+				B3E7B5891CC2AC0600A0062D /* RNJudo.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		44B29072244E491A009DF232 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,11 +176,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				44B29072244E491A009DF232 /* Extensions */,
-				44B29077244E491B009DF232 /* Wrappers */,
-				82FF801E2448A9EE002A72CF /* RNTypes.h */,
-				B3E7B5881CC2AC0600A0062D /* RNJudo.h */,
-				B3E7B5891CC2AC0600A0062D /* RNJudo.m */,
+				44ACBFB12499157E00524BEF /* Classes */,
 				44674005246433F50012DB4C /* RNJudoTests */,
 				302793832464861A00436747 /* RNJudoTests */,
 				134814211AA4EA7D00B7C361 /* Products */,

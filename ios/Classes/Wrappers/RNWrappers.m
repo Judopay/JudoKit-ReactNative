@@ -208,7 +208,7 @@
     NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldDisplayAmount"];
 
     uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
-    uiConfiguration.shouldDisplayAmount = shouldDisplayAmount.boolValue;
+    uiConfiguration.shouldPaymentMethodsDisplayAmount = shouldDisplayAmount.boolValue;
 
     uiConfiguration.theme = [self themeFromUIConfiguration:dictionary];
 

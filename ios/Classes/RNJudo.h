@@ -1,5 +1,5 @@
 //
-//  RNApplePayWrappers.h
+//  RNJudo.h
 //  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
@@ -22,18 +22,10 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-@import JudoKit_iOS;
+#import <React/RCTBridgeModule.h>
 
-@interface RNApplePayWrappers : NSObject
+static const NSErrorDomain _Nonnull RNJudoErrorDomain = @"com.judopay.react-native.error-domain";
 
-/**
- * A method that returns a configured JPApplePayConfiguration instance based on the passed dictionary parameters.
- * The JPApplePayConfiguration instance sets the required parameters for making Apple Pay transactions as well as customizing the payment flow
- *
- * @param configuration - an NSDictionary that contains the complete configuration properties set by the merchant
- *
- * @returns a configured JPApplePayConfiguration instance
- */
-+ (JPApplePayConfiguration *)applePayConfigurationFromConfiguration:(NSDictionary *)configuration;
+@interface RNJudo : NSObject <RCTBridgeModule>
 
 @end
