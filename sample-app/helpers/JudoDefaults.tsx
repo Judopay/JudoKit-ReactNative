@@ -32,7 +32,7 @@ const cardAddress: JudoAddress = {
     line3: 'example-address-3',
     postCode: 'example-postcode',
     town: 'example-town',
-    countryCode: 'example-country-code',
+    countryCode: 826,
 }
 
 const theme: JudoTheme = {

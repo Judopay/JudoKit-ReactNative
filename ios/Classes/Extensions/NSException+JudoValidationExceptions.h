@@ -24,6 +24,10 @@
 
 #import <Foundation/Foundation.h>
 
+static const NSExceptionName _Nonnull JPUndefinedConfigurationException = @"com.judopay.react-native.undefined-configuration-exception";
+static const NSExceptionName _Nonnull JPNullConfigurationException = @"com.judopay.react-native.null-configuration-exception";
+static const NSExceptionName _Nonnull JPUnexpectedTypeConfigurationException = @"com.judopay.react-native.unexpected-type-configuration-exception";
+
 @interface NSException (JudoValidationExceptions)
 
 /**
