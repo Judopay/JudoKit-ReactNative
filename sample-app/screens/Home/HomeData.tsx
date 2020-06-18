@@ -136,6 +136,7 @@ const parsePaymentMethods = (values: string[]): JudoPaymentMethod => {
   if (values.includes('APPLE_PAY')) paymentMethods |= JudoPaymentMethod.ApplePay
   if (values.includes('GOOGLE_PAY')) paymentMethods |= JudoPaymentMethod.GooglePay
   if (values.includes('IDEAL')) paymentMethods |= JudoPaymentMethod.iDEAL
+  if (values.includes('PBBA')) paymentMethods |= JudoPaymentMethod.PayByBankApp
   return paymentMethods
 }
 

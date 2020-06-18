@@ -651,16 +651,29 @@
 }
 
 /*
+ * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
+ *
+ * WHEN:  the [paymentMethods] value is set to 16
+ *
+ * THEN:  Pay By Bank App payment method should be enabled
+ */
+- (void)test_OnPaymentMethodValue32_EnablePBBA {
+    NSDictionary *props = [self propertiesWithConfigurationValue:@16 forKey:@"paymentMethods"];
+    JPConfiguration *config = [RNWrappers configurationFromProperties:props];
+    XCTAssertEqual(config.paymentMethods.firstObject.type, JPPaymentMethodTypePBBA);
+}
+
+/*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [paymentMethods] value is set to 16
+* WHEN:  the [paymentMethods] value is set to 32
 *
 * THEN:  All payment method should be enabled
 */
-- (void)test_OnPaymentMethodValue16_EnableAll {
-    NSDictionary *props = [self propertiesWithConfigurationValue:@16 forKey:@"paymentMethods"];
+- (void)test_OnPaymentMethodValue32_EnableAll {
+    NSDictionary *props = [self propertiesWithConfigurationValue:@32 forKey:@"paymentMethods"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.paymentMethods.count, 3);
+    XCTAssertEqual(config.paymentMethods.count, 4);
 }
 
 /*

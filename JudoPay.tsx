@@ -1,29 +1,57 @@
 import { NativeModules } from 'react-native';
 
-import { JudoConfiguration, JudoResponse, JudoTransactionMode, JudoTransactionType } from './types/JudoTypes';
+import {
+    JudoConfiguration,
+    JudoResponse,
+    JudoTransactionMode,
+    JudoTransactionType
+} from './types/JudoTypes';
 
- export {
-   JudoTransactionType,
-   JudoTransactionMode,
-   JudoPaymentMethod,
-   JudoCardNetwork,
- } from './types/JudoTypes';
+export {
+    JudoTransactionType,
+    JudoTransactionMode,
+    JudoPaymentMethod,
+    JudoCardNetwork
+} from './types/JudoTypes';
 
- export {
-   JudoPaymentSummaryItemType,
-   JudoMerchantCapability,
-   JudoContactField,
-   JudoShippingType,
-   JudoReturnedInfo,
- } from './types/JudoApplePayTypes';
+export type {
+    JudoAmount,
+    JudoReference,
+    JudoAddress,
+    JudoUIConfiguration,
+    JudoAccountDetails,
+    JudoTheme,
+    JudoResponse
+} from './types/JudoTypes';
 
- export {
-   JudoAddressFormat,
-   JudoGooglePayEnvironment,
- } from './types/JudoGooglePayTypes';
+export {
+    JudoPaymentSummaryItemType,
+    JudoMerchantCapability,
+    JudoContactField,
+    JudoShippingType,
+    JudoReturnedInfo
+} from './types/JudoApplePayTypes';
+
+export type {
+    JudoApplePayConfiguration,
+    JudoPaymentSummaryItem,
+    JudoShippingMethod
+} from './types/JudoApplePayTypes';
+
+export {
+    JudoAddressFormat,
+    JudoGooglePayEnvironment
+} from './types/JudoGooglePayTypes';
+
+export type {
+    JudoGooglePayConfiguration,
+    JudoBillingAddressParameters,
+    JudoShippingAddressParameters
+} from './types/JudoGooglePayTypes';
+
+export type { JudoPBBAConfiguration } from './types/JudoPBBATypes';
 
 class JudoPay {
-
     public isSandboxed: boolean = true;
 
     private readonly token: string;
@@ -38,7 +66,10 @@ class JudoPay {
         type: JudoTransactionType,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionTypeParameters(type, configuration);
+        const params = this.generateTransactionTypeParameters(
+            type,
+            configuration
+        );
         return await NativeModules.RNJudo.invokeTransaction(params);
     }
 
@@ -46,7 +77,10 @@ class JudoPay {
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionModeParameters(mode, configuration);
+        const params = this.generateTransactionModeParameters(
+            mode,
+            configuration
+        );
         return await NativeModules.RNJudo.invokeApplePay(params);
     }
 
@@ -54,7 +88,10 @@ class JudoPay {
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionModeParameters(mode, configuration);
+        const params = this.generateTransactionModeParameters(
+            mode,
+            configuration
+        );
         return await NativeModules.RNJudo.invokeGooglePay(params);
     }
 
@@ -62,7 +99,10 @@ class JudoPay {
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionModeParameters(mode, configuration);
+        const params = this.generateTransactionModeParameters(
+            mode,
+            configuration
+        );
         return await NativeModules.RNJudo.invokePaymentMethodScreen(params);
     }
 
@@ -71,26 +111,26 @@ class JudoPay {
         configuration: JudoConfiguration
     ): Record<string, any> => {
         return {
-            'token': this.token,
-            'secret': this.secret,
-            'sandboxed': this.isSandboxed,
-            'transactionType': type,
-            'configuration': configuration,
-        }
-    }
+            token: this.token,
+            secret: this.secret,
+            sandboxed: this.isSandboxed,
+            transactionType: type,
+            configuration: configuration
+        };
+    };
 
     private generateTransactionModeParameters = (
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Record<string, any> => {
         return {
-            'token': this.token,
-            'secret': this.secret,
-            'sandboxed': this.isSandboxed,
-            'transactionMode': mode,
-            'configuration': configuration,
-        }
-    }
+            token: this.token,
+            secret: this.secret,
+            sandboxed: this.isSandboxed,
+            transactionMode: mode,
+            configuration: configuration
+        };
+    };
 }
 
 export default JudoPay;

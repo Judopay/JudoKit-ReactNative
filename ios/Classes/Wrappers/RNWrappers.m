@@ -24,6 +24,7 @@
 
 #import "RNWrappers.h"
 #import "RNApplePayWrappers.h"
+#import "RNPBBAWrappers.h"
 #import "RNTypes.h"
 #import "NSDictionary+JudoConvert.h"
 #import "UIColor+RNAdditions.h"
@@ -89,6 +90,8 @@
     configuration.cardAddress = [RNWrappers cardAddressFromConfiguration:configurationDict];
     configuration.paymentMethods = [RNWrappers paymentMethodsFromConfiguration:configurationDict];
     configuration.applePayConfiguration = [RNApplePayWrappers applePayConfigurationFromConfiguration:configurationDict];
+    configuration.pbbaConfiguration = [RNPBBAWrappers pbbaConfigurationFromConfiguration:configurationDict];
+    
     return configuration;
 }
 
@@ -179,6 +182,10 @@
 
     if (BitmaskContains(bitmask, IOSPaymentMethodIDEAL)) {
         [paymentMethods addObject:JPPaymentMethod.iDeal];
+    }
+
+    if (BitmaskContains(bitmask, IOSPaymentMethodPBBA)) {
+        [paymentMethods addObject:JPPaymentMethod.pbba];
     }
 
     return paymentMethods;

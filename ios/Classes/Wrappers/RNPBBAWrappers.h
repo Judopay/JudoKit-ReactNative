@@ -1,5 +1,5 @@
 //
-//  RNMocks.m
+//  RNPBBAWrappers.h
 //  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
@@ -22,30 +22,19 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import "RNMocks.h"
+#import <JudoKit-iOS/JudoKit_iOS.h>
 
-@implementation RNMocks
+@interface RNPBBAWrappers : NSObject
 
-+ (NSMutableDictionary *)properties {
-    NSBundle *testBundle = [NSBundle bundleForClass:RNMocks.class];
-    NSString *filePath = [testBundle pathForResource:@"MockConfiguration" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:filePath];
-    NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData:data
-                                                                options:kNilOptions
-                                                                  error:nil];
-    return [json mutableCopy];
-}
-
-+ (NSMutableDictionary *)configuration {
-    return [RNMocks.properties[@"configuration"] mutableCopy];
-}
-
-+ (NSMutableDictionary *)applePayConfiguration {
-    return [RNMocks.configuration[@"applePayConfiguration"] mutableCopy];
-}
-
-+ (NSMutableDictionary *)pbbaConfiguration {
-    return [RNMocks.configuration[@"pbbaConfiguration"] mutableCopy];
-}
+/**
+ * A method that returns a configured JPPBBAConfiguration instance based on the passed dictionary parameters.
+ * The JPPBBAConfiguration instance sets the required parameters for making PBBA transactions.
+ *
+ * @param configuration - an NSDictionary that contains the complete configuration properties set by the merchant
+ *
+ * @returns a configured JPPBBAConfiguration instance
+ */
++ (JPPBBAConfiguration *)pbbaConfigurationFromConfiguration:(NSDictionary *)configuration;
 
 @end
+

@@ -101,6 +101,13 @@
             ],
             "shippingType": 1,
             "returnedInfo": 1
+        },
+        "pbbaConfiguration": {
+            "mobileNumber": "123-123",
+            "emailAddress": "example@mail.com",
+            "appearsOnStatement": "Example",
+            "deeplinkScheme": "example://scheme",
+            "deeplinkURL": "https://google.com"
         }
     }
 }
