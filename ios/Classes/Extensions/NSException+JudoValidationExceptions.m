@@ -24,10 +24,6 @@
 
 #import "NSException+JudoValidationExceptions.h"
 
-NSExceptionName const JPUndefinedConfigurationException;
-NSExceptionName const JPNullConfigurationException;
-NSExceptionName const JPUnexpectedTypeConfigurationException;
-
 @implementation NSException (JudoValidationExceptions)
 
 + (NSException *)exceptionUndefinedConfigurationWithKey:(nonnull NSString *)key {
@@ -50,6 +46,5 @@ NSExceptionName const JPUnexpectedTypeConfigurationException;
                                    reason:reason
                                  userInfo:nil];
 }
-
 
 @end

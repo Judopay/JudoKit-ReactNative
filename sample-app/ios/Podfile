@@ -7,7 +7,8 @@ target 'sample-app' do
   # use_frameworks!
   # Pods for sample-app
   pod 'CocoaDebug'
-  pod "JudoKit-iOS", '~> 1.0.0'
+  # Override the dependency from .podspec file - should be removed when new SDK version will be released
+  pod "JudoKit-iOS", :git => 'https://github.com/Judopay/JudoKit-iOS.git', :branch => 'develop'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"

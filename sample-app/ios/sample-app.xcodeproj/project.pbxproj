@@ -309,10 +309,13 @@
 		1522B3F322906FEB00FA0F66 /* libJudoKitObjC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libJudoKitObjC.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		15742E732268C519005EA3C4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		15B13ADF22AD8E3400BFBB2D /* sample-app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "sample-app.entitlements"; sourceTree = "<group>"; };
+		163DEC68AD8F94CBDF80DB10 /* Pods-sample-appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-appTests.release.xcconfig"; path = "Target Support Files/Pods-sample-appTests/Pods-sample-appTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		30659D6E2446F3C100A5A712 /* sample-app-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "sample-app-Bridging-Header.h"; sourceTree = "<group>"; };
 		30659D712446F40600A5A712 /* CocoaDebugSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaDebugSupport.swift; sourceTree = "<group>"; };
+		4544D00F0B9C74E419F20191 /* Pods-sample-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-app.release.xcconfig"; path = "Target Support Files/Pods-sample-app/Pods-sample-app.release.xcconfig"; sourceTree = "<group>"; };
 		5A4CDCB9306307E780F6C125 /* Pods-sample-appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-appTests.release.xcconfig"; path = "Target Support Files/Pods-sample-appTests/Pods-sample-appTests.release.xcconfig"; sourceTree = "<group>"; };
+		5D3C956833013C1384550386 /* Pods-sample-appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-appTests.debug.xcconfig"; path = "Target Support Files/Pods-sample-appTests/Pods-sample-appTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		722AC16CE384570886DB8602 /* Pods-sample-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-app.release.xcconfig"; path = "Target Support Files/Pods-sample-app/Pods-sample-app.release.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
@@ -324,6 +327,7 @@
 		E19B7A4F4D1C25C30C29D883 /* libPods-sample-appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-sample-appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F0D936EB946DD107BAAC1A03 /* Pods-sample-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-app.debug.xcconfig"; path = "Target Support Files/Pods-sample-app/Pods-sample-app.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -466,9 +470,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		24C65368819297B7ED3CF0EF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F0D936EB946DD107BAAC1A03 /* Pods-sample-app.debug.xcconfig */,
+				4544D00F0B9C74E419F20191 /* Pods-sample-app.release.xcconfig */,
+				5D3C956833013C1384550386 /* Pods-sample-appTests.debug.xcconfig */,
+				163DEC68AD8F94CBDF80DB10 /* Pods-sample-appTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD2D9A608291A8B63746D2F4 /* Pods */,
 				015CECA6234F5E4A00D6FBED /* libswiftObjectiveC.tbd */,
 				1522B3F322906FEB00FA0F66 /* libJudoKitObjC.a */,
 				15742E732268C519005EA3C4 /* Foundation.framework */,
@@ -540,7 +557,7 @@
 				00E356EF1AD99517003FC87E /* exampleTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				DD2D9A608291A8B63746D2F4 /* Pods */,
+				24C65368819297B7ED3CF0EF /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -1182,9 +1199,10 @@
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Manager.storyboard",
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Network.storyboard",
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/NetworkCell.xib",
-				"${PODS_ROOT}/JudoKitObjC/Resources/icons.bundle",
-				"${PODS_ROOT}/JudoKitObjC/Resources/resources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKitObjC/JudoKitObjC.bundle",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/icons.bundle",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/resources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit-iOS.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ZappMerchantLib/ZappMerchantLibResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -1366,7 +1384,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/NetworkCell.nib",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icons.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/resources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKitObjC.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKit-iOS.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ZappMerchantLibResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
