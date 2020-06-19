@@ -197,6 +197,11 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
         UiConfiguration.Builder()
             .setAvsEnabled(options.isAVSEnabled)
             .setShouldPaymentMethodsDisplayAmount(options.shouldDisplayAmount)
+
+            // TODO: should be implemented
+            .setShouldPaymentMethodsVerifySecurityCode(true)
+            .setShouldPaymentButtonDisplayAmount(false)
+
             .build()
     } else {
         null
