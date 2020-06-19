@@ -660,7 +660,7 @@
 - (void)test_OnPaymentMethodValue32_EnablePBBA {
     NSDictionary *props = [self propertiesWithConfigurationValue:@16 forKey:@"paymentMethods"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.paymentMethods.firstObject.type, JPPaymentMethodTypePBBA);
+    XCTAssertEqual(config.paymentMethods.firstObject.type, JPPaymentMethodTypePbba);
 }
 
 /*
