@@ -23,7 +23,8 @@ allprojects {
         jcenter()
 
 // TODO: Temp
-        maven { url "http://pay.cards/maven" }
+//        maven { url "http://pay.cards/maven" }
+        maven { url 'https://jitpack.io' }
 
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm

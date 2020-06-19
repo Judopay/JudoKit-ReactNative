@@ -196,7 +196,7 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
     return if (options.uiConfiguration != null) {
         UiConfiguration.Builder()
             .setAvsEnabled(options.isAVSEnabled)
-            .setShouldDisplayAmount(options.shouldDisplayAmount)
+            .setShouldPaymentMethodsDisplayAmount(options.shouldDisplayAmount)
             .build()
     } else {
         null

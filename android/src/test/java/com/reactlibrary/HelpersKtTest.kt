@@ -207,7 +207,7 @@ class HelpersKtTest {
         val configuration = getUIConfiguration(mapMock)
 
         assertTrue(configuration!!.avsEnabled)
-        assertTrue(configuration!!.shouldDisplayAmount)
+        assertTrue(configuration.shouldPaymentMethodsDisplayAmount)
     }
 
     @Test
