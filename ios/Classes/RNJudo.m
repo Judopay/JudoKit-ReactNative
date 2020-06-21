@@ -24,6 +24,9 @@
 
 #import <JudoKit-iOS/JudoKit_iOS.h>
 
+// TODO: Add as part of JudoKit_iOS on the native side
+#import <JudoKit-iOS/JPError+Additions.h>
+
 #import "RNJudo.h"
 #import "RNWrappers.h"
 #import "RNApplePayWrappers.h"
@@ -74,6 +77,12 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
         JPCompletionBlock completion = ^(JPResponse *response, NSError *error) {
             if (error) {
+                
+                if (error.code == JPError.judoUserDidCancelError.code) {
+                    reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
+                    return;
+                }
+                
                 reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
             } else {
                 resolve(response);

@@ -477,6 +477,39 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 95V535S6TQ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion/DoubleConversion.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Folly/folly.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit_iOS.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety/RCTTypeSafety.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules/CoreModules.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTActionSheet/RCTActionSheet.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation/RCTAnimation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob/RCTBlob.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage/RCTImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking/RCTLinking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork/RCTNetwork.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings/RCTSettings.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText/RCTText.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration/RCTVibration.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/cxxreact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi/jsi.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor/jsireact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector/jsinspector.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/TrustKit/TrustKit.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Yoga/yoga.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ZappMerchantLib/ZappMerchantLib.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"$(SRCROOT)/../sample-app/ios/Pods/Headers/Public/**",
+				);
 				INFOPLIST_FILE = RNJudoTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
