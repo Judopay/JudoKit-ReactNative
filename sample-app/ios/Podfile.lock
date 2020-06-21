@@ -363,7 +363,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   JudoKit-iOS:
-    :commit: 0d37e8d9bd8a78202eed707f3272238b094fa8aa
+    :commit: e99c814d615cf9fbe3d9a6615829156efe61c0e6
     :git: https://github.com/Judopay/JudoKit-iOS.git
 
 SPEC CHECKSUMS:
@@ -409,4 +409,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 2b4880424c0d2da32be67627d1bdf34754a6adcb
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3
