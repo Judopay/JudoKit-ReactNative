@@ -48,7 +48,7 @@ export interface JudoAddress {
     line3?: string;
     postCode?: string;
     town?: string;
-    countryCode?: string;
+    countryCode?: number;
 }
 
 export interface JudoUIConfiguration {

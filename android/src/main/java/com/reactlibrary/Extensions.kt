@@ -206,6 +206,27 @@ internal val ReadableMap.allowedCountryCodeList: ReadableArray?
         return null
     }
 
+internal val ReadableMap.pbbaConfiguration: ReadableMap?
+    get() {
+        val hasKey = configuration?.hasKey("pbbaConfiguration") ?: false
+        if (hasKey) {
+            return configuration?.getMap("pbbaConfiguration")
+        }
+        return null
+    }
+
+internal val ReadableMap.mobileNumber: String?
+    get() = pbbaConfiguration?.getString("mobileNumber")
+
+internal val ReadableMap.emailAddress: String?
+    get() = pbbaConfiguration?.getString("emailAddress")
+
+internal val ReadableMap.deeplinkScheme: String?
+    get() = pbbaConfiguration?.getString("deeplinkScheme")
+
+internal val ReadableMap.deeplinkURL: String?
+    get() = pbbaConfiguration?.getString("deeplinkURL")
+
 fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
     Intent(packageContext, JudoActivity::class.java)
         .also { it.putExtra(JUDO_OPTIONS, this) }

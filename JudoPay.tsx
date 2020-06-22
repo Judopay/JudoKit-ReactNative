@@ -21,7 +21,8 @@ export type {
     JudoUIConfiguration,
     JudoAccountDetails,
     JudoTheme,
-    JudoResponse
+    JudoResponse,
+    JudoConfiguration
 } from './types/JudoTypes';
 
 export {

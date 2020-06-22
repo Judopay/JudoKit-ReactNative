@@ -115,6 +115,15 @@ class HelpersKtTest {
         every { shippingAddressParametersMock.getArray("allowedCountryCodes") } returns allowedCountryCodesMock
         every { allowedCountryCodesMock.toArrayList() } returns arrayListOf("US")
 
+        // pbbaConfiguration
+        every { configurationMock.hasKey("pbbaConfiguration") } returns true
+        every { configurationMock.getMap("pbbaConfiguration") } returns pbbaConfigurationMock
+
+        every { pbbaConfigurationMock.getString("mobileNumber") } returns "123-123"
+        every { pbbaConfigurationMock.getString("emailAddress") } returns "example@mail.com"
+        every { pbbaConfigurationMock.getString("deepLinkURL") } returns "https://www.google.com"
+        every { pbbaConfigurationMock.getString("deepLinkScheme") } returns "deep://link"
+
         every { mapMock.configuration } returns configurationMock
     }
 
@@ -464,6 +473,25 @@ class HelpersKtTest {
         every { configurationMock.hasKey("googlePayConfiguration") } returns false
 
         val params = getGooglePayConfiguration(mapMock)
+
+        assertNull(params)
+    }
+
+    @Test
+    fun `Given valid user configuration is provided when invoking getPBBAConfiguration with the given configurations then a valid PBBAConfiguration object should be returned`() {
+        val params = getPBBAConfiguration(mapMock)!!
+
+        assertEquals(params.mobileNumber, "123-123")
+        assertEquals(params.emailAddress, "example@mail.com")
+        assertEquals(params.deepLinkURL, "https://www.google.com")
+        assertEquals(params.deepLinkScheme, "deep://link")
+    }
+
+    @Test
+    fun `Given valid user configuration is provided and it contains no pbbaConfiguration key when invoking getPBBAConfiguration with the given configurations then null should be returned`() {
+        every { configurationMock.hasKey("pbbaConfiguration") } returns false
+
+        val params = getPBBAConfiguration(mapMock)
 
         assertNull(params)
     }
