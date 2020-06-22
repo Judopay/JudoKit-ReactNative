@@ -1232,7 +1232,7 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^25.1.4":
+"@types/jest@^25.1.4", "@types/jest@^25.2.3":
   version "25.2.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-25.2.3.tgz#33d27e4c4716caae4eced355097a47ad363fdcaf"
   integrity sha512-JXc1nK/tXHiDhV55dvfzqtmP4S3sy3T3ouV2tkViZgxY/zeUkcpQcQPGRlgF4KmWzWW5oiWYSZwtCB+2RsE4Fw==
@@ -4425,7 +4425,7 @@ jsx-ast-utils@^2.2.1:
 "judo-react-native@file:..":
   version "3.0.0"
   dependencies:
-    "@types/jest" "^25.1.4"
+    "@types/jest" "^25.2.3"
     "@types/react" "^16.9.23"
     "@types/react-native" "^0.61.21"
     "@types/react-test-renderer" "^16.9.2"
