@@ -1,5 +1,5 @@
 import 'react-native'
-import React from 'react'
+
 import JudoPay from '../JudoPay'
 import configuration from './JudoTestDefaults'
 import { JudoTransactionType, JudoTransactionMode } from '../types/JudoTypes'

@@ -1,5 +1,5 @@
 import 'react-native'
-import React from 'react'
+
 import {
   JudoPaymentSummaryItem,
   JudoPaymentSummaryItemType,
