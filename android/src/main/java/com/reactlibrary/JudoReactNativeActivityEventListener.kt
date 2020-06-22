@@ -32,8 +32,10 @@ class JudoReactNativeActivityEventListener : BaseActivityEventListener() {
                 transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, error?.message)
             }
             PAYMENT_SUCCESS -> {
+                // TODO: Should parse the response to a Map before sending
+                //       Ignoring response for now.
                 val result = data.getParcelableExtra<JudoResult>(JUDO_RESULT)
-                transactionPromise?.resolve(result)
+                transactionPromise?.resolve("result")
             }
         }
 
