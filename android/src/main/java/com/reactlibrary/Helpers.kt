@@ -1,5 +1,6 @@
 package com.reactlibrary
 
+import android.net.Uri
 import android.os.Bundle
 import com.facebook.react.bridge.ReadableMap
 import com.judokit.android.Judo
@@ -9,6 +10,7 @@ import com.judokit.android.model.Currency
 import com.judokit.android.model.GooglePayConfiguration
 import com.judokit.android.model.PaymentMethod
 import com.judokit.android.model.PaymentWidgetType
+import com.judokit.android.model.PBBAConfiguration
 import com.judokit.android.model.PrimaryAccountDetails
 import com.judokit.android.model.Reference
 import com.judokit.android.model.UiConfiguration
@@ -48,6 +50,8 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
     val uiConfiguration = getUIConfiguration(options)
     val primaryAccountDetails = getPrimaryAccountDetails(options)
     val googlePayConfiguration = getGooglePayConfiguration(options)
+    val pbbaConfiguration = getPBBAConfiguration(options)
+
     return Judo.Builder(type)
         .setApiToken(options.token)
         .setApiSecret(options.secret)
@@ -61,6 +65,7 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
         .setUiConfiguration(uiConfiguration)
         .setPrimaryAccountDetails(primaryAccountDetails)
         .setGooglePayConfiguration(googlePayConfiguration)
+        .setPBBAConfiguration(pbbaConfiguration)
         .build()
 }
 
@@ -196,7 +201,9 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
     return if (options.uiConfiguration != null) {
         UiConfiguration.Builder()
             .setAvsEnabled(options.isAVSEnabled)
-            .setShouldDisplayAmount(options.shouldDisplayAmount)
+            .setShouldPaymentMethodsDisplayAmount(options.shouldPaymentMethodsDisplayAmount)
+            .setShouldPaymentButtonDisplayAmount(options.shouldPaymentButtonDisplayAmount)
+            .setShouldPaymentMethodsVerifySecurityCode(options.shouldPaymentMethodsVerifySecurityCode)
             .build()
     } else {
         null
@@ -262,4 +269,17 @@ internal fun getShippingParameters(options: ReadableMap): GooglePayShippingAddre
         allowedCountryCodes,
         options.isShippingPhoneNumberRequired
     )
+}
+
+internal fun getPBBAConfiguration(options: ReadableMap): PBBAConfiguration? {
+    return if (options.pbbaConfiguration != null) {
+        PBBAConfiguration.Builder()
+            .setMobileNumber(options.mobileNumber)
+            .setEmailAddress(options.emailAddress)
+            .setDeepLinkURL(Uri.parse(options.deeplinkURL))
+            .setDeepLinkScheme(options.deeplinkScheme)
+            .build()
+    } else {
+        null
+    }
 }

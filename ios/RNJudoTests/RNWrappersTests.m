@@ -528,14 +528,45 @@
 /*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [shouldDisplayAmount] property of the [uiConfiguration] dictionary is not an integer
+* WHEN:  the [shouldPaymentMethodsDisplayAmount] property of the [uiConfiguration] dictionary is not an integer
 *
 * THEN:  an 'invalid amount display setting' exception should be thrown
 */
 - (void)test_OnInvalidUIConfigurationDisplayAmount_ThrowError {
     NSDictionary *props = [self propertiesWithConfigurationValue:@"hello"
-                                                          forKey:@"shouldDisplayAmount"
+                                                          forKey:@"shouldPaymentMethodsDisplayAmount"
                                                 orDictionaryName:@"uiConfiguration"];
+    XCTAssertThrows([RNWrappers configurationFromProperties:props]);
+}
+
+/*
+* GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
+*
+* WHEN:  the [shouldPaymentButtonDisplayAmount] property of the [uiConfiguration] dictionary is not an integer
+*
+* THEN:  an 'invalid payment button amount display setting' exception should be thrown
+*/
+- (void)test_OnInvalidUIConfigurationPayButtonAmountVisibility_ThrowError {
+    NSDictionary *props = [self propertiesWithConfigurationValue:@"hello"
+                                                          forKey:@"shouldPaymentButtonDisplayAmount"
+                                                orDictionaryName:@"uiConfiguration"];
+
+    XCTAssertThrows([RNWrappers configurationFromProperties:props]);
+}
+
+/*
+* GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
+*
+* WHEN:  the [shouldPaymentMethodsVerifySecurityCode] property of the [uiConfiguration] dictionary is 
+*        not an integer
+*
+* THEN:  an 'invalid secure code check setting type' exception should be thrown
+*/
+- (void)test_OnInvalidUIConfigurationCV2EnabledType_ThrowError {
+    NSDictionary *props = [self propertiesWithConfigurationValue:@"hello"
+                                                          forKey:@"shouldPaymentMethodsVerifySecurityCode"
+                                                orDictionaryName:@"uiConfiguration"];
+
     XCTAssertThrows([RNWrappers configurationFromProperties:props]);
 }
 
@@ -620,16 +651,29 @@
 }
 
 /*
+ * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
+ *
+ * WHEN:  the [paymentMethods] value is set to 16
+ *
+ * THEN:  Pay By Bank App payment method should be enabled
+ */
+- (void)test_OnPaymentMethodValue32_EnablePBBA {
+    NSDictionary *props = [self propertiesWithConfigurationValue:@16 forKey:@"paymentMethods"];
+    JPConfiguration *config = [RNWrappers configurationFromProperties:props];
+    XCTAssertEqual(config.paymentMethods.firstObject.type, JPPaymentMethodTypePbba);
+}
+
+/*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [paymentMethods] value is set to 16
+* WHEN:  the [paymentMethods] value is set to 32
 *
 * THEN:  All payment method should be enabled
 */
-- (void)test_OnPaymentMethodValue16_EnableAll {
-    NSDictionary *props = [self propertiesWithConfigurationValue:@16 forKey:@"paymentMethods"];
+- (void)test_OnPaymentMethodValue32_EnableAll {
+    NSDictionary *props = [self propertiesWithConfigurationValue:@32 forKey:@"paymentMethods"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.paymentMethods.count, 3);
+    XCTAssertEqual(config.paymentMethods.count, 4);
 }
 
 /*

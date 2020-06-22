@@ -24,6 +24,7 @@
 
 #import "RNWrappers.h"
 #import "RNApplePayWrappers.h"
+#import "RNPBBAWrappers.h"
 #import "RNTypes.h"
 #import "NSDictionary+JudoConvert.h"
 #import "UIColor+RNAdditions.h"
@@ -89,6 +90,8 @@
     configuration.cardAddress = [RNWrappers cardAddressFromConfiguration:configurationDict];
     configuration.paymentMethods = [RNWrappers paymentMethodsFromConfiguration:configurationDict];
     configuration.applePayConfiguration = [RNApplePayWrappers applePayConfigurationFromConfiguration:configurationDict];
+    configuration.pbbaConfiguration = [RNPBBAWrappers pbbaConfigurationFromConfiguration:configurationDict];
+    
     return configuration;
 }
 
@@ -181,6 +184,10 @@
         [paymentMethods addObject:JPPaymentMethod.iDeal];
     }
 
+    if (BitmaskContains(bitmask, IOSPaymentMethodPBBA)) {
+        [paymentMethods addObject:JPPaymentMethod.pbba];
+    }
+
     return paymentMethods;
 }
 
@@ -205,10 +212,14 @@
     }
 
     NSNumber *isAVSEnabled = [dictionary boolForKey:@"isAVSEnabled"];
-    NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldDisplayAmount"];
+    NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldPaymentMethodsDisplayAmount"];
+    NSNumber *isPayButtonAmountVisible = [dictionary boolForKey:@"shouldPaymentButtonDisplayAmount"];
+    NSNumber *isSecureCodeCheckEnabled = [dictionary boolForKey:@"shouldPaymentMethodsVerifySecurityCode"];
 
     uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
     uiConfiguration.shouldPaymentMethodsDisplayAmount = shouldDisplayAmount.boolValue;
+    uiConfiguration.shouldPaymentButtonDisplayAmount = isPayButtonAmountVisible.boolValue;
+    uiConfiguration.shouldPaymentMethodsVerifySecurityCode = isSecureCodeCheckEnabled.boolValue;
 
     uiConfiguration.theme = [self themeFromUIConfiguration:dictionary];
 

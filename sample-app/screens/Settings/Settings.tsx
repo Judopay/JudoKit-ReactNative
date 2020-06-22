@@ -256,11 +256,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     marginBottom: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   inputDialog: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#A9ADAE"
+    borderBottomColor: "#A9ADAE",
   },
   header: {
     paddingLeft: 20,
@@ -272,12 +272,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2'
   },
   title: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#000'
   },
   subtitle: {
-    fontSize: 15,
-    width: 300
+    fontSize: 12,
+    width: 300,
+    color: 'gray'
   },
   spinnerTextStyle: {
     color: '#FFF'

@@ -1,70 +1,70 @@
 {
-  "name": "judo-react-native",
-  "title": "Judopay React Native module",
-  "version": "3.0.0",
-  "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
-  "main": "JudoPay.tsx",
-  "scripts": {
-    "test": "jest --coverage && open coverage/lcov-report/index.html",
-    "lint": "tsc && eslint '*/**/*.{js,ts,tsx}' --quiet"
-  },
-  "files": [
-    "JudoPay.tsx",
-    "android/src/main/AndroidManifest.xml",
-    "android/src/main/java/",
-    "android/build.gradle",
-    "android/gradle.properties",
-    "ios/",
-    "RNJudopay.podspec",
-    "README.md"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/judopay/judo-reactnative"
-  },
-  "keywords": [
-    "react-native",
-    "judo",
-    "judopay",
-    "payment",
-    "gateway"
-  ],
-  "author": {
-    "name": "Zeno Foltin",
-    "email": "zeno.foltin@gmail.com"
-  },
-  "license": "MIT",
-  "licenseFilename": "LICENSE",
-  "readmeFilename": "README.md",
-  "peerDependencies": {
-    "react-native": "^0.61.5"
-  },
-  "devDependencies": {
-    "babel-jest": "^25.1.0",
-    "@typescript-eslint/eslint-plugin": "^2.24.0",
-    "@typescript-eslint/parser": "^2.24.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^2.5.0",
-    "jest": "^25.3.0",
-    "react": "16.9.0",
-    "react-native": "0.61.5"
-  },
-  "dependencies": {
-    "@types/jest": "^25.1.4",
-    "@types/react": "^16.9.23",
-    "@types/react-native": "^0.61.21",
-    "@types/react-test-renderer": "^16.9.2",
-    "typescript": "^3.8.3"
-  },
-  "jest": {
-    "preset": "react-native",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-navigation|@react-navigation|@react-native-community/masked-view|judo-react-native)"
+    "name": "judo-react-native",
+    "title": "Judopay React Native module",
+    "version": "3.0.0",
+    "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
+    "main": "JudoPay.tsx",
+    "scripts": {
+        "test": "jest --coverage && open coverage/lcov-report/index.html",
+        "lint": "tsc && eslint '*/**/*.{js,ts,tsx}' --quiet"
+    },
+    "files": [
+        "JudoPay.tsx",
+        "android/src/main/AndroidManifest.xml",
+        "android/src/main/java/",
+        "android/build.gradle",
+        "android/gradle.properties",
+        "ios/",
+        "RNJudopay.podspec",
+        "README.md"
     ],
-    "setupFiles": [
-      "<rootDir>/jestSetup.js"
-    ]
-  }
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/judopay/judo-reactnative"
+    },
+    "keywords": [
+        "react-native",
+        "judo",
+        "judopay",
+        "payment",
+        "gateway"
+    ],
+    "author": {
+        "name": "Zeno Foltin",
+        "email": "zeno.foltin@gmail.com"
+    },
+    "license": "MIT",
+    "licenseFilename": "LICENSE",
+    "readmeFilename": "README.md",
+    "peerDependencies": {
+        "react-native": "^0.61.5"
+    },
+    "devDependencies": {
+        "babel-jest": "^25.1.0",
+        "@typescript-eslint/eslint-plugin": "^2.24.0",
+        "@typescript-eslint/parser": "^2.24.0",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.10.0",
+        "eslint-plugin-react": "^7.19.0",
+        "eslint-plugin-react-hooks": "^2.5.0",
+        "jest": "^25.3.0",
+        "react": "16.9.0",
+        "react-native": "0.61.5"
+    },
+    "dependencies": {
+        "@types/jest": "^25.2.3",
+        "@types/react": "^16.9.23",
+        "@types/react-native": "^0.61.21",
+        "@types/react-test-renderer": "^16.9.2",
+        "typescript": "^3.8.3"
+    },
+    "jest": {
+        "preset": "react-native",
+        "transformIgnorePatterns": [
+            "node_modules/(?!(jest-)?react-native|react-navigation|@react-navigation|@react-native-community/masked-view|judo-react-native)"
+        ],
+        "setupFiles": [
+            "<rootDir>/jestSetup.js"
+        ]
+    }
 }

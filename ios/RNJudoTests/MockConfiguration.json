@@ -27,7 +27,9 @@
         },
         "uiConfiguration": {
             "isAVSEnabled": false,
-            "shouldDisplayAmount": true,
+            "shouldPaymentMethodsDisplayAmount": true,
+            "shouldPaymentButtonDisplayAmount": true,
+            "shouldPaymentMethodsVerifySecurityCode": false,
             "theme": {
                 "largeTitleFont": "Avenir",
                 "largeTitleSize": 20,
@@ -99,7 +101,13 @@
             ],
             "shippingType": 1,
             "returnedInfo": 1
+        },
+        "pbbaConfiguration": {
+            "mobileNumber": "123-123",
+            "emailAddress": "example@mail.com",
+            "appearsOnStatement": "Example",
+            "deeplinkScheme": "example://scheme",
+            "deeplinkURL": "https://google.com"
         }
     }
 }
-
