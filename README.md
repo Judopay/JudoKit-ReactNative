@@ -4,23 +4,23 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
 ## Getting started
 
-- `yarn add judo-react-native`
+-   `yarn add judo-react-native`
 
     or if you use npm: `npm install judo-react-native --save`
 
 ### iOS
 
-- Make sure that the minimum deployment target is set to `11.0` or higher in your `ios/Podfile` :
+-   Make sure that the minimum deployment target is set to `11.0` or higher in your `ios/Podfile` :
 
     `platform :ios, '11.0'`
 
-- Install Cocopods
+-   Install Cocopods
 
     `cd ios && pod install`
 
 ### Android
 
-- Make sure that `minSdkVersion` is set to 19 or higher in your `android/build.gradle`:
+-   Make sure that `minSdkVersion` is set to 19 or higher in your `android/build.gradle`:
 
     ```
     buildscript {
@@ -34,7 +34,7 @@ Judopay's React Native module and sample app. This module is a wrapper around th
     }
     ```
 
--  Add the Judopay maven repository to `allprojects / repositories` in your `android/build.gradle`:
+-   Add the Judopay maven repository to `allprojects / repositories` in your `android/build.gradle`:
 
     ```
     allprojects {
@@ -63,13 +63,13 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
 ### iOS
 
-- Update Cocoapods
+-   Update Cocoapods
 
     `cd ios && pod update JudoKitObjC`
 
 ### Android
 
-- Rebuild your project
+-   Rebuild your project
 
 ## Usage
 

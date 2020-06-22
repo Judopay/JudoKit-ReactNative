@@ -1,25 +1,24 @@
-
 export interface JudoApplePayConfiguration {
-    merchantId: string,
-    countryCode: string,
-    paymentSummaryItems: JudoPaymentSummaryItem[],
-    merchantCapabilities?: JudoMerchantCapability,
-    requiredBillingContactFields?: JudoContactField,
-    requiredShippingContactFields?: JudoContactField,
-    shippingMethods?: JudoShippingMethod[],
+    merchantId: string
+    countryCode: string
+    paymentSummaryItems: JudoPaymentSummaryItem[]
+    merchantCapabilities?: JudoMerchantCapability
+    requiredBillingContactFields?: JudoContactField
+    requiredShippingContactFields?: JudoContactField
+    shippingMethods?: JudoShippingMethod[]
     shippingType?: JudoShippingType
-    returnedInfo?: JudoReturnedInfo,
+    returnedInfo?: JudoReturnedInfo
 }
 
 export enum JudoPaymentSummaryItemType {
     Final,
-    Pending,
+    Pending
 }
 
 export interface JudoPaymentSummaryItem {
-    label: string,
-    amount: string,
-    type?: JudoPaymentSummaryItemType,
+    label: string
+    amount: string
+    type?: JudoPaymentSummaryItemType
 }
 
 export enum JudoMerchantCapability {
@@ -27,7 +26,7 @@ export enum JudoMerchantCapability {
     EMV = 1 << 1,
     Credit = 1 << 2,
     Debit = 1 << 3,
-    All = 1 << 4,
+    All = 1 << 4
 }
 
 export enum JudoContactField {
@@ -35,14 +34,14 @@ export enum JudoContactField {
     Phone = 1 << 1,
     Email = 1 << 2,
     Name = 1 << 3,
-    All = 1 << 4,
+    All = 1 << 4
 }
 
 export interface JudoShippingMethod {
-    identifier: string,
-    detail: string,
-    label: string,
-    amount: string,
+    identifier: string
+    detail: string
+    label: string
+    amount: string
     type: JudoPaymentSummaryItemType
 }
 
@@ -50,11 +49,11 @@ export enum JudoShippingType {
     Shipping,
     Delivery,
     StorePickup,
-    ServicePickup,
+    ServicePickup
 }
 
 export enum JudoReturnedInfo {
     BillingDetails = 1 << 0,
     ShippingDetails = 1 << 1,
-    All = 1 << 2,
+    All = 1 << 2
 }

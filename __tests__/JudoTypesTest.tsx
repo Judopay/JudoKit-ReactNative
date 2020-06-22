@@ -1,4 +1,4 @@
-import 'react-native';
+import 'react-native'
 import {
     JudoResponse,
     JudoAccountDetails,
@@ -12,27 +12,27 @@ import {
     JudoTransactionMode,
     JudoTransactionType,
     JudoConfiguration
-} from '../types/JudoTypes';
-import { JudoApplePayConfiguration } from '../types/JudoApplePayTypes';
-import { JudoGooglePayConfiguration } from '../types/JudoGooglePayTypes';
+} from '../types/JudoTypes'
+import { JudoApplePayConfiguration } from '../types/JudoApplePayTypes'
+import { JudoGooglePayConfiguration } from '../types/JudoGooglePayTypes'
 
 const judoAmount: JudoAmount = {
     value: '1999.0',
     currency: 'USD'
-};
+}
 
 const judoAccountDetails: JudoAccountDetails = {
     name: 'name',
     accountNumber: 'acc number',
     dateOfBirth: 'date of birth',
     postCode: 'post code'
-};
+}
 
 const judoReference: JudoReference = {
     consumerReference: 'reference',
     paymentReference: 'reference',
     metadata: {}
-};
+}
 
 const judoAddress: JudoAddress = {
     line1: 'line1',
@@ -41,7 +41,7 @@ const judoAddress: JudoAddress = {
     postCode: 'postcode',
     town: 'town',
     countryCode: 832
-};
+}
 
 const judoTheme: JudoTheme = {
     largeTitleFont: 'fontName',
@@ -70,7 +70,7 @@ const judoTheme: JudoTheme = {
     buttonTitleColor: '#ff0000',
     backButtonImage: 'image_name',
     buttonCornerRadius: 5
-};
+}
 
 const judoUIConfiguration: JudoUIConfiguration = {
     isAVSEnabled: true,
@@ -78,7 +78,7 @@ const judoUIConfiguration: JudoUIConfiguration = {
     shouldPaymentMethodsDisplayAmount: true,
     shouldPaymentMethodsVerifySecurityCode: false,
     theme: judoTheme
-};
+}
 
 test('check JudoResponse model fields', () => {
     const judoResponse: JudoResponse = {
@@ -100,30 +100,30 @@ test('check JudoResponse model fields', () => {
         consumer: 'consumer',
         risks: 'risks',
         paymentToken: 'token'
-    };
+    }
 
-    expect(Object.keys(judoResponse).length).toBe(18);
-});
+    expect(Object.keys(judoResponse).length).toBe(18)
+})
 
 test('check JudoAccountDetails model fields', () => {
-    expect(Object.keys(judoAccountDetails).length).toBe(4);
-});
+    expect(Object.keys(judoAccountDetails).length).toBe(4)
+})
 
 test('check JudoUIConfiguration model fields', () => {
-    expect(Object.keys(judoUIConfiguration).length).toBe(5);
-});
+    expect(Object.keys(judoUIConfiguration).length).toBe(5)
+})
 
 test('check JudoAddress is empty', () => {
-    expect(Object.keys(judoAddress).length).toBe(6);
-});
+    expect(Object.keys(judoAddress).length).toBe(6)
+})
 
 test('check JudoReference model fields', () => {
-    expect(Object.keys(judoReference).length).toBe(3);
-});
+    expect(Object.keys(judoReference).length).toBe(3)
+})
 
 test('check JudoAmount model fields', () => {
-    expect(Object.keys(judoAmount).length).toBe(2);
-});
+    expect(Object.keys(judoAmount).length).toBe(2)
+})
 
 test('check JudoTransactionType model fields', () => {
     const judoConfiguration: JudoConfiguration = {
@@ -138,10 +138,10 @@ test('check JudoTransactionType model fields', () => {
         primaryAccountDetails: judoAccountDetails,
         applePayConfiguration: {} as JudoApplePayConfiguration,
         googlePayConfiguration: {} as JudoGooglePayConfiguration
-    };
+    }
 
-    expect(Object.keys(judoConfiguration).length).toBe(11);
-});
+    expect(Object.keys(judoConfiguration).length).toBe(11)
+})
 
 test('check JudoTransactionType model fields', () => {
     expect(Object.keys(JudoTransactionType)).toStrictEqual([
@@ -155,8 +155,8 @@ test('check JudoTransactionType model fields', () => {
         'RegisterCard',
         'CheckCard',
         'SaveCard'
-    ]);
-});
+    ])
+})
 
 test('check JudoTransactionMode model fields', () => {
     expect(Object.keys(JudoTransactionMode)).toStrictEqual([
@@ -166,12 +166,12 @@ test('check JudoTransactionMode model fields', () => {
         'Payment',
         'PreAuth',
         'ServerToServer'
-    ]);
-});
+    ])
+})
 
 test('check JudoTheme model fields', () => {
-    expect(Object.keys(judoTheme).length).toBe(26);
-});
+    expect(Object.keys(judoTheme).length).toBe(26)
+})
 
 test('check JudoCardNetwork enum keys/values', () => {
     expect(Object.keys(JudoCardNetwork)).toStrictEqual([
@@ -193,8 +193,8 @@ test('check JudoCardNetwork enum keys/values', () => {
         'Discover',
         'DinersClub',
         'All'
-    ]);
-});
+    ])
+})
 
 test('check JudoPaymentMethod enum keys/values', () => {
     expect(Object.keys(JudoPaymentMethod)).toStrictEqual([
@@ -210,5 +210,5 @@ test('check JudoPaymentMethod enum keys/values', () => {
         'iDEAL',
         'PayByBankApp',
         'All'
-    ]);
-});
+    ])
+})
