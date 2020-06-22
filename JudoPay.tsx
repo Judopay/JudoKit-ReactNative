@@ -71,7 +71,7 @@ class JudoPay {
             type,
             configuration
         );
-        return await NativeModules.RNJudo.invokeTransaction(params);
+        return NativeModules.RNJudo.invokeTransaction(params);
     }
 
     public async invokeApplePay(
@@ -82,7 +82,7 @@ class JudoPay {
             mode,
             configuration
         );
-        return await NativeModules.RNJudo.invokeApplePay(params);
+        return NativeModules.RNJudo.invokeApplePay(params);
     }
 
     public async invokeGooglePay(
@@ -93,7 +93,7 @@ class JudoPay {
             mode,
             configuration
         );
-        return await NativeModules.RNJudo.invokeGooglePay(params);
+        return NativeModules.RNJudo.invokeGooglePay(params);
     }
 
     public async invokePaymentMethodScreen(
@@ -104,7 +104,7 @@ class JudoPay {
             mode,
             configuration
         );
-        return await NativeModules.RNJudo.invokePaymentMethodScreen(params);
+        return NativeModules.RNJudo.invokePaymentMethodScreen(params);
     }
 
     private generateTransactionTypeParameters = (
