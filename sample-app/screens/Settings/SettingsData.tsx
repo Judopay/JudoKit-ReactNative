@@ -56,8 +56,9 @@ export const Payments = {
             "data": [
                 { "entry": "Card", "value": "CARD" } as PickerItem,
                 { "entry": "Apple Pay", "value": "APPLE_PAY" } as PickerItem,
-                { "entry": "GooglePay", "value": "GOOGLE_PAY" } as PickerItem,
+                { "entry": "Google Pay", "value": "GOOGLE_PAY" } as PickerItem,
                 { "entry": "iDEAL", "value": "IDEAL" } as PickerItem,
+                { "entry": "Pay by Bank App", "value": "PBBA"} as PickerItem,
             ]
         }
     ]
@@ -120,11 +121,11 @@ export var SettingsData = {
             ]
         },
         {
-            "title": "Others",
+            "title": "Customizations",
             "data": [
                 {
                     "title": "Supported card networks",
-                    "subtitle": "Visa, Master card, Amex, JCB, Discover",
+                    "subtitle": "Visa, MasterCard, Amex, JCB, Discover",
                     "type": SettingsPickType.MultiPicker,
                     "value": "",
                     "valueArray": ["VISA", "MASTERCARD", "AMEX", "JCB", "DISCOVER"],
@@ -137,7 +138,31 @@ export var SettingsData = {
                     "value": "",
                     "valueArray": ["CARD", "IDEAL"],
                     "pickItems": SettingsPickArray.Payment
-                } as SettingsListItem
+                } as SettingsListItem,
+                {
+                    "title": "Toggle Address Verification System",
+                    "subtitle": "Payments require country and postal code information",
+                    "type": SettingsPickType.Switch,
+                    "value": false,
+                } as SettingsListItem,
+                {
+                    "title": "Toggle Security Code validation",
+                    "subtitle": "Token payments require security code validation to complete",
+                    "type": SettingsPickType.Switch,
+                    "value": false,
+                } as SettingsListItem,
+                {
+                    "title": "Show Payment/PreAuth button amount",
+                    "subtitle": "Payment/PreAuth buttons will now display the amount & currency",
+                    "type": SettingsPickType.Switch,
+                    "value": true,
+                } as SettingsListItem,
+                {
+                    "title": "Show Payment Methods Screen amount",
+                    "subtitle": "The amount will be visible on the Payment Method screen",
+                    "type": SettingsPickType.Switch,
+                    "value": true,
+                } as SettingsListItem,
             ]
         }
     ]

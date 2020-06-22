@@ -92,8 +92,14 @@ internal val ReadableMap.uiConfiguration: ReadableMap?
 internal val ReadableMap.isAVSEnabled: Boolean?
     get() = uiConfiguration?.getBoolean("isAVSEnabled")
 
-internal val ReadableMap.shouldDisplayAmount: Boolean?
-    get() = uiConfiguration?.getBoolean("shouldDisplayAmount")
+internal val ReadableMap.shouldPaymentMethodsDisplayAmount: Boolean?
+    get() = uiConfiguration?.getBoolean("shouldPaymentMethodsDisplayAmount")
+
+internal val ReadableMap.shouldPaymentButtonDisplayAmount: Boolean?
+    get() = uiConfiguration?.getBoolean("shouldPaymentButtonDisplayAmount")
+
+internal val ReadableMap.shouldPaymentMethodsVerifySecurityCode: Boolean?
+    get() = uiConfiguration?.getBoolean("shouldPaymentMethodsVerifySecurityCode")
 
 internal val ReadableMap.primaryAccountDetails: ReadableMap?
     get() {
@@ -199,6 +205,27 @@ internal val ReadableMap.allowedCountryCodeList: ReadableArray?
         }
         return null
     }
+
+internal val ReadableMap.pbbaConfiguration: ReadableMap?
+    get() {
+        val hasKey = configuration?.hasKey("pbbaConfiguration") ?: false
+        if (hasKey) {
+            return configuration?.getMap("pbbaConfiguration")
+        }
+        return null
+    }
+
+internal val ReadableMap.mobileNumber: String?
+    get() = pbbaConfiguration?.getString("mobileNumber")
+
+internal val ReadableMap.emailAddress: String?
+    get() = pbbaConfiguration?.getString("emailAddress")
+
+internal val ReadableMap.deeplinkScheme: String?
+    get() = pbbaConfiguration?.getString("deeplinkScheme")
+
+internal val ReadableMap.deeplinkURL: String?
+    get() = pbbaConfiguration?.getString("deeplinkURL")
 
 fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
     Intent(packageContext, JudoActivity::class.java)

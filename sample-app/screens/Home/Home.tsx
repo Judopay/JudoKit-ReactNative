@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import { store } from '../../helpers/AsyncStore'
 import { HomeScreenData, getStoredData } from './HomeData'
@@ -12,30 +11,29 @@ import {
   TouchableHighlight,
   Text,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native'
 
 import JudoPay, {
   JudoTransactionType,
   JudoTransactionMode,
-  JudoResponse
+  JudoResponse,
 } from 'judo-react-native'
-import configuration from '../../helpers/JudoDefaults';
-import { showMessage } from '../../helpers/utils';
+import configuration from '../../helpers/JudoDefaults'
+import { showMessage } from '../../helpers/utils'
 
 export default class Home extends Component {
-
   state = {
     configuration: configuration,
     token: '<TOKEN>',
     secret: '<SECRET>',
     isSandboxed: true,
-    spinner: false
-  };
+    spinner: false,
+  }
 
   componentDidMount() {
     store.subscribe(() => {
-       this.getConfiguration()
+      this.getConfiguration()
     })
     this.getConfiguration()
   }
@@ -53,106 +51,111 @@ export default class Home extends Component {
   }
 
   async invokePayment() {
-    await this.invokeTransaction(JudoTransactionType.Payment);
+    await this.invokeTransaction(JudoTransactionType.Payment)
   }
 
   async invokePreAuth() {
-    await this.invokeTransaction(JudoTransactionType.PreAuth);
+    await this.invokeTransaction(JudoTransactionType.PreAuth)
   }
 
   async invokeRegisterCard() {
-    await this.invokeTransaction(JudoTransactionType.RegisterCard);
+    await this.invokeTransaction(JudoTransactionType.RegisterCard)
   }
 
   async invokeCheckCard() {
-    await this.invokeTransaction(JudoTransactionType.CheckCard);
+    await this.invokeTransaction(JudoTransactionType.CheckCard)
   }
 
   async invokeSaveCard() {
-    await this.invokeTransaction(JudoTransactionType.SaveCard);
+    await this.invokeTransaction(JudoTransactionType.SaveCard)
   }
 
   async invokeApplePay() {
-    await this.displayApplePaySheet(JudoTransactionMode.Payment);
+    await this.displayApplePaySheet(JudoTransactionMode.Payment)
   }
 
   async invokeApplePreAuth() {
-    await this.displayApplePaySheet(JudoTransactionMode.PreAuth);
+    await this.displayApplePaySheet(JudoTransactionMode.PreAuth)
   }
 
   async invokeGooglePay() {
-    await this.displayGooglePaySheet(JudoTransactionMode.Payment);
+    await this.displayGooglePaySheet(JudoTransactionMode.Payment)
   }
 
   async invokeGooglePreAuth() {
-    await this.displayGooglePaySheet(JudoTransactionMode.PreAuth);
+    await this.displayGooglePaySheet(JudoTransactionMode.PreAuth)
   }
 
   async invokePaymentMethods() {
-    await this.displayPaymentMethod(JudoTransactionMode.Payment);
+    await this.displayPaymentMethod(JudoTransactionMode.Payment)
   }
 
   async invokePreAuthMethods() {
-    await this.displayPaymentMethod(JudoTransactionMode.PreAuth);
+    await this.displayPaymentMethod(JudoTransactionMode.PreAuth)
   }
 
   async invokeServerToServerPayment() {
-    await this.displayPaymentMethod(JudoTransactionMode.ServerToServer);
+    await this.displayPaymentMethod(JudoTransactionMode.ServerToServer)
   }
 
   async invokeTransaction(type: JudoTransactionType) {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret);
+      const judo = new JudoPay(this.state.token, this.state.secret)
       judo.isSandboxed = this.state.isSandboxed
-      const response = await judo.invokeTransaction(type, this.state.configuration);
+      const response = await judo.invokeTransaction(
+        type,
+        this.state.configuration,
+      )
       if (response != null) {
         this.props.navigation.navigate('Receipt', { receipt: response })
       }
-      console.log(response)
     } catch (error) {
-      await showMessage("Error", error.message)
+      await showMessage('Error', error.message)
     }
   }
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret);
+      const judo = new JudoPay(this.state.token, this.state.secret)
       judo.isSandboxed = this.state.isSandboxed
-      const response = await judo.invokeApplePay(mode, this.state.configuration);
+      const response = await judo.invokeApplePay(mode, this.state.configuration)
       if (response != null) {
         this.props.navigation.navigate('Receipt', { receipt: response })
       }
-      console.log(response)
     } catch (error) {
-      await showMessage("Error", error.message)
+      await showMessage('Error', error.message)
     }
   }
 
   async displayGooglePaySheet(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret);
+      const judo = new JudoPay(this.state.token, this.state.secret)
       judo.isSandboxed = this.state.isSandboxed
-      const response = await judo.invokeGooglePay(mode, this.state.configuration);
+      const response = await judo.invokeGooglePay(
+        mode,
+        this.state.configuration,
+      )
       if (response != null) {
         this.props.navigation.navigate('Receipt', { receipt: response })
       }
-      console.log(response)
     } catch (error) {
-      await showMessage("Error", error.message)
+      await showMessage('Error', error.message)
     }
   }
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret);
+      const judo = new JudoPay(this.state.token, this.state.secret)
       judo.isSandboxed = this.state.isSandboxed
-      const response = await judo.invokePaymentMethodScreen(mode, this.state.configuration);
+      const response = await judo.invokePaymentMethodScreen(
+        mode,
+        this.state.configuration,
+      )
       if (response != null) {
         this.props.navigation.navigate('Receipt', { receipt: response })
       }
-      console.log(response)
     } catch (error) {
-      await showMessage("Error", error.message)
+      await showMessage('Error', error.message)
     }
   }
 
@@ -200,8 +203,10 @@ export default class Home extends Component {
   getListItem(item: HomeListItem) {
     return (
       <TouchableHighlight
-        underlayColor='gray'
-        onPress={() => { this.handleListItemPressed(item) }}
+        underlayColor="gray"
+        onPress={() => {
+          this.handleListItemPressed(item)
+        }}
       >
         <View style={styles.listItem}>
           <Text style={styles.title}>{item.title}</Text>
@@ -209,7 +214,7 @@ export default class Home extends Component {
           <View style={styles.separator} />
         </View>
       </TouchableHighlight>
-    );
+    )
   }
 
   render() {
@@ -240,14 +245,14 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: '#e9e9e9'
+    backgroundColor: '#e9e9e9',
   },
   listItem: {
-    marginTop: 10
+    marginTop: 10,
   },
   title: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: '#000',
     width: 250,
     marginStart: 10,
@@ -258,9 +263,9 @@ const styles = StyleSheet.create({
     width: 300,
     marginStart: 10,
     marginEnd: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   spinnerTextStyle: {
-    color: '#FFF'
-  }
+    color: '#FFF',
+  },
 })

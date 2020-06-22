@@ -109,6 +109,12 @@ export const getStoredData = async (state: any): Promise<object> => {
           amount: {
             value: settings.list[1].data[0].value as string,
             currency: settings.list[1].data[1].value as string
+          },
+          uiConfiguration: {
+            isAVSEnabled: settings.list[2].data[2].value,
+            shouldPaymentMethodsVerifySecurityCode: settings.list[2].data[3].value,
+            shouldPaymentButtonDisplayAmount: settings.list[2].data[4].value,
+            shouldPaymentMethodsDisplayAmount: settings.list[2].data[5].value,
           }
         },
         secret: secret,
@@ -130,6 +136,7 @@ const parsePaymentMethods = (values: string[]): JudoPaymentMethod => {
   if (values.includes('APPLE_PAY')) paymentMethods |= JudoPaymentMethod.ApplePay
   if (values.includes('GOOGLE_PAY')) paymentMethods |= JudoPaymentMethod.GooglePay
   if (values.includes('IDEAL')) paymentMethods |= JudoPaymentMethod.iDEAL
+  if (values.includes('PBBA')) paymentMethods |= JudoPaymentMethod.PayByBankApp
   return paymentMethods
 }
 
