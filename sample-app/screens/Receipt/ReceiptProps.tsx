@@ -1,5 +1,5 @@
 export type ReceiptListItem = {
-    title: string,
-    value: any,
-    expandable: boolean
+  title: string,
+  value: any,
+  expandable: boolean,
 }

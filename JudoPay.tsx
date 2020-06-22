@@ -1,18 +1,18 @@
-import { NativeModules } from 'react-native';
+import { NativeModules } from 'react-native'
 
 import {
     JudoConfiguration,
     JudoResponse,
     JudoTransactionMode,
     JudoTransactionType
-} from './types/JudoTypes';
+} from './types/JudoTypes'
 
 export {
     JudoTransactionType,
     JudoTransactionMode,
     JudoPaymentMethod,
     JudoCardNetwork
-} from './types/JudoTypes';
+} from './types/JudoTypes'
 
 export type {
     JudoAmount,
@@ -23,7 +23,7 @@ export type {
     JudoTheme,
     JudoResponse,
     JudoConfiguration
-} from './types/JudoTypes';
+} from './types/JudoTypes'
 
 export {
     JudoPaymentSummaryItemType,
@@ -31,36 +31,36 @@ export {
     JudoContactField,
     JudoShippingType,
     JudoReturnedInfo
-} from './types/JudoApplePayTypes';
+} from './types/JudoApplePayTypes'
 
 export type {
     JudoApplePayConfiguration,
     JudoPaymentSummaryItem,
     JudoShippingMethod
-} from './types/JudoApplePayTypes';
+} from './types/JudoApplePayTypes'
 
 export {
     JudoAddressFormat,
     JudoGooglePayEnvironment
-} from './types/JudoGooglePayTypes';
+} from './types/JudoGooglePayTypes'
 
 export type {
     JudoGooglePayConfiguration,
     JudoBillingAddressParameters,
     JudoShippingAddressParameters
-} from './types/JudoGooglePayTypes';
+} from './types/JudoGooglePayTypes'
 
-export type { JudoPBBAConfiguration } from './types/JudoPBBATypes';
+export type { JudoPBBAConfiguration } from './types/JudoPBBATypes'
 
 class JudoPay {
-    public isSandboxed: boolean = true;
+    public isSandboxed: boolean = true
 
-    private readonly token: string;
-    private readonly secret: string;
+    private readonly token: string
+    private readonly secret: string
 
     constructor(token: string, secret: string) {
-        this.token = token;
-        this.secret = secret;
+        this.token = token
+        this.secret = secret
     }
 
     public async invokeTransaction(
@@ -70,8 +70,8 @@ class JudoPay {
         const params = this.generateTransactionTypeParameters(
             type,
             configuration
-        );
-        return NativeModules.RNJudo.invokeTransaction(params);
+        )
+        return NativeModules.RNJudo.invokeTransaction(params)
     }
 
     public async invokeApplePay(
@@ -81,8 +81,8 @@ class JudoPay {
         const params = this.generateTransactionModeParameters(
             mode,
             configuration
-        );
-        return NativeModules.RNJudo.invokeApplePay(params);
+        )
+        return NativeModules.RNJudo.invokeApplePay(params)
     }
 
     public async invokeGooglePay(
@@ -92,8 +92,8 @@ class JudoPay {
         const params = this.generateTransactionModeParameters(
             mode,
             configuration
-        );
-        return NativeModules.RNJudo.invokeGooglePay(params);
+        )
+        return NativeModules.RNJudo.invokeGooglePay(params)
     }
 
     public async invokePaymentMethodScreen(
@@ -103,8 +103,8 @@ class JudoPay {
         const params = this.generateTransactionModeParameters(
             mode,
             configuration
-        );
-        return NativeModules.RNJudo.invokePaymentMethodScreen(params);
+        )
+        return NativeModules.RNJudo.invokePaymentMethodScreen(params)
     }
 
     private generateTransactionTypeParameters = (
@@ -117,8 +117,8 @@ class JudoPay {
             sandboxed: this.isSandboxed,
             transactionType: type,
             configuration: configuration
-        };
-    };
+        }
+    }
 
     private generateTransactionModeParameters = (
         mode: JudoTransactionMode,
@@ -130,8 +130,8 @@ class JudoPay {
             sandboxed: this.isSandboxed,
             transactionMode: mode,
             configuration: configuration
-        };
-    };
+        }
+    }
 }
 
-export default JudoPay;
+export default JudoPay

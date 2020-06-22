@@ -8,18 +8,18 @@ import {
     JudoPaymentMethod,
     JudoCardNetwork,
     JudoAccountDetails
-} from 'judo-react-native';
+} from 'judo-react-native'
 
 const amount: JudoAmount = {
     value: '0.01',
-    currency: 'GBP',
+    currency: 'GBP'
 }
 
 const reference: JudoReference = {
     consumerReference: 'my-consumer-reference',
     paymentReference: 'my-payment-reference',
     metadata: {
-        'optionalMetadata': 'free-form-type'
+        optionalMetadata: 'free-form-type'
     }
 }
 
@@ -29,7 +29,7 @@ const cardAddress: JudoAddress = {
     line3: 'example-address-3',
     postCode: 'example-postcode',
     town: 'example-town',
-    countryCode: 'example-country-code',
+    countryCode: 'example-country-code'
 }
 
 const theme: JudoTheme = {
@@ -39,25 +39,23 @@ const theme: JudoTheme = {
 const uiConfiguration: JudoUIConfiguration = {
     isAVSEnabled: false,
     shouldDisplayAmount: true,
-    theme: theme,
+    theme: theme
 }
 
 const paymentMethods: JudoPaymentMethod =
     JudoPaymentMethod.Card |
     JudoPaymentMethod.ApplePay |
     JudoPaymentMethod.GooglePay |
-    JudoPaymentMethod.iDEAL;
+    JudoPaymentMethod.iDEAL
 
 const supportedCardNetworks: JudoCardNetwork =
-    JudoCardNetwork.Visa |
-    JudoCardNetwork.Mastercard |
-    JudoCardNetwork.Amex;
+    JudoCardNetwork.Visa | JudoCardNetwork.Mastercard | JudoCardNetwork.Amex
 
 const primaryAccountDetails: JudoAccountDetails = {
     name: 'example-name',
     accountNumber: 'example-account-number',
     dateOfBirth: 'example-date-of-birth',
-    postCode: 'example-post-code',
+    postCode: 'example-post-code'
 }
 
 const configuration: JudoConfiguration = {
@@ -71,7 +69,7 @@ const configuration: JudoConfiguration = {
     supportedCardNetworks: supportedCardNetworks,
     primaryAccountDetails: primaryAccountDetails,
     applePayConfiguration: null,
-    googlePayConfiguration: null,
+    googlePayConfiguration: null
 }
 
-export default configuration;
+export default configuration

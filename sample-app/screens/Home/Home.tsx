@@ -106,13 +106,8 @@ export default class Home extends Component {
         type,
         this.state.configuration,
       )
-      showMessage(
-        'Transaction succesful!',
-        'Please see network logs for details',
-      )
       if (response != null) {
-        // Disable until response parsing is fixed
-        // this.props.navigation.navigate('Receipt', { receipt: response })
+        this.props.navigation.navigate('Receipt', { receipt: response })
       }
     } catch (error) {
       await showMessage('Error', error.message)
@@ -124,13 +119,8 @@ export default class Home extends Component {
       const judo = new JudoPay(this.state.token, this.state.secret)
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeApplePay(mode, this.state.configuration)
-      showMessage(
-        'Transaction succesful!',
-        'Please see network logs for details',
-      )
       if (response != null) {
-        // TODO: Disabled until response parsing is fixed
-        // this.props.navigation.navigate('Receipt', { receipt: response })
+        this.props.navigation.navigate('Receipt', { receipt: response })
       }
     } catch (error) {
       await showMessage('Error', error.message)
@@ -145,13 +135,8 @@ export default class Home extends Component {
         mode,
         this.state.configuration,
       )
-      showMessage(
-        'Transaction succesful!',
-        'Please see network logs for details',
-      )
       if (response != null) {
-        // TODO: Disabled until response parsing is fixed
-        // this.props.navigation.navigate('Receipt', { receipt: response })
+        this.props.navigation.navigate('Receipt', { receipt: response })
       }
     } catch (error) {
       await showMessage('Error', error.message)
@@ -166,13 +151,8 @@ export default class Home extends Component {
         mode,
         this.state.configuration,
       )
-      showMessage(
-        'Transaction succesful!',
-        'Please see network logs for details',
-      )
       if (response != null) {
-        // TODO: Disabled until response parsing is fixed
-        // this.props.navigation.navigate('Receipt', { receipt: response })
+        this.props.navigation.navigate('Receipt', { receipt: response })
       }
     } catch (error) {
       await showMessage('Error', error.message)
