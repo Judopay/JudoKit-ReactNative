@@ -1,4 +1,5 @@
 import { NativeModules } from 'react-native'
+import JudoPBBAButton from './components/JudoPBBAButton'
 
 import {
     JudoConfiguration,
@@ -51,6 +52,8 @@ export type {
 } from './types/JudoGooglePayTypes'
 
 export type { JudoPBBAConfiguration } from './types/JudoPBBATypes'
+
+export { JudoPBBAButton }
 
 class JudoPay {
     public isSandboxed: boolean = true

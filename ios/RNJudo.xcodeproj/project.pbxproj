@@ -22,6 +22,7 @@
 		302793A12466A82C00436747 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
 		302793A22466A82F00436747 /* NSException+JudoValidationExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */; };
 		302793A32466A83100436747 /* UIColor+RNAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C87482245069650035A1C1 /* UIColor+RNAdditions.m */; };
+		30F208C124A28C8E008AA964 /* RNPBBAButtonManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F208C024A28C8E008AA964 /* RNPBBAButtonManager.m */; };
 		44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */; };
 		44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
 		44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907A244E491B009DF232 /* RNApplePayWrappers.m */; };
@@ -70,6 +71,7 @@
 		302793992464AFA100436747 /* RNWrappersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNWrappersTests.m; sourceTree = "<group>"; };
 		3027939D2465B0FE00436747 /* RNThemeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNThemeTests.m; sourceTree = "<group>"; };
 		3027939F2466A0EF00436747 /* NSDictionaryConvertTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSDictionaryConvertTests.m; sourceTree = "<group>"; };
+		30F208C024A28C8E008AA964 /* RNPBBAButtonManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPBBAButtonManager.m; sourceTree = "<group>"; };
 		3791EF88F1241A3EA85263C5 /* Pods-RNJudo-RNJudoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo-RNJudoTests.release.xcconfig"; path = "Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests.release.xcconfig"; sourceTree = "<group>"; };
 		44674008246433F50012DB4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSException+JudoValidationExceptions.m"; sourceTree = "<group>"; };
@@ -127,6 +129,14 @@
 			path = RNJudoTests;
 			sourceTree = "<group>";
 		};
+		30F208BF24A28C8E008AA964 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				30F208C024A28C8E008AA964 /* RNPBBAButtonManager.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		44674005246433F50012DB4C /* RNJudoTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +156,7 @@
 		44ACBFB12499157E00524BEF /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				30F208BF24A28C8E008AA964 /* Views */,
 				44B29072244E491A009DF232 /* Extensions */,
 				44B29077244E491B009DF232 /* Wrappers */,
 				82FF801E2448A9EE002A72CF /* RNTypes.h */,
@@ -446,6 +457,7 @@
 				B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */,
 				44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */,
 				3007CBC3249B86BA0014CFC2 /* RNPBBAWrappers.m in Sources */,
+				30F208C124A28C8E008AA964 /* RNPBBAButtonManager.m in Sources */,
 				44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */,
 				44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */,
 				01C87483245069650035A1C1 /* UIColor+RNAdditions.m in Sources */,

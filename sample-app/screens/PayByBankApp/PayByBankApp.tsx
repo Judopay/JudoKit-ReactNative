@@ -4,10 +4,10 @@ import {
   StatusBar,
   View,
   StyleSheet,
-  TouchableHighlight,
+  TouchableOpacity,
   Text,
 } from 'react-native'
-import JudoPay from 'judo-react-native'
+import JudoPay, { JudoPBBAButton } from 'judo-react-native'
 
 export default class PayByBankApp extends Component {
   constructor(props: any) {
@@ -33,12 +33,12 @@ export default class PayByBankApp extends Component {
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
         <View style={styles.container}>
-          <TouchableHighlight
+          <TouchableOpacity
             style={styles.pbbaButton}
             onPress={this.invokePayByBankApp}
           >
-            <Text>Very custom PBBA Button</Text>
-          </TouchableHighlight>
+            <JudoPBBAButton />
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     )
@@ -47,13 +47,12 @@ export default class PayByBankApp extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'stretch',
     justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
   },
   pbbaButton: {
-    alignItems: 'center',
-    backgroundColor: '#eee',
-    padding: 10,
+    height: 50,
+    width: 310,
   },
 })
