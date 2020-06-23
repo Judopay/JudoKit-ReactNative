@@ -5,5 +5,4 @@ export const pbbaConfiguration: JudoPBBAConfiguration = {
   emailAddress: 'example@mail.com',
   appearsOnStatement: 'example',
   deeplinkScheme: 'judo://example',
-  deeplinkURL: 'https://google.com',
 }

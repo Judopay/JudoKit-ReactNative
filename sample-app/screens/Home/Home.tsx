@@ -17,7 +17,6 @@ import {
 import JudoPay, {
   JudoTransactionType,
   JudoTransactionMode,
-  JudoResponse,
 } from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults'
 import { showMessage } from '../../helpers/utils'
@@ -143,6 +142,14 @@ export default class Home extends Component {
     }
   }
 
+  displayPayByBankAppScreen() {
+    this.props.navigation.navigate('PayByBankApp', {
+      token: this.state.token,
+      secret: this.state.secret,
+      configuration: this.state.configuration,
+    })
+  }
+
   async displayPaymentMethod(mode: JudoTransactionMode) {
     try {
       const judo = new JudoPay(this.state.token, this.state.secret)
@@ -187,6 +194,9 @@ export default class Home extends Component {
         break
       case HomeListType.GooglePreAuth:
         this.invokeGooglePreAuth()
+        break
+      case HomeListType.PayByBankApp:
+        this.displayPayByBankAppScreen()
         break
       case HomeListType.PaymentMethods:
         this.invokePaymentMethods()

@@ -8,6 +8,7 @@ export enum HomeListType {
   ApplePreAuth,
   GooglePay,
   GooglePreAuth,
+  PayByBankApp,
   PaymentMethods,
   PreAuthMethods,
   ServerToServer,
