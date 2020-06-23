@@ -96,6 +96,13 @@ class JudoPay {
         return NativeModules.RNJudo.invokeGooglePay(params)
     }
 
+    public async invokePayByBankApp(
+        configuration: JudoConfiguration
+    ): Promise<JudoResponse> {
+        const params = this.generatePayByBankAppParameters(configuration)
+        return NativeModules.RNJudo.invokePayByBankApp(params)
+    }
+
     public async invokePaymentMethodScreen(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
@@ -105,6 +112,17 @@ class JudoPay {
             configuration
         )
         return NativeModules.RNJudo.invokePaymentMethodScreen(params)
+    }
+
+    private generatePayByBankAppParameters = (
+        configuration: JudoConfiguration
+    ): Record<string, any> => {
+        return {
+            token: this.token,
+            secret: this.secret,
+            sandboxed: this.isSandboxed,
+            configuration: configuration
+        }
     }
 
     private generateTransactionTypeParameters = (

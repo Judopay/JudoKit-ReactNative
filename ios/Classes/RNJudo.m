@@ -36,6 +36,7 @@ static NSString *kJudoPromiseRejectionCode = @"JUDO_ERROR";
 typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
     JudoSDKInvocationTypeTransaction,
     JudoSDKInvocationTypeApplePay,
+    JudoSDKInvocationTypePBBA,
     JudoSDKInvocationTypePaymentMethods
 };
 
@@ -59,6 +60,13 @@ RCT_REMAP_METHOD(invokeApplePay,
                  invokeApplePayWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
     [self invokeSDKWithType:JudoSDKInvocationTypeApplePay withProperties:properties resolver:resolve andRejecter:reject];
+}
+
+RCT_REMAP_METHOD(invokePayByBankApp,
+                 properties:(NSDictionary *)properties
+                 invokePayByBankAppWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    [self invokeSDKWithType:JudoSDKInvocationTypePBBA withProperties:properties resolver:resolve andRejecter:reject];
 }
 
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
@@ -100,6 +108,11 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
             case JudoSDKInvocationTypeApplePay: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
                 [judoKit invokeApplePayWithMode:mode configuration:configuration completion:completion];
+                break;
+            }
+
+            case JudoSDKInvocationTypePBBA: {
+                [judoKit invokePBBAWithConfiguration:configuration completion:completion];
                 break;
             }
                 

@@ -42,6 +42,16 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     }
 
     @ReactMethod
+    fun invokePayByBankApp(options: ReadableMap, promise: Promise) {
+        try {
+            val judo = getPayByBankAppConfiguration(options)
+            startJudoActivity(judo, promise)
+        } catch (error: Exception) {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
+        }
+    }
+
+    @ReactMethod
     fun invokePaymentMethodScreen(options: ReadableMap, promise: Promise) {
         try {
             val judo = getPaymentMethodsConfiguration(options)

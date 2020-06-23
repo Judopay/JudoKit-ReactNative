@@ -32,6 +32,10 @@ internal fun getGoogleTransactionConfiguration(options: ReadableMap): Judo {
     return getJudoConfiguration(type, options)
 }
 
+internal fun getPayByBankAppConfiguration(options: ReadableMap): Judo {
+    return getJudoConfiguration(PaymentWidgetType.PAY_BY_BANK_APP, options)
+}
+
 internal fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
     val type = when (options.transactionMode) {
         0 -> PaymentWidgetType.PAYMENT_METHODS
