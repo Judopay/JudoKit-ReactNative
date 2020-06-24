@@ -74,6 +74,19 @@ class JudoPay {
         return NativeModules.RNJudo.invokeTransaction(params)
     }
 
+    public async performTokenTransaction(
+        mode: JudoTransactionMode,
+        configuration: JudoConfiguration,
+        token: string
+    ): Promise<JudoResponse> {
+        const params = this.generateTransactionModeParameters(
+            mode,
+            configuration
+        )
+        params['cardToken'] = token
+        return NativeModules.RNJudo.performTokenTransaction(params)
+    }
+
     public async invokeApplePay(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration

@@ -363,7 +363,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   JudoKit-iOS:
-    :commit: e99c814d615cf9fbe3d9a6615829156efe61c0e6
+    :commit: 24d6c723cd1e8d3aafb02f1abd4d2f3fd2b725f7
     :git: https://github.com/Judopay/JudoKit-iOS.git
 
 SPEC CHECKSUMS:

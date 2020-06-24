@@ -23,8 +23,7 @@
 //  SOFTWARE.
 
 #import <JudoKit-iOS/JudoKit_iOS.h>
-
-// TODO: Add as part of JudoKit_iOS on the native side
+#import <JudoKit-iOS/JPTransactionService.h>
 #import <JudoKit-iOS/JPError+Additions.h>
 
 #import "RNJudo.h"
@@ -36,6 +35,7 @@ static NSString *kJudoPromiseRejectionCode = @"JUDO_ERROR";
 typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
     JudoSDKInvocationTypeTransaction,
     JudoSDKInvocationTypeApplePay,
+    JudoSDKInvocationTypePBBA,
     JudoSDKInvocationTypePaymentMethods
 };
 
@@ -61,12 +61,44 @@ RCT_REMAP_METHOD(invokeApplePay,
     [self invokeSDKWithType:JudoSDKInvocationTypeApplePay withProperties:properties resolver:resolve andRejecter:reject];
 }
 
+RCT_REMAP_METHOD(invokePayByBankApp,
+                 properties:(NSDictionary *)properties
+                 invokePayByBankAppWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    [self invokeSDKWithType:JudoSDKInvocationTypePBBA withProperties:properties resolver:resolve andRejecter:reject];
+}
+
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  properties:(NSDictionary *)properties
                  invokePaymentMethodScreenWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
     [self invokeSDKWithType:JudoSDKInvocationTypePaymentMethods withProperties:properties resolver:resolve andRejecter:reject];
 }
+
+RCT_REMAP_METHOD(performTokenTransaction,
+                 properties:(NSDictionary *)properties
+                 performTokenTransactionWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    JPTransactionService *transactionService = [RNWrappers transactionServiceFromProperties:properties];
+    JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+    JPTransaction *transaction = [transactionService transactionWithConfiguration:configuration];
+    JPCompletionBlock completion = [self completionBlockWithResolve:resolve andReject:reject];
+    
+    transaction.cardToken = [RNWrappers cardTokenFromProperties:properties];
+    
+    if (transactionMode == JPTransactionModePreAuth) {
+        [transactionService preAuthWithTransaction:transaction andCompletion:completion];
+        return;
+    }
+    
+    [transactionService payWithTransaction:transaction andCompletion:completion];
+}
+
+//----------------------------------------------
+// MARK: - Helper methods
+//----------------------------------------------
 
 - (void)invokeSDKWithType:(JudoSDKInvocationType)invocationType
            withProperties:(NSDictionary *)properties
@@ -75,20 +107,7 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
     @try {
         JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-        JPCompletionBlock completion = ^(JPResponse *response, NSError *error) {
-            if (error) {
-                
-                if (error.code == JPError.judoUserDidCancelError.code) {
-                    reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
-                    return;
-                }
-                
-                reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
-            } else {
-                NSDictionary *mappedResponse = [self dictionaryFromResponse:response];
-                resolve(mappedResponse);
-            }
-        };
+        JPCompletionBlock completion = [self completionBlockWithResolve:resolve andReject:reject];
 
         switch (invocationType) {
             case JudoSDKInvocationTypeTransaction: {
@@ -100,6 +119,11 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
             case JudoSDKInvocationTypeApplePay: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
                 [judoKit invokeApplePayWithMode:mode configuration:configuration completion:completion];
+                break;
+            }
+
+            case JudoSDKInvocationTypePBBA: {
+                [judoKit invokePBBAWithConfiguration:configuration completion:completion];
                 break;
             }
                 
@@ -127,29 +151,44 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
     
     JPTransactionData *data = response.items.firstObject;
     
-    return @{
-        @"receiptId": data.receiptId,
-        @"yourPaymentReference": data.paymentReference,
-        @"createdAt": data.createdAt,
-        @"merchantName": data.merchantName,
-        @"appearsOnStatementAs": data.appearsOnStatementAs,
-        @"originalAmount": data.originalAmount,
-        @"netAmount": data.netAmount,
-        @"amount": data.amount.amount,
-        @"currency": data.amount.currency,
-        @"cardDetails": @{
-                @"cardLastFour": data.cardDetails.cardLastFour,
-                @"endDate": data.cardDetails.endDate,
-                @"cardToken": data.cardDetails.cardToken,
-                @"cardCountry": data.cardDetails.cardCountry,
-                @"bank": data.cardDetails.bank,
-                @"cardScheme": data.cardDetails.cardScheme
-        },
-        @"consumer": @{
-                @"consumerToken": data.consumer.consumerToken,
-                @"consumerReference": data.consumer.consumerReference,
-        }
-    };
+    NSMutableDictionary *mappedResponse = [NSMutableDictionary new];
+    
+    [mappedResponse setValue:data.receiptId forKey:@"receiptId"];
+    [mappedResponse setValue:data.paymentReference forKey:@"yourPaymentReference"];
+    [mappedResponse setValue:data.createdAt forKey:@"createdAt"];
+    [mappedResponse setValue:data.merchantName forKey:@"merchantName"];
+    [mappedResponse setValue:data.appearsOnStatementAs forKey:@"appearsOnStatementAs"];
+    [mappedResponse setValue:data.originalAmount forKey:@"originalAmount"];
+    [mappedResponse setValue:data.netAmount forKey:@"netAmount"];
+    [mappedResponse setValue:data.amount.amount forKey:@"amount"];
+    [mappedResponse setValue:data.amount.currency forKey:@"currency"];
+    
+    NSMutableDictionary *cardDetailsResponse = [NSMutableDictionary new];
+    [cardDetailsResponse setValue:data.cardDetails.cardLastFour forKey:@"cardLastFour"];
+    [cardDetailsResponse setValue:data.cardDetails.endDate forKey:@"endDate"];
+    [cardDetailsResponse setValue:data.cardDetails.cardToken forKey:@"cardToken"];
+    [cardDetailsResponse setValue:data.cardDetails.cardCountry forKey:@"cardCountry"];
+    [cardDetailsResponse setValue:data.cardDetails.bank forKey:@"bank"];
+    [cardDetailsResponse setValue:data.cardDetails.cardScheme forKey:@"cardScheme"];
+    
+    [mappedResponse setValue:cardDetailsResponse forKey:@"cardDetails"];
+    
+    NSMutableDictionary *consumerResponse = [NSMutableDictionary new];
+    [consumerResponse setValue:data.consumer.consumerToken forKey:@"consumerToken"];
+    [consumerResponse setValue:data.consumer.consumerReference forKey:@"consumerReference"];
+    
+    [mappedResponse setValue:consumerResponse forKey:@"consumerResponse"];
+    
+    NSMutableDictionary *orderDetailsResponse = [NSMutableDictionary new];
+    [orderDetailsResponse setValue:data.orderDetails.orderId forKey:@"orderId"];
+    [orderDetailsResponse setValue:data.orderDetails.orderStatus forKey:@"orderStatus"];
+    [orderDetailsResponse setValue:data.orderDetails.orderFailureReason forKey:@"orderFailureReason"];
+    [orderDetailsResponse setValue:data.orderDetails.timestamp forKey:@"timestamp"];
+    [orderDetailsResponse setValue:@(data.orderDetails.amount) forKey:@"amount"];
+    
+    [mappedResponse setValue:orderDetailsResponse forKey:@"orderDetails"];
+    
+    return mappedResponse;
 }
 
 //----------------------------------------------
@@ -162,6 +201,25 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
 
 + (BOOL)requiresMainQueueSetup {
     return YES;
+}
+
+- (JPCompletionBlock)completionBlockWithResolve:(RCTPromiseResolveBlock)resolve
+                                      andReject:(RCTPromiseRejectBlock)reject {
+    
+    return ^(JPResponse *response, NSError *error) {
+        if (error) {
+            
+            if (error.code == JPError.judoUserDidCancelError.code) {
+                reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
+                return;
+            }
+            
+            reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
+        } else {
+            NSDictionary *mappedResponse = [self dictionaryFromResponse:response];
+            resolve(mappedResponse);
+        }
+    };
 }
 
 @end
