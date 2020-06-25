@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Home from './screens/Home/Home'
 import Settings from './screens/Settings/Settings'
 import Receipt from './screens/Receipt/Receipt'
+import TokenPayments from './screens/TokenPayments/TokenPayments'
 
 const Stack = createStackNavigator()
 
@@ -53,6 +54,16 @@ function App() {
         <Stack.Screen
           name="Receipt"
           component={Receipt}
+          options={({ navigation }) => ({
+            headerStyle: {
+              backgroundColor: '#5623e4',
+            },
+            headerTintColor: '#fff',
+          })}
+        />
+        <Stack.Screen
+          name="Token Payments"
+          component={TokenPayments}
           options={({ navigation }) => ({
             headerStyle: {
               backgroundColor: '#5623e4',

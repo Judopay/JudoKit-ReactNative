@@ -17,7 +17,6 @@ import {
 import JudoPay, {
   JudoTransactionType,
   JudoTransactionMode,
-  JudoResponse,
 } from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults'
 import { showMessage } from '../../helpers/utils'
@@ -98,6 +97,16 @@ export default class Home extends Component {
     await this.displayPaymentMethod(JudoTransactionMode.ServerToServer)
   }
 
+  displayTokenPayments() {
+    const judo = new JudoPay(this.state.token, this.state.secret)
+    judo.isSandboxed = this.state.isSandboxed
+
+    this.props.navigation.navigate('Token Payments', {
+      judo: judo,
+      configuration: this.state.configuration,
+    })
+  }
+
   async invokeTransaction(type: JudoTransactionType) {
     try {
       const judo = new JudoPay(this.state.token, this.state.secret)
@@ -175,6 +184,9 @@ export default class Home extends Component {
         break
       case HomeListType.SaveCard:
         this.invokeSaveCard()
+        break
+      case HomeListType.TokenPayments:
+        this.displayTokenPayments()
         break
       case HomeListType.ApplePay:
         this.invokeApplePay()
