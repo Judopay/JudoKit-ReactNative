@@ -29,24 +29,6 @@ export default class PayByBankApp extends Component {
     }
   }
 
-  pbbaButton = () => {
-    return isIos ? (
-      <JudoPBBAButton />
-    ) : (
-      <Text
-        style={{
-          backgroundColor: 'orange',
-          padding: 10,
-          textAlign: 'center',
-          color: 'white',
-          fontWeight: 'bold',
-        }}
-      >
-        Very custom Android PBBA button
-      </Text>
-    )
-  }
-
   render() {
     return (
       <SafeAreaView style={[styles.container]}>
@@ -56,7 +38,7 @@ export default class PayByBankApp extends Component {
             style={styles.pbbaButton}
             onPress={this.invokePayByBankApp}
           >
-            {this.pbbaButton()}
+            <JudoPBBAButton />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
