@@ -30,10 +30,14 @@
 
 @implementation RNPBBAButtonManager
 
+static double const kPBBAButtonWidth = 310.0f;
+static double const kPBBAButtonHeight = 50.0f;
+
+
 RCT_EXPORT_MODULE(RNPBBAButton)
 
 - (UIView *)view {
-    return [JPPBBAButton new];
+    return [[JPPBBAButton alloc] initWithFrame:CGRectMake(0, 0, kPBBAButtonWidth, kPBBAButtonHeight)];
 }
 
 @end
