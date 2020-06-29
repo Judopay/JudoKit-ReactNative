@@ -277,12 +277,16 @@ internal fun getShippingParameters(options: ReadableMap): GooglePayShippingAddre
 
 internal fun getPBBAConfiguration(options: ReadableMap): PBBAConfiguration? {
     return if (options.pbbaConfiguration != null) {
-        PBBAConfiguration.Builder()
+        val configuration = PBBAConfiguration.Builder()
             .setMobileNumber(options.mobileNumber)
             .setEmailAddress(options.emailAddress)
-            .setDeepLinkURL(Uri.parse(options.deeplinkURL))
             .setDeepLinkScheme(options.deeplinkScheme)
-            .build()
+
+        // options.deeplinkURL.let {
+        //     configuration.setDeepLinkURL(Uri.parse(it))
+        // }
+
+        configuration.build()
     } else {
         null
     }

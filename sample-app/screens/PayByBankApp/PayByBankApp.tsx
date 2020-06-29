@@ -1,19 +1,24 @@
 import React, { Component } from 'react'
-import {
-  SafeAreaView,
-  StatusBar,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-} from 'react-native'
+import { SafeAreaView, StatusBar, View, StyleSheet } from 'react-native'
 import JudoPay, { JudoPBBAButton } from 'judo-react-native'
 import { isIos } from '../../helpers/utils'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+
+import AsyncStorage from '@react-native-community/async-storage'
+import { lastUsedFeatureKey } from '../../helpers/AsyncStore'
 
 export default class PayByBankApp extends Component {
   constructor(props: any) {
     super(props)
     this.invokePayByBankApp = this.invokePayByBankApp.bind(this)
+  }
+
+  componentDidMount() {
+    AsyncStorage.setItem(lastUsedFeatureKey, 'PayByBankApp')
+  }
+
+  componentWillUnmount() {
+    AsyncStorage.removeItem(lastUsedFeatureKey)
   }
 
   async invokePayByBankApp() {
@@ -38,7 +43,7 @@ export default class PayByBankApp extends Component {
             style={styles.pbbaButton}
             onPress={this.invokePayByBankApp}
           >
-            <JudoPBBAButton />
+            <JudoPBBAButton style={{ flex: 1 }} />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -54,6 +59,6 @@ const styles = StyleSheet.create({
   },
   pbbaButton: {
     height: 50,
-    width: 310,
+    width: isIos ? 310 : 200,
   },
 })

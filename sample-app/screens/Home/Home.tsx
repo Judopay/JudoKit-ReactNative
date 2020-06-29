@@ -3,6 +3,7 @@ import { store } from '../../helpers/AsyncStore'
 import { HomeScreenData, getStoredData } from './HomeData'
 import { HomeListItem, HomeListType } from './HomeProps'
 import Spinner from 'react-native-loading-spinner-overlay'
+import { isAndroid } from '../../helpers/utils'
 
 import {
   StatusBar,
@@ -12,6 +13,7 @@ import {
   Text,
   View,
   SafeAreaView,
+  Linking,
 } from 'react-native'
 
 import JudoPay, {
@@ -21,7 +23,12 @@ import JudoPay, {
 import configuration from '../../helpers/JudoDefaults'
 import { showMessage } from '../../helpers/utils'
 
+import AsyncStorage from '@react-native-community/async-storage'
+import { lastUsedFeatureKey } from '../../helpers/AsyncStore'
+
 export default class Home extends Component {
+  // MARK: State definition
+
   state = {
     configuration: configuration,
     token: '<TOKEN>',
@@ -30,16 +37,22 @@ export default class Home extends Component {
     spinner: false,
   }
 
+  // MARK: Component lifecycle
+
   componentDidMount() {
     store.subscribe(() => {
       this.getConfiguration()
     })
     this.getConfiguration()
+    this.handleDeepLinkIfNeeded()
   }
 
   componentWillUnmount() {
     store.dispatch({ type: '' })
+    Linking.removeEventListener('url', this.handleOpenURL)
   }
+
+  // MARK: Async storage
 
   async getConfiguration() {
     this.setState({ spinner: true })
@@ -48,6 +61,48 @@ export default class Home extends Component {
       this.setState({ spinner: false })
     })
   }
+
+  // MARK: DeepLinking
+
+  async handleDeepLinkIfNeeded() {
+    this.handleDeepLinkURL()
+
+    const lastUsedFeature = await AsyncStorage.getItem(lastUsedFeatureKey)
+
+    if (lastUsedFeature == 'PayByBankApp') {
+      this.displayPayByBankAppScreen()
+      return
+    }
+
+    if (lastUsedFeature == 'PaymentMethodScreen') {
+      this.invokePaymentMethods()
+      return
+    }
+  }
+
+  async handleDeepLinkURL() {
+    if (isAndroid) {
+      const url = await Linking.getInitialURL()
+      this.updateDeeplinkURL(url)
+    } else {
+      Linking.addEventListener('url', this.handleOpenURL)
+    }
+  }
+
+  handleOpenURL = event => {
+    this.updateDeeplinkURL(event.url)
+  }
+
+  updateDeeplinkURL(url: string | null) {
+    var configuration = this.state.configuration
+
+    if (!configuration.pbbaConfiguration || !url) return
+
+    configuration.pbbaConfiguration.deeplinkURL = url
+    this.setState({ configuration: configuration })
+  }
+
+  // MARK: SDK Features
 
   async invokePayment() {
     await this.invokeTransaction(JudoTransactionType.Payment)
@@ -96,6 +151,8 @@ export default class Home extends Component {
   async invokeServerToServerPayment() {
     await this.displayPaymentMethod(JudoTransactionMode.ServerToServer)
   }
+
+  // MARK: Helper methods
 
   async invokeTransaction(type: JudoTransactionType) {
     try {
