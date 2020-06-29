@@ -85,7 +85,7 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
                 
                 reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
             } else {
-                NSDictionary *mappedResponse = [self dictionaryFromResponse:response];
+                NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
                 resolve(mappedResponse);
             }
         };
@@ -121,35 +121,6 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
         
         reject(kJudoPromiseRejectionCode, exception.reason, error);
     }
-}
-
-- (NSDictionary *)dictionaryFromResponse:(JPResponse *)response {
-    
-    JPTransactionData *data = response.items.firstObject;
-    
-    return @{
-        @"receiptId": data.receiptId,
-        @"yourPaymentReference": data.paymentReference,
-        @"createdAt": data.createdAt,
-        @"merchantName": data.merchantName,
-        @"appearsOnStatementAs": data.appearsOnStatementAs,
-        @"originalAmount": data.originalAmount,
-        @"netAmount": data.netAmount,
-        @"amount": data.amount.amount,
-        @"currency": data.amount.currency,
-        @"cardDetails": @{
-                @"cardLastFour": data.cardDetails.cardLastFour,
-                @"endDate": data.cardDetails.endDate,
-                @"cardToken": data.cardDetails.cardToken,
-                @"cardCountry": data.cardDetails.cardCountry,
-                @"bank": data.cardDetails.bank,
-                @"cardScheme": data.cardDetails.cardScheme
-        },
-        @"consumer": @{
-                @"consumerToken": data.consumer.consumerToken,
-                @"consumerReference": data.consumer.consumerReference,
-        }
-    };
 }
 
 //----------------------------------------------
