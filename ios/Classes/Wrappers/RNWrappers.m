@@ -285,4 +285,48 @@
     return details;
 }
 
++ (NSDictionary *)dictionaryFromResponse:(JPResponse *)response {
+    
+    JPTransactionData *data = response.items.firstObject;
+    
+    NSMutableDictionary *mappedResponse = [NSMutableDictionary new];
+    
+    [mappedResponse setValue:data.receiptId forKey:@"receiptId"];
+    [mappedResponse setValue:data.paymentReference forKey:@"yourPaymentReference"];
+    [mappedResponse setValue:data.createdAt forKey:@"createdAt"];
+    [mappedResponse setValue:data.merchantName forKey:@"merchantName"];
+    [mappedResponse setValue:data.appearsOnStatementAs forKey:@"appearsOnStatementAs"];
+    [mappedResponse setValue:data.originalAmount forKey:@"originalAmount"];
+    [mappedResponse setValue:data.netAmount forKey:@"netAmount"];
+    [mappedResponse setValue:data.amount.amount forKey:@"amount"];
+    [mappedResponse setValue:data.amount.currency forKey:@"currency"];
+    
+    NSMutableDictionary *cardDetailsResponse = [NSMutableDictionary new];
+    [cardDetailsResponse setValue:data.cardDetails.cardLastFour forKey:@"cardLastFour"];
+    [cardDetailsResponse setValue:data.cardDetails.endDate forKey:@"endDate"];
+    [cardDetailsResponse setValue:data.cardDetails.cardToken forKey:@"cardToken"];
+    [cardDetailsResponse setValue:data.cardDetails.cardCountry forKey:@"cardCountry"];
+    [cardDetailsResponse setValue:data.cardDetails.bank forKey:@"bank"];
+    [cardDetailsResponse setValue:data.cardDetails.cardScheme forKey:@"cardScheme"];
+    
+    [mappedResponse setValue:cardDetailsResponse forKey:@"cardDetails"];
+    
+    NSMutableDictionary *consumerResponse = [NSMutableDictionary new];
+    [consumerResponse setValue:data.consumer.consumerToken forKey:@"consumerToken"];
+    [consumerResponse setValue:data.consumer.consumerReference forKey:@"consumerReference"];
+    
+    [mappedResponse setValue:consumerResponse forKey:@"consumerResponse"];
+    
+    NSMutableDictionary *orderDetailsResponse = [NSMutableDictionary new];
+    [orderDetailsResponse setValue:data.orderDetails.orderId forKey:@"orderId"];
+    [orderDetailsResponse setValue:data.orderDetails.orderStatus forKey:@"orderStatus"];
+    [orderDetailsResponse setValue:data.orderDetails.orderFailureReason forKey:@"orderFailureReason"];
+    [orderDetailsResponse setValue:data.orderDetails.timestamp forKey:@"timestamp"];
+    [orderDetailsResponse setValue:@(data.orderDetails.amount) forKey:@"amount"];
+    
+    [mappedResponse setValue:orderDetailsResponse forKey:@"orderDetails"];
+    
+    return mappedResponse;
+}
+
 @end

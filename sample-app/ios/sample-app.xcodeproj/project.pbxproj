@@ -1201,7 +1201,7 @@
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/NetworkCell.xib",
 				"${PODS_ROOT}/JudoKit-iOS/Resources/icons.bundle",
 				"${PODS_ROOT}/JudoKit-iOS/Resources/resources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit-iOS.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit_iOS.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ZappMerchantLib/ZappMerchantLibResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -1384,7 +1384,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/NetworkCell.nib",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icons.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/resources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKit-iOS.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKit_iOS.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ZappMerchantLibResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
