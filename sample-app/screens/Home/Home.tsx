@@ -29,9 +29,9 @@ export default class Home extends Component {
   //----------------------------------------------------------
 
   state = {
-    configuration: configuration,
     token: '<TOKEN>',
     secret: '<SECRET>',
+    configuration: configuration(),
     isSandboxed: true,
     spinner: false,
   }

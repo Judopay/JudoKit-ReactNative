@@ -76,4 +76,13 @@
  */
 + (JPCardNetworkType)cardNetworksFromConfiguration:(NSDictionary *)configuration;
 
+/**
+ * A method that converts the JPResponse properties into a NSDictionary format to be passed back to the Javascript side
+ *
+ * @param response - the JPResponse instance that contains the response details
+ *
+ * @returns a mapped NSDictionary response object
+ */
++ (NSDictionary *)dictionaryFromResponse:(JPResponse *)response;
+
 @end

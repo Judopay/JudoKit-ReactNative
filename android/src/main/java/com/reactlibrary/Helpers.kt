@@ -32,10 +32,6 @@ internal fun getGoogleTransactionConfiguration(options: ReadableMap): Judo {
     return getJudoConfiguration(type, options)
 }
 
-internal fun getPayByBankAppConfiguration(options: ReadableMap): Judo {
-    return getJudoConfiguration(PaymentWidgetType.PAY_BY_BANK_APP, options)
-}
-
 internal fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
     val type = when (options.transactionMode) {
         0 -> PaymentWidgetType.PAYMENT_METHODS
@@ -57,20 +53,20 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
     val pbbaConfiguration = getPBBAConfiguration(options)
 
     return Judo.Builder(type)
-        .setApiToken(options.token)
-        .setApiSecret(options.secret)
-        .setIsSandboxed(options.isSandboxed)
-        .setJudoId(options.judoId)
-        .setSiteId(options.siteId)
-        .setAmount(amount)
-        .setReference(reference)
-        .setSupportedCardNetworks(cardNetworks)
-        .setPaymentMethods(paymentMethods)
-        .setUiConfiguration(uiConfiguration)
-        .setPrimaryAccountDetails(primaryAccountDetails)
-        .setGooglePayConfiguration(googlePayConfiguration)
-        .setPBBAConfiguration(pbbaConfiguration)
-        .build()
+            .setApiToken(options.token)
+            .setApiSecret(options.secret)
+            .setIsSandboxed(options.isSandboxed)
+            .setJudoId(options.judoId)
+            .setSiteId(options.siteId)
+            .setAmount(amount)
+            .setReference(reference)
+            .setSupportedCardNetworks(cardNetworks)
+            .setPaymentMethods(paymentMethods)
+            .setUiConfiguration(uiConfiguration)
+            .setPrimaryAccountDetails(primaryAccountDetails)
+            .setGooglePayConfiguration(googlePayConfiguration)
+            .setPBBAConfiguration(pbbaConfiguration)
+            .build()
 }
 
 internal fun getWidgetType(options: ReadableMap) = when (options.getInt("transactionType")) {
@@ -87,16 +83,16 @@ internal fun getAmount(options: ReadableMap): Amount {
         else -> Currency.valueOf(currencyValue)
     }
     return Amount.Builder()
-        .setAmount(options.amountValue)
-        .setCurrency(currency)
-        .build()
+            .setAmount(options.amountValue)
+            .setCurrency(currency)
+            .build()
 }
 
 internal fun getReference(options: ReadableMap): Reference? {
 
     var builder = Reference.Builder()
-        .setConsumerReference(options.consumerReference)
-        .setPaymentReference(options.paymentReference)
+            .setConsumerReference(options.consumerReference)
+            .setPaymentReference(options.paymentReference)
 
     val metadataMap = options.metadata
     metadataMap?.let {
@@ -204,11 +200,11 @@ internal fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
 internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
     return if (options.uiConfiguration != null) {
         UiConfiguration.Builder()
-            .setAvsEnabled(options.isAVSEnabled)
-            .setShouldPaymentMethodsDisplayAmount(options.shouldPaymentMethodsDisplayAmount)
-            .setShouldPaymentButtonDisplayAmount(options.shouldPaymentButtonDisplayAmount)
-            .setShouldPaymentMethodsVerifySecurityCode(options.shouldPaymentMethodsVerifySecurityCode)
-            .build()
+                .setAvsEnabled(options.isAVSEnabled)
+                .setShouldPaymentMethodsDisplayAmount(options.shouldPaymentMethodsDisplayAmount)
+                .setShouldPaymentButtonDisplayAmount(options.shouldPaymentButtonDisplayAmount)
+                .setShouldPaymentMethodsVerifySecurityCode(options.shouldPaymentMethodsVerifySecurityCode)
+                .build()
     } else {
         null
     }
@@ -216,11 +212,11 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
 
 internal fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetails? {
     return PrimaryAccountDetails.Builder()
-        .setName(options.name)
-        .setAccountNumber(options.accountNumber)
-        .setDateOfBirth(options.dateOfBirth)
-        .setPostCode(options.postCode)
-        .build()
+            .setName(options.name)
+            .setAccountNumber(options.accountNumber)
+            .setDateOfBirth(options.dateOfBirth)
+            .setPostCode(options.postCode)
+            .build()
 }
 
 internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration? {
@@ -235,14 +231,14 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
 
     return if (options.googlePayConfiguration != null) {
         GooglePayConfiguration.Builder()
-            .setTransactionCountryCode(options.countryCode)
-            .setEnvironment(environment)
-            .setIsEmailRequired(options.isEmailRequired)
-            .setIsBillingAddressRequired(options.isBillingAddressRequired)
-            .setBillingAddressParameters(billingParameters)
-            .setIsShippingAddressRequired(options.isShippingAddressRequired)
-            .setShippingAddressParameters(shippingParameters)
-            .build()
+                .setTransactionCountryCode(options.countryCode)
+                .setEnvironment(environment)
+                .setIsEmailRequired(options.isEmailRequired)
+                .setIsBillingAddressRequired(options.isBillingAddressRequired)
+                .setBillingAddressParameters(billingParameters)
+                .setIsShippingAddressRequired(options.isShippingAddressRequired)
+                .setShippingAddressParameters(shippingParameters)
+                .build()
     } else {
         null
     }
@@ -254,8 +250,8 @@ internal fun getBillingParameters(options: ReadableMap): GooglePayBillingAddress
         else -> GooglePayAddressFormat.FULL
     }
     return GooglePayBillingAddressParameters(
-        addressFormat,
-        options.isBillingPhoneNumberRequired
+            addressFormat,
+            options.isBillingPhoneNumberRequired
     )
 }
 
@@ -270,23 +266,25 @@ internal fun getShippingParameters(options: ReadableMap): GooglePayShippingAddre
     }
 
     return GooglePayShippingAddressParameters(
-        allowedCountryCodes,
-        options.isShippingPhoneNumberRequired
+            allowedCountryCodes,
+            options.isShippingPhoneNumberRequired
     )
 }
 
 internal fun getPBBAConfiguration(options: ReadableMap): PBBAConfiguration? {
     return if (options.pbbaConfiguration != null) {
-        val configuration = PBBAConfiguration.Builder()
-            .setMobileNumber(options.mobileNumber)
-            .setEmailAddress(options.emailAddress)
-            .setDeepLinkScheme(options.deeplinkScheme)
+        val deeplinkUri = if (options.deeplinkURL.isNullOrBlank()) {
+            null
+        } else {
+            Uri.parse(options.deeplinkURL)
+        }
 
-        // options.deeplinkURL.let {
-        //     configuration.setDeepLinkURL(Uri.parse(it))
-        // }
-
-        configuration.build()
+        PBBAConfiguration.Builder()
+                .setMobileNumber(options.mobileNumber)
+                .setEmailAddress(options.emailAddress)
+                .setDeepLinkURL(deeplinkUri)
+                .setDeepLinkScheme(options.deeplinkScheme)
+                .build()
     } else {
         null
     }
