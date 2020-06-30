@@ -18,15 +18,11 @@ import {
 import JudoPay, {
   JudoTransactionType,
   JudoTransactionMode,
-  JudoConfiguration,
 } from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults'
 import { showMessage } from '../../helpers/utils'
 
 export default class Home extends Component {
-  //----------------------------------------------------------
-  // MARK: State definition
-  //----------------------------------------------------------
 
   state = {
     token: '<TOKEN>',
@@ -35,10 +31,6 @@ export default class Home extends Component {
     isSandboxed: true,
     spinner: false,
   }
-
-  //----------------------------------------------------------
-  // MARK: Component lifecycle
-  //----------------------------------------------------------
 
   componentDidMount() {
     store.subscribe(() => {
@@ -56,10 +48,6 @@ export default class Home extends Component {
     store.dispatch({ type: '' })
   }
 
-  //----------------------------------------------------------
-  // MARK: Async storage
-  //----------------------------------------------------------
-
   async getConfiguration(callback: Function) {
     this.setState({ spinner: true })
     let configuration = await getStoredData(this.state)
@@ -69,10 +57,6 @@ export default class Home extends Component {
       })
     })
   }
-
-  //----------------------------------------------------------
-  // MARK: DeepLinking
-  //----------------------------------------------------------
 
   async handleDeepLinkIfNeeded() {
     const url = await Linking.getInitialURL()

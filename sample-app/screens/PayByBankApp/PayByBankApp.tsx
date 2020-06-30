@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import JudoPay, { JudoPBBAButton } from 'judo-react-native'
 import { isIos } from '../../helpers/utils'
+import { TouchableOpacity as AndroidTouchableOpacity } from 'react-native-gesture-handler'
 
 export default class PayByBankApp extends Component {
   constructor(props: any) {
@@ -31,18 +32,29 @@ export default class PayByBankApp extends Component {
     }
   }
 
+  pbbaButton() {
+    return isIos ? (
+      <TouchableOpacity
+        style={styles.pbbaButton}
+        onPress={this.invokePayByBankApp}
+      >
+        <JudoPBBAButton style={{ flex: 1 }} />
+      </TouchableOpacity>
+    ) : (
+      <AndroidTouchableOpacity
+        style={styles.pbbaButton}
+        onPress={this.invokePayByBankApp}
+      >
+        <JudoPBBAButton style={{ flex: 1 }} />
+      </AndroidTouchableOpacity>
+    )
+  }
+
   render() {
     return (
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.pbbaButton}
-            onPress={this.invokePayByBankApp}
-          >
-            <JudoPBBAButton style={{ flex: 1 }} />
-          </TouchableOpacity>
-        </View>
+        <View style={styles.container}>{this.pbbaButton()}</View>
       </SafeAreaView>
     )
   }

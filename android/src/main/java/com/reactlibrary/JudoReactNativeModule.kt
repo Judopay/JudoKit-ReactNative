@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
 import com.judokit.android.Judo
+import com.judokit.android.model.PaymentWidgetType
 
 const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
 const val JUDO_PROMISE_REJECTION_CODE = "JUDO_ERROR"
@@ -44,7 +45,7 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
     @ReactMethod
     fun invokePayByBankApp(options: ReadableMap, promise: Promise) {
         try {
-            val judo = getPayByBankAppConfiguration(options)
+            val judo = getJudoConfiguration(PaymentWidgetType.PAY_BY_BANK_APP, options)
             startJudoActivity(judo, promise)
         } catch (error: Exception) {
             promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
