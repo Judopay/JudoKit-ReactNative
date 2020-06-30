@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { SafeAreaView, StatusBar, View, StyleSheet } from 'react-native'
+import {
+  SafeAreaView,
+  StatusBar,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import JudoPay, { JudoPBBAButton } from 'judo-react-native'
 import { isIos } from '../../helpers/utils'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-
-import AsyncStorage from '@react-native-community/async-storage'
-import { lastUsedFeatureKey } from '../../helpers/AsyncStore'
 
 export default class PayByBankApp extends Component {
   constructor(props: any) {
@@ -13,21 +15,16 @@ export default class PayByBankApp extends Component {
     this.invokePayByBankApp = this.invokePayByBankApp.bind(this)
   }
 
-  componentDidMount() {
-    AsyncStorage.setItem(lastUsedFeatureKey, 'PayByBankApp')
-  }
-
-  componentWillUnmount() {
-    AsyncStorage.removeItem(lastUsedFeatureKey)
-  }
-
   async invokePayByBankApp() {
     const token = this.props.route.params.token
     const secret = this.props.route.params.secret
     const configuration = this.props.route.params.configuration
+
     try {
       const judo = new JudoPay(token, secret)
       const response = await judo.invokePayByBankApp(configuration)
+      if (!response) return
+
       this.props.navigation.navigate('Receipt', { receipt: response })
     } catch (error) {
       console.log(error)
