@@ -59,6 +59,15 @@ class JudoReactNativeModuleTest {
     }
 
     @Test
+    fun `Given a JudoReactNativeModule instance is created when invoking invokePayByBankApp on this instance then startActivityForResult should be called on currentActivity instance`() {
+        sut.invokePayByBankApp(mapMock, promiseMock)
+
+        verify {
+            currentActivityMock.startActivityForResult(any(), JUDO_PAYMENT_WIDGET_REQUEST_CODE)
+        }
+    }
+
+    @Test
     fun `Given a JudoReactNativeModule instance is created when invoking invokePaymentMethodScreen on this instance then startActivityForResult should be called on currentActivity instance`() {
         sut.invokePaymentMethodScreen(mapMock, promiseMock)
 
