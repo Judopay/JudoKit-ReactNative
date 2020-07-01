@@ -73,7 +73,7 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  resolver:(RCTPromiseResolveBlock)resolve
               andRejecter:(RCTPromiseRejectBlock)reject {
     @try {
-        JudoKit *judoKit = [RNWrappers judoSessionFromProperties:properties];
+        self.judoKit = [RNWrappers judoSessionFromProperties:properties];
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
         JPCompletionBlock completion = ^(JPResponse *response, NSError *error) {
             if (error) {
@@ -93,19 +93,19 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
         switch (invocationType) {
             case JudoSDKInvocationTypeTransaction: {
                 JPTransactionType type = [RNWrappers transactionTypeFromProperties:properties];
-                [judoKit invokeTransactionWithType:type configuration:configuration completion:completion];
+                [self.judoKit invokeTransactionWithType:type configuration:configuration completion:completion];
                 break;
             }
                 
             case JudoSDKInvocationTypeApplePay: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-                [judoKit invokeApplePayWithMode:mode configuration:configuration completion:completion];
+                [self.judoKit invokeApplePayWithMode:mode configuration:configuration completion:completion];
                 break;
             }
                 
             case JudoSDKInvocationTypePaymentMethods: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-                [judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:completion];
+                [self.judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:completion];
                 break;
             }
                 

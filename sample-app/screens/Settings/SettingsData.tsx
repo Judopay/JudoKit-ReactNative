@@ -5,6 +5,8 @@ import {
     SettingsPickType
 } from './SettingsProps'
 
+import { isIos } from '../../helpers/utils'
+
 export const Currencies = {
     list: [
         {
@@ -64,6 +66,118 @@ export const Payments = {
     ]
 }
 
+export const MerchantCapabilities = {
+    list: [
+        {
+            "data": [
+                { "entry": "3DS", "value": "ThreeDS" } as PickerItem,
+                { "entry": "EMV", "value": "EMV" } as PickerItem,
+                { "entry": "Credit", "value": "Credit" } as PickerItem,
+                { "entry": "Debit", "value": "Debit"} as PickerItem,
+            ]
+        }
+    ]
+}
+
+export const ApplePayContactFields = {
+    list: [
+        {
+            "data": [
+                { "entry": "Postal Address", "value": "PostalAddress" } as PickerItem,
+                { "entry": "Phone", "value": "Phone" } as PickerItem,
+                { "entry": "Email", "value": "Email" } as PickerItem,
+                { "entry": "Name", "value": "Name"} as PickerItem,
+            ]
+        }
+    ]
+}
+
+export const AppleShippingTypes = {
+    list: [
+        {
+            "data": [
+                { "entry": "Delivery", "value": "Delivery" } as PickerItem,
+                { "entry": "Shipping", "value": "Shipping" } as PickerItem,
+                { "entry": "Store Pickup", "value": "Store Pickup" } as PickerItem,
+                { "entry": "Service Pickup", "value": "Service Pickup"} as PickerItem,
+            ]
+        }
+    ]
+}
+
+export const AppleReturnInfoTypes = {
+    list: [
+        {
+            "data": [
+                { "entry": "Billing", "value": "Billing" } as PickerItem,
+                { "entry": "Shipping", "value": "Shipping" } as PickerItem,
+            ]
+        }
+    ]
+}
+
+const applePaySettings = {
+    "title": "Apple Pay",
+    "data": [
+        {
+            "title": "Merchant ID",
+            "subtitle": "Your Merchant ID",
+            "type": SettingsPickType.TextPicker,
+            "value": ""
+        } as SettingsListItem,
+        {
+            "title": "Country Code",
+            "subtitle": "Your 2-digit ISO 3166-1 country code",
+            "type": SettingsPickType.TextPicker,
+            "value": ""
+        } as SettingsListItem,
+        {
+            "title": "Merchant Capabilities",
+            "subtitle": "ThreeDS, Credit",
+            "type": SettingsPickType.MultiPicker,
+            "value": "",
+            "valueArray": ["ThreeDS", "Credit"],
+            "pickItems": SettingsPickArray.MerchantCapabilities
+        } as SettingsListItem,
+        {
+            "title": "Required billing fields",
+            "subtitle": "Email, Phone",
+            "type": SettingsPickType.MultiPicker,
+            "value": "",
+            "valueArray": ["Email", "Phone"],
+            "pickItems": SettingsPickArray.ApplePayContactFields
+        } as SettingsListItem,
+        {
+            "title": "Required shipping fields",
+            "subtitle": "Email",
+            "type": SettingsPickType.MultiPicker,
+            "value": "",
+            "valueArray": ["Email", "Phone"],
+            "pickItems": SettingsPickArray.ApplePayContactFields
+        } as SettingsListItem,
+        {
+            "title": "Shipping Type",
+            "subtitle": "Delivery",
+            "type": SettingsPickType.SinglePicker,
+            "value": "Delivery",
+            "valueArray": [],
+            "pickItems": SettingsPickArray.AppleShippingTypes
+        } as SettingsListItem,
+        {
+            "title": "Returned Contact Info",
+            "subtitle": "Billing, Shipping",
+            "type": SettingsPickType.MultiPicker,
+            "value": "",
+            "valueArray": ["Billing", "Shipping"],
+            "pickItems": SettingsPickArray.AppleReturnInfoTypes
+        } as SettingsListItem,
+    ]
+}
+
+const googlePaySettings = {
+    // TODO: Add Google Pay settings
+}
+
 export var SettingsData = {
     list: [
         {
@@ -120,6 +234,7 @@ export var SettingsData = {
                 } as SettingsListItem
             ]
         },
+        isIos ? applePaySettings : googlePaySettings,
         {
             "title": "Customizations",
             "data": [
