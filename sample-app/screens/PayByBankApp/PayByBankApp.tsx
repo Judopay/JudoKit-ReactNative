@@ -17,9 +17,7 @@ export default class PayByBankApp extends Component {
   }
 
   async invokePayByBankApp() {
-    const token = this.props.route.params.token
-    const secret = this.props.route.params.secret
-    const configuration = this.props.route.params.configuration
+    const { token, secret, configuration } = this.props.route.params
 
     try {
       const judo = new JudoPay(token, secret)

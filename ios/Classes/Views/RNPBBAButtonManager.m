@@ -33,7 +33,6 @@
 static double const kPBBAButtonWidth = 310.0f;
 static double const kPBBAButtonHeight = 50.0f;
 
-
 RCT_EXPORT_MODULE(RNPBBAButton)
 
 - (UIView *)view {
