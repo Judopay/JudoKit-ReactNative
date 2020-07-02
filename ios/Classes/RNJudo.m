@@ -112,7 +112,7 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
             }
 
             case JudoSDKInvocationTypePBBA: {
-                [judoKit invokePBBAWithConfiguration:configuration completion:completion];
+                [self.judoKit invokePBBAWithConfiguration:configuration completion:completion];
                 break;
             }
 
