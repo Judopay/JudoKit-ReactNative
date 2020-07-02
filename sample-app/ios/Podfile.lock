@@ -1,6 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - CocoaDebug (1.2.8)
+  - CocoaDebug (1.2.7)
   - DeviceDNA (1.1.2)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
@@ -368,7 +368,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  CocoaDebug: 32bb9cecd3b2df85f7d0e7bf48cae14fb149633a
+  CocoaDebug: fbe21eafb4894150b1f5756d746a963a1cea8f5a
   DeviceDNA: 3e72fd28d345a5aa6f218af4287cb46dc74b62cb
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
