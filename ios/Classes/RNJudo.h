@@ -28,4 +28,9 @@ static const NSErrorDomain _Nonnull RNJudoErrorDomain = @"com.judopay.react-nati
 
 @interface RNJudo : NSObject <RCTBridgeModule>
 
+/**
+ * A reference to the iOS JudoKit session resposible for handling the native features
+ */
+@property (nonnull, nonatomic, strong) JudoKit *judoKit;
+
 @end

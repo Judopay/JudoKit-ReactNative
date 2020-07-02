@@ -4,7 +4,11 @@ import { storageKey } from '../../helpers/AsyncStore'
 import AsyncStorage from '@react-native-community/async-storage'
 import {
   JudoPaymentMethod,
-  JudoCardNetwork
+  JudoCardNetwork,
+  JudoMerchantCapability,
+  JudoContactField,
+  JudoShippingType,
+  JudoReturnedInfo,
 } from 'judo-react-native'
 
 const applePayment: HomeListItem = {
@@ -109,22 +113,33 @@ export const getStoredData = async (state: any): Promise<object> => {
           ...configuration,
           judoId: settings.list[0].data[1].value as string,
           siteId: settings.list[0].data[2].value as string,
-          paymentMethods: parsePaymentMethods(settings.list[2].data[1].valueArray),
-          supportedCardNetworks: parseCardNetworks(settings.list[2].data[0].valueArray),
+          paymentMethods: parsePaymentMethods(settings.list[3].data[1].valueArray),
+          supportedCardNetworks: parseCardNetworks(settings.list[3].data[0].valueArray),
           amount: {
             value: settings.list[1].data[0].value as string,
             currency: settings.list[1].data[1].value as string
           },
+          applePayConfiguration: {
+            merchantId: settings.list[2].data[0].value as string,
+            countryCode: settings.list[2].data[1].value as string,
+            paymentSummaryItems: configuration.applePayConfiguration.paymentSummaryItems,
+            merchantCapabilities: parseMerchantCapabilities(settings.list[2].data[2].valueArray),
+            requiredBillingContactFields: parseAppleContactFields(settings.list[2].data[3].valueArray),
+            requiredShippingContactFields: parseAppleContactFields(settings.list[2].data[4].valueArray),
+            shippingMethods: configuration.applePayConfiguration.shippingMethods,
+            shippingType: parseAppleShippingType(settings.list[2].data[5].valueArray),
+            returnedInfo: parseAppleReturnedInfo(settings.list[2].data[6].valueArray),
+          },
           uiConfiguration: {
-            isAVSEnabled: settings.list[2].data[2].value,
-            shouldPaymentMethodsVerifySecurityCode: settings.list[2].data[3].value,
-            shouldPaymentButtonDisplayAmount: settings.list[2].data[4].value,
-            shouldPaymentMethodsDisplayAmount: settings.list[2].data[5].value,
+            isAVSEnabled: settings.list[3].data[2].value,
+            shouldPaymentMethodsVerifySecurityCode: settings.list[3].data[3].value,
+            shouldPaymentButtonDisplayAmount: settings.list[3].data[4].value,
+            shouldPaymentMethodsDisplayAmount: settings.list[3].data[5].value,
           }
         },
         secret: secret,
         token: token,
-        isSandbox: settings.list[0].data[0].value as boolean
+        isSandboxed: settings.list[0].data[0].value as boolean
       }
     } else {
       return {}
@@ -143,6 +158,39 @@ const parsePaymentMethods = (values: string[]): JudoPaymentMethod => {
   if (values.includes('IDEAL')) paymentMethods |= JudoPaymentMethod.iDEAL
   if (values.includes('PBBA')) paymentMethods |= JudoPaymentMethod.PayByBankApp
   return paymentMethods
+}
+
+const parseMerchantCapabilities = (values: string[]): JudoMerchantCapability => {
+  var merchantCapabilities = 0
+  if (values.includes('ThreeDS')) merchantCapabilities |= JudoMerchantCapability.ThreeDS
+  if (values.includes('EMV')) merchantCapabilities |= JudoMerchantCapability.EMV
+  if (values.includes('Credit')) merchantCapabilities |= JudoMerchantCapability.Credit
+  if (values.includes('Debit')) merchantCapabilities |= JudoMerchantCapability.Debit
+  return merchantCapabilities
+}
+
+const parseAppleContactFields = (values: string[]): JudoContactField => {
+  var contactFields = 0
+  if (values.includes('PostalAddress')) contactFields |= JudoContactField.PostalAddress
+  if (values.includes('Phone')) contactFields |= JudoContactField.Phone
+  if (values.includes('Email')) contactFields |= JudoContactField.Email
+  if (values.includes('Name')) contactFields |= JudoContactField.Name
+  return contactFields
+}
+
+const parseAppleShippingType = (values: string[]): JudoShippingType => {
+  if (values.includes('Delivery')) return JudoShippingType.Delivery
+  if (values.includes('Shipping')) return JudoShippingType.Shipping
+  if (values.includes('Store Pickup')) return JudoShippingType.StorePickup
+  if (values.includes('Service Pickup')) return JudoShippingType.ServicePickup
+  return 0;
+}
+
+const parseAppleReturnedInfo = (values: string[]): JudoReturnedInfo => {
+  var contactFields = 0
+  if (values.includes('Billing')) contactFields |= JudoReturnedInfo.BillingDetails
+  if (values.includes('Shipping')) contactFields |= JudoReturnedInfo.ShippingDetails
+  return contactFields
 }
 
 const parseCardNetworks = (values: string[]): JudoCardNetwork => {
