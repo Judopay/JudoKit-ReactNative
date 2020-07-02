@@ -9,6 +9,7 @@ import {
   JudoContactField,
   JudoShippingType,
   JudoReturnedInfo,
+  JudoGooglePayEnvironment,
 } from 'judo-react-native'
 
 const applePayment: HomeListItem = {
@@ -130,6 +131,15 @@ export const getStoredData = async (state: any): Promise<object> => {
             shippingType: parseAppleShippingType(settings.list[2].data[5].valueArray),
             returnedInfo: parseAppleReturnedInfo(settings.list[2].data[6].valueArray),
           },
+          googlePayConfiguration: {
+            countryCode: settings.list[2].data[0].value as string,
+            environment: parseGooglePayEnvironment(settings.list[2].data[1].valueArray),
+            isEmailRequired: settings.list[2].data[2].value as string,
+            isBillingAddressRequired: settings.list[2].data[3].value as boolean,
+            billingAddressParameters: configuration.googlePayConfiguration.billingAddressParameters,
+            isShippingAddressRequired: settings.list[2].data[4].value as boolean,
+            shippingAddressParameters: configuration.googlePayConfiguration.shippingAddressParameters,
+          },
           uiConfiguration: {
             isAVSEnabled: settings.list[3].data[2].value,
             shouldPaymentMethodsVerifySecurityCode: settings.list[3].data[3].value,
@@ -191,6 +201,11 @@ const parseAppleReturnedInfo = (values: string[]): JudoReturnedInfo => {
   if (values.includes('Billing')) contactFields |= JudoReturnedInfo.BillingDetails
   if (values.includes('Shipping')) contactFields |= JudoReturnedInfo.ShippingDetails
   return contactFields
+}
+
+const parseGooglePayEnvironment = (values: string[]): JudoGooglePayEnvironment => {
+  if (values.includes('Production')) return JudoGooglePayEnvironment.PRODUCTION
+  return JudoGooglePayEnvironment.TEST
 }
 
 const parseCardNetworks = (values: string[]): JudoCardNetwork => {

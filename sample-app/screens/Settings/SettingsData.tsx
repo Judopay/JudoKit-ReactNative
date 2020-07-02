@@ -174,8 +174,53 @@ const applePaySettings = {
     ]
 }
 
+export const GooglePayEnvironments = {
+    list: [
+        {
+            "data": [
+                { "entry": "Test", "value": "Test" } as PickerItem,
+                { "entry": "Production", "value": "Production" } as PickerItem,
+            ]
+        }
+    ]
+}
+
 const googlePaySettings = {
-    // TODO: Add Google Pay settings
+    "title": "Google Pay",
+    "data": [
+        {
+            "title": "Country Code",
+            "subtitle": "Your 2-digit ISO 3166-1 country code",
+            "type": SettingsPickType.TextPicker,
+            "value": ""
+        } as SettingsListItem,
+        {
+            "title": "Environment",
+            "subtitle": "Test",
+            "type": SettingsPickType.SinglePicker,
+            "value": "Test",
+            "valueArray": [],
+            "pickItems": SettingsPickArray.GooglePayEnvironments
+        } as SettingsListItem,
+        {
+            "title": "E-mail required",
+            "subtitle": "Toggle if Google Pay should require an email address",
+            "type": SettingsPickType.Switch,
+            "value": false,
+        } as SettingsListItem,
+        {
+            "title": "Billing address required",
+            "subtitle": "Toggle if Google Pay should require billing information",
+            "type": SettingsPickType.Switch,
+            "value": false,
+        } as SettingsListItem,
+        {
+            "title": "Shipping address required",
+            "subtitle": "Toggle if Google Pay should require shipping information",
+            "type": SettingsPickType.Switch,
+            "value": false,
+        } as SettingsListItem,
+    ]
 }
 
 export var SettingsData = {
