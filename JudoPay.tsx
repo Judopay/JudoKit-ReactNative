@@ -1,4 +1,5 @@
 import { NativeModules } from 'react-native'
+import JudoPBBAButton from './components/JudoPBBAButton'
 
 import {
     JudoConfiguration,
@@ -52,6 +53,8 @@ export type {
 
 export type { JudoPBBAConfiguration } from './types/JudoPBBATypes'
 
+export { JudoPBBAButton }
+
 class JudoPay {
     public isSandboxed: boolean = true
 
@@ -96,6 +99,13 @@ class JudoPay {
         return NativeModules.RNJudo.invokeGooglePay(params)
     }
 
+    public async invokePayByBankApp(
+        configuration: JudoConfiguration
+    ): Promise<JudoResponse> {
+        const params = this.generatePayByBankAppParameters(configuration)
+        return NativeModules.RNJudo.invokePayByBankApp(params)
+    }
+
     public async invokePaymentMethodScreen(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
@@ -107,7 +117,18 @@ class JudoPay {
         return NativeModules.RNJudo.invokePaymentMethodScreen(params)
     }
 
-    private generateTransactionTypeParameters = (
+    private readonly generatePayByBankAppParameters = (
+        configuration: JudoConfiguration
+    ): Record<string, any> => {
+        return {
+            token: this.token,
+            secret: this.secret,
+            sandboxed: this.isSandboxed,
+            configuration: configuration
+        }
+    }
+
+    private readonly generateTransactionTypeParameters = (
         type: JudoTransactionType,
         configuration: JudoConfiguration
     ): Record<string, any> => {
@@ -120,7 +141,7 @@ class JudoPay {
         }
     }
 
-    private generateTransactionModeParameters = (
+    private readonly generateTransactionModeParameters = (
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Record<string, any> => {

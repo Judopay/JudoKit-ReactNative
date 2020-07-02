@@ -12,17 +12,18 @@ import {
   Text,
   View,
   SafeAreaView,
+  Linking,
 } from 'react-native'
 
 import JudoPay, {
   JudoTransactionType,
   JudoTransactionMode,
-  JudoResponse,
 } from 'judo-react-native'
 import configuration from '../../helpers/JudoDefaults'
 import { showMessage } from '../../helpers/utils'
 
 export default class Home extends Component {
+
   state = {
     token: '<TOKEN>',
     secret: '<SECRET>',
@@ -33,22 +34,83 @@ export default class Home extends Component {
 
   componentDidMount() {
     store.subscribe(() => {
-      this.getConfiguration()
+      this.getConfiguration(() => {
+        this.handleDeepLinkIfNeeded()
+      })
     })
-    this.getConfiguration()
+
+    this.getConfiguration(() => {
+      this.handleDeepLinkIfNeeded()
+    })
   }
 
   componentWillUnmount() {
     store.dispatch({ type: '' })
   }
 
-  async getConfiguration() {
+  async getConfiguration(callback: Function) {
     this.setState({ spinner: true })
     let configuration = await getStoredData(this.state)
     this.setState(configuration, () => {
-      this.setState({ spinner: false })
+      this.setState({ spinner: false }, () => {
+        callback()
+      })
     })
   }
+
+  async handleDeepLinkIfNeeded() {
+    const url = await Linking.getInitialURL()
+    if (url) {
+      this.updateDeepLinkURL(url, () => {
+        this.handlePBBATransaction()
+      })
+    }
+  }
+
+  updateDeepLinkURL(url: string | null, callback: Function) {
+    const mockURL = url + '&orderId=BTO-cUOLVpSbQ1Ce9M3a3Mc7_w'
+
+    this.setState(
+      {
+        spinner: true,
+        configuration: {
+          ...this.state.configuration,
+          pbbaConfiguration: {
+            ...this.state.configuration.pbbaConfiguration,
+            deeplinkURL: mockURL,
+          },
+        },
+      },
+      () => callback(),
+    )
+  }
+
+  async handlePBBATransaction() {
+    try {
+      const judo = new JudoPay(this.state.token, this.state.secret)
+      const response = await judo.invokePayByBankApp(this.state.configuration)
+      if (response) {
+        this.props.navigation.navigate('Receipt', { receipt: response })
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      this.setState({
+        spinner: false,
+        configuration: {
+          ...this.state.configuration,
+          pbbaConfiguration: {
+            ...this.state.configuration.pbbaConfiguration,
+            deeplinkURL: undefined,
+          },
+        },
+      })
+    }
+  }
+
+  //----------------------------------------------------------
+  // MARK: SDK Features
+  //----------------------------------------------------------
 
   async invokePayment() {
     await this.invokeTransaction(JudoTransactionType.Payment)
@@ -98,6 +160,10 @@ export default class Home extends Component {
     await this.displayPaymentMethod(JudoTransactionMode.ServerToServer)
   }
 
+  //----------------------------------------------------------
+  // MARK: Helper methods
+  //----------------------------------------------------------
+
   async invokeTransaction(type: JudoTransactionType) {
     try {
       const judo = new JudoPay(this.state.token, this.state.secret)
@@ -141,6 +207,14 @@ export default class Home extends Component {
     } catch (error) {
       await showMessage('Error', error.message)
     }
+  }
+
+  displayPayByBankAppScreen() {
+    this.props.navigation.navigate('PayByBankApp', {
+      token: this.state.token,
+      secret: this.state.secret,
+      configuration: this.state.configuration,
+    })
   }
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
@@ -187,6 +261,9 @@ export default class Home extends Component {
         break
       case HomeListType.GooglePreAuth:
         this.invokeGooglePreAuth()
+        break
+      case HomeListType.PayByBankApp:
+        this.displayPayByBankAppScreen()
         break
       case HomeListType.PaymentMethods:
         this.invokePaymentMethods()

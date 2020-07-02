@@ -67,6 +67,11 @@ export const HomeScreenData = {
                 isIos ? applePayment : googlePayment,
                 isIos ? applePreAuth : googlePreAuth,
                 {
+                  "title": "Pay By Bank App",
+                  "subtitle": "with your installed bank app",
+                  "type": HomeListType.PayByBankApp
+              } as HomeListItem,
+                {
                     "title": "Payment method",
                     "subtitle": "with default payment methods",
                     "type": HomeListType.PaymentMethods

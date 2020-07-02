@@ -36,6 +36,7 @@ static NSString *kJudoPromiseRejectionCode = @"JUDO_ERROR";
 typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
     JudoSDKInvocationTypeTransaction,
     JudoSDKInvocationTypeApplePay,
+    JudoSDKInvocationTypePBBA,
     JudoSDKInvocationTypePaymentMethods
 };
 
@@ -61,6 +62,13 @@ RCT_REMAP_METHOD(invokeApplePay,
     [self invokeSDKWithType:JudoSDKInvocationTypeApplePay withProperties:properties resolver:resolve andRejecter:reject];
 }
 
+RCT_REMAP_METHOD(invokePayByBankApp,
+                 properties:(NSDictionary *)properties
+                 invokePayByBankAppWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    [self invokeSDKWithType:JudoSDKInvocationTypePBBA withProperties:properties resolver:resolve andRejecter:reject];
+}
+
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  properties:(NSDictionary *)properties
                  invokePaymentMethodScreenWithResolver:(RCTPromiseResolveBlock)resolve
@@ -77,12 +85,12 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
         JPCompletionBlock completion = ^(JPResponse *response, NSError *error) {
             if (error) {
-                
+
                 if (error.code == JPError.judoUserDidCancelError.code) {
                     reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
                     return;
                 }
-                
+
                 reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
             } else {
                 NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
@@ -96,19 +104,24 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
                 [self.judoKit invokeTransactionWithType:type configuration:configuration completion:completion];
                 break;
             }
-                
+
             case JudoSDKInvocationTypeApplePay: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
                 [self.judoKit invokeApplePayWithMode:mode configuration:configuration completion:completion];
                 break;
             }
-                
+
+            case JudoSDKInvocationTypePBBA: {
+                [judoKit invokePBBAWithConfiguration:configuration completion:completion];
+                break;
+            }
+
             case JudoSDKInvocationTypePaymentMethods: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
                 [self.judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:completion];
                 break;
             }
-                
+
             default:
                 @throw [NSException exceptionWithName:NSInvalidArgumentException
                                                reason:@"Unsupported invocation type."
@@ -118,7 +131,7 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
         NSError *error = [[NSError alloc] initWithDomain:RNJudoErrorDomain
                                                     code:0
                                                 userInfo:exception.userInfo];
-        
+
         reject(kJudoPromiseRejectionCode, exception.reason, error);
     }
 }

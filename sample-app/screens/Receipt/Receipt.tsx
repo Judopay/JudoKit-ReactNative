@@ -49,7 +49,7 @@ export default class Receipt extends Component {
     for (let [key, value] of Object.entries(hash)) {
       items.push({
         title: key,
-        value: value,
+        value: value || '',
         expandable: value instanceof Object
       } as ReceiptListItem)
     }
