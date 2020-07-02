@@ -117,7 +117,7 @@ class JudoPay {
         return NativeModules.RNJudo.invokePaymentMethodScreen(params)
     }
 
-    private generatePayByBankAppParameters = (
+    private readonly generatePayByBankAppParameters = (
         configuration: JudoConfiguration
     ): Record<string, any> => {
         return {
@@ -128,7 +128,7 @@ class JudoPay {
         }
     }
 
-    private generateTransactionTypeParameters = (
+    private readonly generateTransactionTypeParameters = (
         type: JudoTransactionType,
         configuration: JudoConfiguration
     ): Record<string, any> => {
@@ -141,7 +141,7 @@ class JudoPay {
         }
     }
 
-    private generateTransactionModeParameters = (
+    private readonly generateTransactionModeParameters = (
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Record<string, any> => {
