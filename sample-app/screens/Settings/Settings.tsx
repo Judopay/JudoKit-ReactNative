@@ -8,7 +8,11 @@ import {
   SettingsData,
   Currencies,
   CardNetworks,
-  Payments
+  Payments,
+  MerchantCapabilities,
+  ApplePayContactFields,
+  AppleShippingTypes,
+  AppleReturnInfoTypes
 } from './SettingsData'
 
 import {
@@ -178,6 +182,10 @@ export default class Settings extends Component {
       case SettingsPickArray.Currencies: return Currencies.list
       case SettingsPickArray.CardNetworks: return CardNetworks.list
       case SettingsPickArray.Payment: return Payments.list
+      case SettingsPickArray.MerchantCapabilities: return MerchantCapabilities.list
+      case SettingsPickArray.ApplePayContactFields: return ApplePayContactFields.list
+      case SettingsPickArray.AppleShippingTypes: return AppleShippingTypes.list
+      case SettingsPickArray.AppleReturnInfoTypes: return AppleReturnInfoTypes.list
     }
   }
 

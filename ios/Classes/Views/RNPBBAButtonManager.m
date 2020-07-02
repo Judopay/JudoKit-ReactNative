@@ -1,5 +1,5 @@
 //
-//  RNJudo.h
+//  RNPBBAButtonManager.h
 //  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
@@ -22,15 +22,21 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <React/RCTBridgeModule.h>
+#import <React/RCTViewManager.h>
+#import <JudoKit-iOS/JudoKit_iOS.h>
 
-static const NSErrorDomain _Nonnull RNJudoErrorDomain = @"com.judopay.react-native.error-domain";
+@interface RNPBBAButtonManager: RCTViewManager
+@end
 
-@interface RNJudo : NSObject <RCTBridgeModule>
+@implementation RNPBBAButtonManager
 
-/**
- * A reference to the iOS JudoKit session resposible for handling the native features
- */
-@property (nonnull, nonatomic, strong) JudoKit *judoKit;
+static double const kPBBAButtonWidth = 310.0f;
+static double const kPBBAButtonHeight = 50.0f;
+
+RCT_EXPORT_MODULE(RNPBBAButton)
+
+- (UIView *)view {
+    return [[JPPBBAButton alloc] initWithFrame:CGRectMake(0, 0, kPBBAButtonWidth, kPBBAButtonHeight)];
+}
 
 @end

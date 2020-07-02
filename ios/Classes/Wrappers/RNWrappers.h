@@ -88,13 +88,22 @@
 + (JPCardNetworkType)cardNetworksFromConfiguration:(NSDictionary *)configuration;
 
 /**
- * A method that returns the card token obtained after the Save Card transaction from the dictionary parameters.
- * The card token is used to complete a payment or pre-auth transaction with a stored card token
- *
- * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
- *
- * @returns an optional card token NSString instance
- */
+* A method that returns the card token obtained after the Save Card transaction from the dictionary parameters.
+* The card token is used to complete a payment or pre-auth transaction with a stored card token
+*
+* @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
+*
+* @returns an optional card token NSString instance
+*/
 + (NSString *)cardTokenFromProperties:(NSDictionary *)properties;
+
+/**
+ * A method that converts the JPResponse properties into a NSDictionary format to be passed back to the Javascript side
+ *
+ * @param response - the JPResponse instance that contains the response details
+ *
+ * @returns a mapped NSDictionary response object
+ */
++ (NSDictionary *)dictionaryFromResponse:(JPResponse *)response;
 
 @end

@@ -225,8 +225,15 @@ internal val ReadableMap.deeplinkScheme: String?
     get() = pbbaConfiguration?.getString("deeplinkScheme")
 
 internal val ReadableMap.deeplinkURL: String?
-    get() = pbbaConfiguration?.getString("deeplinkURL")
+    get() {
+        val hasKey = pbbaConfiguration?.hasKey("deeplinkURL") ?: false
+        return if (hasKey) {
+            pbbaConfiguration?.getString("deeplinkURL")
+        } else {
+            null
+        }
+    }
 
 fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
-    Intent(packageContext, JudoActivity::class.java)
-        .also { it.putExtra(JUDO_OPTIONS, this) }
+        Intent(packageContext, JudoActivity::class.java)
+                .also { it.putExtra(JUDO_OPTIONS, this) }

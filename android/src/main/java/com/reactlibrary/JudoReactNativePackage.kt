@@ -11,5 +11,5 @@ class JudoReactNativePackage : ReactPackage {
         listOf(JudoReactNativeModule(reactContext))
 
     override fun createViewManagers(reactContext: ReactApplicationContext) =
-        emptyList<ViewManager<*, *>>()
+            listOf(JudoReactNativePBBAManager())
 }

@@ -9,6 +9,10 @@ export enum SettingsPickArray {
   Currencies,
   CardNetworks,
   Payment,
+  MerchantCapabilities,
+  ApplePayContactFields,
+  AppleShippingTypes,
+  AppleReturnInfoTypes
 }
 
 export type SettingsListItem = {
