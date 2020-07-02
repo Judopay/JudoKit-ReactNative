@@ -175,7 +175,8 @@ const applePaySettings = {
 }
 
 const googlePaySettings = {
-    // TODO: Add Google Pay settings
+    "title": "Google Pay",
+    "data": []
 }
 
 export var SettingsData = {
