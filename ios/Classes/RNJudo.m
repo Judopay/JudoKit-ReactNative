@@ -136,7 +136,7 @@ RCT_REMAP_METHOD(performTokenTransaction,
             }
 
             case JudoSDKInvocationTypePBBA: {
-                [judoKit invokePBBAWithConfiguration:configuration completion:completion];
+                [self.judoKit invokePBBAWithConfiguration:configuration completion:completion];
                 break;
             }
 
@@ -185,7 +185,7 @@ RCT_REMAP_METHOD(performTokenTransaction,
 
             reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
         } else {
-            NSDictionary *mappedResponse = [self dictionaryFromResponse:response];
+            NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
             resolve(mappedResponse);
         }
     };

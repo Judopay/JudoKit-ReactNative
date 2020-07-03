@@ -13,6 +13,8 @@ import Judo, {
   JudoTransactionMode,
 } from 'judo-react-native'
 import TokenPaymentProps from './TokenPaymentsProps'
+import JudoPay from 'judo-react-native'
+import { showMessage } from '../../helpers/utils'
 
 interface IState {
   cardToken: string | undefined;
@@ -32,33 +34,41 @@ export default class TokenPayments extends Component<
   }
 
   async invokeSaveCard() {
-    const judo: Judo = this.props.route.params.judo
-    const configuration: JudoConfiguration = this.props.route.params
-      .configuration
+    const { token, secret, configuration } = this.props.route.params
 
-    const response = await judo.invokeTransaction(
-      JudoTransactionType.SaveCard,
-      configuration,
-    )
+    try {
+      const judo: Judo = new JudoPay(token, secret)
 
-    this.setState({ cardToken: response.cardDetails.cardToken })
+      const response = await judo.invokeTransaction(
+        JudoTransactionType.SaveCard,
+        configuration,
+      )
+
+      this.setState({ cardToken: response.cardDetails.cardToken })
+    } catch (error) {
+      showMessage(error.message)
+    }
   }
 
   async completeTransaction(mode: JudoTransactionMode) {
-    const judo: Judo = this.props.route.params.judo
-    const configuration: JudoConfiguration = this.props.route.params
-      .configuration
+    const { token, secret, configuration } = this.props.route.params
 
-    if (this.state.cardToken == undefined) return
+    try {
+      const judo: Judo = new JudoPay(token, secret)
 
-    const response = await judo.performTokenTransaction(
-      mode,
-      configuration,
-      this.state.cardToken,
-    )
+      if (this.state.cardToken == undefined) return
 
-    if (response != null) {
-      this.props.navigation.navigate('Receipt', { receipt: response })
+      const response = await judo.performTokenTransaction(
+        mode,
+        configuration,
+        this.state.cardToken,
+      )
+
+      if (response != null) {
+        this.props.navigation.navigate('Receipt', { receipt: response })
+      }
+    } catch (error) {
+      showMessage(error.message)
     }
   }
 

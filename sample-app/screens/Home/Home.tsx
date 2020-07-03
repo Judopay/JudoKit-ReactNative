@@ -23,7 +23,6 @@ import configuration from '../../helpers/JudoDefaults'
 import { showMessage } from '../../helpers/utils'
 
 export default class Home extends Component {
-
   state = {
     token: '<TOKEN>',
     secret: '<SECRET>',
@@ -222,7 +221,8 @@ export default class Home extends Component {
     judo.isSandboxed = this.state.isSandboxed
 
     this.props.navigation.navigate('Token Payments', {
-      judo: judo,
+      token: this.state.token,
+      secret: this.state.secret,
       configuration: this.state.configuration,
     })
   }
