@@ -12,7 +12,8 @@ export enum SettingsPickArray {
   MerchantCapabilities,
   ApplePayContactFields,
   AppleShippingTypes,
-  AppleReturnInfoTypes
+  AppleReturnInfoTypes,
+  GooglePayEnvironments
 }
 
 export type SettingsListItem = {
