@@ -38,10 +38,10 @@
 + (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
     NSString *token = [properties stringForKey:@"token"];
     NSString *secret = [properties stringForKey:@"secret"];
-    BOOL isSandboxed = [properties boolForKey:@"sandboxed"];
+    NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
 
     JudoKit *judoKit = [[JudoKit alloc] initWithToken:token secret:secret];
-    judoKit.isSandboxed = isSandboxed;
+    judoKit.isSandboxed = isSandboxed.boolValue;
 
     return judoKit;
 }

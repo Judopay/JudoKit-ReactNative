@@ -12,7 +12,8 @@ import {
   MerchantCapabilities,
   ApplePayContactFields,
   AppleShippingTypes,
-  AppleReturnInfoTypes
+  AppleReturnInfoTypes,
+  GooglePayEnvironments
 } from './SettingsData'
 
 import {
@@ -186,6 +187,7 @@ export default class Settings extends Component {
       case SettingsPickArray.ApplePayContactFields: return ApplePayContactFields.list
       case SettingsPickArray.AppleShippingTypes: return AppleShippingTypes.list
       case SettingsPickArray.AppleReturnInfoTypes: return AppleReturnInfoTypes.list
+      case SettingsPickArray.GooglePayEnvironments: return GooglePayEnvironments.list
     }
   }
 

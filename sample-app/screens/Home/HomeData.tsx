@@ -1,5 +1,5 @@
 import { HomeListItem, HomeListType } from './HomeProps'
-import { isIos } from '../../helpers/utils';
+import { isIos, isAndroid } from '../../helpers/utils';
 import { storageKey } from '../../helpers/AsyncStore'
 import AsyncStorage from '@react-native-community/async-storage'
 import {
@@ -120,7 +120,7 @@ export const getStoredData = async (state: any): Promise<object> => {
             value: settings.list[1].data[0].value as string,
             currency: settings.list[1].data[1].value as string
           },
-          applePayConfiguration: {
+          applePayConfiguration: isIos ? {
             merchantId: settings.list[2].data[0].value as string,
             countryCode: settings.list[2].data[1].value as string,
             paymentSummaryItems: configuration.applePayConfiguration.paymentSummaryItems,
@@ -128,18 +128,18 @@ export const getStoredData = async (state: any): Promise<object> => {
             requiredBillingContactFields: parseAppleContactFields(settings.list[2].data[3].valueArray),
             requiredShippingContactFields: parseAppleContactFields(settings.list[2].data[4].valueArray),
             shippingMethods: configuration.applePayConfiguration.shippingMethods,
-            shippingType: parseAppleShippingType(settings.list[2].data[5].valueArray),
+            shippingType: parseAppleShippingType(settings.list[2].data[5].value as string),
             returnedInfo: parseAppleReturnedInfo(settings.list[2].data[6].valueArray),
-          },
-          googlePayConfiguration: {
+          } : configuration.applePayConfiguration,
+          googlePayConfiguration: isAndroid ? {
             countryCode: settings.list[2].data[0].value as string,
-            environment: parseGooglePayEnvironment(settings.list[2].data[1].valueArray),
+            environment: parseGooglePayEnvironment(settings.list[2].data[1].value as string),
             isEmailRequired: settings.list[2].data[2].value as string,
             isBillingAddressRequired: settings.list[2].data[3].value as boolean,
             billingAddressParameters: configuration.googlePayConfiguration.billingAddressParameters,
             isShippingAddressRequired: settings.list[2].data[4].value as boolean,
             shippingAddressParameters: configuration.googlePayConfiguration.shippingAddressParameters,
-          },
+          } : configuration.googlePayConfiguration,
           uiConfiguration: {
             isAVSEnabled: settings.list[3].data[2].value,
             shouldPaymentMethodsVerifySecurityCode: settings.list[3].data[3].value,
@@ -188,11 +188,11 @@ const parseAppleContactFields = (values: string[]): JudoContactField => {
   return contactFields
 }
 
-const parseAppleShippingType = (values: string[]): JudoShippingType => {
-  if (values.includes('Delivery')) return JudoShippingType.Delivery
-  if (values.includes('Shipping')) return JudoShippingType.Shipping
-  if (values.includes('Store Pickup')) return JudoShippingType.StorePickup
-  if (values.includes('Service Pickup')) return JudoShippingType.ServicePickup
+const parseAppleShippingType = (value: string): JudoShippingType => {
+  if (value == 'Delivery') return JudoShippingType.Delivery
+  if (value == 'Shipping') return JudoShippingType.Shipping
+  if (value == 'Store Pickup') return JudoShippingType.StorePickup
+  if (value == 'Service Pickup') return JudoShippingType.ServicePickup
   return 0;
 }
 
@@ -203,8 +203,8 @@ const parseAppleReturnedInfo = (values: string[]): JudoReturnedInfo => {
   return contactFields
 }
 
-const parseGooglePayEnvironment = (values: string[]): JudoGooglePayEnvironment => {
-  if (values.includes('Production')) return JudoGooglePayEnvironment.PRODUCTION
+const parseGooglePayEnvironment = (value: string): JudoGooglePayEnvironment => {
+  if (value == 'Production') return JudoGooglePayEnvironment.PRODUCTION
   return JudoGooglePayEnvironment.TEST
 }
 
