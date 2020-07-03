@@ -1,17 +1,22 @@
 package com.reactlibrary
 
-import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.*
 import com.judokit.android.Judo
+import com.judokit.android.api.factory.JudoApiServiceFactory
+import com.judokit.android.api.model.response.JudoApiCallResult
+import com.judokit.android.api.model.response.Receipt
+import com.judokit.android.api.model.response.toJudoPaymentResult
+import com.judokit.android.model.JudoPaymentResult
 import com.judokit.android.model.PaymentWidgetType
+import com.judokit.android.toJSONString
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
 const val JUDO_PROMISE_REJECTION_CODE = "JUDO_ERROR"
 
-class JudoReactNativeModule internal constructor(context: ReactApplicationContext) :
+class JudoReactNativeModule internal constructor(val context: ReactApplicationContext) :
     ReactContextBaseJavaModule(context) {
 
     private val listener = JudoReactNativeActivityEventListener()
@@ -59,6 +64,44 @@ class JudoReactNativeModule internal constructor(context: ReactApplicationContex
             startJudoActivity(judo, promise)
         } catch (error: Exception) {
             promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
+        }
+    }
+
+    @ReactMethod
+    fun performTokenTransaction(options: ReadableMap, promise: Promise) {
+        try {
+
+            val judo = getTokenTransactionConfiguration(options)
+
+            val service = JudoApiServiceFactory.createApiService(context, judo)
+
+            val cardToken = options.cardToken
+
+            if (cardToken == null) {
+                promise.reject(JUDO_PROMISE_REJECTION_CODE, "No card token found")
+                return
+            }
+
+            service.tokenPayment(judo.toTokenPayment(cardToken)).enqueue(object: Callback<JudoApiCallResult<Receipt>> {
+
+                override fun onFailure(call: Call<JudoApiCallResult<Receipt>>, t: Throwable) {
+                    promise.reject(t)
+                }
+
+                override fun onResponse(call: Call<JudoApiCallResult<Receipt>>, response: Response<JudoApiCallResult<Receipt>>) {
+                    when (val data = response.body()?.toJudoPaymentResult()) {
+                        is JudoPaymentResult.Success -> {
+                            promise.resolve(getMappedResult(data.result))
+                        }
+                        is JudoPaymentResult.Error -> {
+                            promise.reject(JUDO_PROMISE_REJECTION_CODE, data.error.message)
+                        }
+                    }
+                }
+            })
+
+        } catch(exception: java.lang.Exception) {
+            promise.reject(exception)
         }
     }
 
