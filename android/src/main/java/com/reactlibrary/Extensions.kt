@@ -23,6 +23,9 @@ internal val ReadableMap.secret: String?
 internal val ReadableMap.isSandboxed: Boolean?
     get() = getBoolean("sandboxed")
 
+internal val ReadableMap.cardToken: String?
+    get() = getString("cardToken")
+
 internal val ReadableMap.judoId: String?
     get() = configuration?.getString("judoId")
 

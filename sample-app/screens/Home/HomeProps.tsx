@@ -4,6 +4,7 @@ export enum HomeListType {
   RegisterCard,
   CheckCard,
   SaveCard,
+  TokenPayments,
   ApplePay,
   ApplePreAuth,
   GooglePay,

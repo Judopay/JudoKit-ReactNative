@@ -116,24 +116,34 @@ export interface JudoAccountDetails {
     postCode?: string
 }
 
+export interface JudoCardDetails {
+    bank?: string
+    cardCountry?: string
+    cardLastFour?: string
+    cardScheme?: string
+    cardToken?: string
+    endDate?: string
+}
+
+export interface JudoConsumer {
+    consumerReference?: string
+    consumerToken?: string
+}
+
 export interface JudoResponse {
-    receiptId: string
-    yourPaymentReference: string
-    type: string
-    createdAt: string
-    result: string
-    message?: string
-    judoId: string
-    siteId: string
-    merchantName: string
-    appearsOnStatementAs: string
+    receiptId?: string
+    originalReceiptId?: string
+    partnerServiceFee?: string
+    yourPaymentReference?: string
+    type?: string
+    createdAt?: string
+    merchantName?: string
+    appearsOnStatementAs?: string
     originalAmount?: string
     netAmount?: string
     amount?: string
     currency?: string
-    cardDetails?: any
-    consumer?: any
-    risks?: any
-    device?: any
-    paymentToken?: any
+    result?: string
+    cardDetails?: JudoCardDetails
+    consumerResponse?: JudoConsumer
 }

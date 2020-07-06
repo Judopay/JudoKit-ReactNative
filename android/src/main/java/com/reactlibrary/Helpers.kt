@@ -2,25 +2,23 @@ package com.reactlibrary
 
 import android.net.Uri
 import android.os.Bundle
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableMap
 import com.judokit.android.Judo
-import com.judokit.android.model.Amount
-import com.judokit.android.model.CardNetwork
-import com.judokit.android.model.Currency
-import com.judokit.android.model.GooglePayConfiguration
-import com.judokit.android.model.PaymentMethod
-import com.judokit.android.model.PaymentWidgetType
-import com.judokit.android.model.PBBAConfiguration
-import com.judokit.android.model.PrimaryAccountDetails
-import com.judokit.android.model.Reference
-import com.judokit.android.model.UiConfiguration
+import com.judokit.android.model.*
 import com.judokit.android.model.googlepay.GooglePayAddressFormat
 import com.judokit.android.model.googlepay.GooglePayBillingAddressParameters
 import com.judokit.android.model.googlepay.GooglePayEnvironment
 import com.judokit.android.model.googlepay.GooglePayShippingAddressParameters
 
 internal fun getTransactionConfiguration(options: ReadableMap): Judo {
-    val widgetType = getWidgetType(options)
+    val widgetType = getTransactionTypeWidget(options)
+    return getJudoConfiguration(widgetType, options)
+}
+
+internal fun getTokenTransactionConfiguration(options: ReadableMap): Judo {
+    val widgetType = getTransactionModeWidget(options)
     return getJudoConfiguration(widgetType, options)
 }
 
@@ -40,6 +38,37 @@ internal fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
         else -> PaymentWidgetType.PAYMENT_METHODS
     }
     return getJudoConfiguration(type, options)
+}
+
+internal fun getMappedResult(result: JudoResult?): WritableMap {
+    val map = Arguments.createMap()
+    map.putString("receiptId", result?.receiptId)
+    map.putString("yourPaymentReference", result?.yourPaymentReference)
+    map.putString("createdAt", result?.createdAt.toString())
+    map.putString("merchantName", result?.merchantName)
+    map.putString("appearsOnStatementAs", result?.appearsOnStatementAs)
+    map.putString("originalAmount", result?.originalAmount.toString())
+    map.putString("netAmount", result?.netAmount.toString())
+    map.putString("amount", result?.amount.toString())
+    map.putString("currency", result?.currency)
+
+    val cardDetailsMap = Arguments.createMap()
+    cardDetailsMap.putString("cardLastFour", result?.cardDetails?.lastFour)
+    cardDetailsMap.putString("endDate", result?.cardDetails?.endDate)
+    cardDetailsMap.putString("cardToken", result?.cardDetails?.token)
+    cardDetailsMap.putString("cardCountry", result?.cardDetails?.country)
+    cardDetailsMap.putString("bank", result?.cardDetails?.bank)
+    cardDetailsMap.putString("cardScheme", result?.cardDetails?.scheme)
+
+    map.putMap("cardDetails", cardDetailsMap)
+
+    val consumerMap = Arguments.createMap()
+    consumerMap.putString("consumerToken", result?.consumer?.consumerToken)
+    consumerMap.putString("consumerReference", result?.consumer?.yourConsumerReference)
+
+    map.putMap("consumer", consumerMap)
+
+    return map
 }
 
 internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap): Judo {
@@ -69,11 +98,16 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
             .build()
 }
 
-internal fun getWidgetType(options: ReadableMap) = when (options.getInt("transactionType")) {
+internal fun getTransactionTypeWidget(options: ReadableMap) = when (options.getInt("transactionType")) {
     1 -> PaymentWidgetType.PRE_AUTH
     2 -> PaymentWidgetType.REGISTER_CARD
     3 -> PaymentWidgetType.CHECK_CARD
     4 -> PaymentWidgetType.CREATE_CARD_TOKEN
+    else -> PaymentWidgetType.CARD_PAYMENT
+}
+
+internal fun getTransactionModeWidget(options: ReadableMap) = when (options.getInt("transactionMode")) {
+    1 -> PaymentWidgetType.PRE_AUTH
     else -> PaymentWidgetType.CARD_PAYMENT
 }
 

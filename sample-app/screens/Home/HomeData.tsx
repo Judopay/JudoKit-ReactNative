@@ -65,6 +65,11 @@ export const HomeScreenData = {
                     "subtitle": "to be stored for future transactions",
                     "type": HomeListType.SaveCard
                 } as HomeListItem,
+                {
+                  "title": "Token payments",
+                  "subtitle": "by using a stored card token",
+                  "type": HomeListType.TokenPayments
+                } as HomeListItem,
                 isIos ? applePayment : googlePayment,
                 isIos ? applePreAuth : googlePreAuth,
                 {

@@ -23,6 +23,7 @@
 //  SOFTWARE.
 
 #import <JudoKit-iOS/JudoKit_iOS.h>
+#import <JudoKit-iOS/JPTransactionService.h>
 
 @interface RNWrappers : NSObject
 
@@ -35,6 +36,16 @@
  * @returns a configured JudoKit instance
  */
 + (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties;
+
+/**
+ * A method that returns a configured JPTransactionService instance based on the passed dictionary parameters
+ * JPTransactionService is initialized based on a provided token and secret
+ *
+ * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
+ *
+ * @returns a configured JPTransactionService instance
+ */
++ (JPTransactionService *)transactionServiceFromProperties:(NSDictionary *)properties;
 
 /**
  * A method that returns the correct TransactionType value based on the passed dictionary parameters
@@ -75,6 +86,16 @@
  * @returns a configured CardNetwork instance
  */
 + (JPCardNetworkType)cardNetworksFromConfiguration:(NSDictionary *)configuration;
+
+/**
+* A method that returns the card token obtained after the Save Card transaction from the dictionary parameters.
+* The card token is used to complete a payment or pre-auth transaction with a stored card token
+*
+* @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
+*
+* @returns an optional card token NSString instance
+*/
++ (NSString *)cardTokenFromProperties:(NSDictionary *)properties;
 
 /**
  * A method that converts the JPResponse properties into a NSDictionary format to be passed back to the Javascript side

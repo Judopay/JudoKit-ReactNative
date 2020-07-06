@@ -46,6 +46,19 @@
     return judoKit;
 }
 
++ (JPTransactionService *)transactionServiceFromProperties:(NSDictionary *)properties {
+    NSString *token = [properties stringForKey:@"token"];
+    NSString *secret = [properties stringForKey:@"secret"];
+    BOOL isSandboxed = [properties boolForKey:@"sandboxed"];
+
+    JPTransactionService *transactionService = [[JPTransactionService alloc] initWithToken:token
+                                                                                 andSecret:secret];
+    
+    transactionService.isSandboxed = isSandboxed;
+    
+    return transactionService;
+}
+
 + (JPTransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
     int type = [properties numberForKey:@"transactionType"].intValue;
 
@@ -138,6 +151,10 @@
     }
 
     return networks;
+}
+
++ (NSString *)cardTokenFromProperties:(NSDictionary *)properties {
+    return [properties optionalStringForKey:@"cardToken"];
 }
 
 //---------------------------------------------------

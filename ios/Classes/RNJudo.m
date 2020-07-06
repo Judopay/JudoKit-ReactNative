@@ -23,8 +23,7 @@
 //  SOFTWARE.
 
 #import <JudoKit-iOS/JudoKit_iOS.h>
-
-// TODO: Add as part of JudoKit_iOS on the native side
+#import <JudoKit-iOS/JPTransactionService.h>
 #import <JudoKit-iOS/JPError+Additions.h>
 
 #import "RNJudo.h"
@@ -75,6 +74,31 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  rejecter:(RCTPromiseRejectBlock)reject) {
     [self invokeSDKWithType:JudoSDKInvocationTypePaymentMethods withProperties:properties resolver:resolve andRejecter:reject];
 }
+
+RCT_REMAP_METHOD(performTokenTransaction,
+                 properties:(NSDictionary *)properties
+                 performTokenTransactionWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    JPTransactionService *transactionService = [RNWrappers transactionServiceFromProperties:properties];
+    JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+    JPTransaction *transaction = [transactionService transactionWithConfiguration:configuration];
+    JPCompletionBlock completion = [self completionBlockWithResolve:resolve andReject:reject];
+
+    transaction.cardToken = [RNWrappers cardTokenFromProperties:properties];
+
+    if (transactionMode == JPTransactionModePreAuth) {
+        [transactionService preAuthWithTransaction:transaction andCompletion:completion];
+        return;
+    }
+
+    [transactionService payWithTransaction:transaction andCompletion:completion];
+}
+
+//----------------------------------------------
+// MARK: - Helper methods
+//----------------------------------------------
 
 - (void)invokeSDKWithType:(JudoSDKInvocationType)invocationType
            withProperties:(NSDictionary *)properties
@@ -146,6 +170,25 @@ RCT_REMAP_METHOD(invokePaymentMethodScreen,
 
 + (BOOL)requiresMainQueueSetup {
     return YES;
+}
+
+- (JPCompletionBlock)completionBlockWithResolve:(RCTPromiseResolveBlock)resolve
+                                      andReject:(RCTPromiseRejectBlock)reject {
+
+    return ^(JPResponse *response, NSError *error) {
+        if (error) {
+
+            if (error.code == JPError.judoUserDidCancelError.code) {
+                reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
+                return;
+            }
+
+            reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
+        } else {
+            NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
+            resolve(mappedResponse);
+        }
+    };
 }
 
 @end
