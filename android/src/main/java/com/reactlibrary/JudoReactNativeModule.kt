@@ -89,6 +89,12 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
                 }
 
                 override fun onResponse(call: Call<JudoApiCallResult<Receipt>>, response: Response<JudoApiCallResult<Receipt>>) {
+
+                    if (response.body() == null) {
+                        promise.reject(JUDO_PROMISE_REJECTION_CODE, "Response body is empty")
+                        return
+                    }
+
                     when (val data = response.body()?.toJudoPaymentResult()) {
                         is JudoPaymentResult.Success -> {
                             promise.resolve(getMappedResult(data.result))
