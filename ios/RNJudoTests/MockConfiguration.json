@@ -1,0 +1,113 @@
+{
+    "token": "example-token",
+    "secret": "example-secret",
+    "sandboxed": true,
+    "transactionType": 0,
+    "configuration": {
+        "judoId": "example-judo-id",
+        "amount": {
+            "value": "0.01",
+            "currency": "GBP"
+        },
+        "reference": {
+            "consumerReference": "example-consumer-reference",
+            "paymentReference": "example-payment-reference",
+            "metadata": {
+                "example-key": "example-value"
+            }
+        },
+        "siteId": "example-site-id",
+        "cardAddress": {
+            "line1": "example-line-1",
+            "line2": "example-line-2",
+            "line3": "example-line-3",
+            "postCode": "example-post-code",
+            "town": "example-town",
+            "countryCode": 12
+        },
+        "uiConfiguration": {
+            "isAVSEnabled": false,
+            "shouldPaymentMethodsDisplayAmount": true,
+            "shouldPaymentButtonDisplayAmount": true,
+            "shouldPaymentMethodsVerifySecurityCode": false,
+            "theme": {
+                "largeTitleFont": "Avenir",
+                "largeTitleSize": 20,
+                "titleFont": "Avenir",
+                "titleSize": 19,
+                "headlineFont": "Avenir",
+                "headlineSize": 18,
+                "headlineLightFont": "Avenir",
+                "headlineLightSize": 17,
+                "bodyFont": "Avenir",
+                "bodySize": 16,
+                "bodyBoldFont": "Avenir",
+                "bodyBoldSize": 15,
+                "captionFont": "Avenir",
+                "captionSize": 14,
+                "captionBoldFont": "Avenir",
+                "captionBoldSize": 13,
+                "jpBlackColor": "#000000",
+                "jpDarkGrayColor": "#000001",
+                "jpGrayColor": "#000002",
+                "jpLightGrayColor": "#000003",
+                "jpRedColor": "#000004",
+                "jpWhiteColor": "#000005",
+                "buttonColor": "#000006",
+                "buttonTitleColor": "#000007",
+                "backButtonImage": "example-image-name",
+                "buttonCornerRadius": 20
+            }
+        },
+        "paymentMethods": 9,
+        "supportedCardNetworks": 13,
+        "primaryAccountDetails": {
+            "name": "example-name",
+            "accountNumber": "example-account-number",
+            "dateOfBirth": "example-date-of-birth",
+            "postCode": "example-post-code"
+        },
+        "applePayConfiguration": {
+            "merchantId": "example-merchant-id",
+            "countryCode": "GB",
+            "paymentSummaryItems": [
+                {
+                    "label": "example-label",
+                    "amount": "0.01",
+                    "type": 0
+                },
+                {
+                    "label": "example-label",
+                    "amount": "0.02",
+                    "type": 0
+                },
+                {
+                    "label": "example-label",
+                    "amount": "0.03",
+                    "type": 0
+                }
+            ],
+            "merchantCapabilities": 1,
+            "requiredBillingContactFields": 1,
+            "requiredShippingContactFields": 1,
+            "shippingMethods": [
+                {
+                    "identifier": "example-identifier",
+                    "detail": "example-detail",
+                    "label": "example-label",
+                    "amount": "0.01",
+                    "type": 0
+                }
+            ],
+            "shippingType": 1,
+            "returnedInfo": 1
+        },
+        "pbbaConfiguration": {
+            "mobileNumber": "123-123",
+            "emailAddress": "example@mail.com",
+            "appearsOnStatement": "Example",
+            "deeplinkScheme": "example://scheme",
+            "deeplinkURL": "https://google.com"
+        }
+    }
+}

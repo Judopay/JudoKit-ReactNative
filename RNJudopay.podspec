@@ -12,8 +12,13 @@ Pod::Spec.new do |s|
   s.author       = { "Judopay" => "devteam@judopayments.com" }
   s.platform     = :ios, "11.0"
   s.source       = { :path => 'ios' }
-  s.source_files = "ios/**/*.{h,m}"
+  s.source_files = "ios/Classes/**/*.{h,m}"
   s.requires_arc = true
   s.dependency "React"
-  s.dependency "JudoKitObjC", '~> 10.0'
+  s.dependency "JudoKit-iOS"
+
+  s.test_spec 'RNJudoTests' do |test_spec|
+    test_spec.source_files = 'ios/RNJudoTests/**/*.{h,m}'
+  end
+
 end

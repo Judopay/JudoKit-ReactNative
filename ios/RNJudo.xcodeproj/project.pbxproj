@@ -7,9 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0190D32923570CFE00040223 /* RNApplePayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0190D32823570CFD00040223 /* RNApplePayButton.m */; };
+		01C87483245069650035A1C1 /* UIColor+RNAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C87482245069650035A1C1 /* UIColor+RNAdditions.m */; };
+		057717333D873855624E3693 /* Pods_RNJudo_RNJudoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3E64B8CB1A30B7E79AA57E /* Pods_RNJudo_RNJudoTests.framework */; };
+		3007CBC3249B86BA0014CFC2 /* RNPBBAWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 3007CBC2249B86BA0014CFC2 /* RNPBBAWrappers.m */; };
+		3007CBC9249B8AB10014CFC2 /* RNPBBAWrappersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3007CBC8249B8AB10014CFC2 /* RNPBBAWrappersTests.m */; };
+		302793852464861A00436747 /* RNJudoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 302793842464861A00436747 /* RNJudoTests.m */; };
+		302793872464861A00436747 /* libRNJudo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 134814201AA4EA6300B7C361 /* libRNJudo.a */; };
+		302793912464863A00436747 /* MockConfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 3027938D2464863900436747 /* MockConfiguration.json */; };
+		302793922464863A00436747 /* RNApplePayWrappersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3027938E2464863A00436747 /* RNApplePayWrappersTests.m */; };
+		302793932464863A00436747 /* RNMocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 3027938F2464863A00436747 /* RNMocks.m */; };
+		3027939A2464AFA100436747 /* RNWrappersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 302793992464AFA100436747 /* RNWrappersTests.m */; };
+		3027939E2465B0FE00436747 /* RNThemeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3027939D2465B0FE00436747 /* RNThemeTests.m */; };
+		302793A02466A0EF00436747 /* NSDictionaryConvertTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3027939F2466A0EF00436747 /* NSDictionaryConvertTests.m */; };
+		302793A12466A82C00436747 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
+		302793A22466A82F00436747 /* NSException+JudoValidationExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */; };
+		302793A32466A83100436747 /* UIColor+RNAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C87482245069650035A1C1 /* UIColor+RNAdditions.m */; };
+		30F208C124A28C8E008AA964 /* RNPBBAButtonManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F208C024A28C8E008AA964 /* RNPBBAButtonManager.m */; };
+		44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */; };
+		44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
+		44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907A244E491B009DF232 /* RNApplePayWrappers.m */; };
+		44B2907F244E491B009DF232 /* RNWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907B244E491B009DF232 /* RNWrappers.m */; };
+		4B0010D5C8FFA3EA4AF4C56A /* Pods_RNJudo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B6CAE04B116E6423A5F317C /* Pods_RNJudo.framework */; };
 		B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNJudo.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		302793882464861A00436747 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 58B511D31A9E6C8500147676 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 58B511DA1A9E6C8500147676;
+			remoteInfo = RNJudo;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		58B511D91A9E6C8500147676 /* CopyFiles */ = {
@@ -24,18 +54,58 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0190D32723570CFD00040223 /* RNApplePayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNApplePayButton.h; sourceTree = "<group>"; };
-		0190D32823570CFD00040223 /* RNApplePayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNApplePayButton.m; sourceTree = "<group>"; };
+		01C87482245069650035A1C1 /* UIColor+RNAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RNAdditions.m"; sourceTree = "<group>"; };
+		01C87484245069DD0035A1C1 /* UIColor+RNAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+RNAdditions.h"; sourceTree = "<group>"; };
 		134814201AA4EA6300B7C361 /* libRNJudo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNJudo.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		279C05BF7E27DDBE62E491FC /* Pods-RNJudo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo.release.xcconfig"; path = "Target Support Files/Pods-RNJudo/Pods-RNJudo.release.xcconfig"; sourceTree = "<group>"; };
+		3007CBC1249B86BA0014CFC2 /* RNPBBAWrappers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNPBBAWrappers.h; sourceTree = "<group>"; };
+		3007CBC2249B86BA0014CFC2 /* RNPBBAWrappers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNPBBAWrappers.m; sourceTree = "<group>"; };
+		3007CBC8249B8AB10014CFC2 /* RNPBBAWrappersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNPBBAWrappersTests.m; sourceTree = "<group>"; };
+		302793822464861900436747 /* RNJudoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNJudoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		302793842464861A00436747 /* RNJudoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNJudoTests.m; sourceTree = "<group>"; };
+		302793862464861A00436747 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3027938D2464863900436747 /* MockConfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockConfiguration.json; sourceTree = "<group>"; };
+		3027938E2464863A00436747 /* RNApplePayWrappersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNApplePayWrappersTests.m; sourceTree = "<group>"; };
+		3027938F2464863A00436747 /* RNMocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNMocks.m; sourceTree = "<group>"; };
+		302793902464863A00436747 /* RNMocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNMocks.h; sourceTree = "<group>"; };
+		302793992464AFA100436747 /* RNWrappersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNWrappersTests.m; sourceTree = "<group>"; };
+		3027939D2465B0FE00436747 /* RNThemeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNThemeTests.m; sourceTree = "<group>"; };
+		3027939F2466A0EF00436747 /* NSDictionaryConvertTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSDictionaryConvertTests.m; sourceTree = "<group>"; };
+		30F208C024A28C8E008AA964 /* RNPBBAButtonManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPBBAButtonManager.m; sourceTree = "<group>"; };
+		3791EF88F1241A3EA85263C5 /* Pods-RNJudo-RNJudoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo-RNJudoTests.release.xcconfig"; path = "Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests.release.xcconfig"; sourceTree = "<group>"; };
+		44674008246433F50012DB4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSException+JudoValidationExceptions.m"; sourceTree = "<group>"; };
+		44B29074244E491A009DF232 /* NSDictionary+JudoConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JudoConvert.h"; sourceTree = "<group>"; };
+		44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JudoConvert.m"; sourceTree = "<group>"; };
+		44B29076244E491A009DF232 /* NSException+JudoValidationExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSException+JudoValidationExceptions.h"; sourceTree = "<group>"; };
+		44B29078244E491B009DF232 /* RNApplePayWrappers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNApplePayWrappers.h; sourceTree = "<group>"; };
+		44B29079244E491B009DF232 /* RNWrappers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNWrappers.h; sourceTree = "<group>"; };
+		44B2907A244E491B009DF232 /* RNApplePayWrappers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNApplePayWrappers.m; sourceTree = "<group>"; };
+		44B2907B244E491B009DF232 /* RNWrappers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNWrappers.m; sourceTree = "<group>"; };
+		519A0EFB9F5FC707B83D5CEA /* Pods-RNJudo-RNJudoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo-RNJudoTests.debug.xcconfig"; path = "Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6B6CAE04B116E6423A5F317C /* Pods_RNJudo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNJudo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D3E64B8CB1A30B7E79AA57E /* Pods_RNJudo_RNJudoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNJudo_RNJudoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D72421A356EEAC9375BF818 /* Pods-RNJudo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo.debug.xcconfig"; path = "Target Support Files/Pods-RNJudo/Pods-RNJudo.debug.xcconfig"; sourceTree = "<group>"; };
+		82FF801E2448A9EE002A72CF /* RNTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTypes.h; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNJudo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNJudo.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNJudo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNJudo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3027937F2464861900436747 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				302793872464861A00436747 /* libRNJudo.a in Frameworks */,
+				057717333D873855624E3693 /* Pods_RNJudo_RNJudoTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		58B511D81A9E6C8500147676 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B0010D5C8FFA3EA4AF4C56A /* Pods_RNJudo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,24 +120,139 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		302793832464861A00436747 /* RNJudoTests */ = {
+			isa = PBXGroup;
+			children = (
+				302793842464861A00436747 /* RNJudoTests.m */,
+				302793862464861A00436747 /* Info.plist */,
+			);
+			path = RNJudoTests;
+			sourceTree = "<group>";
+		};
+		30F208BF24A28C8E008AA964 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				30F208C024A28C8E008AA964 /* RNPBBAButtonManager.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		44674005246433F50012DB4C /* RNJudoTests */ = {
+			isa = PBXGroup;
+			children = (
+				44674008246433F50012DB4C /* Info.plist */,
+				3027938D2464863900436747 /* MockConfiguration.json */,
+				3027939F2466A0EF00436747 /* NSDictionaryConvertTests.m */,
+				3027938E2464863A00436747 /* RNApplePayWrappersTests.m */,
+				302793902464863A00436747 /* RNMocks.h */,
+				3027938F2464863A00436747 /* RNMocks.m */,
+				3027939D2465B0FE00436747 /* RNThemeTests.m */,
+				302793992464AFA100436747 /* RNWrappersTests.m */,
+				3007CBC8249B8AB10014CFC2 /* RNPBBAWrappersTests.m */,
+			);
+			path = RNJudoTests;
+			sourceTree = "<group>";
+		};
+		44ACBFB12499157E00524BEF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				30F208BF24A28C8E008AA964 /* Views */,
+				44B29072244E491A009DF232 /* Extensions */,
+				44B29077244E491B009DF232 /* Wrappers */,
+				82FF801E2448A9EE002A72CF /* RNTypes.h */,
+				B3E7B5881CC2AC0600A0062D /* RNJudo.h */,
+				B3E7B5891CC2AC0600A0062D /* RNJudo.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		44B29072244E491A009DF232 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				44B29074244E491A009DF232 /* NSDictionary+JudoConvert.h */,
+				44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */,
+				44B29076244E491A009DF232 /* NSException+JudoValidationExceptions.h */,
+				44B29073244E491A009DF232 /* NSException+JudoValidationExceptions.m */,
+				01C87484245069DD0035A1C1 /* UIColor+RNAdditions.h */,
+				01C87482245069650035A1C1 /* UIColor+RNAdditions.m */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		44B29077244E491B009DF232 /* Wrappers */ = {
+			isa = PBXGroup;
+			children = (
+				44B29078244E491B009DF232 /* RNApplePayWrappers.h */,
+				44B2907A244E491B009DF232 /* RNApplePayWrappers.m */,
+				44B29079244E491B009DF232 /* RNWrappers.h */,
+				44B2907B244E491B009DF232 /* RNWrappers.m */,
+				3007CBC1249B86BA0014CFC2 /* RNPBBAWrappers.h */,
+				3007CBC2249B86BA0014CFC2 /* RNPBBAWrappers.m */,
+			);
+			path = Wrappers;
+			sourceTree = "<group>";
+		};
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				B3E7B5881CC2AC0600A0062D /* RNJudo.h */,
-				B3E7B5891CC2AC0600A0062D /* RNJudo.m */,
-				0190D32723570CFD00040223 /* RNApplePayButton.h */,
-				0190D32823570CFD00040223 /* RNApplePayButton.m */,
+				44ACBFB12499157E00524BEF /* Classes */,
+				44674005246433F50012DB4C /* RNJudoTests */,
+				302793832464861A00436747 /* RNJudoTests */,
 				134814211AA4EA7D00B7C361 /* Products */,
+				9B6791AF87E7C37C6CE084D2 /* Pods */,
+				9DA5B1B63B800FC15D705334 /* Frameworks */,
+				302793822464861900436747 /* RNJudoTests.xctest */,
 			);
+			sourceTree = "<group>";
+		};
+		9B6791AF87E7C37C6CE084D2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7D72421A356EEAC9375BF818 /* Pods-RNJudo.debug.xcconfig */,
+				279C05BF7E27DDBE62E491FC /* Pods-RNJudo.release.xcconfig */,
+				519A0EFB9F5FC707B83D5CEA /* Pods-RNJudo-RNJudoTests.debug.xcconfig */,
+				3791EF88F1241A3EA85263C5 /* Pods-RNJudo-RNJudoTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		9DA5B1B63B800FC15D705334 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6B6CAE04B116E6423A5F317C /* Pods_RNJudo.framework */,
+				7D3E64B8CB1A30B7E79AA57E /* Pods_RNJudo_RNJudoTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		302793812464861900436747 /* RNJudoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3027938A2464861A00436747 /* Build configuration list for PBXNativeTarget "RNJudoTests" */;
+			buildPhases = (
+				7D2EAE7C3219DF6E39C7B41D /* [CP] Check Pods Manifest.lock */,
+				3027937E2464861900436747 /* Sources */,
+				3027937F2464861900436747 /* Frameworks */,
+				302793802464861900436747 /* Resources */,
+				4ADC37DC29341F8C7537DB78 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				302793892464861A00436747 /* PBXTargetDependency */,
+			);
+			name = RNJudoTests;
+			productName = RNJudoTests;
+			productReference = 302793822464861900436747 /* RNJudoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		58B511DA1A9E6C8500147676 /* RNJudo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNJudo" */;
 			buildPhases = (
+				D311BCF1C891389BB979943E /* [CP] Check Pods Manifest.lock */,
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
 				58B511D91A9E6C8500147676 /* CopyFiles */,
@@ -87,9 +272,15 @@
 		58B511D31A9E6C8500147676 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 1020;
-				ORGANIZATIONNAME = Facebook;
+				ORGANIZATIONNAME = "Alternative Payments Ltd";
 				TargetAttributes = {
+					302793812464861900436747 = {
+						CreatedOnToolsVersion = 11.4.1;
+						DevelopmentTeam = 95V535S6TQ;
+						ProvisioningStyle = Automatic;
+					};
 					58B511DA1A9E6C8500147676 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
@@ -109,23 +300,264 @@
 			projectRoot = "";
 			targets = (
 				58B511DA1A9E6C8500147676 /* RNJudo */,
+				302793812464861900436747 /* RNJudoTests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		302793802464861900436747 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				302793912464863A00436747 /* MockConfiguration.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4ADC37DC29341F8C7537DB78 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests-frameworks.sh",
+				"${PODS_ROOT}/DeviceDNA/Framework/DeviceDNA.framework",
+				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
+				"${BUILT_PRODUCTS_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework",
+				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
+				"${BUILT_PRODUCTS_DIR}/JudoKit-iOS/JudoKit_iOS.framework",
+				"${PODS_ROOT}/PayCardsRecognizer/Source/PayCardsRecognizer.framework",
+				"${BUILT_PRODUCTS_DIR}/RCTTypeSafety/RCTTypeSafety.framework",
+				"${BUILT_PRODUCTS_DIR}/React-Core/React.framework",
+				"${BUILT_PRODUCTS_DIR}/React-CoreModules/CoreModules.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTActionSheet/RCTActionSheet.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTAnimation/RCTAnimation.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTBlob/RCTBlob.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTImage/RCTImage.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTLinking/RCTLinking.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTNetwork/RCTNetwork.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTSettings/RCTSettings.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTText/RCTText.framework",
+				"${BUILT_PRODUCTS_DIR}/React-RCTVibration/RCTVibration.framework",
+				"${BUILT_PRODUCTS_DIR}/React-cxxreact/cxxreact.framework",
+				"${BUILT_PRODUCTS_DIR}/React-jsi/jsi.framework",
+				"${BUILT_PRODUCTS_DIR}/React-jsiexecutor/jsireact.framework",
+				"${BUILT_PRODUCTS_DIR}/React-jsinspector/jsinspector.framework",
+				"${BUILT_PRODUCTS_DIR}/ReactCommon/ReactCommon.framework",
+				"${BUILT_PRODUCTS_DIR}/TrustKit/TrustKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
+				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceDNA.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBReactNativeSpec.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JudoKit_iOS.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PayCardsRecognizer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTTypeSafety.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreModules.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTActionSheet.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTAnimation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTBlob.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTLinking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTNetwork.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTSettings.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTText.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTVibration.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/cxxreact.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsi.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsireact.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsinspector.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactCommon.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TrustKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7D2EAE7C3219DF6E39C7B41D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNJudo-RNJudoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D311BCF1C891389BB979943E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNJudo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		3027937E2464861900436747 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				302793A02466A0EF00436747 /* NSDictionaryConvertTests.m in Sources */,
+				302793852464861A00436747 /* RNJudoTests.m in Sources */,
+				3027939A2464AFA100436747 /* RNWrappersTests.m in Sources */,
+				302793A22466A82F00436747 /* NSException+JudoValidationExceptions.m in Sources */,
+				302793A32466A83100436747 /* UIColor+RNAdditions.m in Sources */,
+				302793922464863A00436747 /* RNApplePayWrappersTests.m in Sources */,
+				3007CBC9249B8AB10014CFC2 /* RNPBBAWrappersTests.m in Sources */,
+				302793A12466A82C00436747 /* NSDictionary+JudoConvert.m in Sources */,
+				302793932464863A00436747 /* RNMocks.m in Sources */,
+				3027939E2465B0FE00436747 /* RNThemeTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		58B511D71A9E6C8500147676 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44B2907F244E491B009DF232 /* RNWrappers.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */,
-				0190D32923570CFE00040223 /* RNApplePayButton.m in Sources */,
+				44B2907C244E491B009DF232 /* NSException+JudoValidationExceptions.m in Sources */,
+				3007CBC3249B86BA0014CFC2 /* RNPBBAWrappers.m in Sources */,
+				30F208C124A28C8E008AA964 /* RNPBBAButtonManager.m in Sources */,
+				44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */,
+				44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */,
+				01C87483245069650035A1C1 /* UIColor+RNAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		302793892464861A00436747 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 58B511DA1A9E6C8500147676 /* RNJudo */;
+			targetProxy = 302793882464861A00436747 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		3027938B2464861A00436747 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 519A0EFB9F5FC707B83D5CEA /* Pods-RNJudo-RNJudoTests.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 95V535S6TQ;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion/DoubleConversion.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Folly/folly.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit_iOS.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety/RCTTypeSafety.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules/CoreModules.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTActionSheet/RCTActionSheet.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation/RCTAnimation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob/RCTBlob.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage/RCTImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking/RCTLinking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork/RCTNetwork.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings/RCTSettings.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText/RCTText.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration/RCTVibration.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/cxxreact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi/jsi.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor/jsireact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector/jsinspector.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/TrustKit/TrustKit.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Yoga/yoga.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ZappMerchantLib/ZappMerchantLib.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"$(SRCROOT)/../sample-app/ios/Pods/Headers/Public/**",
+				);
+				INFOPLIST_FILE = RNJudoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.judopay.RNJudoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3027938C2464861A00436747 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3791EF88F1241A3EA85263C5 /* Pods-RNJudo-RNJudoTests.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 95V535S6TQ;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = RNJudoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.judopay.RNJudoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		58B511ED1A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -227,11 +659,9 @@
 		};
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D72421A356EEAC9375BF818 /* Pods-RNJudo.debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../../ios/",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -247,11 +677,9 @@
 		};
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 279C05BF7E27DDBE62E491FC /* Pods-RNJudo.release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../../ios/",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -268,6 +696,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3027938A2464861A00436747 /* Build configuration list for PBXNativeTarget "RNJudoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3027938B2464861A00436747 /* Debug */,
+				3027938C2464861A00436747 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNJudo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
