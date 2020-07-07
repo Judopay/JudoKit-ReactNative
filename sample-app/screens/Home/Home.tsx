@@ -19,7 +19,7 @@ import JudoPay, {
   JudoTransactionType,
   JudoTransactionMode,
 } from 'judo-react-native'
-import configuration from '../../helpers/JudoDefaults'
+import configuration, { reference } from '../../helpers/JudoDefaults'
 import { showMessage } from '../../helpers/utils'
 
 export default class Home extends Component {
@@ -212,7 +212,7 @@ export default class Home extends Component {
     this.props.navigation.navigate('PayByBankApp', {
       token: this.state.token,
       secret: this.state.secret,
-      configuration: this.state.configuration,
+      configuration: { ...this.state.configuration, reference: reference() },
     })
   }
 
@@ -223,7 +223,7 @@ export default class Home extends Component {
     this.props.navigation.navigate('Token Payments', {
       token: this.state.token,
       secret: this.state.secret,
-      configuration: this.state.configuration,
+      configuration: { ...this.state.configuration, reference: reference() },
     })
   }
 

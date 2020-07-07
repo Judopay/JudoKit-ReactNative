@@ -19,7 +19,7 @@ const amount: JudoAmount = {
     currency: 'GBP',
 }
 
-const reference = (): JudoReference => {
+export const reference = (): JudoReference => {
     return {
         consumerReference: 'my-consumer-reference',
         paymentReference: Math.random().toString(20).substr(2, 40),

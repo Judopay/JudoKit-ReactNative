@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { TouchableHighlight, Image } from 'react-native'
+import { TouchableHighlight, Image, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Home from './screens/Home/Home'
@@ -60,6 +60,19 @@ function App() {
               backgroundColor: '#5623e4',
             },
             headerTintColor: '#fff',
+            headerLeft: () => (
+              <TouchableHighlight
+                underlayColor="transparent"
+                onPress={() => navigation.popToTop()}
+                style={{ marginLeft: 10, marginRight: 20 }}
+              >
+                <Text
+                  style={{ fontSize: 16, color: '#fff', fontWeight: 'bold' }}
+                >
+                  Home
+                </Text>
+              </TouchableHighlight>
+            ),
           })}
         />
         <Stack.Screen
