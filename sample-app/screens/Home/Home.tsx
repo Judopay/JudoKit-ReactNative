@@ -25,8 +25,7 @@ import { JudoAuthorization } from 'judo-react-native/types/JudoAuthorization'
 
 export default class Home extends Component {
   state = {
-    token: '<TOKEN>',
-    secret: '<SECRET>',
+    authorization: undefined,
     configuration: configuration(),
     isSandboxed: true,
     spinner: false,
@@ -166,6 +165,7 @@ export default class Home extends Component {
 
   async invokeTransaction(type: JudoTransactionType) {
     try {
+
       const judo = new JudoPay(this.getAuthorization())
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeTransaction(
@@ -225,13 +225,7 @@ export default class Home extends Component {
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
     try {
-      const authorization: JudoAuthorization = {
-        kind: 'basic',
-        token: this.state.token,
-        secret: this.state.secret,
-      }
-
-      const judo = new JudoPay(authorization)
+      const judo = new JudoPay(this.getAuthorization())
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokePaymentMethodScreen(
         mode,
@@ -246,10 +240,29 @@ export default class Home extends Component {
   }
 
   getAuthorization = (): JudoAuthorization => {
+
+    const authorization = this.state.authorization;
+
+    if (!authorization) {
+      throw new Error('No authorization parameter in state');
+    }
+
+    const token = authorization['token'] as string;
+    const secret = authorization['secret'] as string;
+    const paymentSession = authorization['paymentSession'] as string;
+
+    if (secret && secret.length > 0) {
+      return {
+        kind: 'basic',
+        token: token,
+        secret: secret
+      }
+    }
+
     return {
-      kind: 'basic',
-      token: this.state.token,
-      secret: this.state.secret,
+      kind: 'session',
+      token: token,
+      paymentSession: paymentSession,
     }
   }
 

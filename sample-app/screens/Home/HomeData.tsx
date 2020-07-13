@@ -102,59 +102,77 @@ export const getStoredData = async (state: any): Promise<object> => {
     const value = await AsyncStorage.getItem(storageKey)
     if (value !== null) {
       const settings = JSON.parse(value)
-      var token = state.token
-      var secret = state.secret
+
       var configuration = state.configuration
-      let tokenValue = settings.list[0].data[3].value as string
-      if (tokenValue) {
-        token = tokenValue
+
+      const basicAuthorization = {
+        token: settings.list[1].data[0].value as string,
+        secret: settings.list[1].data[1].value as string,
       }
-      let secretValue = settings.list[0].data[4].value as string
-      if (secretValue) {
-        secret = secretValue
+
+      const sessionAuthorization = {
+        token: settings.list[2].data[0].value as string,
+        paymentSession: settings.list[2].data[1].value as string,
       }
 
       return {
+
+        isSandboxed: settings.list[0].data[0].value as boolean,
+
+        //Authorization
+        authorization: getAuthorizationMethod(settings),
+
         configuration: {
           ...configuration,
+
+          //API Configuration
           judoId: settings.list[0].data[1].value as string,
           siteId: settings.list[0].data[2].value as string,
-          paymentMethods: parsePaymentMethods(settings.list[3].data[1].valueArray),
-          supportedCardNetworks: parseCardNetworks(settings.list[3].data[0].valueArray),
+
+          //Amount
           amount: {
-            value: settings.list[1].data[0].value as string,
-            currency: settings.list[1].data[1].value as string
+            value: settings.list[3].data[0].value as string,
+            currency: settings.list[3].data[1].value as string
           },
+
+          //Apple Pay Configuration
           applePayConfiguration: isIos ? {
-            merchantId: settings.list[2].data[0].value as string,
-            countryCode: settings.list[2].data[1].value as string,
+            merchantId: settings.list[4].data[0].value as string,
+            countryCode: settings.list[4].data[1].value as string,
             paymentSummaryItems: configuration.applePayConfiguration.paymentSummaryItems,
-            merchantCapabilities: parseMerchantCapabilities(settings.list[2].data[2].valueArray),
-            requiredBillingContactFields: parseAppleContactFields(settings.list[2].data[3].valueArray),
-            requiredShippingContactFields: parseAppleContactFields(settings.list[2].data[4].valueArray),
+            merchantCapabilities: parseMerchantCapabilities(settings.list[4].data[2].valueArray),
+            requiredBillingContactFields: parseAppleContactFields(settings.list[4].data[3].valueArray),
+            requiredShippingContactFields: parseAppleContactFields(settings.list[4].data[4].valueArray),
             shippingMethods: configuration.applePayConfiguration.shippingMethods,
-            shippingType: parseAppleShippingType(settings.list[2].data[5].value as string),
-            returnedInfo: parseAppleReturnedInfo(settings.list[2].data[6].valueArray),
+            shippingType: parseAppleShippingType(settings.list[4].data[5].value as string),
+            returnedInfo: parseAppleReturnedInfo(settings.list[4].data[6].valueArray),
           } : configuration.applePayConfiguration,
+
+          //Google Pay Configuration
           googlePayConfiguration: isAndroid ? {
-            countryCode: settings.list[2].data[0].value as string,
-            environment: parseGooglePayEnvironment(settings.list[2].data[1].value as string),
-            isEmailRequired: settings.list[2].data[2].value as string,
-            isBillingAddressRequired: settings.list[2].data[3].value as boolean,
+            countryCode: settings.list[4].data[0].value as string,
+            environment: parseGooglePayEnvironment(settings.list[4].data[1].value as string),
+            isEmailRequired: settings.list[4].data[2].value as string,
+            isBillingAddressRequired: settings.list[4].data[3].value as boolean,
             billingAddressParameters: configuration.googlePayConfiguration.billingAddressParameters,
-            isShippingAddressRequired: settings.list[2].data[4].value as boolean,
+            isShippingAddressRequired: settings.list[4].data[4].value as boolean,
             shippingAddressParameters: configuration.googlePayConfiguration.shippingAddressParameters,
           } : configuration.googlePayConfiguration,
+
+          //Payment Methods
+          paymentMethods: parsePaymentMethods(settings.list[5].data[1].valueArray),
+
+          //Supported Card Networks
+          supportedCardNetworks: parseCardNetworks(settings.list[5].data[0].valueArray),
+
+          //UI Configuration
           uiConfiguration: {
-            isAVSEnabled: settings.list[3].data[2].value,
-            shouldPaymentMethodsVerifySecurityCode: settings.list[3].data[3].value,
-            shouldPaymentButtonDisplayAmount: settings.list[3].data[4].value,
-            shouldPaymentMethodsDisplayAmount: settings.list[3].data[5].value,
+            isAVSEnabled: settings.list[5].data[2].value,
+            shouldPaymentMethodsVerifySecurityCode: settings.list[5].data[3].value,
+            shouldPaymentButtonDisplayAmount: settings.list[5].data[4].value,
+            shouldPaymentMethodsDisplayAmount: settings.list[5].data[5].value,
           }
-        },
-        secret: secret,
-        token: token,
-        isSandboxed: settings.list[0].data[0].value as boolean
+        }
       }
     } else {
       return {}
@@ -162,6 +180,23 @@ export const getStoredData = async (state: any): Promise<object> => {
   } catch(e) {
     console.log("getStoredData() error " + e)
     return {}
+  }
+}
+
+const getAuthorizationMethod = (settings: any) => {
+
+  var paymentSession = settings.list[2].data[1].value as string;
+
+  if (paymentSession && paymentSession.length > 0) {
+    return {
+      token: settings.list[2].data[0].value as string,
+      paymentSession: paymentSession,
+    }
+  }
+
+  return {
+    token: settings.list[1].data[0].value as string,
+    secret: settings.list[1].data[1].value as string,
   }
 }
 
