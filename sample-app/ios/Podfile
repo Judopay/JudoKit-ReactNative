@@ -8,7 +8,7 @@ target 'sample-app' do
   # Pods for sample-app
   pod 'CocoaDebug'
   # Override the dependency from .podspec file - should be removed when new SDK version will be released
-  pod "JudoKit-iOS", :git => 'https://github.com/Judopay/JudoKit-iOS.git', :branch => 'develop'
+  pod "JudoKit-iOS", :git => 'https://github.com/Judopay/JudoKit-iOS.git', :branch => 'tests/api-service-tests'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"

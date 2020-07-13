@@ -7,11 +7,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native'
-import Judo, {
-  JudoConfiguration,
-  JudoTransactionType,
-  JudoTransactionMode,
-} from 'judo-react-native'
+import { JudoTransactionType, JudoTransactionMode } from 'judo-react-native'
 import TokenPaymentProps from './TokenPaymentsProps'
 import JudoPay from 'judo-react-native'
 import { showMessage } from '../../helpers/utils'
@@ -34,10 +30,10 @@ export default class TokenPayments extends Component<
   }
 
   async invokeSaveCard() {
-    const { token, secret, configuration } = this.props.route.params
+    const { authorization, configuration } = this.props.route.params
 
     try {
-      const judo: Judo = new JudoPay(token, secret)
+      const judo = new JudoPay(authorization)
 
       const response = await judo.invokeTransaction(
         JudoTransactionType.SaveCard,
@@ -51,10 +47,10 @@ export default class TokenPayments extends Component<
   }
 
   async completeTransaction(mode: JudoTransactionMode) {
-    const { token, secret, configuration } = this.props.route.params
+    const { authorization, configuration } = this.props.route.params
 
     try {
-      const judo: Judo = new JudoPay(token, secret)
+      const judo = new JudoPay(authorization)
 
       if (this.state.cardToken == undefined) return
 

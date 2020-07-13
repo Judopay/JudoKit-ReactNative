@@ -21,6 +21,7 @@ import JudoPay, {
 } from 'judo-react-native'
 import configuration, { reference } from '../../helpers/JudoDefaults'
 import { showMessage } from '../../helpers/utils'
+import { JudoAuthorization } from 'judo-react-native/types/JudoAuthorization'
 
 export default class Home extends Component {
   state = {
@@ -86,7 +87,7 @@ export default class Home extends Component {
 
   async handlePBBATransaction() {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret)
+      const judo = new JudoPay(this.getAuthorization())
       const response = await judo.invokePayByBankApp(this.state.configuration)
       if (response) {
         this.props.navigation.navigate('Receipt', { receipt: response })
@@ -165,7 +166,7 @@ export default class Home extends Component {
 
   async invokeTransaction(type: JudoTransactionType) {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret)
+      const judo = new JudoPay(this.getAuthorization())
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeTransaction(
         type,
@@ -181,7 +182,7 @@ export default class Home extends Component {
 
   async displayApplePaySheet(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret)
+      const judo = new JudoPay(this.getAuthorization())
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeApplePay(mode, this.state.configuration)
       if (response != null) {
@@ -194,7 +195,7 @@ export default class Home extends Component {
 
   async displayGooglePaySheet(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret)
+      const judo = new JudoPay(this.getAuthorization())
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeGooglePay(
         mode,
@@ -210,26 +211,27 @@ export default class Home extends Component {
 
   displayPayByBankAppScreen() {
     this.props.navigation.navigate('PayByBankApp', {
-      token: this.state.token,
-      secret: this.state.secret,
+      authorization: this.getAuthorization(),
       configuration: { ...this.state.configuration, reference: reference() },
     })
   }
 
   displayTokenPayments() {
-    const judo = new JudoPay(this.state.token, this.state.secret)
-    judo.isSandboxed = this.state.isSandboxed
-
     this.props.navigation.navigate('Token Payments', {
-      token: this.state.token,
-      secret: this.state.secret,
+      authorization: this.getAuthorization(),
       configuration: { ...this.state.configuration, reference: reference() },
     })
   }
 
   async displayPaymentMethod(mode: JudoTransactionMode) {
     try {
-      const judo = new JudoPay(this.state.token, this.state.secret)
+      const authorization: JudoAuthorization = {
+        kind: 'basic',
+        token: this.state.token,
+        secret: this.state.secret,
+      }
+
+      const judo = new JudoPay(authorization)
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokePaymentMethodScreen(
         mode,
@@ -240,6 +242,14 @@ export default class Home extends Component {
       }
     } catch (error) {
       await showMessage('Error', error.message)
+    }
+  }
+
+  getAuthorization = (): JudoAuthorization => {
+    return {
+      kind: 'basic',
+      token: this.state.token,
+      secret: this.state.secret,
     }
   }
 

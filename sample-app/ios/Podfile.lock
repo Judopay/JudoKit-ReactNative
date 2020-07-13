@@ -251,7 +251,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (from `https://github.com/Judopay/JudoKit-iOS.git`, branch `develop`)
+  - JudoKit-iOS (from `https://github.com/Judopay/JudoKit-iOS.git`, branch `tests/api-service-tests`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -304,7 +304,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   JudoKit-iOS:
-    :branch: develop
+    :branch: tests/api-service-tests
     :git: https://github.com/Judopay/JudoKit-iOS.git
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
@@ -363,7 +363,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   JudoKit-iOS:
-    :commit: 35b95f444c065620dd01aa30736a7bb738043193
+    :commit: e40da58edb9c883df3a87371a994659a93558183
     :git: https://github.com/Judopay/JudoKit-iOS.git
 
 SPEC CHECKSUMS:
@@ -407,6 +407,6 @@ SPEC CHECKSUMS:
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: 2b4880424c0d2da32be67627d1bdf34754a6adcb
+PODFILE CHECKSUM: 28e8ee6f1d9a67fd5b5c7b99360acb32741355fc
 
 COCOAPODS: 1.9.3
