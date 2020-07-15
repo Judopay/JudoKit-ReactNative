@@ -80,7 +80,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 //    implementation 'com.judokit.android:judokit-android:1.0.0'
-    implementation 'com.github.Judopay:JudoKit-Android:hotfix~jitpack-io-card-scanning-library-SNAPSHOT'
+    implementation 'com.github.Judopay:JudoKit-Android:jitpack-updated-SNAPSHOT'
 
     testImplementation 'junit:junit:4.13'
     testImplementation 'androidx.test:core:1.2.0'
