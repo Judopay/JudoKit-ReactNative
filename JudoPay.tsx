@@ -64,7 +64,7 @@ export type {
 } from './types/JudoAuthorization'
 
 class JudoPay {
-    public isSandboxed: boolean = true
+    public isSandboxed = true
 
     private readonly authorization: JudoAuthorization
 
