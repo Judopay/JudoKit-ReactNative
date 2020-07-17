@@ -103,20 +103,28 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
 
 internal fun getAuthorization(options: ReadableMap): Authorization {
     val token = options.authorization?.getString("token")
-    val secret = options.authorization?.getString("secret")
-    val paymentSession = options.authorization?.getString("paymentSession")
 
-    if (token != null && secret != null) {
-        return BasicAuthorization.Builder()
-                .setApiToken(token)
-                .setApiSecret(secret)
-                .build()
+    options.authorization?.hasKey("secret").let {
+        if (it == true) {
+            val secret = options.authorization?.getString("secret")
+            return BasicAuthorization.Builder()
+                    .setApiToken(token)
+                    .setApiSecret(secret)
+                    .build()
+        }
     }
 
-    return PaymentSessionAuthorization.Builder()
-            .setApiToken(token)
-            .setPaymentSession(paymentSession)
-            .build()
+    options.authorization?.hasKey("paymentSession").let {
+        if (it == true) {
+            val paymentSession = options.authorization?.getString("paymentSession")
+            return PaymentSessionAuthorization.Builder()
+                    .setApiToken(token)
+                    .setPaymentSession(paymentSession)
+                    .build()
+        }
+    }
+
+    throw IllegalArgumentException("No secret or payment session in the authorization")
 }
 
 internal fun getTransactionTypeWidget(options: ReadableMap) = when (options.getInt("transactionType")) {

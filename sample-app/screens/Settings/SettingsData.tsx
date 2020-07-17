@@ -283,6 +283,23 @@ export var SettingsData = {
             ]
         },
         {
+            "title": "References",
+            "data": [
+                {
+                    "title": "Consumer Reference",
+                    "subtitle": "Your consumer reference",
+                    "type": SettingsPickType.TextPicker,
+                    "value": ""
+                } as SettingsListItem,
+                {
+                    "title": "Payment Reference",
+                    "subtitle": "If no payment reference is set, a random one will be generated",
+                    "type": SettingsPickType.TextPicker,
+                    "value": ""
+                } as SettingsListItem
+            ]
+        },
+        {
             "title": "Amount",
             "data": [
                 {

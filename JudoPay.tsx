@@ -180,7 +180,7 @@ class JudoPay {
 
         return {
             token: this.authorization.token,
-            secret: this.authorization.paymentSession
+            paymentSession: this.authorization.paymentSession
         }
     }
 }

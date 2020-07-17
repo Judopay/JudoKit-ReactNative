@@ -105,16 +105,6 @@ export const getStoredData = async (state: any): Promise<object> => {
 
       var configuration = state.configuration
 
-      const basicAuthorization = {
-        token: settings.list[1].data[0].value as string,
-        secret: settings.list[1].data[1].value as string,
-      }
-
-      const sessionAuthorization = {
-        token: settings.list[2].data[0].value as string,
-        paymentSession: settings.list[2].data[1].value as string,
-      }
-
       return {
 
         isSandboxed: settings.list[0].data[0].value as boolean,
@@ -129,48 +119,54 @@ export const getStoredData = async (state: any): Promise<object> => {
           judoId: settings.list[0].data[1].value as string,
           siteId: settings.list[0].data[2].value as string,
 
+          //References
+          reference: {
+            consumerReference: settings.list[3].data[0].value as string,
+            paymentReference: settings.list[3].data[1].value as string,
+          },
+
           //Amount
           amount: {
-            value: settings.list[3].data[0].value as string,
-            currency: settings.list[3].data[1].value as string
+            value: settings.list[4].data[0].value as string,
+            currency: settings.list[4].data[1].value as string
           },
 
           //Apple Pay Configuration
           applePayConfiguration: isIos ? {
-            merchantId: settings.list[4].data[0].value as string,
-            countryCode: settings.list[4].data[1].value as string,
+            merchantId: settings.list[5].data[0].value as string,
+            countryCode: settings.list[5].data[1].value as string,
             paymentSummaryItems: configuration.applePayConfiguration.paymentSummaryItems,
-            merchantCapabilities: parseMerchantCapabilities(settings.list[4].data[2].valueArray),
-            requiredBillingContactFields: parseAppleContactFields(settings.list[4].data[3].valueArray),
-            requiredShippingContactFields: parseAppleContactFields(settings.list[4].data[4].valueArray),
+            merchantCapabilities: parseMerchantCapabilities(settings.list[5].data[2].valueArray),
+            requiredBillingContactFields: parseAppleContactFields(settings.list[5].data[3].valueArray),
+            requiredShippingContactFields: parseAppleContactFields(settings.list[5].data[4].valueArray),
             shippingMethods: configuration.applePayConfiguration.shippingMethods,
-            shippingType: parseAppleShippingType(settings.list[4].data[5].value as string),
-            returnedInfo: parseAppleReturnedInfo(settings.list[4].data[6].valueArray),
+            shippingType: parseAppleShippingType(settings.list[5].data[5].value as string),
+            returnedInfo: parseAppleReturnedInfo(settings.list[5].data[6].valueArray),
           } : configuration.applePayConfiguration,
 
           //Google Pay Configuration
           googlePayConfiguration: isAndroid ? {
-            countryCode: settings.list[4].data[0].value as string,
-            environment: parseGooglePayEnvironment(settings.list[4].data[1].value as string),
-            isEmailRequired: settings.list[4].data[2].value as string,
-            isBillingAddressRequired: settings.list[4].data[3].value as boolean,
+            countryCode: settings.list[5].data[0].value as string,
+            environment: parseGooglePayEnvironment(settings.list[5].data[1].value as string),
+            isEmailRequired: settings.list[5].data[2].value as string,
+            isBillingAddressRequired: settings.list[5].data[3].value as boolean,
             billingAddressParameters: configuration.googlePayConfiguration.billingAddressParameters,
-            isShippingAddressRequired: settings.list[4].data[4].value as boolean,
+            isShippingAddressRequired: settings.list[5].data[4].value as boolean,
             shippingAddressParameters: configuration.googlePayConfiguration.shippingAddressParameters,
           } : configuration.googlePayConfiguration,
 
           //Payment Methods
-          paymentMethods: parsePaymentMethods(settings.list[5].data[1].valueArray),
+          paymentMethods: parsePaymentMethods(settings.list[6].data[1].valueArray),
 
           //Supported Card Networks
-          supportedCardNetworks: parseCardNetworks(settings.list[5].data[0].valueArray),
+          supportedCardNetworks: parseCardNetworks(settings.list[6].data[0].valueArray),
 
           //UI Configuration
           uiConfiguration: {
-            isAVSEnabled: settings.list[5].data[2].value,
-            shouldPaymentMethodsVerifySecurityCode: settings.list[5].data[3].value,
-            shouldPaymentButtonDisplayAmount: settings.list[5].data[4].value,
-            shouldPaymentMethodsDisplayAmount: settings.list[5].data[5].value,
+            isAVSEnabled: settings.list[6].data[2].value,
+            shouldPaymentMethodsVerifySecurityCode: settings.list[6].data[3].value,
+            shouldPaymentButtonDisplayAmount: settings.list[6].data[4].value,
+            shouldPaymentMethodsDisplayAmount: settings.list[6].data[5].value,
           }
         }
       }
