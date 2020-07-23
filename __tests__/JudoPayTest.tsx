@@ -1,6 +1,9 @@
 import 'react-native'
 
-import JudoPay, { JudoBasicAuthorization } from '../JudoPay'
+import JudoPay, {
+    JudoBasicAuthorization,
+    JudoSessionAuthorization
+} from '../JudoPay'
 import configuration from './JudoTestDefaults'
 import { JudoTransactionType, JudoTransactionMode } from '../types/JudoTypes'
 
@@ -16,9 +19,9 @@ test('JudoPay after init has isSandboxed = true', () => {
 })
 
 test('invokeTransaction will return mocked JudoResponse', async () => {
-    const authorization: JudoBasicAuthorization = {
+    const authorization: JudoSessionAuthorization = {
         token: 'token',
-        secret: 'secret'
+        paymentSession: 'paymentSession'
     }
 
     const judoPay = new JudoPay(authorization)
