@@ -14,11 +14,8 @@ internal val ReadableMap.configuration: ReadableMap?
 internal val ReadableMap.transactionMode: Int?
     get() = getInt("transactionMode")
 
-internal val ReadableMap.token: String?
-    get() = getString("token")
-
-internal val ReadableMap.secret: String?
-    get() = getString("secret")
+internal val ReadableMap.authorization: ReadableMap?
+    get() = getMap("authorization")
 
 internal val ReadableMap.isSandboxed: Boolean?
     get() = getBoolean("sandboxed")

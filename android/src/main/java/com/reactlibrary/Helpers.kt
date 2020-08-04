@@ -6,6 +6,9 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.judokit.android.Judo
+import com.judokit.android.api.model.Authorization
+import com.judokit.android.api.model.BasicAuthorization
+import com.judokit.android.api.model.PaymentSessionAuthorization
 import com.judokit.android.model.*
 import com.judokit.android.model.googlepay.GooglePayAddressFormat
 import com.judokit.android.model.googlepay.GooglePayBillingAddressParameters
@@ -72,6 +75,7 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
 }
 
 internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap): Judo {
+    val authorization = getAuthorization(options)
     val amount = getAmount(options)
     val reference = getReference(options)
     val cardNetworks = getCardNetworks(options)
@@ -82,8 +86,7 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
     val pbbaConfiguration = getPBBAConfiguration(options)
 
     return Judo.Builder(type)
-            .setApiToken(options.token)
-            .setApiSecret(options.secret)
+            .setAuthorization(authorization)
             .setIsSandboxed(options.isSandboxed)
             .setJudoId(options.judoId)
             .setSiteId(options.siteId)
@@ -96,6 +99,32 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
             .setGooglePayConfiguration(googlePayConfiguration)
             .setPBBAConfiguration(pbbaConfiguration)
             .build()
+}
+
+internal fun getAuthorization(options: ReadableMap): Authorization {
+    val token = options.authorization?.getString("token")
+
+    options.authorization?.hasKey("secret").let {
+        if (it == true) {
+            val secret = options.authorization?.getString("secret")
+            return BasicAuthorization.Builder()
+                    .setApiToken(token)
+                    .setApiSecret(secret)
+                    .build()
+        }
+    }
+
+    options.authorization?.hasKey("paymentSession").let {
+        if (it == true) {
+            val paymentSession = options.authorization?.getString("paymentSession")
+            return PaymentSessionAuthorization.Builder()
+                    .setApiToken(token)
+                    .setPaymentSession(paymentSession)
+                    .build()
+        }
+    }
+
+    throw IllegalArgumentException("No secret or payment session in the authorization")
 }
 
 internal fun getTransactionTypeWidget(options: ReadableMap) = when (options.getInt("transactionType")) {

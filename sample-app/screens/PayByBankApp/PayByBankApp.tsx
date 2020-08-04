@@ -17,10 +17,10 @@ export default class PayByBankApp extends Component {
   }
 
   async invokePayByBankApp() {
-    const { token, secret, configuration } = this.props.route.params
+    const { authorization, configuration } = this.props.route.params
 
     try {
-      const judo = new JudoPay(token, secret)
+      const judo = new JudoPay(authorization)
       const response = await judo.invokePayByBankApp(configuration)
       if (!response) return
 

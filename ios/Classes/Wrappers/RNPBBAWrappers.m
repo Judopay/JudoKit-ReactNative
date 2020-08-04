@@ -39,10 +39,11 @@
     NSString *deeplinkScheme = [dictionary optionalStringForKey:@"deeplinkScheme"];
     NSString *deeplinkURLString = [dictionary optionalStringForKey:@"deeplinkURL"];
     
-    JPPBBAConfiguration *config = [[JPPBBAConfiguration alloc] initWithMobileNumber:mobileNumber
-                                                                       emailAddress:emailAddress
-                                                                 appearsOnStatement:appearsOnStatement];
+    JPPBBAConfiguration *config = [JPPBBAConfiguration new];
     
+    config.mobileNumber = mobileNumber;
+    config.emailAddress = emailAddress;
+    config.appearsOnStatement = appearsOnStatement;
     config.deeplinkURL = [NSURL URLWithString:deeplinkURLString];
     config.deeplinkScheme = deeplinkScheme;
     

@@ -36,27 +36,50 @@
 //---------------------------------------------------
 
 + (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
-    NSString *token = [properties stringForKey:@"token"];
-    NSString *secret = [properties stringForKey:@"secret"];
-    NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
+    
+    NSDictionary *authorizationDict = [properties dictionaryForKey:@"authorization"];
 
-    JudoKit *judoKit = [[JudoKit alloc] initWithToken:token secret:secret];
+    NSString *token = [authorizationDict stringForKey:@"token"];
+    NSString *secret = [authorizationDict optionalStringForKey:@"secret"];
+    NSString *paymentSession = [authorizationDict optionalStringForKey:@"paymentSession"];
+    
+    JudoKit *judoKit;
+    
+    if (secret) {
+        JPBasicAuthorization *authorization = [JPBasicAuthorization authorizationWithToken:token
+                                                                                 andSecret:secret];
+        judoKit = [[JudoKit alloc] initWithAuthorization:authorization];
+    } else {
+        JPSessionAuthorization *authorization = [JPSessionAuthorization authorizationWithToken:token
+                                                                             andPaymentSession:paymentSession];
+        judoKit = [[JudoKit alloc] initWithAuthorization:authorization];
+    }
+    
+    NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
     judoKit.isSandboxed = isSandboxed.boolValue;
 
     return judoKit;
 }
 
-+ (JPTransactionService *)transactionServiceFromProperties:(NSDictionary *)properties {
-    NSString *token = [properties stringForKey:@"token"];
-    NSString *secret = [properties stringForKey:@"secret"];
-    BOOL isSandboxed = [properties boolForKey:@"sandboxed"];
++ (JPApiService *)apiServiceFromProperties:(NSDictionary *)properties {
+    
+    NSDictionary *authorizationDict = [properties dictionaryForKey:@"authorization"];
 
-    JPTransactionService *transactionService = [[JPTransactionService alloc] initWithToken:token
+    NSString *token = [authorizationDict stringForKey:@"token"];
+    NSString *secret = [authorizationDict optionalStringForKey:@"secret"];
+    NSString *paymentSession = [authorizationDict optionalStringForKey:@"paymentSession"];
+    
+    NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
+
+    if (secret) {
+        JPBasicAuthorization *authorization = [JPBasicAuthorization authorizationWithToken:token
                                                                                  andSecret:secret];
+        return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed];
+    }
     
-    transactionService.isSandboxed = isSandboxed;
-    
-    return transactionService;
+    JPSessionAuthorization *authorization = [JPSessionAuthorization authorizationWithToken:token
+                                                                         andPaymentSession:paymentSession];
+    return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed];
 }
 
 + (JPTransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
@@ -304,42 +327,40 @@
 
 + (NSDictionary *)dictionaryFromResponse:(JPResponse *)response {
     
-    JPTransactionData *data = response.items.firstObject;
-    
     NSMutableDictionary *mappedResponse = [NSMutableDictionary new];
     
-    [mappedResponse setValue:data.receiptId forKey:@"receiptId"];
-    [mappedResponse setValue:data.paymentReference forKey:@"yourPaymentReference"];
-    [mappedResponse setValue:data.createdAt forKey:@"createdAt"];
-    [mappedResponse setValue:data.merchantName forKey:@"merchantName"];
-    [mappedResponse setValue:data.appearsOnStatementAs forKey:@"appearsOnStatementAs"];
-    [mappedResponse setValue:data.originalAmount forKey:@"originalAmount"];
-    [mappedResponse setValue:data.netAmount forKey:@"netAmount"];
-    [mappedResponse setValue:data.amount.amount forKey:@"amount"];
-    [mappedResponse setValue:data.amount.currency forKey:@"currency"];
+    [mappedResponse setValue:response.receiptId forKey:@"receiptId"];
+    [mappedResponse setValue:response.paymentReference forKey:@"yourPaymentReference"];
+    [mappedResponse setValue:response.createdAt forKey:@"createdAt"];
+    [mappedResponse setValue:response.merchantName forKey:@"merchantName"];
+    [mappedResponse setValue:response.appearsOnStatementAs forKey:@"appearsOnStatementAs"];
+    [mappedResponse setValue:response.originalAmount forKey:@"originalAmount"];
+    [mappedResponse setValue:response.netAmount forKey:@"netAmount"];
+    [mappedResponse setValue:response.amount.amount forKey:@"amount"];
+    [mappedResponse setValue:response.amount.currency forKey:@"currency"];
     
     NSMutableDictionary *cardDetailsResponse = [NSMutableDictionary new];
-    [cardDetailsResponse setValue:data.cardDetails.cardLastFour forKey:@"cardLastFour"];
-    [cardDetailsResponse setValue:data.cardDetails.endDate forKey:@"endDate"];
-    [cardDetailsResponse setValue:data.cardDetails.cardToken forKey:@"cardToken"];
-    [cardDetailsResponse setValue:data.cardDetails.cardCountry forKey:@"cardCountry"];
-    [cardDetailsResponse setValue:data.cardDetails.bank forKey:@"bank"];
-    [cardDetailsResponse setValue:data.cardDetails.cardScheme forKey:@"cardScheme"];
+    [cardDetailsResponse setValue:response.cardDetails.cardLastFour forKey:@"cardLastFour"];
+    [cardDetailsResponse setValue:response.cardDetails.endDate forKey:@"endDate"];
+    [cardDetailsResponse setValue:response.cardDetails.cardToken forKey:@"cardToken"];
+    [cardDetailsResponse setValue:response.cardDetails.cardCountry forKey:@"cardCountry"];
+    [cardDetailsResponse setValue:response.cardDetails.bank forKey:@"bank"];
+    [cardDetailsResponse setValue:response.cardDetails.cardScheme forKey:@"cardScheme"];
     
     [mappedResponse setValue:cardDetailsResponse forKey:@"cardDetails"];
     
     NSMutableDictionary *consumerResponse = [NSMutableDictionary new];
-    [consumerResponse setValue:data.consumer.consumerToken forKey:@"consumerToken"];
-    [consumerResponse setValue:data.consumer.consumerReference forKey:@"consumerReference"];
+    [consumerResponse setValue:response.consumer.consumerToken forKey:@"consumerToken"];
+    [consumerResponse setValue:response.consumer.consumerReference forKey:@"consumerReference"];
     
     [mappedResponse setValue:consumerResponse forKey:@"consumerResponse"];
     
     NSMutableDictionary *orderDetailsResponse = [NSMutableDictionary new];
-    [orderDetailsResponse setValue:data.orderDetails.orderId forKey:@"orderId"];
-    [orderDetailsResponse setValue:data.orderDetails.orderStatus forKey:@"orderStatus"];
-    [orderDetailsResponse setValue:data.orderDetails.orderFailureReason forKey:@"orderFailureReason"];
-    [orderDetailsResponse setValue:data.orderDetails.timestamp forKey:@"timestamp"];
-    [orderDetailsResponse setValue:@(data.orderDetails.amount) forKey:@"amount"];
+    [orderDetailsResponse setValue:response.orderDetails.orderId forKey:@"orderId"];
+    [orderDetailsResponse setValue:response.orderDetails.orderStatus forKey:@"orderStatus"];
+    [orderDetailsResponse setValue:response.orderDetails.orderFailureReason forKey:@"orderFailureReason"];
+    [orderDetailsResponse setValue:response.orderDetails.timestamp forKey:@"timestamp"];
+    [orderDetailsResponse setValue:@(response.orderDetails.amount) forKey:@"amount"];
     
     [mappedResponse setValue:orderDetailsResponse forKey:@"orderDetails"];
     

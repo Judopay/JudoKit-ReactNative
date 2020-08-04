@@ -1,6 +1,6 @@
-import Judo, { JudoConfiguration } from "judo-react-native"
+import { JudoConfiguration, JudoAuthorization } from "judo-react-native"
 
 export default interface TokenPaymentProps {
-    judo: Judo
+    authorization: JudoAuthorization
     configuration: JudoConfiguration
 }

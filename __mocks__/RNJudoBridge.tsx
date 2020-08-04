@@ -7,9 +7,6 @@ const response: JudoResponse = {
     type: 'payment',
     createdAt: '12345678',
     result: 'response_result',
-    message: 'response_message',
-    judoId: 'yourJudoId',
-    siteId: 'yourSiteId',
     merchantName: 'merchantName',
     appearsOnStatementAs: 'nothing',
     originalAmount: '1100.0',
@@ -22,5 +19,6 @@ NativeModules.RNJudo = {
     invokeTransaction: jest.fn(() => Promise.resolve(response)),
     invokeApplePay: jest.fn(() => Promise.resolve(response)),
     invokeGooglePay: jest.fn(() => Promise.resolve(response)),
-    invokePaymentMethodScreen: jest.fn(() => Promise.resolve(response))
+    invokePaymentMethodScreen: jest.fn(() => Promise.resolve(response)),
+    invokePayByBankApp: jest.fn(() => Promise.resolve(response))
 }

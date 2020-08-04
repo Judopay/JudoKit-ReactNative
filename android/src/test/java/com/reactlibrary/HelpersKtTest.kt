@@ -22,6 +22,7 @@ class HelpersKtTest {
     private val configurationMock = mockkClass(ReadableMap::class)
     private val mapMock = mockkClass(ReadableMap::class)
     private val amountMock = mockkClass(ReadableMap::class)
+    private val authorizationMock = mockkClass(ReadableMap::class)
     private val referenceMock = mockkClass(ReadableMap::class)
     private val uiConfigurationMock = mockkClass(ReadableMap::class)
     private val primaryAccountDetailsMock = mockkClass(ReadableMap::class)
@@ -29,14 +30,15 @@ class HelpersKtTest {
     private val billingAddressParametersMock = mockkClass(ReadableMap::class)
     private val shippingAddressParametersMock = mockkClass(ReadableMap::class)
     private val googlePayConfigurationMock = mockkClass(ReadableMap::class)
+    private val pbbaConfigurationMock = mockkClass(ReadableMap::class)
     private val allowedCountryCodesMock = mockkClass(ReadableArray::class)
 
     @Before
     fun before() {
 
         every { mapMock.getInt("transactionMode") } returns 1
-        every { mapMock.getString("token") } returns "token"
-        every { mapMock.getString("secret") } returns "secret"
+        every { mapMock.hasKey("authorization") } returns true
+        every { mapMock.getMap("authorization") } returns authorizationMock
         every { mapMock.getBoolean("sandboxed") } returns true
         every { configurationMock.getString("judoId") } returns "judoId"
 
@@ -167,7 +169,7 @@ class HelpersKtTest {
     fun `Given user configuration contains transactionType key with value 1 when invoking getWidgetType with the given configurations then PaymentWidgetType-PRE_AUTH should be returned`() {
         every { mapMock.getInt("transactionType") } returns 1
 
-        val type = getWidgetType(mapMock)
+        val type = getTransactionTypeWidget(mapMock)
         assertEquals(type, PaymentWidgetType.PRE_AUTH)
     }
 
@@ -175,7 +177,7 @@ class HelpersKtTest {
     fun `Given user configuration contains transactionType key with value 2 when invoking getWidgetType with the given configurations then PaymentWidgetType-REGISTER_CARD should be returned`() {
         every { mapMock.getInt("transactionType") } returns 2
 
-        val type = getWidgetType(mapMock)
+        val type = getTransactionTypeWidget(mapMock)
         assertEquals(type, PaymentWidgetType.REGISTER_CARD)
     }
 
@@ -183,7 +185,7 @@ class HelpersKtTest {
     fun `Given user configuration contains transactionType key with value 3 when invoking getWidgetType with the given configurations then PaymentWidgetType-CHECK_CARD should be returned`() {
         every { mapMock.getInt("transactionType") } returns 3
 
-        val type = getWidgetType(mapMock)
+        val type = getTransactionTypeWidget(mapMock)
         assertEquals(type, PaymentWidgetType.CHECK_CARD)
     }
 
@@ -191,7 +193,7 @@ class HelpersKtTest {
     fun `Given user configuration contains transactionType key with value 4 when invoking getWidgetType with the given configurations then PaymentWidgetType-CREATE_CARD_TOKEN should be returned`() {
         every { mapMock.getInt("transactionType") } returns 4
 
-        val type = getWidgetType(mapMock)
+        val type = getTransactionTypeWidget(mapMock)
         assertEquals(type, PaymentWidgetType.CREATE_CARD_TOKEN)
     }
 
@@ -199,7 +201,7 @@ class HelpersKtTest {
     fun `Given user configuration contains transactionType key with any unknown value when invoking getWidgetType with the given configurations then PaymentWidgetType-CARD_PAYMENT should be returned`() {
         every { mapMock.getInt("transactionType") } returns 100
 
-        val type = getWidgetType(mapMock)
+        val type = getTransactionTypeWidget(mapMock)
         assertEquals(type, PaymentWidgetType.CARD_PAYMENT)
     }
 

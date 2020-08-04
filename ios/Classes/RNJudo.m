@@ -23,7 +23,6 @@
 //  SOFTWARE.
 
 #import <JudoKit-iOS/JudoKit_iOS.h>
-#import <JudoKit-iOS/JPTransactionService.h>
 #import <JudoKit-iOS/JPError+Additions.h>
 
 #import "RNJudo.h"
@@ -80,20 +79,22 @@ RCT_REMAP_METHOD(performTokenTransaction,
                  performTokenTransactionWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    JPTransactionService *transactionService = [RNWrappers transactionServiceFromProperties:properties];
-    JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
-    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-    JPTransaction *transaction = [transactionService transactionWithConfiguration:configuration];
-    JPCompletionBlock completion = [self completionBlockWithResolve:resolve andReject:reject];
+    
+   JPApiService *apiService = [RNWrappers apiServiceFromProperties:properties];
+   JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
+   JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+   JPCompletionBlock completion = [self completionBlockWithResolve:resolve andReject:reject];
 
-    transaction.cardToken = [RNWrappers cardTokenFromProperties:properties];
+   NSString *cardToken = [RNWrappers cardTokenFromProperties:properties];
+   JPTokenRequest *tokenRequest = [[JPTokenRequest alloc] initWithConfiguration:configuration
+                                                                   andCardToken:cardToken];
 
-    if (transactionMode == JPTransactionModePreAuth) {
-        [transactionService preAuthWithTransaction:transaction andCompletion:completion];
-        return;
-    }
+   if (transactionMode == JPTransactionModePreAuth) {
+       [apiService invokePreAuthTokenPaymentWithRequest:tokenRequest andCompletion:completion];
+       return;
+   }
 
-    [transactionService payWithTransaction:transaction andCompletion:completion];
+   [apiService invokeTokenPaymentWithRequest:tokenRequest andCompletion:completion];
 }
 
 //----------------------------------------------

@@ -8,6 +8,8 @@ import {
     JudoTransactionType
 } from './types/JudoTypes'
 
+import { JudoAuthorization } from './types/JudoAuthorization'
+
 export {
     JudoTransactionType,
     JudoTransactionMode,
@@ -55,15 +57,19 @@ export type { JudoPBBAConfiguration } from './types/JudoPBBATypes'
 
 export { JudoPBBAButton }
 
+export type {
+    JudoAuthorization,
+    JudoBasicAuthorization,
+    JudoSessionAuthorization
+} from './types/JudoAuthorization'
+
 class JudoPay {
-    public isSandboxed: boolean = true
+    public isSandboxed = true
 
-    private readonly token: string
-    private readonly secret: string
+    private readonly authorization: JudoAuthorization
 
-    constructor(token: string, secret: string) {
-        this.token = token
-        this.secret = secret
+    constructor(authorization: JudoAuthorization) {
+        this.authorization = authorization
     }
 
     public async invokeTransaction(
@@ -134,8 +140,7 @@ class JudoPay {
         configuration: JudoConfiguration
     ): Record<string, any> => {
         return {
-            token: this.token,
-            secret: this.secret,
+            authorization: this.generateAuthorizationParameters(),
             sandboxed: this.isSandboxed,
             configuration: configuration
         }
@@ -146,8 +151,7 @@ class JudoPay {
         configuration: JudoConfiguration
     ): Record<string, any> => {
         return {
-            token: this.token,
-            secret: this.secret,
+            authorization: this.generateAuthorizationParameters(),
             sandboxed: this.isSandboxed,
             transactionType: type,
             configuration: configuration
@@ -159,11 +163,24 @@ class JudoPay {
         configuration: JudoConfiguration
     ): Record<string, any> => {
         return {
-            token: this.token,
-            secret: this.secret,
+            authorization: this.generateAuthorizationParameters(),
             sandboxed: this.isSandboxed,
             transactionMode: mode,
             configuration: configuration
+        }
+    }
+
+    private readonly generateAuthorizationParameters = (): Record<string, any> => {
+        if (this.authorization.kind === 'basic') {
+            return {
+                token: this.authorization.token,
+                secret: this.authorization.secret
+            }
+        }
+
+        return {
+            token: this.authorization.token,
+            paymentSession: this.authorization.paymentSession
         }
     }
 }

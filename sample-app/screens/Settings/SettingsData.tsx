@@ -246,6 +246,11 @@ export var SettingsData = {
                     "type": SettingsPickType.TextPicker,
                     "value": ""
                 } as SettingsListItem,
+            ]
+        },
+        {
+            "title": "Basic Authorization",
+            "data": [
                 {
                     "title": "Token",
                     "subtitle": "Your API authorization token",
@@ -257,7 +262,41 @@ export var SettingsData = {
                     "subtitle": "Your API authorization secret",
                     "type": SettingsPickType.TextPicker,
                     "value": ""
-                }
+                },
+            ]
+        },
+        {
+            "title": "Session Authorization",
+            "data": [
+                {
+                    "title": "Token",
+                    "subtitle": "Your API authorization token",
+                    "type": SettingsPickType.TextPicker,
+                    "value": ""
+                } as SettingsListItem,
+                {
+                    "title": "Payment Session",
+                    "subtitle": "Yout payment session value",
+                    "type": SettingsPickType.TextPicker,
+                    "value": ""
+                },
+            ]
+        },
+        {
+            "title": "References",
+            "data": [
+                {
+                    "title": "Consumer Reference",
+                    "subtitle": "Your consumer reference",
+                    "type": SettingsPickType.TextPicker,
+                    "value": ""
+                } as SettingsListItem,
+                {
+                    "title": "Payment Reference",
+                    "subtitle": "If no payment reference is set, a random one will be generated",
+                    "type": SettingsPickType.TextPicker,
+                    "value": ""
+                } as SettingsListItem
             ]
         },
         {

@@ -23,13 +23,12 @@
 //  SOFTWARE.
 
 #import <JudoKit-iOS/JudoKit_iOS.h>
-#import <JudoKit-iOS/JPTransactionService.h>
 
 @interface RNWrappers : NSObject
 
 /**
  * A method that returns a configured JudoKit instance based on the passed dictionary parameters
- * JudoKit initializes the Judo session based on a provided token and secret
+ * JudoKit initializes the Judo session based on a provided basic or session authorization
  *
  * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
  *
@@ -38,14 +37,14 @@
 + (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties;
 
 /**
- * A method that returns a configured JPTransactionService instance based on the passed dictionary parameters
- * JPTransactionService is initialized based on a provided token and secret
+ * A method that returns a configured JPApiService instance based on the passed dictionary parameters
+ * JPApiService is initialized based on a provided basic or session authorization
  *
  * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
  *
  * @returns a configured JPTransactionService instance
  */
-+ (JPTransactionService *)transactionServiceFromProperties:(NSDictionary *)properties;
++ (JPApiService *)apiServiceFromProperties:(NSDictionary *)properties;
 
 /**
  * A method that returns the correct TransactionType value based on the passed dictionary parameters
