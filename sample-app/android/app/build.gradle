@@ -174,7 +174,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     implementation 'com.readystatesoftware.chuck:library:1.1.0'
-    implementation 'com.github.Judopay:JudoKit-Android:jitpack-updated-SNAPSHOT'
+    implementation 'com.judokit.android:judokit-android:2.0.2'
 
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermes-engine/android/"

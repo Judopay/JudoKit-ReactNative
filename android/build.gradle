@@ -30,7 +30,8 @@ buildscript {
 
     allprojects {
         repositories {
-            maven { url 'https://jitpack.io' }
+            maven { url 'http://dl.bintray.com/judopay/maven' }
+            maven { url "http://pay.cards/maven" }
         }
     }
 
@@ -79,14 +80,12 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.3.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-//    implementation 'com.judokit.android:judokit-android:1.0.0'
-    implementation 'com.github.Judopay:JudoKit-Android:jitpack-updated-SNAPSHOT'
+    implementation 'com.judokit.android:judokit-android:2.0.2'
 
     testImplementation 'junit:junit:4.13'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation 'io.mockk:mockk:1.10.0'
     testImplementation 'android.arch.core:core-testing:1.1.1'
-
 }
 
 def configureReactNativePom(def pom) {
