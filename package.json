@@ -10,6 +10,8 @@
     },
     "files": [
         "JudoPay.tsx",
+        "types/",
+        "components/",
         "android/src/main/AndroidManifest.xml",
         "android/src/main/java/",
         "android/build.gradle",

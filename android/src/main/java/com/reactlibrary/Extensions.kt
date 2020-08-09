@@ -26,15 +26,6 @@ internal val ReadableMap.cardToken: String?
 internal val ReadableMap.judoId: String?
     get() = configuration?.getString("judoId")
 
-internal val ReadableMap.siteId: String?
-    get() {
-        val hasKey = configuration?.hasKey("siteId") ?: false
-        if (hasKey) {
-            return configuration?.getString("siteId")
-        }
-        return null
-    }
-
 internal val ReadableMap.amount: ReadableMap?
     get() = configuration?.getMap("amount")
 
