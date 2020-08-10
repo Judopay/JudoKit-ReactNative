@@ -1,14 +1,17 @@
 import 'react-native'
 
-import JudoPay, {
-    JudoBasicAuthorization,
-    JudoSessionAuthorization
-} from '../JudoPay'
 import configuration from './JudoTestDefaults'
-import { JudoTransactionType, JudoTransactionMode } from '../types/JudoTypes'
+
+import JudoPay from '../JudoPay'
+
+import {
+    JudoTransactionType,
+    JudoTransactionMode,
+    JudoAuthorization
+} from '../types/JudoTypes'
 
 test('JudoPay after init has isSandboxed = true', () => {
-    const authorization: JudoBasicAuthorization = {
+    const authorization: JudoAuthorization = {
         token: 'token',
         secret: 'secret'
     }
@@ -19,7 +22,7 @@ test('JudoPay after init has isSandboxed = true', () => {
 })
 
 test('invokeTransaction will return mocked JudoResponse', async () => {
-    const authorization: JudoSessionAuthorization = {
+    const authorization: JudoAuthorization = {
         token: 'token',
         paymentSession: 'paymentSession'
     }
@@ -47,7 +50,7 @@ test('invokeTransaction will return mocked JudoResponse', async () => {
 })
 
 test('invokeApplePay will return mocked JudoResponse', async () => {
-    const authorization: JudoBasicAuthorization = {
+    const authorization: JudoAuthorization = {
         token: 'token',
         secret: 'secret'
     }
@@ -75,7 +78,7 @@ test('invokeApplePay will return mocked JudoResponse', async () => {
 })
 
 test('invokeGooglePay will return mocked JudoResponse', async () => {
-    const authorization: JudoBasicAuthorization = {
+    const authorization: JudoAuthorization = {
         token: 'token',
         secret: 'secret'
     }
@@ -103,7 +106,7 @@ test('invokeGooglePay will return mocked JudoResponse', async () => {
 })
 
 test('invokePaymentMethodScreen will return mocked JudoResponse', async () => {
-    const authorization: JudoBasicAuthorization = {
+    const authorization: JudoAuthorization = {
         token: 'token',
         secret: 'secret'
     }
@@ -131,7 +134,7 @@ test('invokePaymentMethodScreen will return mocked JudoResponse', async () => {
 })
 
 test('invokePayByBankApp will return mocked JudoResponse', async () => {
-    const authorization: JudoBasicAuthorization = {
+    const authorization: JudoAuthorization = {
         token: 'token',
         secret: 'secret'
     }

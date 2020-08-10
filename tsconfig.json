@@ -21,6 +21,7 @@
         "__tests__/**/*-test.ts",
         "__tests__/**/*Test.ts",
         "node_modules",
+        "sample-app",
         "babel.config.js",
         "metro.config.js",
         "jest.config.js"

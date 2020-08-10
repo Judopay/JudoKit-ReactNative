@@ -147,3 +147,9 @@ export interface JudoResponse {
     cardDetails?: JudoCardDetails
     consumerResponse?: JudoConsumer
 }
+
+export interface JudoAuthorization {
+    token: string
+    secret?: string
+    paymentSession?: string
+}

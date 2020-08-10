@@ -49,7 +49,7 @@ export default class Home extends Component {
 
   async getConfiguration(callback: Function) {
     this.setState({ spinner: true })
-    let configuration = await getStoredData(this.state)
+    const configuration = await getStoredData(this.state)
     this.setState(configuration, () => {
       this.setState({ spinner: false }, () => {
         callback()

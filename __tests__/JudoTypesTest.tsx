@@ -87,19 +87,13 @@ test('check JudoResponse model fields', () => {
         type: 'someType',
         createdAt: 'someCreationTime',
         result: 'any result',
-        message: 'some message',
-        judoId: 'favourite Id',
-        siteId: 'your site Id',
         merchantName: 'best merchant name',
         appearsOnStatementAs: 'as',
         originalAmount: 'amounting',
         netAmount: 'net amount',
         amount: 'some other number',
         currency: 'currency id',
-        cardDetails: 'details',
-        consumer: 'consumer',
-        risks: 'risks',
-        paymentToken: 'token'
+        cardDetails: undefined
     }
 
     expect(Object.keys(judoResponse).length).toBe(18)

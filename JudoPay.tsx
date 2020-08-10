@@ -1,14 +1,13 @@
 import { NativeModules } from 'react-native'
-import JudoPBBAButton from './components/JudoPBBAButton'
+import * as JudoPBBAButton from './components/JudoPBBAButton'
 
 import {
     JudoConfiguration,
     JudoResponse,
     JudoTransactionMode,
-    JudoTransactionType
+    JudoTransactionType,
+    JudoAuthorization
 } from './types/JudoTypes'
-
-import { JudoAuthorization } from './types/JudoAuthorization'
 
 export {
     JudoTransactionType,
@@ -25,7 +24,8 @@ export type {
     JudoAccountDetails,
     JudoTheme,
     JudoResponse,
-    JudoConfiguration
+    JudoConfiguration,
+    JudoAuthorization
 } from './types/JudoTypes'
 
 export {
@@ -56,12 +56,6 @@ export type {
 export type { JudoPBBAConfiguration } from './types/JudoPBBATypes'
 
 export { JudoPBBAButton }
-
-export type {
-    JudoAuthorization,
-    JudoBasicAuthorization,
-    JudoSessionAuthorization
-} from './types/JudoAuthorization'
 
 class JudoPay {
     public isSandboxed = true
@@ -171,7 +165,7 @@ class JudoPay {
     }
 
     private readonly generateAuthorizationParameters = (): Record<string, any> => {
-        if (this.authorization.kind === 'basic') {
+        if (this.authorization.secret) {
             return {
                 token: this.authorization.token,
                 secret: this.authorization.secret

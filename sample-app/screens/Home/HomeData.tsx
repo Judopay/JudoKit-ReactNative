@@ -103,7 +103,7 @@ export const getStoredData = async (state: any): Promise<object> => {
     if (value !== null) {
       const settings = JSON.parse(value)
 
-      var configuration = state.configuration
+      const configuration = state.configuration
 
       return {
 
@@ -181,7 +181,7 @@ export const getStoredData = async (state: any): Promise<object> => {
 
 const getAuthorizationMethod = (settings: any) => {
 
-  var paymentSession = settings.list[2].data[1].value as string;
+  const paymentSession = settings.list[2].data[1].value as string;
 
   if (paymentSession && paymentSession.length > 0) {
     return {
@@ -197,7 +197,7 @@ const getAuthorizationMethod = (settings: any) => {
 }
 
 const parsePaymentMethods = (values: string[]): JudoPaymentMethod => {
-  var paymentMethods = 0
+  let paymentMethods = 0
   if (values.includes('CARD')) paymentMethods |= JudoPaymentMethod.Card
   if (values.includes('APPLE_PAY')) paymentMethods |= JudoPaymentMethod.ApplePay
   if (values.includes('GOOGLE_PAY')) paymentMethods |= JudoPaymentMethod.GooglePay
@@ -207,7 +207,7 @@ const parsePaymentMethods = (values: string[]): JudoPaymentMethod => {
 }
 
 const parseMerchantCapabilities = (values: string[]): JudoMerchantCapability => {
-  var merchantCapabilities = 0
+  let merchantCapabilities = 0
   if (values.includes('ThreeDS')) merchantCapabilities |= JudoMerchantCapability.ThreeDS
   if (values.includes('EMV')) merchantCapabilities |= JudoMerchantCapability.EMV
   if (values.includes('Credit')) merchantCapabilities |= JudoMerchantCapability.Credit
@@ -216,7 +216,7 @@ const parseMerchantCapabilities = (values: string[]): JudoMerchantCapability => 
 }
 
 const parseAppleContactFields = (values: string[]): JudoContactField => {
-  var contactFields = 0
+  let contactFields = 0
   if (values.includes('PostalAddress')) contactFields |= JudoContactField.PostalAddress
   if (values.includes('Phone')) contactFields |= JudoContactField.Phone
   if (values.includes('Email')) contactFields |= JudoContactField.Email
@@ -233,7 +233,7 @@ const parseAppleShippingType = (value: string): JudoShippingType => {
 }
 
 const parseAppleReturnedInfo = (values: string[]): JudoReturnedInfo => {
-  var contactFields = 0
+  let contactFields = 0
   if (values.includes('Billing')) contactFields |= JudoReturnedInfo.BillingDetails
   if (values.includes('Shipping')) contactFields |= JudoReturnedInfo.ShippingDetails
   return contactFields
@@ -245,7 +245,7 @@ const parseGooglePayEnvironment = (value: string): JudoGooglePayEnvironment => {
 }
 
 const parseCardNetworks = (values: string[]): JudoCardNetwork => {
-  var cardNetworks = 0
+  let cardNetworks = 0
   if (values.includes('AMEX')) cardNetworks |= JudoCardNetwork.Amex
   if (values.includes('CHINA_UNION_PAY')) cardNetworks |= JudoCardNetwork.ChinaUnionPay
   if (values.includes('DINERS_CLUB')) cardNetworks |= JudoCardNetwork.DinersClub

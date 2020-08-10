@@ -12,15 +12,15 @@ import TokenPaymentProps from './TokenPaymentsProps'
 import JudoPay from 'judo-react-native'
 import { showMessage } from '../../helpers/utils'
 
-interface IState {
+interface State {
   cardToken: string | undefined;
 }
 
 export default class TokenPayments extends Component<
   TokenPaymentProps,
-  IState,
+  State
 > {
-  state: IState
+  state: State
 
   constructor(props: TokenPaymentProps) {
     super(props)
@@ -40,7 +40,7 @@ export default class TokenPayments extends Component<
         configuration,
       )
 
-      this.setState({ cardToken: response.cardDetails.cardToken })
+      this.setState({ cardToken: response.cardDetails?.cardToken })
     } catch (error) {
       showMessage(error.message)
     }

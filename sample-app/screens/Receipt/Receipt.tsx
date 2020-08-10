@@ -44,9 +44,9 @@ export default class Receipt extends Component {
     )
   }
 
-  getReceiptList(hash: Object) {
+  getReceiptList(hash: Record<string, any>) {
     const items: Array<ReceiptListItem> = []
-    for (let [key, value] of Object.entries(hash)) {
+    for (const [key, value] of Object.entries(hash)) {
       items.push({
         title: key,
         value: value || '',
