@@ -1,5 +1,5 @@
 import { NativeModules } from 'react-native'
-import * as JudoPBBAButton from './components/JudoPBBAButton'
+import JudoPBBAButton from './components/JudoPBBAButton'
 
 import {
     JudoConfiguration,

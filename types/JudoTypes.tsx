@@ -6,7 +6,6 @@ export interface JudoConfiguration {
     judoId: string
     amount: JudoAmount
     reference: JudoReference
-    siteId?: string
     cardAddress?: JudoAddress
     uiConfiguration?: JudoUIConfiguration
     paymentMethods?: JudoPaymentMethod
