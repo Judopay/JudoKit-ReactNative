@@ -119,7 +119,6 @@
                                                                       amount:amount
                                                                    reference:reference];
 
-    configuration.siteId = [configurationDict optionalStringForKey:@"siteId"];
     configuration.uiConfiguration = [RNWrappers uiConfigurationFromConfiguration:configurationDict];
     configuration.supportedCardNetworks = [RNWrappers cardNetworksFromConfiguration:configurationDict];
     configuration.primaryAccountDetails = [RNWrappers accountDetailsFromConfiguration:configurationDict];
@@ -133,43 +132,47 @@
 
 + (JPCardNetworkType)cardNetworksFromConfiguration:(NSDictionary *)configuration {
 
-    int bitmask = [configuration numberForKey:@"supportedCardNetworks"].intValue;
+    NSNumber *bitmask = [configuration optionalNumberForKey:@"supportedCardNetworks"];
 
-    if (BitmaskContains(bitmask, IOSCardNetworkAll)) {
+    if (!bitmask) {
+        return JPCardNetworkTypeAll;
+    }
+    
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkAll)) {
         return JPCardNetworkTypeAll;
     }
 
     JPCardNetworkType networks = JPCardNetworkTypeUnknown;
 
-    if (BitmaskContains(bitmask, IOSCardNetworkVisa)) {
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkVisa)) {
         networks |= JPCardNetworkTypeVisa;
     }
 
-    if (BitmaskContains(bitmask, IOSCardNetworkMastercard)) {
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkMastercard)) {
         networks |= JPCardNetworkTypeMasterCard;
     }
 
-    if (BitmaskContains(bitmask, IOSCardNetworkMaestro)) {
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkMaestro)) {
         networks |= JPCardNetworkTypeMaestro;
     }
 
-    if (BitmaskContains(bitmask, IOSCardNetworkAmex)) {
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkAmex)) {
         networks |= JPCardNetworkTypeAMEX;
     }
 
-    if (BitmaskContains(bitmask, IOSCardNetworkChinaUnionPay)) {
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkChinaUnionPay)) {
         networks |= JPCardNetworkTypeChinaUnionPay;
     }
 
-    if (BitmaskContains(bitmask, IOSCardNetworkJCB)) {
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkJCB)) {
         networks |= JPCardNetworkTypeJCB;
     }
 
-    if (BitmaskContains(bitmask, IOSCardNetworkDiscover)) {
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkDiscover)) {
         networks |= JPCardNetworkTypeDiscover;
     }
 
-    if (BitmaskContains(bitmask, IOSCardNetworkDinersClub)) {
+    if (BitmaskContains(bitmask.intValue, IOSCardNetworkDinersClub)) {
         networks |= JPCardNetworkTypeDinersClub;
     }
 
@@ -204,27 +207,31 @@
 }
 
 + (NSArray<JPPaymentMethod *> *)paymentMethodsFromConfiguration:(NSDictionary *)configuration {
-    int bitmask = [configuration numberForKey:@"paymentMethods"].intValue;
+    NSNumber *bitmask = [configuration optionalNumberForKey:@"paymentMethods"];
 
-    if (BitmaskContains(bitmask, IOSPaymentMethodAll)) {
-        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal];
+    if (!bitmask) {
+        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal, JPPaymentMethod.pbba];
+    }
+    
+    if (BitmaskContains(bitmask.intValue, IOSPaymentMethodAll)) {
+        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal, JPPaymentMethod.pbba];
     }
 
     NSMutableArray<JPPaymentMethod *> *paymentMethods = [NSMutableArray new];
 
-    if (BitmaskContains(bitmask, IOSPaymentMethodCard)) {
+    if (BitmaskContains(bitmask.intValue, IOSPaymentMethodCard)) {
         [paymentMethods addObject:JPPaymentMethod.card];
     }
 
-    if (BitmaskContains(bitmask, IOSPaymentMethodApplePay)) {
+    if (BitmaskContains(bitmask.intValue, IOSPaymentMethodApplePay)) {
         [paymentMethods addObject:JPPaymentMethod.applePay];
     }
 
-    if (BitmaskContains(bitmask, IOSPaymentMethodIDEAL)) {
+    if (BitmaskContains(bitmask.intValue, IOSPaymentMethodIDEAL)) {
         [paymentMethods addObject:JPPaymentMethod.iDeal];
     }
 
-    if (BitmaskContains(bitmask, IOSPaymentMethodPBBA)) {
+    if (BitmaskContains(bitmask.intValue, IOSPaymentMethodPBBA)) {
         [paymentMethods addObject:JPPaymentMethod.pbba];
     }
 

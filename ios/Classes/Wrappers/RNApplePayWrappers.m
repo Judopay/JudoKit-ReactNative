@@ -35,13 +35,17 @@
 
 + (JPApplePayConfiguration *)applePayConfigurationFromConfiguration:(NSDictionary *)configuration {
     
-    NSDictionary *dictionary = [configuration dictionaryForKey:@"applePayConfiguration"];
+    NSDictionary *dictionary = [configuration optionalDictionaryForKey:@"applePayConfiguration"];
     
+    if (!dictionary) {
+        return nil;
+    }
+
     NSString *merchantId = [dictionary stringForKey:@"merchantId"];
     NSString *currency = [[configuration dictionaryForKey:@"amount"] stringForKey:@"currency"];
     NSString *countryCode = [dictionary stringForKey:@"countryCode"];
-    NSNumber *billingFieldNumber = [dictionary numberForKey:@"requiredBillingContactFields"];
-    NSNumber *shippingFieldNumber = [dictionary numberForKey:@"requiredShippingContactFields"];
+    NSNumber *billingFieldNumber = [dictionary optionalNumberForKey:@"requiredBillingContactFields"];
+    NSNumber *shippingFieldNumber = [dictionary optionalNumberForKey:@"requiredShippingContactFields"];
 
     NSArray *paymentSummaryItems = [RNApplePayWrappers summaryItemsFromAppleConfiguration:dictionary];
     
@@ -95,28 +99,31 @@
 
 + (JPMerchantCapability)merchantCapabilitiesFromAppleConfiguration:(NSDictionary *)appleConfiguration {
     
-    NSNumber *selectedCapabilitiesNumber = [appleConfiguration numberForKey:@"merchantCapabilities"];
-    int bitmask = selectedCapabilitiesNumber.intValue;
+    NSNumber *bitmask = [appleConfiguration optionalNumberForKey:@"merchantCapabilities"];
+    
+    if (!bitmask) {
+        return JPMerchantCapability3DS;
+    }
         
-    if (BitmaskContains(bitmask, IOSApplePayCapabilityAll)) {
+    if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityAll)) {
         return JPMerchantCapability3DS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
     }
     
     JPMerchantCapability capabilities = 0;
 
-    if (BitmaskContains(bitmask, IOSApplePayCapability3DS)) {
+    if (BitmaskContains(bitmask.intValue, IOSApplePayCapability3DS)) {
         capabilities |= JPMerchantCapability3DS;
     }
     
-    if (BitmaskContains(bitmask, IOSApplePayCapabilityEMV)) {
+    if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityEMV)) {
         capabilities |= JPMerchantCapabilityEMV;
     }
     
-    if (BitmaskContains(bitmask, IOSApplePayCapabilityCredit)) {
+    if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityCredit)) {
         capabilities |= JPMerchantCapabilityCredit;
     }
     
-    if (BitmaskContains(bitmask, IOSApplePayCapabilityDebit)) {
+    if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityDebit)) {
         capabilities |= JPMerchantCapabilityDebit;
     }
     
@@ -153,7 +160,7 @@
 
 + (JPPaymentShippingType)shippingTypeFromDictionary:(NSDictionary *)dictionary {
     
-    NSNumber *shippingTypeNumber = [dictionary numberForKey:@"shippingType"];
+    NSNumber *shippingTypeNumber = [dictionary optionalNumberForKey:@"shippingType"];
     
     switch (shippingTypeNumber.intValue) {
         case IOSShippingTypeDelivery:
@@ -200,20 +207,23 @@
 
 + (JPReturnedInfo)returnedInfoFromAppleConfiguration:(NSDictionary *)appleConfiguration {
     
-    NSNumber *returnedInfoNumber = [appleConfiguration numberForKey:@"returnedInfo"];
-    int bitmask = returnedInfoNumber.intValue;
+    NSNumber *bitmask = [appleConfiguration optionalNumberForKey:@"returnedInfo"];
+
+    if (!bitmask) {
+        return JPReturnedInfoNone;
+    }
     
-    if (BitmaskContains(bitmask, IOSAppleReturnedInfoAll)) {
+    if (BitmaskContains(bitmask.intValue, IOSAppleReturnedInfoAll)) {
         return JPReturnedInfoAll;
     }
     
     JPReturnedInfo returnedInfo = JPReturnedInfoNone;
 
-    if (BitmaskContains(bitmask, IOSAppleReturnedInfoBilling)) {
+    if (BitmaskContains(bitmask.intValue, IOSAppleReturnedInfoBilling)) {
         returnedInfo |= JPReturnedInfoBillingContacts;
     }
     
-    if (BitmaskContains(bitmask, IOSAppleReturnedInfoShipping)) {
+    if (BitmaskContains(bitmask.intValue, IOSAppleReturnedInfoShipping)) {
         returnedInfo |= JPReturnedInfoShippingContacts;
     }
     
