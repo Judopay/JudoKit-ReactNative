@@ -58,7 +58,6 @@ const configuration: JudoConfiguration = {
     judoId: 'my-judo-id',
     amount: amount,
     reference: reference,
-    siteId: 'my-site-id',
     cardAddress: cardAddress,
     uiConfiguration: uiConfiguration,
     paymentMethods: paymentMethods,
