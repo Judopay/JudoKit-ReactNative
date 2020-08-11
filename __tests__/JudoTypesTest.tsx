@@ -133,7 +133,7 @@ test('check JudoTransactionType model fields', () => {
         googlePayConfiguration: {} as JudoGooglePayConfiguration
     }
 
-    expect(Object.keys(judoConfiguration).length).toBe(11)
+    expect(Object.keys(judoConfiguration).length).toBe(10)
 })
 
 test('check JudoTransactionType model fields', () => {
