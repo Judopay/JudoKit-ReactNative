@@ -4,11 +4,10 @@ import {
     JudoReference,
     JudoAddress,
     JudoUIConfiguration,
-    JudoTheme,
     JudoPaymentMethod,
     JudoCardNetwork,
     JudoAccountDetails
-} from 'judo-react-native'
+} from '../types/JudoTypes'
 
 const amount: JudoAmount = {
     value: '0.01',
@@ -29,17 +28,14 @@ const cardAddress: JudoAddress = {
     line3: 'example-address-3',
     postCode: 'example-postcode',
     town: 'example-town',
-    countryCode: 'example-country-code'
-}
-
-const theme: JudoTheme = {
-    //TODO: Nothing here yet
+    countryCode: 123
 }
 
 const uiConfiguration: JudoUIConfiguration = {
     isAVSEnabled: false,
-    shouldDisplayAmount: true,
-    theme: theme
+    shouldPaymentButtonDisplayAmount: true,
+    shouldPaymentMethodsVerifySecurityCode: true,
+    shouldPaymentMethodsDisplayAmount: true
 }
 
 const paymentMethods: JudoPaymentMethod =
@@ -68,8 +64,6 @@ const configuration: JudoConfiguration = {
     paymentMethods: paymentMethods,
     supportedCardNetworks: supportedCardNetworks,
     primaryAccountDetails: primaryAccountDetails,
-    applePayConfiguration: null,
-    googlePayConfiguration: null,
     pbbaConfiguration: {
         mobileNumber: '123-123',
         emailAddress: 'example@mail.com',

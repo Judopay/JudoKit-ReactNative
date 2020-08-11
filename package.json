@@ -1,5 +1,5 @@
 {
-    "name": "judo-react-native",
+    "name": "judokit-react-native",
     "title": "Judopay React Native module",
     "version": "3.0.0",
     "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
@@ -22,18 +22,20 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/judopay/judo-reactnative"
+        "url": "https://github.com/judopay/judokit-reactnative"
     },
     "keywords": [
         "react-native",
         "judo",
         "judopay",
+        "judokit",
         "payment",
         "gateway"
     ],
     "author": {
-        "name": "Zeno Foltin",
-        "email": "zeno.foltin@gmail.com"
+        "name": "JudoPay",
+        "email": "developersupport@judopayments.com",
+        "url": "https://www.judopay.com"
     },
     "license": "MIT",
     "licenseFilename": "LICENSE",
@@ -42,9 +44,9 @@
         "react-native": "^0.61.5"
     },
     "devDependencies": {
-        "babel-jest": "^25.1.0",
         "@typescript-eslint/eslint-plugin": "^2.24.0",
         "@typescript-eslint/parser": "^2.24.0",
+        "babel-jest": "^25.1.0",
         "eslint": "^6.8.0",
         "eslint-config-prettier": "^6.10.0",
         "eslint-plugin-react": "^7.19.0",
@@ -57,6 +59,8 @@
         "@types/jest": "^25.2.3",
         "@types/react": "^16.9.23",
         "@types/react-native": "^0.61.21",
+        "@types/react-native-dialog": "^5.6.2",
+        "@types/react-native-loading-spinner-overlay": "^0.5.2",
         "@types/react-test-renderer": "^16.9.2",
         "typescript": "^3.8.3"
     },

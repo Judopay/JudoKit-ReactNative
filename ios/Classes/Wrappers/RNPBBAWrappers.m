@@ -31,7 +31,11 @@
 @implementation RNPBBAWrappers
 
 + (JPPBBAConfiguration *)pbbaConfigurationFromConfiguration:(NSDictionary *)configuration {
-    NSDictionary *dictionary = [configuration dictionaryForKey:@"pbbaConfiguration"];
+    NSDictionary *dictionary = [configuration optionalDictionaryForKey:@"pbbaConfiguration"];
+    
+    if (!dictionary) {
+        return nil;
+    }
     
     NSString *mobileNumber = [dictionary optionalStringForKey:@"mobileNumber"];
     NSString *emailAddress = [dictionary optionalStringForKey:@"emailAddress"];

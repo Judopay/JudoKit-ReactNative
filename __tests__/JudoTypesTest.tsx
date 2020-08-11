@@ -87,22 +87,16 @@ test('check JudoResponse model fields', () => {
         type: 'someType',
         createdAt: 'someCreationTime',
         result: 'any result',
-        message: 'some message',
-        judoId: 'favourite Id',
-        siteId: 'your site Id',
         merchantName: 'best merchant name',
         appearsOnStatementAs: 'as',
         originalAmount: 'amounting',
         netAmount: 'net amount',
         amount: 'some other number',
         currency: 'currency id',
-        cardDetails: 'details',
-        consumer: 'consumer',
-        risks: 'risks',
-        paymentToken: 'token'
+        cardDetails: undefined
     }
 
-    expect(Object.keys(judoResponse).length).toBe(18)
+    expect(Object.keys(judoResponse).length).toBe(12)
 })
 
 test('check JudoAccountDetails model fields', () => {
@@ -130,7 +124,6 @@ test('check JudoTransactionType model fields', () => {
         judoId: 'judoId',
         amount: judoAmount,
         reference: judoReference,
-        siteId: 'siteId',
         cardAddress: judoAddress,
         uiConfiguration: judoUIConfiguration,
         paymentMethods: JudoPaymentMethod.All,
@@ -140,7 +133,7 @@ test('check JudoTransactionType model fields', () => {
         googlePayConfiguration: {} as JudoGooglePayConfiguration
     }
 
-    expect(Object.keys(judoConfiguration).length).toBe(11)
+    expect(Object.keys(judoConfiguration).length).toBe(10)
 })
 
 test('check JudoTransactionType model fields', () => {

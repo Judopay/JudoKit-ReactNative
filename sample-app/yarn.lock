@@ -1272,6 +1272,30 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
+"@types/react-native-dialog@^5.6.2":
+  version "5.6.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-dialog/-/react-native-dialog-5.6.2.tgz#a519e1f24d4e24a566fe9ce6e5cb133c25414211"
+  integrity sha512-Qq/9YO8oI9F3SG75OJYikKPAQdXRPQ15B+Oj0trcJVnXL8cHswTFx4+3ggcpFNnlm/vI6VYysGCB9YYwiJJ9kA==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+    react-native-modal ">=9.0.0"
+
+"@types/react-native-loading-spinner-overlay@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-0.5.2.tgz#e1ba291b48257fa171ebf34adfb6aefa030f50c1"
+  integrity sha512-bVO1B+92l40T1AtfEiuxeN+8RPLD46aQgs72AcrU15JPeAV1F9F8f1V7QHclU+tDh6MtZuFQ2kUe9BoM+NIwRA==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
+"@types/react-native@*":
+  version "0.63.6"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.63.6.tgz#ba3f9c9ed6f066cb964424cacc844ea58eac5148"
+  integrity sha512-qAv/VOyXAk4it9MOsQoyUjUnEJ3kAW1FCRGi0OvfQDKLH1/FFogVFvoB6xAlBNc6lPyBtCg+nvzj/ScYe0PqCQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-native@^0.61.21":
   version "0.61.23"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.61.23.tgz#bff4e0311c229a5203eb37aacd4febf59f3e2980"
@@ -4516,6 +4540,8 @@ jsx-ast-utils@^2.2.1, jsx-ast-utils@^2.4.1:
     "@types/jest" "^25.2.3"
     "@types/react" "^16.9.23"
     "@types/react-native" "^0.61.21"
+    "@types/react-native-dialog" "^5.6.2"
+    "@types/react-native-loading-spinner-overlay" "^0.5.2"
     "@types/react-test-renderer" "^16.9.2"
     typescript "^3.8.3"
 
@@ -5867,6 +5893,14 @@ react-native-loading-spinner-overlay@^1.1.0:
   integrity sha512-PMTMM4zdQkZlORKWzHhDTlFicMfDHz5vbAfwxUnQbVeGwdFezZKG7J/0KyJMtOUPZYzUjouo+uIOoydYM/Xt+A==
   dependencies:
     prop-types "^15.6.2"
+
+react-native-modal@>=9.0.0:
+  version "11.5.6"
+  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-11.5.6.tgz#bb25a78c35a5e24f45de060e5f64284397d38a87"
+  integrity sha512-APGNfbvgC4hXbJqcSADu79GLoMKIHUmgR3fDQ7rCGZNBypkStSP8imZ4PKK/OzIZZfjGU9aP49jhMgGbhY9KHA==
+  dependencies:
+    prop-types "^15.6.2"
+    react-native-animatable "1.3.3"
 
 react-native-modal@^9.0.0:
   version "9.0.0"

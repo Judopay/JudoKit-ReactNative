@@ -6,7 +6,6 @@ export interface JudoConfiguration {
     judoId: string
     amount: JudoAmount
     reference: JudoReference
-    siteId?: string
     cardAddress?: JudoAddress
     uiConfiguration?: JudoUIConfiguration
     paymentMethods?: JudoPaymentMethod
@@ -146,4 +145,10 @@ export interface JudoResponse {
     result?: string
     cardDetails?: JudoCardDetails
     consumerResponse?: JudoConsumer
+}
+
+export interface JudoAuthorization {
+    token: string
+    secret?: string
+    paymentSession?: string
 }

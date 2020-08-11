@@ -10,20 +10,20 @@ export enum JudoAddressFormat {
 
 export interface JudoBillingAddressParameters {
     addressFormat: JudoAddressFormat
-    isPhoneNumberRequired: Boolean
+    isPhoneNumberRequired: boolean
 }
 
 export interface JudoShippingAddressParameters {
     allowedCountryCodes?: string[]
-    isPhoneNumberRequired: Boolean
+    isPhoneNumberRequired: boolean
 }
 
 export interface JudoGooglePayConfiguration {
     countryCode: string
     environment: JudoGooglePayEnvironment
-    isEmailRequired: Boolean
-    isBillingAddressRequired: Boolean
+    isEmailRequired: boolean
+    isBillingAddressRequired: boolean
     billingAddressParameters?: JudoBillingAddressParameters
-    isShippingAddressRequired: Boolean
+    isShippingAddressRequired: boolean
     shippingAddressParameters?: JudoShippingAddressParameters
 }
