@@ -96,7 +96,7 @@ test('check JudoResponse model fields', () => {
         cardDetails: undefined
     }
 
-    expect(Object.keys(judoResponse).length).toBe(18)
+    expect(Object.keys(judoResponse).length).toBe(12)
 })
 
 test('check JudoAccountDetails model fields', () => {
@@ -124,7 +124,6 @@ test('check JudoTransactionType model fields', () => {
         judoId: 'judoId',
         amount: judoAmount,
         reference: judoReference,
-        siteId: 'siteId',
         cardAddress: judoAddress,
         uiConfiguration: judoUIConfiguration,
         paymentMethods: JudoPaymentMethod.All,

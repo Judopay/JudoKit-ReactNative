@@ -117,7 +117,6 @@ export const getStoredData = async (state: any): Promise<object> => {
 
           //API Configuration
           judoId: settings.list[0].data[1].value as string,
-          siteId: settings.list[0].data[2].value as string,
 
           //References
           reference: {

@@ -240,12 +240,6 @@ export var SettingsData = {
                     "type": SettingsPickType.TextPicker,
                     "value": ""
                 } as SettingsListItem,
-                {
-                    "title": "Site ID",
-                    "subtitle": "Your Site ID",
-                    "type": SettingsPickType.TextPicker,
-                    "value": ""
-                } as SettingsListItem,
             ]
         },
         {
