@@ -213,6 +213,7 @@ export default class Home extends Component {
     this.props.navigation.navigate('PayByBankApp', {
       authorization: this.getAuthorization(),
       configuration: { ...this.state.configuration, reference: reference() },
+      isSandboxed: this.state.isSandboxed
     })
   }
 

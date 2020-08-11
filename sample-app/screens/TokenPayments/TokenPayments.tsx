@@ -16,10 +16,7 @@ interface State {
   cardToken: string | undefined;
 }
 
-export default class TokenPayments extends Component<
-  TokenPaymentProps,
-  State
-> {
+export default class TokenPayments extends Component<TokenPaymentProps, State> {
   state: State
 
   constructor(props: TokenPaymentProps) {
@@ -30,10 +27,11 @@ export default class TokenPayments extends Component<
   }
 
   async invokeSaveCard() {
-    const { authorization, configuration } = this.props.route.params
+    const { authorization, configuration, isSandboxed } = this.props.route.params
 
     try {
       const judo = new JudoPay(authorization)
+      judo.isSandboxed = isSandboxed
 
       const response = await judo.invokeTransaction(
         JudoTransactionType.SaveCard,
@@ -47,10 +45,11 @@ export default class TokenPayments extends Component<
   }
 
   async completeTransaction(mode: JudoTransactionMode) {
-    const { authorization, configuration } = this.props.route.params
+    const { authorization, configuration, isSandboxed } = this.props.route.params
 
     try {
       const judo = new JudoPay(authorization)
+      judo.isSandboxed = isSandboxed
 
       if (this.state.cardToken == undefined) return
 
