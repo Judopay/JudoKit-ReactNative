@@ -96,7 +96,6 @@ const configuration = (): JudoConfiguration => {
         judoId: '<YOUR JUDO ID>',
         amount: amount,
         reference: reference(),
-        siteId: '<YOUR SITE ID>',
         cardAddress: cardAddress,
         uiConfiguration: uiConfiguration,
         paymentMethods: paymentMethods,
