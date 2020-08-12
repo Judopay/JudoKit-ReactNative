@@ -74,12 +74,12 @@
     if (secret) {
         JPBasicAuthorization *authorization = [JPBasicAuthorization authorizationWithToken:token
                                                                                  andSecret:secret];
-        return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed];
+        return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed.boolValue];
     }
     
     JPSessionAuthorization *authorization = [JPSessionAuthorization authorizationWithToken:token
                                                                          andPaymentSession:paymentSession];
-    return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed];
+    return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed.boolValue];
 }
 
 + (JPTransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
