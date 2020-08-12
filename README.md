@@ -1,12 +1,24 @@
-# Judopay React Native module
+# JudoPay React Native module
 
-Judopay's React Native module and sample app. This module is a wrapper around the JudoKitObjC library on iOS and the Judo-Android library on Android.
+JudoPay's React Native module and sample app. This module is a wrapper around the JudoKit-iOS library on iOS and the JudoKit-Android library on Android.
+
+## Features
+
+- Card transactions *(Payment, PreAuth, Save Card, Register Card, Check Card)*;
+- Token payments/pre-auths;
+- Apple Pay;
+- Google Pay;
+- iDEAL;
+- Pay By Bank App;
+- 3DS;
+- Server-to-server transactions;
+- Payment Method Selection screen;
 
 ## Getting started
 
--   `yarn add judo-react-native`
+-   `yarn add judokit-react-native`
 
-    or if you use npm: `npm install judo-react-native --save`
+    or if you use npm: `npm install judokit-react-native --save`
 
 ### iOS
 
@@ -59,58 +71,59 @@ Judopay's React Native module and sample app. This module is a wrapper around th
 
 ## Update an existing project
 
-`yarn upgrade judo-react-native`
+`yarn upgrade judokit-react-native`
 
 ### iOS
 
 -   Update Cocoapods
 
-    `cd ios && pod update JudoKitObjC`
+    `cd ios && pod update JudoKit-iOS`
 
 ### Android
 
--   Rebuild your project
+- Rebuild your project
 
 ## Usage
 
-with TypeScript
+For a detailed description of all features, visit [our documentation](https://docs.judopay.com/) or try out the sample app attached to the package.
 
-```javascript
-import { Judopay, type JudoConfig } from "judo-react-native";
+```ts
 
-async makePayment() {
-    const options: JudoConfig = {
-        token: "<API_TOKEN>",
-        secret: "<API_SECRET>",
-        judoId: "<JUDO_ID>",
-        siteId: "<SITE_ID>",
-        isSandbox: true,
-        amount: "0.01",
-        currency: "GBP",
-        consumerReference: "myCustomerReference"
-	  };
-    options.paymentReference = "myUniquePaymentReference"
+import Judo, {
+  JudoAuthorization,
+  JudoTransactionType,
+} from 'judokit-react-native'
 
-    try {
-        let response = await Judopay.makePayment({
-            ...options
-        });
+// 1. Create a Judo session by providing an authorization object (basic or session)
+const auth: JudoAuthorization = {token: 'YOUR-TOKEN', secret: 'YOUR_SECRET'}
+const judo = new Judo(auth)
 
-        if (response.result === "Success") {
-            console.log(`Payment successful. ReceiptId: ${response.receiptId}`);
-        } else {
-            console.log("Payment error");
-        }
-    } catch (e) {
-        if (e.code === "JUDO_USER_CANCELLED") {
-            // do nothing
-            return;
-        } else if (e.code === "JUDO_ERROR" && e.userInfo && e.userInfo.result === "Declined") {
-            console.log("Card declined. Please try again and make sure the card details are correct.");
-        } else {
-            const message = e.message || "Something went wrong. Please try again later.";
-            console.log(`Oops... ${message}`);
-        }
-    }
-};
+// 2. Set the Judo session to sandbox mode for testing
+judo.isSandboxed = true
+
+// 3. Create a Judo configuration to setup your payment flow
+const amount: JudoAmount = {
+    value: '0.01',
+    currency: 'GBP',
+}
+
+const reference: JudoReference = {
+    consumerReference: 'MY-CONSUMER-REFERENCE',
+    paymentReference: 'MY-PAYMENT-REFERENCE'
+}
+
+const configuration: JudoConfiguration = {
+    judoId: 'MY-JUDO-ID',
+    amount: amount,
+    reference: reference
+}
+
+// 4. Invoke a payment transaction and handle the result
+judo.invokeTransaction(JudoTransactionType.Payment, configuration)
+    .then((response) => {
+        // Handle response
+    })
+    .catch((error) => {
+       // Handle error
+    });
 ```
