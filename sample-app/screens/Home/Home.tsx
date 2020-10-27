@@ -18,9 +18,14 @@ import {
 import JudoPay, {JudoTransactionMode, JudoTransactionType,} from 'judo-react-native'
 import configuration, {reference} from '../../helpers/JudoDefaults'
 import {showMessage} from '../../helpers/utils'
-import {JudoAuthorization} from 'judo-react-native/types/JudoAuthorization'
+import {JudoAuthorization} from 'judo-react-native'
 
-export default class Home extends Component {
+interface HomeProps {
+  navigation: any,
+}
+
+export default class Home extends Component<HomeProps> {
+
   state = {
     authorization: undefined,
     configuration: configuration(),
@@ -41,6 +46,7 @@ export default class Home extends Component {
   }
 
   componentWillUnmount() {
+    Linking.removeAllListeners("url")
     store.dispatch({ type: '' })
   }
 
@@ -55,7 +61,15 @@ export default class Home extends Component {
   }
 
   async handleDeepLinkIfNeeded() {
+
+    Linking.addEventListener("url", ({url}) => {
+      this.updateDeepLinkURL(url, () => {
+        this.handlePBBATransaction()
+      })
+    });
+
     const url = await Linking.getInitialURL()
+
     if (url) {
       this.updateDeepLinkURL(url, () => {
         this.handlePBBATransaction()

@@ -29,7 +29,7 @@ export default class PayByBankApp extends Component<PayByBankAppProps> {
       const response = await judo.invokePayByBankApp(configuration)
       if (!response) return
 
-      this.props.navigation.navigate('Receipt', { receipt: response })
+      this.props.navigation.pop()
     } catch (error) {
       console.log(error)
     }

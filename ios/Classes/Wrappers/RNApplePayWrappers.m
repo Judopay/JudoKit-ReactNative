@@ -130,20 +130,20 @@
     return capabilities;
 }
 
-+ (NSArray<PaymentShippingMethod *> *)shippingMethodsFromAppleConfiguration:(NSDictionary *)appleConfiguration {
++ (NSArray<JPPaymentShippingMethod *> *)shippingMethodsFromAppleConfiguration:(NSDictionary *)appleConfiguration {
     
     NSArray *shippingMethodsArray = [appleConfiguration optionalArrayForKey:@"shippingMethods"];
     NSMutableArray *mappedShippingMethods = [NSMutableArray new];
     
     for (NSDictionary *shippingMethodDict in shippingMethodsArray) {
-        PaymentShippingMethod *method = [self shippingMethodFromDictionary:shippingMethodDict];
+        JPPaymentShippingMethod *method = [self shippingMethodFromDictionary:shippingMethodDict];
         [mappedShippingMethods addObject:method];
     }
     
     return mappedShippingMethods;
 }
 
-+ (PaymentShippingMethod *)shippingMethodFromDictionary:(NSDictionary *)dictionary {
++ (JPPaymentShippingMethod *)shippingMethodFromDictionary:(NSDictionary *)dictionary {
     
     NSString *identifier = [dictionary stringForKey:@"identifier"];
     NSString *detail = [dictionary stringForKey:@"detail"];
@@ -151,10 +151,10 @@
     NSString *amountString = [dictionary stringForKey:@"amount"];
     NSNumber *typeNumber = [dictionary numberForKey:@"type"];
     
-    return [[PaymentShippingMethod alloc] initWithIdentifier:identifier
-                                                      detail:detail
-                                                       label:label
-                                                      amount:[NSDecimalNumber decimalNumberWithString:amountString]
+    return [[JPPaymentShippingMethod alloc] initWithIdentifier:identifier
+                                                        detail:detail
+                                                         label:label
+                                                        amount:[NSDecimalNumber decimalNumberWithString:amountString]
                                                         type:typeNumber.intValue];
 }
 

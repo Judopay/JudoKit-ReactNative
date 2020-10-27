@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import JudoPay from 'judo-react-native'
 import TransactionDetailsProps from "./TransactionDetailsProps";
-import {SafeAreaView, StatusBar, StyleSheet, View} from "react-native";
-import {isIos} from "../../helpers/utils";
+import {SafeAreaView, StatusBar, StyleSheet, Text} from "react-native";
 
 export default class TransactionDetails extends Component<TransactionDetailsProps> {
 
@@ -14,7 +13,7 @@ export default class TransactionDetails extends Component<TransactionDetailsProp
         return (
             <SafeAreaView style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
-                <Text></Text>
+                <Text>Hello</Text>
             </SafeAreaView>
         )
     }
@@ -25,9 +24,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-    },
-    pbbaButton: {
-        height: 50,
-        width: isIos ? 310 : 200,
     },
 })
