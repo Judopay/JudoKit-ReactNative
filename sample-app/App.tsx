@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { TouchableHighlight, Image, Text } from 'react-native'
+import { TouchableHighlight, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Home from './screens/Home/Home'
@@ -8,6 +8,7 @@ import Settings from './screens/Settings/Settings'
 import Receipt from './screens/Receipt/Receipt'
 import TokenPayments from './screens/TokenPayments/TokenPayments'
 import PayByBankApp from './screens/PayByBankApp/PayByBankApp'
+import TransactionDetails from "./screens/TransactionDetails/TransactionDetails";
 
 const Stack = createStackNavigator()
 
@@ -16,7 +17,7 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Judo Sample app"
+          name="Sample App"
           component={Home}
           options={({ navigation }) => ({
             headerStyle: {
@@ -29,15 +30,7 @@ function App() {
                 onPress={() => navigation.navigate('Settings')}
                 style={{ marginRight: 10 }}
               >
-                <Image
-                  style={{
-                    width: 30,
-                    height: 30,
-                    alignItems: 'center',
-                    padding: 10,
-                  }}
-                  source={require('./resources/ic_settings.png')}
-                />
+                  <Text style={{color:"white", fontSize: 16, fontWeight: 'bold'}}>Settings</Text>
               </TouchableHighlight>
             ),
           })}
@@ -95,6 +88,16 @@ function App() {
             headerTintColor: '#fff',
           })}
         />
+          <Stack.Screen
+              name="Transaction Details"
+              component={TransactionDetails}
+              options={({ navigation }) => ({
+                  headerStyle: {
+                      backgroundColor: '#5623e4',
+                  },
+                  headerTintColor: '#fff',
+              })}
+          />
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -13,6 +13,7 @@ export enum HomeListType {
   PaymentMethods,
   PreAuthMethods,
   ServerToServer,
+  TransactionDetails,
 }
 
 export type HomeListItem = {

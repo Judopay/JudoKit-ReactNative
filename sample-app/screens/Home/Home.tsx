@@ -1,27 +1,24 @@
-import React, { Component } from 'react'
-import { store } from '../../helpers/AsyncStore'
-import { HomeScreenData, getStoredData } from './HomeData'
-import { HomeListItem, HomeListType } from './HomeProps'
+import React, {Component} from 'react'
+import {store} from '../../helpers/AsyncStore'
+import {getStoredData, HomeScreenData} from './HomeData'
+import {HomeListItem, HomeListType} from './HomeProps'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
+  Linking,
+  SafeAreaView,
+  SectionList,
   StatusBar,
   StyleSheet,
-  SectionList,
-  TouchableHighlight,
   Text,
+  TouchableHighlight,
   View,
-  SafeAreaView,
-  Linking,
 } from 'react-native'
 
-import JudoPay, {
-  JudoTransactionType,
-  JudoTransactionMode,
-} from 'judo-react-native'
-import configuration, { reference } from '../../helpers/JudoDefaults'
-import { showMessage } from '../../helpers/utils'
-import { JudoAuthorization } from 'judo-react-native/types/JudoAuthorization'
+import JudoPay, {JudoTransactionMode, JudoTransactionType,} from 'judo-react-native'
+import configuration, {reference} from '../../helpers/JudoDefaults'
+import {showMessage} from '../../helpers/utils'
+import {JudoAuthorization} from 'judo-react-native/types/JudoAuthorization'
 
 export default class Home extends Component {
   state = {
@@ -224,6 +221,13 @@ export default class Home extends Component {
     })
   }
 
+  displayTransactionDetails() {
+    this.props.navigation.navigate('Transaction Details', {
+      authorization: this.getAuthorization(),
+      isSandboxed: this.state.isSandboxed
+    })
+  }
+
   async displayPaymentMethod(mode: JudoTransactionMode) {
     try {
       const judo = new JudoPay(this.getAuthorization())
@@ -310,6 +314,9 @@ export default class Home extends Component {
         break
       case HomeListType.ServerToServer:
         this.invokeServerToServerPayment()
+        break
+      case HomeListType.TransactionDetails:
+        this.displayTransactionDetails()
         break
     }
   }

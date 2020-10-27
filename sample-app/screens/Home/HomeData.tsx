@@ -92,6 +92,11 @@ export const HomeScreenData = {
                   "subtitle": "with default Server-to-Server payment methods",
                   "type": HomeListType.ServerToServer
                 } as HomeListItem,
+                {
+                    "title": "Get transaction details",
+                    "subtitle": "by using your Receipt ID",
+                    "type": HomeListType.TransactionDetails
+                } as HomeListItem,
             ]
         }
     ]
