@@ -130,6 +130,11 @@ class JudoPay {
         return NativeModules.RNJudo.invokePaymentMethodScreen(params)
     }
 
+    public async fetchTransactionDetails(receiptId: string): Promise<JudoResponse> {
+        const params = this.generateTransactionDetailsParameters(receiptId)
+        return NativeModules.RNJudo.fetchTransactionDetails(params)
+    }
+
     private readonly generatePayByBankAppParameters = (
         configuration: JudoConfiguration
     ): Record<string, any> => {
@@ -161,6 +166,16 @@ class JudoPay {
             sandboxed: this.isSandboxed,
             transactionMode: mode,
             configuration: configuration
+        }
+    }
+
+    private readonly generateTransactionDetailsParameters = (
+        receiptId: string
+    ): Record<string, any> => {
+        return {
+            authorization: this.generateAuthorizationParameters(),
+            sandboxed: this.isSandboxed,
+            receiptId: receiptId
         }
     }
 
