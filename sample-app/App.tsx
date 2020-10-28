@@ -71,7 +71,7 @@ function App() {
         <Stack.Screen
           name="PayByBankApp"
           component={PayByBankApp}
-          options={({ navigation }) => ({
+          options={() => ({
             headerStyle: {
               backgroundColor: '#5623e4',
             },
@@ -81,7 +81,7 @@ function App() {
         <Stack.Screen
           name="Token Payments"
           component={TokenPayments}
-          options={({ navigation }) => ({
+          options={() => ({
             headerStyle: {
               backgroundColor: '#5623e4',
             },
@@ -91,7 +91,7 @@ function App() {
           <Stack.Screen
               name="Transaction Details"
               component={TransactionDetails}
-              options={({ navigation }) => ({
+              options={() => ({
                   headerStyle: {
                       backgroundColor: '#5623e4',
                   },

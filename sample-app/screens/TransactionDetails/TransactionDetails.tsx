@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import JudoPay from 'judo-react-native'
 import TransactionDetailsProps from "./TransactionDetailsProps";
 import {SafeAreaView, StatusBar, StyleSheet, Text} from "react-native";
 

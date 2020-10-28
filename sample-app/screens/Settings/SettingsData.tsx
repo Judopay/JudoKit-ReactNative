@@ -223,7 +223,7 @@ const googlePaySettings = {
     ]
 }
 
-export var SettingsData = {
+export const SettingsData = {
     list: [
         {
             "title": "API Configurations",
