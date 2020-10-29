@@ -46,6 +46,13 @@ RCT_EXPORT_MODULE();
 // MARK: - SDK Methods
 //----------------------------------------------
 
+RCT_REMAP_METHOD(isBankingAppAvailable,
+                 isBankingAppAvailableWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    NSNumber *boolValue = [NSNumber numberWithBool:[JudoKit isBankingAppAvailable]];
+    resolve(boolValue);
+}
+
 RCT_REMAP_METHOD(invokeTransaction,
                  properties:(NSDictionary *)properties
                  invokePaymentWithResolver:(RCTPromiseResolveBlock)resolve
