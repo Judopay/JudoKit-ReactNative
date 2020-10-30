@@ -7,8 +7,9 @@ import com.judokit.android.api.model.response.JudoApiCallResult
 import com.judokit.android.api.model.response.Receipt
 import com.judokit.android.api.model.response.toJudoPaymentResult
 import com.judokit.android.model.JudoPaymentResult
+import com.judokit.android.model.JudoResult
 import com.judokit.android.model.PaymentWidgetType
-import com.judokit.android.toJSONString
+import com.judokit.android.toTokenRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -76,13 +77,14 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
             val service = JudoApiServiceFactory.createApiService(context, judo)
 
             val cardToken = options.cardToken
+            val securityCode = options.securityCode
 
             if (cardToken == null) {
                 promise.reject(JUDO_PROMISE_REJECTION_CODE, "No card token found")
                 return
             }
 
-            service.tokenPayment(judo.toTokenPayment(cardToken)).enqueue(object: Callback<JudoApiCallResult<Receipt>> {
+            service.tokenPayment(judo.toTokenRequest(cardToken, securityCode)).enqueue(object : Callback<JudoApiCallResult<Receipt>> {
 
                 override fun onFailure(call: Call<JudoApiCallResult<Receipt>>, t: Throwable) {
                     promise.reject(t)
@@ -95,7 +97,7 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
                         return
                     }
 
-                    when (val data = response.body()?.toJudoPaymentResult()) {
+                    when (val data = response.body()?.toJudoPaymentResult(context.resources)) {
                         is JudoPaymentResult.Success -> {
                             promise.resolve(getMappedResult(data.result))
                         }
