@@ -1,5 +1,10 @@
 package com.reactlibrary
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.facebook.react.bridge.*
 import com.judokit.android.Judo
 import com.judokit.android.api.factory.JudoApiServiceFactory
@@ -10,6 +15,9 @@ import com.judokit.android.model.JudoPaymentResult
 import com.judokit.android.model.JudoResult
 import com.judokit.android.model.PaymentWidgetType
 import com.judokit.android.toTokenRequest
+import com.judokit.android.ui.common.BR_PBBA_RESULT
+import com.judokit.android.ui.common.PBBA_RESULT
+import com.judokit.android.ui.common.isBankingAppAvailable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,11 +30,29 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
 
     private val listener = JudoReactNativeActivityEventListener()
 
+    /**
+     * A broadcast receiver to catch Pay by Bank app /order/bank/sale response event.
+     */
+    private val payByBankAppReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            val pbbaSaleResult = intent.getParcelableExtra<JudoResult>(PBBA_RESULT)
+            payByBankSalePromise.resolve(getMappedResult(pbbaSaleResult))
+        }
+    }
+
     init {
         context.addActivityEventListener(listener)
+        LocalBroadcastManager.getInstance(context).registerReceiver(payByBankAppReceiver, IntentFilter(BR_PBBA_RESULT))
     }
 
     override fun getName() = "RNJudo"
+
+    /**
+     * Promise to make a callback from the first /order/bank/sale response of PbBa request.
+     * Initialised in [invokePayByBankApp] or [invokePaymentMethodScreen].
+     * Resolved in [payByBankAppReceiver].
+     */
+    private lateinit var payByBankSalePromise: Promise
 
     @ReactMethod
     fun invokeTransaction(options: ReadableMap, promise: Promise) {
@@ -52,6 +78,7 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
     fun invokePayByBankApp(options: ReadableMap, promise: Promise) {
         try {
             val judo = getJudoConfiguration(PaymentWidgetType.PAY_BY_BANK_APP, options)
+            payByBankSalePromise = promise
             startJudoActivity(judo, promise)
         } catch (error: Exception) {
             promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
@@ -62,6 +89,7 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
     fun invokePaymentMethodScreen(options: ReadableMap, promise: Promise) {
         try {
             val judo = getPaymentMethodsConfiguration(options)
+            payByBankSalePromise = promise
             startJudoActivity(judo, promise)
         } catch (error: Exception) {
             promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
@@ -108,8 +136,17 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
                 }
             })
 
-        } catch(exception: java.lang.Exception) {
+        } catch (exception: Exception) {
             promise.reject(exception)
+        }
+    }
+
+    @ReactMethod
+    fun isBankingAppAvailable(promise: Promise) {
+        try {
+            promise.resolve(isBankingAppAvailable(context))
+        } catch (exception: Exception) {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, exception.localizedMessage, exception)
         }
     }
 
