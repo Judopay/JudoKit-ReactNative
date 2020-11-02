@@ -111,16 +111,16 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
 }
 
 internal fun getAuthorization(options: ReadableMap): Authorization {
-    val token = options.authorization?.token
+    val token = options.token
 
-    options.authorization?.secret?.let { secret ->
+    options.secret?.let { secret ->
         return BasicAuthorization.Builder()
                 .setApiToken(token)
                 .setApiSecret(secret)
                 .build()
     }
 
-    options.authorization?.paymentSession?.let { paymentSession ->
+    options.paymentSession?.let { paymentSession ->
         return PaymentSessionAuthorization.Builder()
                 .setApiToken(token)
                 .setPaymentSession(paymentSession)
