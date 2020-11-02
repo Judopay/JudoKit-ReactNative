@@ -9,11 +9,7 @@ import {
 import JudoPay, { JudoPBBAButton } from 'judo-react-native'
 import { isIos } from '../../helpers/utils'
 import { TouchableOpacity as AndroidTouchableOpacity } from 'react-native-gesture-handler'
-
-interface PayByBankAppProps {
-  navigation: any,
-  route: any,
-}
+import PayByBankAppProps from "./PayByBankAppProps";
 
 export default class PayByBankApp extends Component<PayByBankAppProps> {
   constructor(props: any) {

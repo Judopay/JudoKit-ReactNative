@@ -9,15 +9,35 @@ import Receipt from './screens/Receipt/Receipt'
 import TokenPayments from './screens/TokenPayments/TokenPayments'
 import PayByBankApp from './screens/PayByBankApp/PayByBankApp'
 import TransactionDetails from "./screens/TransactionDetails/TransactionDetails";
+import {JudoAuthorization, JudoConfiguration, JudoResponse} from "../types/JudoTypes";
 
-const Stack = createStackNavigator()
+export type RootStackParamList = {
+    Home: undefined;
+    Settings: undefined;
+    Receipt: { receipt: JudoResponse };
+    PayByBankApp: {
+        authorization: JudoAuthorization,
+        configuration: JudoConfiguration,
+    };
+    TokenPayments: {
+        authorization: JudoAuthorization,
+        configuration: JudoConfiguration,
+        isSandboxed: boolean
+    };
+    TransactionDetails: {
+        authorization: JudoAuthorization,
+        isSandboxed: boolean
+    };
+};
+
+const RootStack = createStackNavigator<RootStackParamList>()
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Sample App"
+      <RootStack.Navigator initialRouteName="Home">
+        <RootStack.Screen
+          name="Home"
           component={Home}
           options={({ navigation }) => ({
             headerStyle: {
@@ -43,7 +63,7 @@ function App() {
             ),
           })}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Settings"
           component={Settings}
           options={() => ({
@@ -53,7 +73,7 @@ function App() {
             headerTintColor: '#fff',
           })}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Receipt"
           component={Receipt}
           options={({ navigation }) => ({
@@ -76,37 +96,40 @@ function App() {
             ),
           })}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="PayByBankApp"
           component={PayByBankApp}
           options={() => ({
-            headerStyle: {
-              backgroundColor: '#5623e4',
-            },
-            headerTintColor: '#fff',
+              title: "Pay By Bank App",
+              headerStyle: {
+                  backgroundColor: '#5623e4',
+              },
+              headerTintColor: '#fff',
           })}
         />
-        <Stack.Screen
-          name="Token Payments"
+        <RootStack.Screen
+          name="TokenPayments"
           component={TokenPayments}
           options={() => ({
-            headerStyle: {
-              backgroundColor: '#5623e4',
-            },
-            headerTintColor: '#fff',
+              title: "Token Payments",
+              headerStyle: {
+                backgroundColor: '#5623e4',
+              },
+              headerTintColor: '#fff',
           })}
         />
-          <Stack.Screen
-              name="Transaction Details"
+          <RootStack.Screen
+              name="TransactionDetails"
               component={TransactionDetails}
               options={() => ({
+                  title: "Transaction Details",
                   headerStyle: {
                       backgroundColor: '#5623e4',
                   },
                   headerTintColor: '#fff',
               })}
           />
-      </Stack.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   )
 }

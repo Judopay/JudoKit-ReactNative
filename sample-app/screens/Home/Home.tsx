@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {store} from '../../helpers/AsyncStore'
 import {getStoredData, HomeScreenData} from './HomeData'
-import {HomeListItem, HomeListType} from './HomeProps'
+import HomeProps, {HomeListItem, HomeListType} from './HomeProps'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
@@ -19,10 +19,6 @@ import JudoPay, {JudoTransactionMode, JudoTransactionType,} from 'judo-react-nat
 import configuration, {reference} from '../../helpers/JudoDefaults'
 import {showMessage} from '../../helpers/utils'
 import {JudoAuthorization} from 'judo-react-native'
-
-interface HomeProps {
-  navigation: any,
-}
 
 export default class Home extends Component<HomeProps> {
 
@@ -228,7 +224,7 @@ export default class Home extends Component<HomeProps> {
   }
 
   displayTokenPayments() {
-    this.props.navigation.navigate('Token Payments', {
+    this.props.navigation.navigate('TokenPayments', {
       authorization: this.getAuthorization(),
       configuration: { ...this.state.configuration, reference: reference() },
       isSandboxed: this.state.isSandboxed
@@ -236,7 +232,7 @@ export default class Home extends Component<HomeProps> {
   }
 
   displayTransactionDetails() {
-    this.props.navigation.navigate('Transaction Details', {
+    this.props.navigation.navigate('TransactionDetails', {
       authorization: this.getAuthorization(),
       isSandboxed: this.state.isSandboxed
     })
@@ -271,15 +267,14 @@ export default class Home extends Component<HomeProps> {
     const paymentSession = authorization['paymentSession'] as string;
 
     if (secret && secret.length > 0) {
+
       return {
-        kind: 'basic',
         token: token,
         secret: secret
       }
     }
 
     return {
-      kind: 'session',
       token: token,
       paymentSession: paymentSession,
     }
