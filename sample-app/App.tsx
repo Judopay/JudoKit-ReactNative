@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { TouchableHighlight, Text } from 'react-native'
+import { TouchableHighlight, Text, Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Home from './screens/Home/Home'
@@ -30,7 +30,15 @@ function App() {
                 onPress={() => navigation.navigate('Settings')}
                 style={{ marginRight: 10 }}
               >
-                  <Text style={{color:"white", fontSize: 16, fontWeight: 'bold'}}>Settings</Text>
+                  <Image
+                      style={{
+                          width: 30,
+                          height: 30,
+                          alignItems: 'center',
+                          padding: 10,
+                      }}
+                      source={require('./resources/ic_settings.png')}
+                  />
               </TouchableHighlight>
             ),
           })}
