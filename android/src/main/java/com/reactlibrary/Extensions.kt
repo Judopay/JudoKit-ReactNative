@@ -30,10 +30,17 @@ internal val ReadableMap.judoId: String?
     get() = configuration?.getString("judoId")
 
 internal val ReadableMap.token: String?
-    get() = configuration?.getString("token")
+    get() = authorization?.getString("token")
 
 internal val ReadableMap.secret: String?
-    get() = configuration?.getString("secret")
+    get() {
+        return authorization?.getString("secret")
+    }
+
+internal val ReadableMap.paymentSession: String?
+    get() {
+        return authorization?.getString("paymentSession")
+    }
 
 internal val ReadableMap.amount: ReadableMap?
     get() = configuration?.getMap("amount")
