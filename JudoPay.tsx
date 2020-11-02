@@ -100,8 +100,10 @@ class JudoPay {
      *
      * This can be useful for conditionally rendering the PBBA button only if the bank app
      * is available (PBBA won't work otherwise).
+     *
+     * @returns an asynchronous boolean value that indicates if any PBBA apps are installed.
      */
-    public isBankingAppAvailable(): boolean {
+    public isBankingAppAvailable(): Promise<boolean> {
         return NativeModules.RNJudo.isBankingAppAvailable()
     }
 
@@ -221,18 +223,6 @@ class JudoPay {
             configuration
         )
         return NativeModules.RNJudo.invokePaymentMethodScreen(params)
-    }
-
-    /**
-     * A method for obtaining the transaction details based on a provided receipt ID.
-     *
-     * @param receiptId - the receipt ID used to identify the transaction.
-     *
-     * @returns an asynchronous JudoResponse object, containing the transaction results.
-     */
-    public async fetchTransactionDetails(receiptId: string): Promise<JudoResponse> {
-        const params = this.generateTransactionDetailsParameters(receiptId)
-        return NativeModules.RNJudo.fetchTransactionDetails(params)
     }
 
     //------------------------------------------------------------------

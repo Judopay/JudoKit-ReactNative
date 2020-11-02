@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import TransactionDetailsProps from "./TransactionDetailsProps";
-import JudoPay from "judo-react-native";
 import {SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableHighlight} from "react-native";
 
 interface State {
@@ -23,21 +22,7 @@ export default class TransactionDetails extends Component<TransactionDetailsProp
     }
 
     async getTransactionDetails() {
-
-        const {authorization, isSandboxed} = this.props.route.params
-
-        try {
-            const judo = new JudoPay(authorization)
-            judo.isSandboxed = isSandboxed
-
-            const response = await judo.fetchTransactionDetails(this.state.receiptId)
-
-            if (response != null) {
-                this.props.navigation.navigate('Receipt', {receipt: response})
-            }
-        } catch (error) {
-            console.log(error)
-        }
+        // TODO: Add the transaction details functionality once it's implemented on Android
     }
 
     render() {
