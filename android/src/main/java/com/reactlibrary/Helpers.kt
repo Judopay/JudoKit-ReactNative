@@ -9,7 +9,17 @@ import com.judokit.android.Judo
 import com.judokit.android.api.model.Authorization
 import com.judokit.android.api.model.BasicAuthorization
 import com.judokit.android.api.model.PaymentSessionAuthorization
-import com.judokit.android.model.*
+import com.judokit.android.model.Amount
+import com.judokit.android.model.CardNetwork
+import com.judokit.android.model.Currency
+import com.judokit.android.model.GooglePayConfiguration
+import com.judokit.android.model.JudoResult
+import com.judokit.android.model.PBBAConfiguration
+import com.judokit.android.model.PaymentMethod
+import com.judokit.android.model.PaymentWidgetType
+import com.judokit.android.model.PrimaryAccountDetails
+import com.judokit.android.model.Reference
+import com.judokit.android.model.UiConfiguration
 import com.judokit.android.model.googlepay.GooglePayAddressFormat
 import com.judokit.android.model.googlepay.GooglePayBillingAddressParameters
 import com.judokit.android.model.googlepay.GooglePayEnvironment
@@ -101,26 +111,20 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
 }
 
 internal fun getAuthorization(options: ReadableMap): Authorization {
-    val token = options.authorization?.getString("token")
+    val token = options.token
 
-    options.authorization?.hasKey("secret").let {
-        if (it == true) {
-            val secret = options.authorization?.getString("secret")
-            return BasicAuthorization.Builder()
-                    .setApiToken(token)
-                    .setApiSecret(secret)
-                    .build()
-        }
+    options.secret?.let { secret ->
+        return BasicAuthorization.Builder()
+                .setApiToken(token)
+                .setApiSecret(secret)
+                .build()
     }
 
-    options.authorization?.hasKey("paymentSession").let {
-        if (it == true) {
-            val paymentSession = options.authorization?.getString("paymentSession")
-            return PaymentSessionAuthorization.Builder()
-                    .setApiToken(token)
-                    .setPaymentSession(paymentSession)
-                    .build()
-        }
+    options.paymentSession?.let { paymentSession ->
+        return PaymentSessionAuthorization.Builder()
+                .setApiToken(token)
+                .setPaymentSession(paymentSession)
+                .build()
     }
 
     throw IllegalArgumentException("No secret or payment session in the authorization")

@@ -35,15 +35,15 @@ class UIConfigurationReadableMapExtensionsTest {
     }
 
     @Test
-    fun `Given configuration object has uiConfiguration key when invoking isAVSEnabled then the value of shouldDisplayAmount property should be returned`() {
-        every { uiConfigMock.getBoolean("shouldDisplayAmount") } returns true
-        assertNotNull(sut.shouldDisplayAmount)
-        assert(sut.shouldDisplayAmount!!)
+    fun `Given configuration object has uiConfiguration key when invoking shouldPaymentMethodsDisplayAmount then the value of shouldDisplayAmount property should be returned`() {
+        every { uiConfigMock.getBoolean("shouldPaymentMethodsDisplayAmount") } returns true
+        assertNotNull(sut.shouldPaymentMethodsDisplayAmount)
+        assert(sut.shouldPaymentMethodsDisplayAmount!!)
     }
 
     @Test
-    fun `Given configuration object has no uiConfiguration key when invoking shouldDisplayAmount then null should be returned`() {
+    fun `Given configuration object has no uiConfiguration key when invoking shouldPaymentMethodsDisplayAmount then null should be returned`() {
         every { configMock.hasKey("uiConfiguration") } returns false
-        assertNull(sut.shouldDisplayAmount)
+        assertNull(sut.shouldPaymentMethodsDisplayAmount)
     }
 }

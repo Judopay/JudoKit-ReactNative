@@ -8,6 +8,7 @@ import com.judokit.android.Judo
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.justRun
+import io.mockk.mockk
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
 import io.mockk.spyk
@@ -33,9 +34,11 @@ class JudoReactNativeModuleTest {
         every { getTransactionConfiguration(any()) } returns judoMock
         every { getGoogleTransactionConfiguration(any()) } returns judoMock
         every { getPaymentMethodsConfiguration(any()) } returns judoMock
+        every { getJudoConfiguration(any(), any()) } returns judoMock
 
         justRun { reactContextMock.addActivityEventListener(any()) }
         every { reactContextMock.currentActivity } returns currentActivityMock
+        every { reactContextMock.applicationContext } returns mockk(relaxed = true)
 
         sut = JudoReactNativeModule(reactContextMock)
     }
@@ -84,9 +87,9 @@ class JudoReactNativeModuleTest {
 
         verify {
             promiseMock.reject(
-                eq(JUDO_PROMISE_REJECTION_CODE),
-                eq("Message"),
-                ofType(NullPointerException::class)
+                    eq(JUDO_PROMISE_REJECTION_CODE),
+                    eq("Message"),
+                    ofType(NullPointerException::class)
             )
 
             currentActivityMock wasNot Called
@@ -101,9 +104,9 @@ class JudoReactNativeModuleTest {
 
         verify {
             promiseMock.reject(
-                eq(JUDO_PROMISE_REJECTION_CODE),
-                eq("Message"),
-                ofType(NullPointerException::class)
+                    eq(JUDO_PROMISE_REJECTION_CODE),
+                    eq("Message"),
+                    ofType(NullPointerException::class)
             )
 
             currentActivityMock wasNot Called
@@ -118,9 +121,9 @@ class JudoReactNativeModuleTest {
 
         verify {
             promiseMock.reject(
-                eq(JUDO_PROMISE_REJECTION_CODE),
-                eq("Message"),
-                ofType(NullPointerException::class)
+                    eq(JUDO_PROMISE_REJECTION_CODE),
+                    eq("Message"),
+                    ofType(NullPointerException::class)
             )
 
             currentActivityMock wasNot Called
