@@ -2,6 +2,14 @@
 platform :ios, '11.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
+pre_install do |installer|
+  puts("Image fix for ios14: remove this when upgradeing to >= 0.63.3")
+  find = "_currentFrame.CGImage;"
+  replace = "_currentFrame.CGImage ;} else { [super displayLayer:layer];"
+  op = `sed -ie "s/#{find}/#{replace}/" ../node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m`
+  puts("Image fix for ios14 done")
+end
+
 target 'sample-app' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!

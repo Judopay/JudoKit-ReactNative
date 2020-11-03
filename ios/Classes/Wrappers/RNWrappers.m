@@ -183,6 +183,10 @@
     return [properties optionalStringForKey:@"cardToken"];
 }
 
++ (NSString *)receiptIdFromProperties:(NSDictionary *)properties {
+    return [properties optionalStringForKey:@"receiptId"];
+}
+
 //---------------------------------------------------
 // MARK: - Helper methods
 //---------------------------------------------------

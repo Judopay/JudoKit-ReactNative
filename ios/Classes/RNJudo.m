@@ -46,6 +46,13 @@ RCT_EXPORT_MODULE();
 // MARK: - SDK Methods
 //----------------------------------------------
 
+RCT_REMAP_METHOD(isBankingAppAvailable,
+                 isBankingAppAvailableWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    NSNumber *boolValue = [NSNumber numberWithBool:[JudoKit isBankingAppAvailable]];
+    resolve(boolValue);
+}
+
 RCT_REMAP_METHOD(invokeTransaction,
                  properties:(NSDictionary *)properties
                  invokePaymentWithResolver:(RCTPromiseResolveBlock)resolve
@@ -79,7 +86,6 @@ RCT_REMAP_METHOD(performTokenTransaction,
                  performTokenTransactionWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    
    JPApiService *apiService = [RNWrappers apiServiceFromProperties:properties];
    JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
@@ -95,6 +101,19 @@ RCT_REMAP_METHOD(performTokenTransaction,
    }
 
    [apiService invokeTokenPaymentWithRequest:tokenRequest andCompletion:completion];
+}
+
+RCT_REMAP_METHOD(fetchTransactionDetails,
+                 properties:(NSDictionary *)properties
+                 fetchTransactionDetailsWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    JPApiService *apiService = [RNWrappers apiServiceFromProperties:properties];
+    JPCompletionBlock completion = [self completionBlockWithResolve:resolve andReject:reject];
+
+    NSString *receiptId = [RNWrappers receiptIdFromProperties:properties];
+
+    [apiService fetchTransactionWithReceiptId:receiptId completion:completion];
 }
 
 //----------------------------------------------
