@@ -21,7 +21,6 @@ NativeModules.RNJudo = {
     invokeGooglePay: jest.fn(() => Promise.resolve(response)),
     invokePaymentMethodScreen: jest.fn(() => Promise.resolve(response)),
     invokePayByBankApp: jest.fn(() => Promise.resolve(response)),
-    fetchTransactionDetails: jest.fn(() => Promise.resolve(response)),
     performTokenTransaction: jest.fn(() => Promise.resolve(response)),
     isBankingAppAvailable: jest.fn(() => Promise.resolve(false))
 }
