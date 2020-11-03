@@ -63,7 +63,7 @@ export default class PayByBankApp extends Component<PayByBankAppProps, State> {
     )
   }
 
-  noBankApp() {
+  noBankAppText() {
     return <Text style={styles.textStyle}>No banking app available</Text>
   }
 
@@ -71,7 +71,7 @@ export default class PayByBankApp extends Component<PayByBankAppProps, State> {
     return (
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
-        <View style={styles.container}>{this.state.isBankingAppAvailable ? this.pbbaButton() : this.noBankApp()}</View>
+        <View style={styles.container}>{this.state.isBankingAppAvailable ? this.pbbaButton() : this.noBankAppText()}</View>
       </SafeAreaView>
     )
   }
