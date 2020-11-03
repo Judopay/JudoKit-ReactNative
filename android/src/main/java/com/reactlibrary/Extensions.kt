@@ -24,7 +24,12 @@ internal val ReadableMap.cardToken: String?
     get() = getString("cardToken")
 
 internal val ReadableMap.securityCode: String?
-    get() = getString("securityCode")
+    get() {
+        if (hasKey("securityCode")) {
+            return getString("securityCode")
+        }
+        return null
+    }
 
 internal val ReadableMap.judoId: String?
     get() = configuration?.getString("judoId")

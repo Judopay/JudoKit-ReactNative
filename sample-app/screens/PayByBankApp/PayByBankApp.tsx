@@ -5,16 +5,30 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Text,
 } from 'react-native'
 import JudoPay, { JudoPBBAButton } from 'judo-react-native'
 import { isIos } from '../../helpers/utils'
 import { TouchableOpacity as AndroidTouchableOpacity } from 'react-native-gesture-handler'
 import PayByBankAppProps from "./PayByBankAppProps";
 
-export default class PayByBankApp extends Component<PayByBankAppProps> {
+interface State {
+  isBankingAppAvailable: boolean | undefined;
+}
+
+export default class PayByBankApp extends Component<PayByBankAppProps, State> {
+  state: State
+
   constructor(props: any) {
     super(props)
+    this.state = {isBankingAppAvailable: undefined}
     this.invokePayByBankApp = this.invokePayByBankApp.bind(this)
+  }
+
+  async componentDidMount() {
+    const {authorization} = this.props.route.params
+    const judo = new JudoPay(authorization)
+    this.setState({isBankingAppAvailable: await judo.isBankingAppAvailable()})
   }
 
   async invokePayByBankApp() {
@@ -49,11 +63,15 @@ export default class PayByBankApp extends Component<PayByBankAppProps> {
     )
   }
 
+  noBankAppText() {
+    return <Text style={styles.textStyle}>No banking app available</Text>
+  }
+
   render() {
     return (
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
-        <View style={styles.container}>{this.pbbaButton()}</View>
+        <View style={styles.container}>{this.state.isBankingAppAvailable ? this.pbbaButton() : this.noBankAppText()}</View>
       </SafeAreaView>
     )
   }
@@ -68,5 +86,9 @@ const styles = StyleSheet.create({
   pbbaButton: {
     height: 50,
     width: isIos ? 310 : 200,
+  },
+  textStyle: {
+    fontSize: 16,
+    color: '#000',
   },
 })
