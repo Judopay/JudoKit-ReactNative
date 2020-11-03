@@ -58,14 +58,64 @@ export type { JudoPBBAConfiguration } from './types/JudoPBBATypes'
 export { JudoPBBAButton }
 
 class JudoPay {
-    public isSandboxed = true
+
+    //------------------------------------------------------------------
+    // Private properties
+    //------------------------------------------------------------------
 
     private readonly authorization: JudoAuthorization
 
+    //------------------------------------------------------------------
+    // Public properties
+    //------------------------------------------------------------------
+
+    /**
+     * This property is used to toggle the sandbox environment on and off.
+     * You can use the sandbox environment to test our SDK features.
+     */
+    public isSandboxed = true
+
+    //------------------------------------------------------------------
+    // Initializers
+    //------------------------------------------------------------------
+
+    /**
+     * The designated initializer that is used to configure the JudoPay session, based
+     * on a provided object that implements the JudoAuthorization interface.
+     *
+     * @param authorization - can be either a JudoBasicAuthorization (token & secret) or
+     * a JudoSessionAuthorization (token & payment session) instance.
+     */
     constructor(authorization: JudoAuthorization) {
         this.authorization = authorization
     }
 
+    //------------------------------------------------------------------
+    // SDK Features
+    //------------------------------------------------------------------
+
+    /**
+     * A method used to verify if any Pay By Bank App supported banking apps are installed
+     * on the device.
+     *
+     * This can be useful for conditionally rendering the PBBA button only if the bank app
+     * is available (PBBA won't work otherwise).
+     *
+     * @returns an asynchronous boolean value that indicates if any PBBA apps are installed.
+     */
+    public isBankingAppAvailable(): Promise<boolean> {
+        return NativeModules.RNJudo.isBankingAppAvailable()
+    }
+
+    /**
+     * A method for invoking the Judo UI for card transactions.
+     * Supported operations - payments, pre-auths, register card, save card, check card.
+     *
+     * @param type - a JudoTransactionType value that defines the transaction type.
+     * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
+     *
+     * @returns an asynchronous JudoResponse object, containing the transaction results.
+     */
     public async invokeTransaction(
         type: JudoTransactionType,
         configuration: JudoConfiguration
@@ -77,6 +127,15 @@ class JudoPay {
         return NativeModules.RNJudo.invokeTransaction(params)
     }
 
+    /**
+     * A method for completing a payment/pre-auth transaction using a saved card token.
+     *
+     * @param mode - a JudoTransactionMode value that defines if the transaction is either a payment or pre-auth.
+     * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
+     * @param token - the saved card token string.
+     *
+     * @returns an asynchronous JudoResponse object, containing the transaction results.
+     */
     public async performTokenTransaction(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration,
@@ -90,6 +149,16 @@ class JudoPay {
         return NativeModules.RNJudo.performTokenTransaction(params)
     }
 
+    /**
+     * A method for invoking Apple Pay transactions.
+     * For this transaction to work, the required JudoApplePayConfiguration parameters must be present as part of
+     * the JudoConfiguration object passed to the method.
+     *
+     * @param mode - a JudoTransactionMode value that defines if the transaction is either a payment or pre-auth.
+     * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
+     *
+     * @returns an asynchronous JudoResponse object, containing the transaction results.
+     */
     public async invokeApplePay(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
@@ -101,6 +170,16 @@ class JudoPay {
         return NativeModules.RNJudo.invokeApplePay(params)
     }
 
+    /**
+     * A method for invoking Google Pay transactions.
+     * For this transaction to work, the required JudoGooglePayConfiguration parameters must be present as part of
+     * the JudoConfiguration object passed to the method.
+     *
+     * @param mode - a JudoTransactionMode value that defines if the transaction is either a payment or pre-auth.
+     * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
+     *
+     * @returns an asynchronous JudoResponse object, containing the transaction results.
+     */
     public async invokeGooglePay(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
@@ -112,6 +191,13 @@ class JudoPay {
         return NativeModules.RNJudo.invokeGooglePay(params)
     }
 
+    /**
+     * A method for invoking Pay By Bank App transactions.
+     *
+     * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
+     *
+     * @returns an asynchronous JudoResponse object, containing the transaction results.
+     */
     public async invokePayByBankApp(
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
@@ -119,6 +205,15 @@ class JudoPay {
         return NativeModules.RNJudo.invokePayByBankApp(params)
     }
 
+    /**
+     * A method for invoking the Judo wallet, allowing users to pay with their preferred payment method.
+     * (Cards, Apple Pay/Google Pay, iDEAL, Pay By Bank App)
+     *
+     * @param mode - a JudoTransactionMode value that defines if the transaction is either a payment or pre-auth.
+     * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
+     *
+     * @returns an asynchronous JudoResponse object, containing the transaction results.
+     */
     public async invokePaymentMethodScreen(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
@@ -129,6 +224,10 @@ class JudoPay {
         )
         return NativeModules.RNJudo.invokePaymentMethodScreen(params)
     }
+
+    //------------------------------------------------------------------
+    // Private helper methods
+    //------------------------------------------------------------------
 
     private readonly generatePayByBankAppParameters = (
         configuration: JudoConfiguration
@@ -161,6 +260,16 @@ class JudoPay {
             sandboxed: this.isSandboxed,
             transactionMode: mode,
             configuration: configuration
+        }
+    }
+
+    private readonly generateTransactionDetailsParameters = (
+        receiptId: string
+    ): Record<string, any> => {
+        return {
+            authorization: this.generateAuthorizationParameters(),
+            sandboxed: this.isSandboxed,
+            receiptId: receiptId
         }
     }
 

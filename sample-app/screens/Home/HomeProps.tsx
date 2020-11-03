@@ -1,3 +1,6 @@
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from "../../App";
+
 export enum HomeListType {
   Payment,
   PreAuth,
@@ -13,10 +16,20 @@ export enum HomeListType {
   PaymentMethods,
   PreAuthMethods,
   ServerToServer,
+  TransactionDetails,
 }
 
 export type HomeListItem = {
   title: string,
   subtitle: string,
   type: HomeListType,
+}
+
+type HomeScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'Home'
+    >;
+
+export default interface HomeProps {
+  navigation: HomeScreenNavigationProp
 }

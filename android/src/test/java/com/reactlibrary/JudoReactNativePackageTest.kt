@@ -5,7 +5,6 @@ import io.mockk.justRun
 import io.mockk.mockkClass
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertSame
-import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -29,10 +28,11 @@ class JudoReactNativePackageTest {
     }
 
     @Test
-    fun `Given a JudoReactNativePackage instance is created when invoking createViewManagers on it then an empty array should be returned`() {
+    fun `Given a JudoReactNativePackage instance is created when invoking createViewManagers on it then an array containing only one instance of JudoReactNativePBBAManager should be returned`() {
         val managers = sut.createViewManagers(reactContextMock)
 
-        assertTrue(managers.isEmpty())
+        assertEquals(managers.size, 1)
+        assertSame(managers.first()::class.java, JudoReactNativePBBAManager::class.java)
     }
 
 }

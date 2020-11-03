@@ -1,29 +1,27 @@
-import React, { Component } from 'react'
-import { store } from '../../helpers/AsyncStore'
-import { HomeScreenData, getStoredData } from './HomeData'
-import { HomeListItem, HomeListType } from './HomeProps'
+import React, {Component} from 'react'
+import {store} from '../../helpers/AsyncStore'
+import {getStoredData, HomeScreenData} from './HomeData'
+import HomeProps, {HomeListItem, HomeListType} from './HomeProps'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
+  Linking,
+  SafeAreaView,
+  SectionList,
   StatusBar,
   StyleSheet,
-  SectionList,
-  TouchableHighlight,
   Text,
+  TouchableHighlight,
   View,
-  SafeAreaView,
-  Linking,
 } from 'react-native'
 
-import JudoPay, {
-  JudoTransactionType,
-  JudoTransactionMode,
-} from 'judo-react-native'
-import configuration, { reference } from '../../helpers/JudoDefaults'
-import { showMessage } from '../../helpers/utils'
-import { JudoAuthorization } from 'judo-react-native/types/JudoAuthorization'
+import JudoPay, {JudoTransactionMode, JudoTransactionType,} from 'judo-react-native'
+import configuration, {reference} from '../../helpers/JudoDefaults'
+import {showMessage} from '../../helpers/utils'
+import {JudoAuthorization} from 'judo-react-native'
 
-export default class Home extends Component {
+export default class Home extends Component<HomeProps> {
+
   state = {
     authorization: undefined,
     configuration: configuration(),
@@ -44,6 +42,7 @@ export default class Home extends Component {
   }
 
   componentWillUnmount() {
+    Linking.removeAllListeners("url")
     store.dispatch({ type: '' })
   }
 
@@ -58,7 +57,15 @@ export default class Home extends Component {
   }
 
   async handleDeepLinkIfNeeded() {
+
+    Linking.addEventListener("url", ({url}) => {
+      this.updateDeepLinkURL(url, () => {
+        this.handlePBBATransaction()
+      })
+    });
+
     const url = await Linking.getInitialURL()
+
     if (url) {
       this.updateDeepLinkURL(url, () => {
         this.handlePBBATransaction()
@@ -217,9 +224,16 @@ export default class Home extends Component {
   }
 
   displayTokenPayments() {
-    this.props.navigation.navigate('Token Payments', {
+    this.props.navigation.navigate('TokenPayments', {
       authorization: this.getAuthorization(),
       configuration: { ...this.state.configuration, reference: reference() },
+      isSandboxed: this.state.isSandboxed
+    })
+  }
+
+  displayTransactionDetails() {
+    this.props.navigation.navigate('TransactionDetails', {
+      authorization: this.getAuthorization(),
       isSandboxed: this.state.isSandboxed
     })
   }
@@ -253,15 +267,14 @@ export default class Home extends Component {
     const paymentSession = authorization['paymentSession'] as string;
 
     if (secret && secret.length > 0) {
+
       return {
-        kind: 'basic',
         token: token,
         secret: secret
       }
     }
 
     return {
-      kind: 'session',
       token: token,
       paymentSession: paymentSession,
     }
@@ -310,6 +323,9 @@ export default class Home extends Component {
         break
       case HomeListType.ServerToServer:
         this.invokeServerToServerPayment()
+        break
+      case HomeListType.TransactionDetails:
+        this.displayTransactionDetails()
         break
     }
   }

@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { TouchableHighlight, Image, Text } from 'react-native'
+import { TouchableHighlight, Text, Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Home from './screens/Home/Home'
@@ -8,15 +8,36 @@ import Settings from './screens/Settings/Settings'
 import Receipt from './screens/Receipt/Receipt'
 import TokenPayments from './screens/TokenPayments/TokenPayments'
 import PayByBankApp from './screens/PayByBankApp/PayByBankApp'
+import TransactionDetails from "./screens/TransactionDetails/TransactionDetails";
+import {JudoAuthorization, JudoConfiguration, JudoResponse} from "../types/JudoTypes";
 
-const Stack = createStackNavigator()
+export type RootStackParamList = {
+    Home: undefined;
+    Settings: undefined;
+    Receipt: { receipt: JudoResponse };
+    PayByBankApp: {
+        authorization: JudoAuthorization,
+        configuration: JudoConfiguration,
+    };
+    TokenPayments: {
+        authorization: JudoAuthorization,
+        configuration: JudoConfiguration,
+        isSandboxed: boolean
+    };
+    TransactionDetails: {
+        authorization: JudoAuthorization,
+        isSandboxed: boolean
+    };
+};
+
+const RootStack = createStackNavigator<RootStackParamList>()
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Judo Sample app"
+      <RootStack.Navigator initialRouteName="Home">
+        <RootStack.Screen
+          name="Home"
           component={Home}
           options={({ navigation }) => ({
             headerStyle: {
@@ -29,20 +50,20 @@ function App() {
                 onPress={() => navigation.navigate('Settings')}
                 style={{ marginRight: 10 }}
               >
-                <Image
-                  style={{
-                    width: 30,
-                    height: 30,
-                    alignItems: 'center',
-                    padding: 10,
-                  }}
-                  source={require('./resources/ic_settings.png')}
-                />
+                  <Image
+                      style={{
+                          width: 30,
+                          height: 30,
+                          alignItems: 'center',
+                          padding: 10,
+                      }}
+                      source={require('./resources/ic_settings.png')}
+                  />
               </TouchableHighlight>
             ),
           })}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Settings"
           component={Settings}
           options={() => ({
@@ -52,7 +73,7 @@ function App() {
             headerTintColor: '#fff',
           })}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Receipt"
           component={Receipt}
           options={({ navigation }) => ({
@@ -75,27 +96,40 @@ function App() {
             ),
           })}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="PayByBankApp"
           component={PayByBankApp}
-          options={({ navigation }) => ({
-            headerStyle: {
-              backgroundColor: '#5623e4',
-            },
-            headerTintColor: '#fff',
+          options={() => ({
+              title: "Pay By Bank App",
+              headerStyle: {
+                  backgroundColor: '#5623e4',
+              },
+              headerTintColor: '#fff',
           })}
         />
-        <Stack.Screen
-          name="Token Payments"
+        <RootStack.Screen
+          name="TokenPayments"
           component={TokenPayments}
-          options={({ navigation }) => ({
-            headerStyle: {
-              backgroundColor: '#5623e4',
-            },
-            headerTintColor: '#fff',
+          options={() => ({
+              title: "Token Payments",
+              headerStyle: {
+                backgroundColor: '#5623e4',
+              },
+              headerTintColor: '#fff',
           })}
         />
-      </Stack.Navigator>
+          <RootStack.Screen
+              name="TransactionDetails"
+              component={TransactionDetails}
+              options={() => ({
+                  title: "Transaction Details",
+                  headerStyle: {
+                      backgroundColor: '#5623e4',
+                  },
+                  headerTintColor: '#fff',
+              })}
+          />
+      </RootStack.Navigator>
     </NavigationContainer>
   )
 }

@@ -1,5 +1,7 @@
 package com.reactlibrary
 
+import android.net.Uri
+import android.util.Base64
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.judokit.android.model.CardNetwork
@@ -9,13 +11,16 @@ import com.judokit.android.model.PaymentWidgetType
 import com.judokit.android.model.googlepay.GooglePayAddressFormat
 import com.judokit.android.model.googlepay.GooglePayEnvironment
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkClass
+import io.mockk.mockkStatic
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.nio.charset.StandardCharsets
 
 class HelpersKtTest {
 
@@ -35,16 +40,18 @@ class HelpersKtTest {
 
     @Before
     fun before() {
+        mockkStatic("android.util.Base64")
+        mockkStatic("android.net.Uri")
+        every { Base64.encodeToString("token:secret".toByteArray(StandardCharsets.UTF_8), Base64.NO_WRAP) } returns "credentials"
 
         every { mapMock.getInt("transactionMode") } returns 1
-        every { mapMock.hasKey("authorization") } returns true
-        every { mapMock.getMap("authorization") } returns authorizationMock
-        every { mapMock.getBoolean("sandboxed") } returns true
-        every { configurationMock.getString("judoId") } returns "judoId"
 
-        // siteId
-        every { configurationMock.hasKey("siteId") } returns true
-        every { configurationMock.getString("siteId") } returns "siteId"
+        every { mapMock.authorization } returns authorizationMock
+        every { authorizationMock.token } returns "token"
+        every { authorizationMock.secret } returns "secret"
+
+        every { mapMock.getBoolean("sandboxed") } returns true
+        every { configurationMock.getString("judoId") } returns "111111111"
 
         // amount
         every { amountMock.getString("value") } returns "1.50"
@@ -123,8 +130,9 @@ class HelpersKtTest {
 
         every { pbbaConfigurationMock.getString("mobileNumber") } returns "123-123"
         every { pbbaConfigurationMock.getString("emailAddress") } returns "example@mail.com"
-        every { pbbaConfigurationMock.getString("deepLinkURL") } returns "https://www.google.com"
-        every { pbbaConfigurationMock.getString("deepLinkScheme") } returns "deep://link"
+        every { pbbaConfigurationMock.hasKey("deeplinkURL") } returns true
+        every { pbbaConfigurationMock.getString("deeplinkURL") } returns "https://www.google.com"
+        every { pbbaConfigurationMock.getString("deeplinkScheme") } returns "deep://link"
 
         every { mapMock.configuration } returns configurationMock
     }
@@ -481,12 +489,15 @@ class HelpersKtTest {
 
     @Test
     fun `Given valid user configuration is provided when invoking getPBBAConfiguration with the given configurations then a valid PBBAConfiguration object should be returned`() {
+        val deeplinkUrl = mockk<Uri>(relaxed = true)
+        every { Uri.parse("https://www.google.com") } returns deeplinkUrl
+
         val params = getPBBAConfiguration(mapMock)!!
 
-        assertEquals(params.mobileNumber, "123-123")
-        assertEquals(params.emailAddress, "example@mail.com")
-        assertEquals(params.deepLinkURL, "https://www.google.com")
-        assertEquals(params.deepLinkScheme, "deep://link")
+        assertEquals("123-123", params.mobileNumber)
+        assertEquals("example@mail.com", params.emailAddress)
+        assertEquals(deeplinkUrl, params.deepLinkURL)
+        assertEquals("deep://link", params.deepLinkScheme)
     }
 
     @Test

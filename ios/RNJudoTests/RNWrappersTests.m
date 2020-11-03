@@ -885,6 +885,28 @@
     XCTAssertThrows([RNWrappers configurationFromProperties:props]);
 }
 
+/*
+ * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [cardToken] property
+ *
+ * THEN:  the correct card token value should be extracted
+ */
+- (void)test_OnValidParameterFormat_FetchCardToken {
+    NSDictionary *props = [self propertiesWithConfigurationValue:@"hello" forKey:@"cardToken"];
+    NSString *cardToken = [RNWrappers cardTokenFromProperties:props];
+    XCTAssertEqual(cardToken, @"hello");
+}
+
+/*
+ * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [receiptId] property
+ *
+ * THEN:  the correct receipt ID value should be extracted
+ */
+- (void)test_OnValidParameterFormat_FetchReceiptId {
+    NSDictionary *props = [self propertiesWithConfigurationValue:@"hello" forKey:@"receiptId"];
+    NSString *receiptId = [RNWrappers receiptIdFromProperties:props];
+    XCTAssertEqual(receiptId, @"hello");
+}
+
 #pragma mark - Helpers
 
 - (NSMutableDictionary *)propertiesByChangingValue:(id)value

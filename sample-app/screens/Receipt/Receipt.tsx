@@ -10,9 +10,9 @@ import {
   SafeAreaView,
   Image
 } from 'react-native'
-import { ReceiptListItem } from './ReceiptProps'
+import ReceiptProps, { ReceiptListItem } from './ReceiptProps'
 
-export default class Receipt extends Component {
+export default class Receipt extends Component<ReceiptProps> {
 
   handleListItemPressed(item: ReceiptListItem) {
     this.props.navigation.push('Receipt', { receipt: item.value })

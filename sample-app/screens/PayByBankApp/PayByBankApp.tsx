@@ -9,8 +9,9 @@ import {
 import JudoPay, { JudoPBBAButton } from 'judo-react-native'
 import { isIos } from '../../helpers/utils'
 import { TouchableOpacity as AndroidTouchableOpacity } from 'react-native-gesture-handler'
+import PayByBankAppProps from "./PayByBankAppProps";
 
-export default class PayByBankApp extends Component {
+export default class PayByBankApp extends Component<PayByBankAppProps> {
   constructor(props: any) {
     super(props)
     this.invokePayByBankApp = this.invokePayByBankApp.bind(this)
@@ -24,7 +25,7 @@ export default class PayByBankApp extends Component {
       const response = await judo.invokePayByBankApp(configuration)
       if (!response) return
 
-      this.props.navigation.navigate('Receipt', { receipt: response })
+      this.props.navigation.pop()
     } catch (error) {
       console.log(error)
     }

@@ -97,6 +97,15 @@
 + (NSString *)cardTokenFromProperties:(NSDictionary *)properties;
 
 /**
+* A method that returns the receipt ID contained in the properties dictionary
+*
+* @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
+*
+* @returns an optional receipt ID NSString instance
+*/
++ (NSString *)receiptIdFromProperties:(NSDictionary *)properties;
+
+/**
  * A method that converts the JPResponse properties into a NSDictionary format to be passed back to the Javascript side
  *
  * @param response - the JPResponse instance that contains the response details
