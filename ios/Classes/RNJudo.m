@@ -38,6 +38,15 @@ typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
     JudoSDKInvocationTypePaymentMethods
 };
 
+@interface RNJudo ()
+
+@property (nonatomic, strong) JudoKit *judoKit;
+@property (nonatomic, strong) JPApiService *apiService;
+@property (nonatomic, strong) JP3DSService *threeDSService;
+@property (nonatomic, strong) JPCompletionBlock completionBlock;
+
+@end
+
 @implementation RNJudo
 
 RCT_EXPORT_MODULE();
@@ -86,21 +95,31 @@ RCT_REMAP_METHOD(performTokenTransaction,
                  performTokenTransactionWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-   JPApiService *apiService = [RNWrappers apiServiceFromProperties:properties];
-   JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
-   JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-   JPCompletionBlock completion = [self completionBlockWithResolve:resolve andReject:reject];
+    self.apiService = [RNWrappers apiServiceFromProperties:properties];
+    self.threeDSService = [[JP3DSService alloc] initWithApiService:self.apiService];
+    self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
 
-   NSString *cardToken = [RNWrappers cardTokenFromProperties:properties];
-   JPTokenRequest *tokenRequest = [[JPTokenRequest alloc] initWithConfiguration:configuration
-                                                                   andCardToken:cardToken];
+    JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
 
-   if (transactionMode == JPTransactionModePreAuth) {
-       [apiService invokePreAuthTokenPaymentWithRequest:tokenRequest andCompletion:completion];
-       return;
-   }
+    NSString *cardToken = [RNWrappers cardTokenFromProperties:properties];
+    JPTokenRequest *tokenRequest = [[JPTokenRequest alloc] initWithConfiguration:configuration
+                                                                    andCardToken:cardToken];
 
-   [apiService invokeTokenPaymentWithRequest:tokenRequest andCompletion:completion];
+    __weak typeof(self) weakSelf = self;
+
+    if (transactionMode == JPTransactionModePreAuth) {
+        [self.apiService invokePreAuthTokenPaymentWithRequest:tokenRequest
+                                                andCompletion:^(JPResponse *response, JPError *error) {
+            [weakSelf handleResponse:response andError:error];
+        }];
+        return;
+    }
+
+    [self.apiService invokeTokenPaymentWithRequest:tokenRequest
+                                     andCompletion:^(JPResponse *response, JPError *error) {
+        [weakSelf handleResponse:response andError:error];
+    }];
 }
 
 RCT_REMAP_METHOD(fetchTransactionDetails,
@@ -108,12 +127,12 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
                  fetchTransactionDetailsWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    JPApiService *apiService = [RNWrappers apiServiceFromProperties:properties];
-    JPCompletionBlock completion = [self completionBlockWithResolve:resolve andReject:reject];
+    self.apiService = [RNWrappers apiServiceFromProperties:properties];
+    self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
 
     NSString *receiptId = [RNWrappers receiptIdFromProperties:properties];
 
-    [apiService fetchTransactionWithReceiptId:receiptId completion:completion];
+    [self.apiService fetchTransactionWithReceiptId:receiptId completion:self.completionBlock];
 }
 
 //----------------------------------------------
@@ -126,43 +145,31 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
               andRejecter:(RCTPromiseRejectBlock)reject {
     @try {
         self.judoKit = [RNWrappers judoSessionFromProperties:properties];
+        self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
+
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-        JPCompletionBlock completion = ^(JPResponse *response, NSError *error) {
-            if (error) {
-
-                if (error.code == JPError.judoUserDidCancelError.code) {
-                    reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
-                    return;
-                }
-
-                reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
-            } else {
-                NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
-                resolve(mappedResponse);
-            }
-        };
 
         switch (invocationType) {
             case JudoSDKInvocationTypeTransaction: {
                 JPTransactionType type = [RNWrappers transactionTypeFromProperties:properties];
-                [self.judoKit invokeTransactionWithType:type configuration:configuration completion:completion];
+                [self.judoKit invokeTransactionWithType:type configuration:configuration completion:self.completionBlock];
                 break;
             }
 
             case JudoSDKInvocationTypeApplePay: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-                [self.judoKit invokeApplePayWithMode:mode configuration:configuration completion:completion];
+                [self.judoKit invokeApplePayWithMode:mode configuration:configuration completion:self.completionBlock];
                 break;
             }
 
             case JudoSDKInvocationTypePBBA: {
-                [self.judoKit invokePBBAWithConfiguration:configuration completion:completion];
+                [self.judoKit invokePBBAWithConfiguration:configuration completion:self.completionBlock];
                 break;
             }
 
             case JudoSDKInvocationTypePaymentMethods: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-                [self.judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:completion];
+                [self.judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:self.completionBlock];
                 break;
             }
 
@@ -178,6 +185,17 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
 
         reject(kJudoPromiseRejectionCode, exception.reason, error);
     }
+}
+
+- (void)handleResponse:(JPResponse *)response andError:(JPError *)error {
+
+    if (error.code != Judo3DSRequestError) {
+        self.completionBlock(response, error);
+        return;
+    }
+
+    JP3DSConfiguration *configuration = [JP3DSConfiguration configurationWithError:error];
+    [self.threeDSService invoke3DSecureWithConfiguration:configuration completion:self.completionBlock];
 }
 
 //----------------------------------------------

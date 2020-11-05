@@ -32,10 +32,11 @@ export default class PayByBankApp extends Component<PayByBankAppProps, State> {
   }
 
   async invokePayByBankApp() {
-    const { authorization, configuration } = this.props.route.params
+    const { authorization, configuration, isSandboxed } = this.props.route.params
 
     try {
       const judo = new JudoPay(authorization)
+      judo.isSandboxed = isSandboxed;
       const response = await judo.invokePayByBankApp(configuration)
       if (!response) return
 

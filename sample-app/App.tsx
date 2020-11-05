@@ -18,6 +18,7 @@ export type RootStackParamList = {
     PayByBankApp: {
         authorization: JudoAuthorization,
         configuration: JudoConfiguration,
+        isSandboxed: boolean
     };
     TokenPayments: {
         authorization: JudoAuthorization,
