@@ -94,6 +94,7 @@ export default class Home extends Component<HomeProps> {
   async handlePBBATransaction() {
     try {
       const judo = new JudoPay(this.getAuthorization())
+      judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokePayByBankApp(this.state.configuration)
       if (response) {
         this.props.navigation.navigate('Receipt', { receipt: response })
@@ -220,6 +221,7 @@ export default class Home extends Component<HomeProps> {
     this.props.navigation.navigate('PayByBankApp', {
       authorization: this.getAuthorization(),
       configuration: { ...this.state.configuration, reference: reference() },
+      isSandboxed: this.state.isSandboxed
     })
   }
 
