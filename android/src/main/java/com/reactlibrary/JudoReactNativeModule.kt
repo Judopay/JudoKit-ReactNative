@@ -4,17 +4,25 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.facebook.react.bridge.*
 import com.judokit.android.Judo
 import com.judokit.android.api.factory.JudoApiServiceFactory
 import com.judokit.android.api.model.response.JudoApiCallResult
 import com.judokit.android.api.model.response.Receipt
+import com.judokit.android.api.model.response.toCardVerificationModel
 import com.judokit.android.api.model.response.toJudoPaymentResult
+import com.judokit.android.api.model.response.toJudoResult
 import com.judokit.android.model.JudoPaymentResult
 import com.judokit.android.model.JudoResult
 import com.judokit.android.model.PaymentWidgetType
+import com.judokit.android.model.code
 import com.judokit.android.toTokenRequest
+import com.judokit.android.ui.cardverification.THREE_DS_ONE_DIALOG_FRAGMENT_TAG
+import com.judokit.android.ui.cardverification.ThreeDSOneCardVerificationDialogFragment
+import com.judokit.android.ui.cardverification.ThreeDSOneCompletionCallback
 import com.judokit.android.ui.common.BR_PBBA_RESULT
 import com.judokit.android.ui.common.PBBA_RESULT
 import com.judokit.android.ui.common.isBankingAppAvailable
@@ -127,7 +135,33 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
 
                     when (val data = response.body()?.toJudoPaymentResult(context.resources)) {
                         is JudoPaymentResult.Success -> {
-                            promise.resolve(getMappedResult(data.result))
+                            val receipt = (response.body() as JudoApiCallResult.Success).data
+                            if (receipt != null && receipt.is3dSecureRequired) {
+                                val callback = object : ThreeDSOneCompletionCallback {
+                                    override fun onSuccess(success: JudoPaymentResult) {
+                                        if (success is JudoPaymentResult.Success) {
+                                            promise.resolve(getMappedResult(success.result))
+                                        }
+                                    }
+
+                                    override fun onFailure(error: JudoPaymentResult) {
+                                        if (error is JudoPaymentResult.Error) {
+                                            promise.reject(JUDO_PROMISE_REJECTION_CODE, error.error.message)
+                                        } else if (error is JudoPaymentResult.UserCancelled) {
+                                            promise.reject(JUDO_PROMISE_REJECTION_CODE, error.error.message)
+                                        }
+                                    }
+                                }
+
+                                val fragment = ThreeDSOneCardVerificationDialogFragment(
+                                        service,
+                                        receipt.toCardVerificationModel(),
+                                        callback
+                                )
+                                fragment.show((context.currentActivity as FragmentActivity).supportFragmentManager, THREE_DS_ONE_DIALOG_FRAGMENT_TAG)
+                            } else {
+                                promise.resolve(getMappedResult(receipt?.toJudoResult()))
+                            }
                         }
                         is JudoPaymentResult.Error -> {
                             promise.reject(JUDO_PROMISE_REJECTION_CODE, data.error.message)
