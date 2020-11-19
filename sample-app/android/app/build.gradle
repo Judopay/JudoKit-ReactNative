@@ -122,7 +122,7 @@ android {
         applicationId "com.judopay.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode 17
         versionName "1.0"
         multiDexEnabled true
     }
@@ -176,7 +176,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     implementation 'com.readystatesoftware.chuck:library:1.1.0'
-    implementation 'com.judokit.android:judokit-android:2.0.7'
+    implementation 'com.judokit.android:judokit-android:2.0.8'
     implementation 'cards.pay:paycardsrecognizer:1.1.0'
 
     if (enableHermes) {
