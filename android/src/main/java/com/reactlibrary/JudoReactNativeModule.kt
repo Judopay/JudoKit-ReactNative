@@ -171,17 +171,11 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
     private fun handleThreeDSAuthentication(promise: Promise, service: JudoApiService, receipt: Receipt) {
         val callback = object : ThreeDSOneCompletionCallback {
             override fun onSuccess(success: JudoPaymentResult) {
-                if (success is JudoPaymentResult.Success) {
-                    promise.resolve(getMappedResult(success.result))
-                }
+                handleSuccessfulThreeDSTransaction(success, promise)
             }
 
             override fun onFailure(error: JudoPaymentResult) {
-                if (error is JudoPaymentResult.Error) {
-                    promise.reject(JUDO_PROMISE_REJECTION_CODE, error.error.message)
-                } else if (error is JudoPaymentResult.UserCancelled) {
-                    promise.reject(JUDO_PROMISE_REJECTION_CODE, error.error.message)
-                }
+                handleFailedThreeDSTransaction(error, promise)
             }
         }
 
@@ -191,5 +185,21 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
                 callback
         )
         fragment.show((context.currentActivity as FragmentActivity).supportFragmentManager, THREE_DS_ONE_DIALOG_FRAGMENT_TAG)
+    }
+
+    private fun handleFailedThreeDSTransaction(error: JudoPaymentResult, promise: Promise) {
+        when (error) {
+            is JudoPaymentResult.Error -> promise.reject(JUDO_PROMISE_REJECTION_CODE, error.error.message)
+            is JudoPaymentResult.UserCancelled -> promise.reject(JUDO_PROMISE_REJECTION_CODE, error.error.message)
+            else -> promise.reject(JUDO_PROMISE_REJECTION_CODE, "The transaction was unsuccessful")
+        }
+    }
+
+    private fun handleSuccessfulThreeDSTransaction(success: JudoPaymentResult, promise: Promise) {
+        if (success is JudoPaymentResult.Success) {
+            promise.resolve(getMappedResult(success.result))
+        } else {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, "Unknown error occured")
+        }
     }
 }
