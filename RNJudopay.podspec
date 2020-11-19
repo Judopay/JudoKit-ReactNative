@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/Classes/**/*.{h,m}"
   s.requires_arc = true
   s.dependency "React"
-  s.dependency "JudoKit-iOS", "2.1.3"
+  s.dependency "JudoKit-iOS", "2.2.1"
 
   s.test_spec 'RNJudoTests' do |test_spec|
     test_spec.source_files = 'ios/RNJudoTests/**/*.{h,m}'
