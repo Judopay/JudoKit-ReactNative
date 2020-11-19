@@ -4,17 +4,24 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.fragment.app.FragmentActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.facebook.react.bridge.*
 import com.judokit.android.Judo
+import com.judokit.android.api.JudoApiService
 import com.judokit.android.api.factory.JudoApiServiceFactory
 import com.judokit.android.api.model.response.JudoApiCallResult
 import com.judokit.android.api.model.response.Receipt
+import com.judokit.android.api.model.response.toCardVerificationModel
 import com.judokit.android.api.model.response.toJudoPaymentResult
+import com.judokit.android.api.model.response.toJudoResult
 import com.judokit.android.model.JudoPaymentResult
 import com.judokit.android.model.JudoResult
 import com.judokit.android.model.PaymentWidgetType
 import com.judokit.android.toTokenRequest
+import com.judokit.android.ui.cardverification.THREE_DS_ONE_DIALOG_FRAGMENT_TAG
+import com.judokit.android.ui.cardverification.ThreeDSOneCardVerificationDialogFragment
+import com.judokit.android.ui.cardverification.ThreeDSOneCompletionCallback
 import com.judokit.android.ui.common.BR_PBBA_RESULT
 import com.judokit.android.ui.common.PBBA_RESULT
 import com.judokit.android.ui.common.isBankingAppAvailable
@@ -127,7 +134,12 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
 
                     when (val data = response.body()?.toJudoPaymentResult(context.resources)) {
                         is JudoPaymentResult.Success -> {
-                            promise.resolve(getMappedResult(data.result))
+                            val receipt = (response.body() as JudoApiCallResult.Success).data
+                            if (receipt != null && receipt.is3dSecureRequired) {
+                                handleThreeDSAuthentication(promise, service, receipt)
+                            } else {
+                                promise.resolve(getMappedResult(receipt?.toJudoResult()))
+                            }
                         }
                         is JudoPaymentResult.Error -> {
                             promise.reject(JUDO_PROMISE_REJECTION_CODE, data.error.message)
@@ -154,5 +166,41 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
         listener.transactionPromise = promise
         val intent = configuration.toJudoActivityIntent(it)
         it.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE)
+    }
+
+    private fun handleThreeDSAuthentication(promise: Promise, service: JudoApiService, receipt: Receipt) {
+        val callback = object : ThreeDSOneCompletionCallback {
+            override fun onSuccess(success: JudoPaymentResult) {
+                handleSuccessfulThreeDSTransaction(success, promise)
+            }
+
+            override fun onFailure(error: JudoPaymentResult) {
+                handleFailedThreeDSTransaction(error, promise)
+            }
+        }
+
+        val fragment = ThreeDSOneCardVerificationDialogFragment(
+                service,
+                receipt.toCardVerificationModel(),
+                callback
+        )
+        fragment.show((context.currentActivity as FragmentActivity).supportFragmentManager, THREE_DS_ONE_DIALOG_FRAGMENT_TAG)
+    }
+
+    private fun handleFailedThreeDSTransaction(error: JudoPaymentResult, promise: Promise) {
+        val message = when (error) {
+            is JudoPaymentResult.Error -> error.error.message
+            is JudoPaymentResult.UserCancelled -> error.error.message
+            else -> "The transaction was unsuccessful"
+        }
+        promise.reject(JUDO_PROMISE_REJECTION_CODE, message)
+    }
+
+    private fun handleSuccessfulThreeDSTransaction(success: JudoPaymentResult, promise: Promise) {
+        if (success is JudoPaymentResult.Success) {
+            promise.resolve(getMappedResult(success.result))
+        } else {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, "Unknown error occured")
+        }
     }
 }
