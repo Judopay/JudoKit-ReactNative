@@ -188,11 +188,12 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
     }
 
     private fun handleFailedThreeDSTransaction(error: JudoPaymentResult, promise: Promise) {
-        when (error) {
-            is JudoPaymentResult.Error -> promise.reject(JUDO_PROMISE_REJECTION_CODE, error.error.message)
-            is JudoPaymentResult.UserCancelled -> promise.reject(JUDO_PROMISE_REJECTION_CODE, error.error.message)
-            else -> promise.reject(JUDO_PROMISE_REJECTION_CODE, "The transaction was unsuccessful")
+        val message = when (error) {
+            is JudoPaymentResult.Error -> error.error.message
+            is JudoPaymentResult.UserCancelled -> error.error.message
+            else -> "The transaction was unsuccessful"
         }
+        promise.reject(JUDO_PROMISE_REJECTION_CODE, message)
     }
 
     private fun handleSuccessfulThreeDSTransaction(success: JudoPaymentResult, promise: Promise) {
