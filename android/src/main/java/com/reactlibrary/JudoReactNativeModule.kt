@@ -119,7 +119,7 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
                 return
             }
 
-            service.tokenPayment(judo.toTokenRequest(cardToken, securityCode)).enqueue(object : Callback<JudoApiCallResult<Receipt>> {
+            val tokenTransactionCallback = object : Callback<JudoApiCallResult<Receipt>> {
 
                 override fun onFailure(call: Call<JudoApiCallResult<Receipt>>, t: Throwable) {
                     promise.reject(t)
@@ -146,7 +146,13 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
                         }
                     }
                 }
-            })
+            }
+
+            when (judo.paymentWidgetType) {
+                PaymentWidgetType.CARD_PAYMENT -> service.tokenPayment(judo.toTokenRequest(cardToken, securityCode)).enqueue(tokenTransactionCallback)
+                PaymentWidgetType.PRE_AUTH -> service.preAuthTokenPayment(judo.toTokenRequest(cardToken, securityCode)).enqueue(tokenTransactionCallback)
+                else -> promise.reject(JUDO_PROMISE_REJECTION_CODE, "${judo.paymentWidgetType.name} is not valid for token transactions")
+            }
 
         } catch (exception: Exception) {
             promise.reject(exception)
