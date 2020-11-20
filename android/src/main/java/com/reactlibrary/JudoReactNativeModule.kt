@@ -151,7 +151,7 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
             when (judo.paymentWidgetType) {
                 PaymentWidgetType.CARD_PAYMENT -> service.tokenPayment(judo.toTokenRequest(cardToken, securityCode)).enqueue(tokenTransactionCallback)
                 PaymentWidgetType.PRE_AUTH -> service.preAuthTokenPayment(judo.toTokenRequest(cardToken, securityCode)).enqueue(tokenTransactionCallback)
-                else -> promise.reject(JUDO_PROMISE_REJECTION_CODE, "${judo.paymentWidgetType.name} is not valid for token transactions")
+                else -> promise.reject(JUDO_PROMISE_REJECTION_CODE, "${judo.paymentWidgetType.name} payment widget type is not valid for token transactions")
             }
 
         } catch (exception: Exception) {
