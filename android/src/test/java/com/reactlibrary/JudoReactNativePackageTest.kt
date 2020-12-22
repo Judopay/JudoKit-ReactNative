@@ -1,7 +1,9 @@
 package com.reactlibrary
 
 import com.facebook.react.bridge.ReactApplicationContext
+import io.mockk.every
 import io.mockk.justRun
+import io.mockk.mockk
 import io.mockk.mockkClass
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertSame
@@ -10,7 +12,9 @@ import org.junit.Test
 
 class JudoReactNativePackageTest {
 
-    private val reactContextMock: ReactApplicationContext = mockkClass(ReactApplicationContext::class)
+    private val reactContextMock: ReactApplicationContext = mockkClass(ReactApplicationContext::class) {
+        every { applicationContext } returns mockk(relaxed = true)
+    }
     private lateinit var sut: JudoReactNativePackage
 
     @Before
