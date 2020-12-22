@@ -1,0 +1,43 @@
+version: 2.1
+
+executors:
+  macos:
+    macos:
+      xcode: 11.3.0
+
+jobs:
+  yarn_install:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-{{ checksum "package.json" }}
+      - run:
+          name: Yarn Install
+          command: yarn install
+      - save_cache:
+          key: judokit-reactnative-{{ checksum "package.json" }}
+          paths: node_modules
+  build_sdk:
+    executor: macos
+    steps:
+      - restore_cache:
+          keys:
+            - judokit-reactnative-{{ checksum "package.json" }}
+      - run:
+          name: Yarn Bundle
+          command: yarn react-native bundle --entry-file JudoPay.tsx --bundle-output bundle.js
+    - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - yarn_install
+      - build_sdk:
+          requires:
+            - yarn_install
