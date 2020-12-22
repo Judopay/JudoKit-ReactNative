@@ -22,6 +22,7 @@ jobs:
   build_sdk:
     executor: macos
     steps:
+      - checkout
       - restore_cache:
           keys:
             - judokit-reactnative-{{ checksum "package.json" }}
@@ -32,6 +33,26 @@ jobs:
             root: .
             paths:
               - .
+  build_sdk_ios:
+    executor: macos
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Xcode Build
+          command: |
+            cd ios
+            xcodebuild clean build \
+              -workspace RNJudo.xcworkspace \
+              -scheme RNJudo \
+              -configuration Release \
+              -sdk iphonesimulator \
+              -derivedDataPath DerivedData
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ios/DerivedData
 
 workflows:
   version: 2
