@@ -28,11 +28,10 @@ jobs:
       - run:
           name: Yarn Bundle
           command: yarn react-native bundle --entry-file JudoPay.tsx --bundle-output bundle.js
-    - persist_to_workspace:
-          root: .
-          paths:
-            - .
-            
+      - persist_to_workspace:
+            root: .
+            paths:
+              - .
 
 workflows:
   version: 2
