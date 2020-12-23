@@ -404,6 +404,9 @@ workflows:
       - build_sample_ios:
           requires:
             - pod_install_sample
+      - build_sdk_android:
+          requires:
+            - yarn_install
       - build_sample_android:
           context: shared-secrets
       - unit_test_sdk_js:
