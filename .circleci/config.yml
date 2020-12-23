@@ -144,15 +144,16 @@ jobs:
           command: echo "$REACTNATIVE_ANDROID_GOOGLE_SERVICES_JSON" | base64 -d > sample-app/android/google-services.json
       - run:
           name: Prepare Signing Key
+          working_directory: sample-app/android
           command: |
             echo "$ANDROID_SIGNING_PRIVATE_KEY" | base64 -d > signing.key
             echo "$ANDROID_SIGNING_CERTIFICATE" | base64 -d > signing.crt
             openssl pkcs12 -export -inkey signing.key -in signing.crt -out signing.p12 -passout "pass:$ANDROID_KEYSTORE_PASSWORD"
             keytool -importkeystore -srckeystore signing.p12 -srcstoretype pkcs12 -srcstorepass "$ANDROID_KEYSTORE_PASSWORD" -destkeystore signing.jks -deststoretype JKS -storepass "$ANDROID_KEYSTORE_PASSWORD" -noprompt 2>/dev/null
-            echo "storeFile=${PWD}/signing.jks" > ./sample-app/android/keystore.properties
-            echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}" >> ./sample-app/android/keystore.properties
-            echo "keyAlias=1" >> ./sample-app/android/keystore.properties
-            echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> ./sample-app/android/keystore.properties
+            echo "storeFile=${PWD}/signing.jks" > keystore.properties
+            echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
+            echo "keyAlias=1" >> keystore.properties
+            echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
       - run:
           name: Build Sample App APK
           command: |
@@ -402,7 +403,8 @@ workflows:
       - build_sample_ios:
           requires:
             - pod_install_sample
-      - build_sample_android
+      - build_sample_android:
+          context: shared-secrets
       - unit_test_sdk_js:
           requires:
             - build_sdk_js
