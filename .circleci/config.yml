@@ -7,6 +7,9 @@ executors:
   macos:
     macos:
       xcode: 11.3.0
+  android:
+    docker:
+      - image: circleci/android:api-29
 
 jobs:
   yarn_install:
@@ -38,6 +41,22 @@ jobs:
           paths:
             - ios/Pods
             - ios/Podfile.lock
+  pod_install_sample:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+      - run:
+          name: Pod Install
+          working_directory: sample-app/ios
+          command: pod install
+      - save_cache:
+          key: judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+          paths:
+            - sample-app/ios/Pods
+            - sample-app/ios/Podfile.lock
   build_sdk_js:
     executor: node
     steps:
@@ -73,7 +92,79 @@ jobs:
             root: .
             paths:
               - ios/DerivedData
-  unit_test_sdk:
+  build_sdk_android:
+    executor: android
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
+      - run:
+          name: Gradle Build
+          command: ./gradlew clean build
+      - save_cache:
+          key: judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
+          paths:
+            - ./build/cache
+      - persist_to_workspace:
+          root: .
+          paths:
+            - judokit-android/build
+  build_sample_ios:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+      - run:
+          name: Build iOS Sample
+          working_directory: sample-app/ios
+          command: |
+            xcodebuild clean build \
+              -project RNJudo.xcodeproj \
+              -scheme RNJudo \
+              -configuration Release \
+              -sdk iphonesimulator \
+              -derivedDataPath DerivedData
+      - persist_to_workspace:
+          root: .
+          paths:
+            - sample-app/ios/DerivedData
+  build_sample_android:
+    executor: android
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-gradle-{{ checksum "sample-app/android/build.gradle" }}
+      - run:
+          name: Prepare Google Services Json
+          command: echo "$REACTNATIVE_ANDROID_GOOGLE_SERVICES_JSON" | base64 -d > sample-app/android/google-services.json
+      - run:
+          name: Prepare Signing Key
+          command: |
+            echo "$ANDROID_SIGNING_PRIVATE_KEY" | base64 -d > signing.key
+            echo "$ANDROID_SIGNING_CERTIFICATE" | base64 -d > signing.crt
+            openssl pkcs12 -export -inkey signing.key -in signing.crt -out signing.p12 -passout "pass:$ANDROID_KEYSTORE_PASSWORD"
+            keytool -importkeystore -srckeystore signing.p12 -srcstoretype pkcs12 -srcstorepass "$ANDROID_KEYSTORE_PASSWORD" -destkeystore signing.jks -deststoretype JKS -storepass "$ANDROID_KEYSTORE_PASSWORD" -noprompt 2>/dev/null
+            echo "storeFile=${PWD}/signing.jks" > ./sample-app/android/keystore.properties
+            echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}" >> ./sample-app/android/keystore.properties
+            echo "keyAlias=1" >> ./sample-app/android/keystore.properties
+            echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> ./sample-app/android/keystore.properties
+      - run:
+          name: Build Sample App APK
+          command: |
+            ./gradlew assembleRelease
+      - save_cache:
+          key: judokit-reactnative-sample-gradle-{{ checksum "sample-app/android/build.gradle" }}
+          paths:
+            - ./sample-app/android/build/cache
+      - persist_to_workspace:
+          root: .
+          paths:
+            - sample-app/android/build
+  unit_test_sdk_js:
     executor: node
     steps:
       - checkout
@@ -89,6 +180,164 @@ jobs:
             root: .
             paths:
               - coverage
+  unit_test_sdk_ios:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install Sonar Build Wrapper
+          command: |
+            curl -o /var/tmp/build-wrapper-macosx-x86.zip https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip
+            unzip /var/tmp/build-wrapper-macosx-x86.zip -d /var/tmp
+            sudo mkdir -p /opt/build-wrapper-macosx/bin
+            sudo mv /var/tmp/build-wrapper-macosx-x86/* /opt/build-wrapper-macosx/bin/
+            rm -rf /var/tmp/build-wrapper-macosx-x86
+            ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
+      - run:
+          name: Run Unit Tests
+          working_directory: ios
+          command: |
+            build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
+              -workspace RNJudo.xcworkspace \
+              -scheme RNJudo \
+              -destination 'platform=iOS Simulator,name=iPhone 11' \
+              -derivedDataPath DerivedData \
+              test
+      - run:
+          name: Covert XCode Coverage Reports to SonarQube Format
+          working_directory: ios
+          command: |
+            curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
+            chmod +x xccov-to-sonarqube-generic.sh
+            ./xccov-to-sonarqube-generic.sh DerivedData/Logs/Test/*.xcresult/ > build-wrapper-output/sonarqube-generic-coverage.xml
+            rm xccov-to-sonarqube-generic.sh
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ios/DerivedData
+            - ios/build-wrapper-output
+  unit_test_sdk_android:
+    executor: android
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
+      - attach_workspace:
+          at: /home/circleci/project
+      - run:
+          name: Run Unit Tests
+          working_directory: android
+          command: ./gradlew test generateCodeAnalysisReport
+      - persist_to_workspace:
+          root: .
+          paths:
+            - android/build
+  unit_test_sample_ios:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install Sonar Build Wrapper
+          command: |
+            curl -o /var/tmp/build-wrapper-macosx-x86.zip https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip
+            unzip /var/tmp/build-wrapper-macosx-x86.zip -d /var/tmp
+            sudo mkdir -p /opt/build-wrapper-macosx/bin
+            sudo mv /var/tmp/build-wrapper-macosx-x86/* /opt/build-wrapper-macosx/bin/
+            rm -rf /var/tmp/build-wrapper-macosx-x86
+            ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
+      - run:
+          name: Run Unit Tests
+          working_directory: sample-app/ios
+          command: |
+            build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
+              -project RNJudo.xcodeproj \
+              -scheme RNJudo \
+              -destination 'platform=iOS Simulator,name=iPhone 11' \
+              -derivedDataPath DerivedData \
+              test
+      - run:
+          name: Covert XCode Coverage Reports to SonarQube Format
+          working_directory: sample-app/ios
+          command: |
+            curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
+            chmod +x xccov-to-sonarqube-generic.sh
+            ./xccov-to-sonarqube-generic.sh DerivedData/Logs/Test/*.xcresult/ > build-wrapper-output/sonarqube-generic-coverage.xml
+            rm xccov-to-sonarqube-generic.sh
+      - persist_to_workspace:
+          root: .
+          paths:
+            - sample-app/ios/DerivedData
+            - sample-app/ios/build-wrapper-output
+  unit_test_sample_android:
+    executor: android
+    steps:
+      - attach_workspace:
+          at: /home/circleci/project
+      - run:
+          name: Run Unit Tests
+          working_directory: sample-app/android
+          command: ./gradlew test
+  release_sample_ios:
+    executor: macos
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install Firebase CLI
+          command: curl -sL https://firebase.tools | bash
+      - run:
+          name: Store Google Service Account
+          command: |
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+      - run:
+          name: Create Release Notes
+          command: echo "$(git log -1 --pretty=format:"%b")" > ./notes.txt
+      - run:
+          name: Distribute Sample App
+          command: |
+            export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json
+            firebase appdistribution:distribute \
+              somepackage \
+              --app "$REACTNATIVE_IOS_FIREBASE_APP_ID" \
+              --groups "default-testers" \
+              --release-notes-file ./notes.txt
+  release_sample_android:
+    executor: android
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install Firebase CLI
+          command: curl -sL https://firebase.tools | bash
+      - run:
+          name: Store Google Service Account
+          command: |
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+      - run:
+          name: Create Release Notes
+          command: echo "$(git log -1 --pretty=format:"%b")" > ./notes.txt
+      - run:
+          name: Distribute Sample App
+          command: |
+            export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json
+            firebase appdistribution:distribute \
+              sample-app/android/build/outputs/apk/release/somepackage.apk \
+              --app "$REACTNATIVE_ANDROID_FIREBASE_APP_ID" \
+              --groups "default-testers" \
+              --release-notes-file ./notes.txt
   sonar_scan:
     docker:
       - image: gcr.io/opnf-management/sonar-scanner:latest
@@ -137,6 +386,7 @@ workflows:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
       - pod_install
+      - pod_install_sample
       - build_sdk_js:
           requires:
             - yarn_install
@@ -147,13 +397,52 @@ workflows:
       - build_sdk_ios:
           requires:
             - pod_install
-      - unit_test_sdk:
+      - build_sdk_android
+      - build_sample_ios:
+          requires:
+            - pod_install_sample
+      - build_sample_android
+      - unit_test_sdk_js:
           requires:
             - build_sdk_js
+      - unit_test_sdk_ios:
+          requires:
+            - build_sdk_ios
+      - unit_test_sdk_android:
+          requires:
+            - build_sdk_android
+      - unit_test_sample_ios:
+          requires:
+            - build_sample_ios
+      - init_test_sample_android:
+          requires:
+            - build_sample_android
       - sonar_scan:
           context: shared-secrets
           requires:
-            - unit_test_sdk
+            - unit_test_sdk_js
+      - release_sample_ios:
+          context: shared-secrets
+          requires:
+            - unit_test_sample_ios
+          filters:
+            branches:
+              only:
+                - master
+      - release_sample_android:
+          context: shared-secrets
+          requires:
+            - unit_test_sample_android
+          filters:
+            branches:
+              only:
+                - master
+      - report_to_jira:
+          context: shared-secrets
+          environment: staging
+          requires:
+            - release_sample_ios
+            - release_sample_android
       - release_sdk:
           context: shared-secrets
           requires:
