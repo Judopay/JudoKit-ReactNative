@@ -9,7 +9,7 @@ executors:
       xcode: 11.3.0
   android:
     docker:
-      - image: cimg/node:12.16
+      - image: circleci/android:api-29
 
 jobs:
   yarn_install:
