@@ -5,7 +5,7 @@
     "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
     "main": "JudoPay.tsx",
     "scripts": {
-        "test": "jest --coverage && open coverage/lcov-report/index.html",
+        "test": "jest --coverage",
         "lint": "tsc && eslint '*/**/*.{js,ts,tsx}' --quiet"
     },
     "files": [
