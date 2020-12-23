@@ -25,6 +25,20 @@ jobs:
       - save_cache:
           key: judokit-reactnative-{{ checksum "package.json" }}
           paths: node_modules
+  yarn_install_sample:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-{{ checksum "package.json" }}
+      - run:
+          name: Yarn Install
+          command: yarn install
+          working_directory: sample-app
+      - save_cache:
+          key: judokit-reactnative-{{ checksum "package.json" }}
+          paths: node_modules
   pod_install:
     executor: macos
     steps:
@@ -388,6 +402,11 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
+      - yarn_install_sample:
+          filters:
+            tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
       - pod_install
       - pod_install_sample
       - build_sdk_js:
@@ -409,7 +428,7 @@ workflows:
       - build_sample_android:
           context: shared-secrets
           requires:
-            - yarn_install
+            - yarn_install_sample
       - unit_test_sdk_js:
           requires:
             - build_sdk_js
