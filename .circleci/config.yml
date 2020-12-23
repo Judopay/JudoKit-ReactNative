@@ -21,7 +21,7 @@ jobs:
             - judokit-reactnative-{{ checksum "package.json" }}
       - run:
           name: Yarn Install
-          command: yarn install && cd sample-app/ && yarn install
+          command: yarn cache clean && yarn install && cd sample-app/ && yarn install
       - save_cache:
           key: judokit-reactnative-{{ checksum "package.json" }}
           paths: node_modules
