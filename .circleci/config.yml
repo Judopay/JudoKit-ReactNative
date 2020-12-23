@@ -407,6 +407,8 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
+          requires:
+            - pod_install
       - pod_install
       - pod_install_sample
       - build_sdk_js:
