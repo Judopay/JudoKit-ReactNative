@@ -156,6 +156,7 @@ jobs:
             echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
       - run:
           name: Build Sample App APK
+          working_directory: sample-app/android
           command: |
             ./gradlew assembleRelease
       - save_cache:
