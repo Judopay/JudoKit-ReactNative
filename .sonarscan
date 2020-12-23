@@ -1,1 +1,2 @@
-sonar.exclusions=node_modules,ios,android,sample-app
+sonar.exclusions=__tests__,node_modules,ios,android,sample-app
+sonar.tests=__tests__
