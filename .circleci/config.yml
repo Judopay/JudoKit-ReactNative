@@ -136,13 +136,17 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
-      - build_sdk:
+      - pod_install
+      - build_sdk_js:
           requires:
             - yarn_install
           filters:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
+      - build_sdk_ios:
+          requires:
+            - pod_install
       - unit_test_sdk:
           requires:
             - build_sdk
