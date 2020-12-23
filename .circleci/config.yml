@@ -9,7 +9,7 @@ executors:
       xcode: 11.3.0
   android:
     docker:
-      - image: circleci/android:api-29
+      - image: cimg/node:12.16
 
 jobs:
   yarn_install:
@@ -402,13 +402,6 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
-      - yarn_install_sample:
-          filters:
-            tags:
-              only:
-                - /^v[0-9]+(\.[0-9]+)*$/
-          requires:
-            - pod_install
       - pod_install
       - pod_install_sample
       - build_sdk_js:
@@ -423,14 +416,12 @@ workflows:
             - pod_install
       - build_sdk_android:
           requires:
-            - build_sdk_js
+            - yarn_install
       - build_sample_ios:
           requires:
             - pod_install_sample
       - build_sample_android:
           context: shared-secrets
-          requires:
-            - yarn_install_sample
       - unit_test_sdk_js:
           requires:
             - build_sdk_js
