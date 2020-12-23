@@ -414,7 +414,7 @@ workflows:
       - unit_test_sample_ios:
           requires:
             - build_sample_ios
-      - init_test_sample_android:
+      - unit_test_sample_android:
           requires:
             - build_sample_android
       - sonar_scan:
