@@ -45,6 +45,10 @@ jobs:
           command: |
             yarn lint || true
             yarn test
+      - persist_to_workspace:
+            root: .
+            paths:
+              - coverage
   sonar_scan:
     docker:
       - image: gcr.io/opnf-management/sonar-scanner:latest
