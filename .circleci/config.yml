@@ -149,7 +149,7 @@ workflows:
             - pod_install
       - unit_test_sdk:
           requires:
-            - build_sdk
+            - build_sdk_js
       - sonar_scan:
           context: shared-secrets
           requires:
