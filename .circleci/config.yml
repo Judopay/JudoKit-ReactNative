@@ -25,20 +25,6 @@ jobs:
       - save_cache:
           key: judokit-reactnative-{{ checksum "package.json" }}
           paths: node_modules
-  yarn_install_sample:
-    executor: node
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-{{ checksum "package.json" }}
-      - run:
-          name: Yarn Install
-          command: yarn install
-          working_directory: sample-app
-      - save_cache:
-          key: judokit-reactnative-{{ checksum "package.json" }}
-          paths: node_modules
   pod_install:
     executor: macos
     steps:
