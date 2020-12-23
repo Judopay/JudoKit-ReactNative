@@ -400,9 +400,7 @@ workflows:
       - build_sdk_ios:
           requires:
             - pod_install
-      - build_sdk_android:
-          requires:
-            - yarn_install
+      - build_sdk_android
       - build_sample_ios:
           requires:
             - pod_install_sample
