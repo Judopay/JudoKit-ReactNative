@@ -1,13 +1,13 @@
 version: 2.1
 
 executors:
-  macos:
-    macos:
-      xcode: 11.3.0
+  node:
+    docker:
+      - image: circleci/node
 
 jobs:
   yarn_install:
-    executor: macos
+    executor: node
     steps:
       - checkout
       - restore_cache:
@@ -20,7 +20,7 @@ jobs:
           key: judokit-reactnative-{{ checksum "package.json" }}
           paths: node_modules
   build_sdk:
-    executor: macos
+    executor: node
     steps:
       - checkout
       - restore_cache:
@@ -32,33 +32,96 @@ jobs:
       - persist_to_workspace:
             root: .
             paths:
-              - .
-  build_sdk_ios:
-    executor: macos
+              - bundle.js
+  unit_test_sdk:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-{{ checksum "package.json" }}
+      - run:
+          name: Yarn Test
+          command: |
+            yarn lint || true
+            yarn test
+  sonar_scan:
+    docker:
+      - image: gcr.io/opnf-management/sonar-scanner:latest
+        auth:
+          username: _json_key
+          password: $GCLOUD_SERVICE_KEY
+    working_directory: /home/circleci/project
     steps:
       - checkout
       - attach_workspace:
-          at: ~/project
+          at: /home/circleci/project
+      - run: /opt/run-scan.sh
+  release_sdk:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /home/circleci/project
       - run:
-          name: Xcode Build
-          command: |
-            cd ios
-            xcodebuild clean build \
-              -workspace RNJudo.xcworkspace \
-              -scheme RNJudo \
-              -configuration Release \
-              -sdk iphonesimulator \
-              -derivedDataPath DerivedData
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ios/DerivedData
+          name: Release SDK
+          command: yarn publish
+  report_to_jira:
+    docker:
+      - image: gcr.io/opnf-management/deployer:latest
+        auth:
+          username: _json_key
+          password: $GCLOUD_SERVICE_KEY
+    parameters:
+      environment:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Report Deployment to Jira
+          environment:
+            ENVIRONMENT: << parameters.environment >>
+          command: /resources/scripts/report-status-to-jira.sh
 
 workflows:
   version: 2
   build:
     jobs:
-      - yarn_install
+      - yarn_install:
+          filters:
+            tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
       - build_sdk:
           requires:
             - yarn_install
+          filters:
+            tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
+      - unit_test_sdk:
+          requires:
+            - build_sdk
+      - sonar_scan:
+          context: shared-secrets
+          requires:
+            - unit_test_sdk
+      - release_sdk:
+          context: shared-secrets
+          requires:
+            - build_sdk
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
+      - report_to_jira:
+          context: shared-secrets
+          environment: prod
+          requires:
+            - release_sdk
+          tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
