@@ -9,7 +9,7 @@ executors:
       xcode: 11.3.0
   android:
     docker:
-      - image: reactnativecommunity/react-native-android
+      - image: circleci/android:api-29
 
 jobs:
   yarn_install:
