@@ -72,7 +72,7 @@ repositories {
     jcenter()
 
     maven { url "http://dl.bintray.com/judopay/maven" }
-    maven { url "$rootDir/../node_modules/react-native/android" }
+    maven { url "$projectDir/../node_modules/react-native/android" }
 }
 
 dependencies {
