@@ -421,6 +421,8 @@ workflows:
           context: shared-secrets
           requires:
             - unit_test_sdk_js
+            - unit_test_sdk_ios
+            - unit_test_sdk_android
       - release_sample_ios:
           context: shared-secrets
           requires:
