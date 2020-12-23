@@ -24,8 +24,7 @@ jobs:
           command: yarn install
       - save_cache:
           key: judokit-reactnative-{{ checksum "package.json" }}
-          paths:
-            - node_modules
+          paths: node_modules
   pod_install:
     executor: macos
     steps:
