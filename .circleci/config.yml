@@ -101,15 +101,16 @@ jobs:
             - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
       - run:
           name: Gradle Build
+          working_directory: android
           command: ./gradlew clean build
       - save_cache:
           key: judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
           paths:
-            - ./build/cache
+            - android/build/cache
       - persist_to_workspace:
           root: .
           paths:
-            - judokit-android/build
+            - android/build
   build_sample_ios:
     executor: macos
     steps:
