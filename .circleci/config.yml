@@ -4,6 +4,9 @@ executors:
   node:
     docker:
       - image: circleci/node
+  macos:
+    macos:
+      xcode: 11.3.0
 
 jobs:
   yarn_install:
@@ -19,7 +22,23 @@ jobs:
       - save_cache:
           key: judokit-reactnative-{{ checksum "package.json" }}
           paths: node_modules
-  build_sdk:
+  pod_install:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+      - run:
+          name: Pod Install
+          working_directory: ios
+          command: pod install
+      - save_cache:
+          key: judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+          paths:
+            - ios/Pods
+            - ios/Podfile.lock
+  build_sdk_js:
     executor: node
     steps:
       - checkout
@@ -33,6 +52,27 @@ jobs:
             root: .
             paths:
               - bundle.js
+  build_sdk_ios:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+      - run:
+          name: XCode Build
+          working_directory: ios
+          command: |
+            xcodebuild clean build \
+              -workspace RNJudo.xcworkspace \
+              -scheme RNJudo \
+              -configuration Release \
+              -sdk iphonesimulator \
+              -derivedDataPath DerivedData
+      - persist_to_workspace:
+            root: .
+            paths:
+              - ios/DerivedData
   unit_test_sdk:
     executor: node
     steps:
