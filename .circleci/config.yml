@@ -101,8 +101,7 @@ jobs:
             - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
       - run:
           name: Gradle Build
-          working_directory: android
-          command: ./gradlew clean build
+          command: yarn android
       - save_cache:
           key: judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
           paths:
@@ -400,7 +399,9 @@ workflows:
       - build_sdk_ios:
           requires:
             - pod_install
-      - build_sdk_android
+      - build_sdk_android:
+          requires:
+            - yarn_install
       - build_sample_ios:
           requires:
             - pod_install_sample
