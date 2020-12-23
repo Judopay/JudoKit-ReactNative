@@ -157,7 +157,7 @@ workflows:
       - release_sdk:
           context: shared-secrets
           requires:
-            - build_sdk
+            - build_sdk_js
           filters:
             branches:
               ignore:
