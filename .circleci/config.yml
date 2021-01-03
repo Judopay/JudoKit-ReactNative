@@ -432,6 +432,8 @@ workflows:
             - pod_install_sample
       - build_sample_android:
           context: shared-secrets
+          requires:
+            - yarn_install_sample
       - unit_test_sdk_js:
           requires:
             - build_sdk_js
