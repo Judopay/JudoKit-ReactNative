@@ -42,7 +42,7 @@ jobs:
             - ios/Pods
             - ios/Podfile.lock
   yarn_install_sample:
-    executor: node
+    executor: macos
     steps:
       - checkout
       - restore_cache:
