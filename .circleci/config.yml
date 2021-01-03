@@ -41,10 +41,27 @@ jobs:
           paths:
             - ios/Pods
             - ios/Podfile.lock
+  yarn_install_sample:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
+      - run:
+          name: Yarn Install
+          working_directory: sample-app
+          command: yarn install
+      - save_cache:
+          key: judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
+          paths: sample-app/node_modules
   pod_install_sample:
     executor: macos
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
       - restore_cache:
           keys:
             - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
@@ -117,6 +134,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
+            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
+      - restore_cache:
+          keys:
             - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
       - run:
           name: Build iOS Sample
@@ -136,6 +156,9 @@ jobs:
     executor: android
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
       - restore_cache:
           keys:
             - judokit-reactnative-sample-gradle-{{ checksum "sample-app/android/build.gradle" }}
@@ -389,7 +412,10 @@ workflows:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
       - pod_install
-      - pod_install_sample
+      - yarn_install_sample
+      - pod_install_sample:
+          requires:
+            - yarn_install_sample
       - build_sdk_js:
           requires:
             - yarn_install
