@@ -6,7 +6,7 @@ executors:
       - image: circleci/node
   macos:
     macos:
-      xcode: 11.3.0
+      xcode: 12.3.0
   android:
     docker:
       - image: circleci/android:api-29
@@ -25,37 +25,23 @@ jobs:
       - save_cache:
           key: judokit-reactnative-{{ checksum "package.json" }}
           paths: node_modules
-  pod_install:
-    executor: macos
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
-      - run:
-          name: Pod Install
-          working_directory: ios
-          command: pod install
-      - save_cache:
-          key: judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
-          paths:
-            - ios/Pods
-            - ios/Podfile.lock
+  # pod_install:
+  #   executor: macos
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+  #     - run:
+  #         name: Pod Install
+  #         working_directory: ios
+  #         command: pod install
+  #     - save_cache:
+  #         key: judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+  #         paths:
+  #           - ios/Pods
+  #           - ios/Podfile.lock
   yarn_install_sample:
-    executor: macos
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
-      - run:
-          name: Yarn Install
-          working_directory: sample-app
-          command: yarn install
-      - save_cache:
-          key: judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
-          paths: sample-app/node_modules
-  pod_install_sample:
     executor: macos
     steps:
       - checkout
@@ -66,12 +52,15 @@ jobs:
           keys:
             - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
       - run:
-          name: Pod Install
-          working_directory: sample-app/ios
-          command: pod install
+          name: Yarn Install
+          working_directory: sample-app
+          command: yarn install
+      - save_cache:
+          key: judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
+          paths: sample-app/node_modules
       - save_cache:
           key: judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
-          paths:
+          paths: 
             - sample-app/ios/Pods
             - sample-app/ios/Podfile.lock
   build_sdk_js:
@@ -88,46 +77,46 @@ jobs:
             root: .
             paths:
               - bundle.js
-  build_sdk_ios:
-    executor: macos
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
-      - run:
-          name: XCode Build
-          working_directory: ios
-          command: |
-            xcodebuild clean build \
-              -workspace RNJudo.xcworkspace \
-              -scheme RNJudo \
-              -configuration Release \
-              -sdk iphonesimulator \
-              -derivedDataPath DerivedData
-      - persist_to_workspace:
-            root: .
-            paths:
-              - ios/DerivedData
-  build_sdk_android:
-    executor: android
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
-      - run:
-          name: Gradle Build
-          working_directory: android
-          command: ./gradlew clean build
-      - save_cache:
-          key: judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
-          paths:
-            - android/build/cache
-      - persist_to_workspace:
-          root: .
-          paths:
-            - android/build
+  # build_sdk_ios:
+  #   executor: macos
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+  #     - run:
+  #         name: XCode Build
+  #         working_directory: ios
+  #         command: |
+  #           xcodebuild clean build \
+  #             -workspace RNJudo.xcworkspace \
+  #             -scheme RNJudo \
+  #             -configuration Release \
+  #             -sdk iphonesimulator \
+  #             -derivedDataPath DerivedData
+  #     - persist_to_workspace:
+  #           root: .
+  #           paths:
+  #             - ios/DerivedData
+  # build_sdk_android:
+  #   executor: android
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
+  #     - run:
+  #         name: Gradle Build
+  #         working_directory: android
+  #         command: ./gradlew clean build
+  #     - save_cache:
+  #         key: judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
+  #         paths:
+  #           - android/build/cache
+  #     - persist_to_workspace:
+  #         root: .
+  #         paths:
+  #           - android/build
   build_sample_ios:
     executor: macos
     steps:
@@ -143,8 +132,8 @@ jobs:
           working_directory: sample-app/ios
           command: |
             xcodebuild clean build \
-              -project RNJudo.xcodeproj \
-              -scheme RNJudo \
+              -project sample-app.xcodeproj \
+              -scheme sample-app \
               -configuration Release \
               -sdk iphonesimulator \
               -derivedDataPath DerivedData
@@ -169,14 +158,15 @@ jobs:
           name: Prepare Signing Key
           working_directory: sample-app/android
           command: |
-            echo "$ANDROID_SIGNING_PRIVATE_KEY" | base64 -d > signing.key
-            echo "$ANDROID_SIGNING_CERTIFICATE" | base64 -d > signing.crt
-            openssl pkcs12 -export -inkey signing.key -in signing.crt -out signing.p12 -passout "pass:$ANDROID_KEYSTORE_PASSWORD"
-            keytool -importkeystore -srckeystore signing.p12 -srcstoretype pkcs12 -srcstorepass "$ANDROID_KEYSTORE_PASSWORD" -destkeystore signing.jks -deststoretype JKS -storepass "$ANDROID_KEYSTORE_PASSWORD" -noprompt 2>/dev/null
-            echo "storeFile=${PWD}/signing.jks" > keystore.properties
-            echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
-            echo "keyAlias=1" >> keystore.properties
-            echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
+            # echo "$ANDROID_SIGNING_PRIVATE_KEY" | base64 -d > signing.key
+            # echo "$ANDROID_SIGNING_CERTIFICATE" | base64 -d > signing.crt
+            # openssl pkcs12 -export -inkey signing.key -in signing.crt -out signing.p12 -passout "pass:$ANDROID_KEYSTORE_PASSWORD"
+            # keytool -importkeystore -srckeystore signing.p12 -srcstoretype pkcs12 -srcstorepass "$ANDROID_KEYSTORE_PASSWORD" -destkeystore signing.jks -deststoretype JKS -storepass "$ANDROID_KEYSTORE_PASSWORD" -noprompt 2>/dev/null
+            # echo "storeFile=${PWD}/signing.jks" > keystore.properties
+            # echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
+            # echo "keyAlias=1" >> keystore.properties
+            # echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
+            yarn android
       - run:
           name: Build Sample App APK
           working_directory: sample-app/android
@@ -411,11 +401,7 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
-      - pod_install
       - yarn_install_sample
-      - pod_install_sample:
-          requires:
-            - yarn_install_sample
       - build_sdk_js:
           requires:
             - yarn_install
@@ -423,13 +409,9 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
-      - build_sdk_ios:
-          requires:
-            - pod_install
-      - build_sdk_android
       - build_sample_ios:
           requires:
-            - pod_install_sample
+            - yarn_install_sample
       - build_sample_android:
           context: shared-secrets
           requires:
@@ -439,10 +421,10 @@ workflows:
             - build_sdk_js
       - unit_test_sdk_ios:
           requires:
-            - build_sdk_ios
+            - build_sample_ios
       - unit_test_sdk_android:
           requires:
-            - build_sdk_android
+            - build_sample_android
       - unit_test_sample_ios:
           requires:
             - build_sample_ios
