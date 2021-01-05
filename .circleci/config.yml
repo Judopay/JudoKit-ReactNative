@@ -12,18 +12,18 @@ executors:
       - image: circleci/android:api-29
 
 jobs:
-  yarn_install:
+  get_dependencies_sdk:
     executor: node
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-{{ checksum "package.json" }}
+            - judokit-reactnative-sdk-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Install
           command: yarn install
       - save_cache:
-          key: judokit-reactnative-{{ checksum "package.json" }}
+          key: judokit-reactnative-sdk-yarn-{{ checksum "package.json" }}
           paths: node_modules
   # pod_install:
   #   executor: macos
@@ -41,28 +41,46 @@ jobs:
   #         paths:
   #           - ios/Pods
   #           - ios/Podfile.lock
-  yarn_install_sample:
+  get_dependencies_sample_ios:
     executor: macos
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
+            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+      - run:
+          name: Yarn Install
+          working_directory: sample-app
+          command: yarn install
+      - run:
+          name: Pod Install
+          working_directory: sample-app/ios
+          command: pod install
+      - save_cache:
+          key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
+          paths: sample-app/node_modules
+      - save_cache:
+          key: judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+          paths: 
+            - sample-app/ios/Pods
+            - sample-app/ios/Podfile.lock
+  get_dependencies_sample_android:
+    executor: android
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
       - run:
           name: Yarn Install
           working_directory: sample-app
           command: yarn install
       - save_cache:
-          key: judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
+          key: judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
           paths: sample-app/node_modules
-      - save_cache:
-          key: judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
-          paths: 
-            - sample-app/ios/Pods
-            - sample-app/ios/Podfile.lock
   build_sdk_js:
     executor: node
     steps:
@@ -123,16 +141,16 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
+            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
       - run:
           name: Build iOS Sample
           working_directory: sample-app/ios
           command: |
             xcodebuild clean build \
-              -project sample-app.xcodeproj \
+              -workspace sample-app.xcworkspace \
               -scheme sample-app \
               -configuration Release \
               -sdk iphonesimulator \
@@ -142,19 +160,12 @@ jobs:
           paths:
             - sample-app/ios/DerivedData
   build_sample_android:
-    executor: macos
+    executor: android
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
-      - run:
-          name: Install Android SDK
-          command: |
-            brew uninstall adoptopenjdk11
-            brew install adoptopenjdk/openjdk/adoptopenjdk8
-            brew install android-sdk
-            yes | sudo sdkmanager --licenses || true
+            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
       - run:
           name: Prepare Google Services Json
           command: echo "$REACTNATIVE_ANDROID_GOOGLE_SERVICES_JSON" | base64 -d > sample-app/android/google-services.json
@@ -174,7 +185,6 @@ jobs:
           name: Build Sample App APK
           working_directory: sample-app/android
           command: |
-            export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
             ./gradlew assembleRelease
       - persist_to_workspace:
           root: .
@@ -196,77 +206,77 @@ jobs:
             root: .
             paths:
               - coverage
-  unit_test_sdk_ios:
-    executor: macos
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install Sonar Build Wrapper
-          command: |
-            curl -o /var/tmp/build-wrapper-macosx-x86.zip https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip
-            unzip /var/tmp/build-wrapper-macosx-x86.zip -d /var/tmp
-            sudo mkdir -p /opt/build-wrapper-macosx/bin
-            sudo mv /var/tmp/build-wrapper-macosx-x86/* /opt/build-wrapper-macosx/bin/
-            rm -rf /var/tmp/build-wrapper-macosx-x86
-            ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
-      - run:
-          name: Run Unit Tests
-          working_directory: ios
-          command: |
-            build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
-              -workspace RNJudo.xcworkspace \
-              -scheme RNJudo \
-              -destination 'platform=iOS Simulator,name=iPhone 11' \
-              -derivedDataPath DerivedData \
-              test
-      - run:
-          name: Covert XCode Coverage Reports to SonarQube Format
-          working_directory: ios
-          command: |
-            curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
-            chmod +x xccov-to-sonarqube-generic.sh
-            ./xccov-to-sonarqube-generic.sh DerivedData/Logs/Test/*.xcresult/ > build-wrapper-output/sonarqube-generic-coverage.xml
-            rm xccov-to-sonarqube-generic.sh
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ios/DerivedData
-            - ios/build-wrapper-output
-  unit_test_sdk_android:
-    executor: macos
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install Android SDK
-          command: |
-            brew uninstall adoptopenjdk11
-            brew install adoptopenjdk/openjdk/adoptopenjdk8
-            brew install android-sdk
-            yes | sudo sdkmanager --licenses || true
-      - run:
-          name: Run Unit Tests
-          working_directory: android
-          command: |
-            export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
-            ./gradlew test generateCodeAnalysisReport
-      - persist_to_workspace:
-          root: .
-          paths:
-            - android/build
+  # unit_test_sdk_ios:
+  #   executor: macos
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - judokit-reactnative-ios-cocoapods-{{ checksum "ios/Podfile" }}
+  #     - attach_workspace:
+  #         at: ~/project
+  #     - run:
+  #         name: Install Sonar Build Wrapper
+  #         command: |
+  #           curl -o /var/tmp/build-wrapper-macosx-x86.zip https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip
+  #           unzip /var/tmp/build-wrapper-macosx-x86.zip -d /var/tmp
+  #           sudo mkdir -p /opt/build-wrapper-macosx/bin
+  #           sudo mv /var/tmp/build-wrapper-macosx-x86/* /opt/build-wrapper-macosx/bin/
+  #           rm -rf /var/tmp/build-wrapper-macosx-x86
+  #           ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
+  #     - run:
+  #         name: Run Unit Tests
+  #         working_directory: ios
+  #         command: |
+  #           build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
+  #             -workspace RNJudo.xcworkspace \
+  #             -scheme RNJudo \
+  #             -destination 'platform=iOS Simulator,name=iPhone 11' \
+  #             -derivedDataPath DerivedData \
+  #             test
+  #     - run:
+  #         name: Covert XCode Coverage Reports to SonarQube Format
+  #         working_directory: ios
+  #         command: |
+  #           curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
+  #           chmod +x xccov-to-sonarqube-generic.sh
+  #           ./xccov-to-sonarqube-generic.sh DerivedData/Logs/Test/*.xcresult/ > build-wrapper-output/sonarqube-generic-coverage.xml
+  #           rm xccov-to-sonarqube-generic.sh
+  #     - persist_to_workspace:
+  #         root: .
+  #         paths:
+  #           - ios/DerivedData
+  #           - ios/build-wrapper-output
+  # unit_test_sdk_android:
+  #   executor: macos
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #         at: ~/project
+  #     - run:
+  #         name: Install Android SDK
+  #         command: |
+  #           brew uninstall adoptopenjdk11
+  #           brew install adoptopenjdk/openjdk/adoptopenjdk8
+  #           brew install android-sdk
+  #           yes | sudo sdkmanager --licenses || true
+  #     - run:
+  #         name: Run Unit Tests
+  #         working_directory: android
+  #         command: |
+  #           export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
+  #           ./gradlew test generateCodeAnalysisReport
+  #     - persist_to_workspace:
+  #         root: .
+  #         paths:
+  #           - android/build
   unit_test_sample_ios:
     executor: macos
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
       - attach_workspace:
           at: ~/project
       - run:
@@ -302,27 +312,18 @@ jobs:
             - sample-app/ios/DerivedData
             - sample-app/ios/build-wrapper-output
   unit_test_sample_android:
-    executor: macos
+    executor: android
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
+            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
       - attach_workspace:
           at: ~/project
       - run:
-          name: Install Android SDK
-          command: |
-            brew uninstall adoptopenjdk11
-            brew install adoptopenjdk/openjdk/adoptopenjdk8
-            brew install android-sdk
-            yes | sudo sdkmanager --licenses || true
-      - run:
           name: Run Unit Tests
           working_directory: sample-app/android
-          command: |
-            export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
-            ./gradlew test
+          command: ./gradlew test
   release_sample_ios:
     executor: macos
     steps:
@@ -415,26 +416,27 @@ workflows:
   version: 2
   build:
     jobs:
-      - yarn_install:
+      - get_dependencies_sdk:
           filters:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
-      - yarn_install_sample
+      - get_dependencies_sample_ios
+      - get_dependencies_sample_android
       - build_sdk_js:
           requires:
-            - yarn_install
+            - get_dependencies_sdk
           filters:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
       - build_sample_ios:
           requires:
-            - yarn_install_sample
+            - get_dependencies_sample_ios
       - build_sample_android:
           context: shared-secrets
           requires:
-            - yarn_install_sample
+            - get_dependencies_sample_android
       - unit_test_sdk_js:
           requires:
             - build_sdk_js
