@@ -18,13 +18,29 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sdk-yarn-{{ checksum "package.json" }}
+            - judokit-reactnative-{{ checksum "package.json" }}
       - run:
           name: Yarn Install
           command: yarn install
       - save_cache:
-          key: judokit-reactnative-sdk-yarn-{{ checksum "package.json" }}
+          key: judokit-reactnative-{{ checksum "package.json" }}
           paths: node_modules
+  # pod_install:
+  #   executor: macos
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+  #     - run:
+  #         name: Pod Install
+  #         working_directory: ios
+  #         command: pod install
+  #     - save_cache:
+  #         key: judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
+  #         paths:
+  #           - ios/Pods
+  #           - ios/Podfile.lock
   yarn_install_sample:
     executor: macos
     steps:
@@ -132,9 +148,13 @@ jobs:
       - restore_cache:
           keys:
             - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-gradle-{{ checksum "sample-app/android/build.gradle" }}
+      - run:
+          name: Install Android SDK
+          command: |
+            brew uninstall adoptopenjdk11
+            brew install adoptopenjdk8
+            brew install android-sdk
+            yes | sudo sdkmanager --licenses
       - run:
           name: Prepare Google Services Json
           command: echo "$REACTNATIVE_ANDROID_GOOGLE_SERVICES_JSON" | base64 -d > sample-app/android/google-services.json
@@ -142,24 +162,20 @@ jobs:
           name: Prepare Signing Key
           working_directory: sample-app/android
           command: |
-            # echo "$ANDROID_SIGNING_PRIVATE_KEY" | base64 -d > signing.key
-            # echo "$ANDROID_SIGNING_CERTIFICATE" | base64 -d > signing.crt
-            # openssl pkcs12 -export -inkey signing.key -in signing.crt -out signing.p12 -passout "pass:$ANDROID_KEYSTORE_PASSWORD"
-            # keytool -importkeystore -srckeystore signing.p12 -srcstoretype pkcs12 -srcstorepass "$ANDROID_KEYSTORE_PASSWORD" -destkeystore signing.jks -deststoretype JKS -storepass "$ANDROID_KEYSTORE_PASSWORD" -noprompt 2>/dev/null
-            # echo "storeFile=${PWD}/signing.jks" > keystore.properties
-            # echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
-            # echo "keyAlias=1" >> keystore.properties
-            # echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
-            yarn android
+            echo "$ANDROID_SIGNING_PRIVATE_KEY" | base64 -d > signing.key
+            echo "$ANDROID_SIGNING_CERTIFICATE" | base64 -d > signing.crt
+            openssl pkcs12 -export -inkey signing.key -in signing.crt -out signing.p12 -passout "pass:$ANDROID_KEYSTORE_PASSWORD"
+            keytool -importkeystore -srckeystore signing.p12 -srcstoretype pkcs12 -srcstorepass "$ANDROID_KEYSTORE_PASSWORD" -destkeystore signing.jks -deststoretype JKS -storepass "$ANDROID_KEYSTORE_PASSWORD" -noprompt 2>/dev/null
+            echo "storeFile=${PWD}/signing.jks" > keystore.properties
+            echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
+            echo "keyAlias=1" >> keystore.properties
+            echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
       - run:
           name: Build Sample App APK
           working_directory: sample-app/android
           command: |
+            export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
             ./gradlew assembleRelease
-      - save_cache:
-          key: judokit-reactnative-sample-gradle-{{ checksum "sample-app/android/build.gradle" }}
-          paths:
-            - ./sample-app/android/build/cache
       - persist_to_workspace:
           root: .
           paths:
@@ -222,7 +238,7 @@ jobs:
             - ios/DerivedData
             - ios/build-wrapper-output
   unit_test_sdk_android:
-    executor: android
+    executor: macos
     steps:
       - checkout
       - restore_cache:
