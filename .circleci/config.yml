@@ -440,12 +440,12 @@ workflows:
       - unit_test_sdk_js:
           requires:
             - build_sdk_js
-      - unit_test_sdk_ios:
-          requires:
-            - build_sample_ios
-      - unit_test_sdk_android:
-          requires:
-            - build_sample_android
+      # - unit_test_sdk_ios:
+      #     requires:
+      #       - build_sample_ios
+      # - unit_test_sdk_android:
+      #     requires:
+      #       - build_sample_android
       - unit_test_sample_ios:
           requires:
             - build_sample_ios
@@ -456,20 +456,20 @@ workflows:
           context: shared-secrets
           requires:
             - unit_test_sdk_js
-            - unit_test_sdk_ios
-            - unit_test_sdk_android
+          #  - unit_test_sdk_ios
+          #  - unit_test_sdk_android
       - release_sample_ios:
           context: shared-secrets
-          requires:
-            - unit_test_sample_ios
+          # requires:
+          #  - unit_test_sample_ios
           filters:
             branches:
               only:
                 - master
       - release_sample_android:
           context: shared-secrets
-          requires:
-            - unit_test_sample_android
+          # requires:
+          #   - unit_test_sample_android
           filters:
             branches:
               only:
