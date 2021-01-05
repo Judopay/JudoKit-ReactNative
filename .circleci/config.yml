@@ -241,9 +241,6 @@ jobs:
     executor: macos
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
       - attach_workspace:
           at: ~/project
       - run:
@@ -308,6 +305,9 @@ jobs:
     executor: macos
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
       - attach_workspace:
           at: ~/project
       - run:
