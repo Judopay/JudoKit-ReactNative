@@ -154,7 +154,7 @@ jobs:
             brew uninstall adoptopenjdk11
             brew install adoptopenjdk/openjdk/adoptopenjdk8
             brew install android-sdk
-            yes | sudo sdkmanager --licenses
+            yes | sudo sdkmanager --licenses || true
       - run:
           name: Prepare Google Services Json
           command: echo "$REACTNATIVE_ANDROID_GOOGLE_SERVICES_JSON" | base64 -d > sample-app/android/google-services.json
