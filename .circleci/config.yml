@@ -152,7 +152,7 @@ jobs:
           name: Install Android SDK
           command: |
             brew uninstall adoptopenjdk11
-            brew install adoptopenjdk8
+            brew install adoptopenjdk/openjdk/adoptopenjdk8
             brew install android-sdk
             yes | sudo sdkmanager --licenses
       - run:
@@ -296,7 +296,7 @@ jobs:
             - sample-app/ios/DerivedData
             - sample-app/ios/build-wrapper-output
   unit_test_sample_android:
-    executor: android
+    executor: macos
     steps:
       - attach_workspace:
           at: /home/circleci/project
