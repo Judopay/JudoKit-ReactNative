@@ -245,7 +245,7 @@ jobs:
           keys:
             - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
       - attach_workspace:
-          at: /home/circleci/project
+          at: ~/project
       - run:
           name: Run Unit Tests
           working_directory: android
@@ -299,7 +299,7 @@ jobs:
     executor: macos
     steps:
       - attach_workspace:
-          at: /home/circleci/project
+          at: ~/project
       - run:
           name: Run Unit Tests
           working_directory: sample-app/android
@@ -360,18 +360,18 @@ jobs:
         auth:
           username: _json_key
           password: $GCLOUD_SERVICE_KEY
-    working_directory: /home/circleci/project
+    working_directory: ~/project
     steps:
       - checkout
       - attach_workspace:
-          at: /home/circleci/project
+          at: ~/project
       - run: /opt/run-scan.sh
   release_sdk:
     executor: node
     steps:
       - checkout
       - attach_workspace:
-          at: /home/circleci/project
+          at: ~/project
       - run:
           name: Release SDK
           command: yarn publish
