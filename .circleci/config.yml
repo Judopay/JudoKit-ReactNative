@@ -311,9 +311,18 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
+          name: Install Android SDK
+          command: |
+            brew uninstall adoptopenjdk11
+            brew install adoptopenjdk/openjdk/adoptopenjdk8
+            brew install android-sdk
+            yes | sudo sdkmanager --licenses || true
+      - run:
           name: Run Unit Tests
           working_directory: sample-app/android
-          command: ./gradlew test
+          command: |
+            export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
+            ./gradlew test
   release_sample_ios:
     executor: macos
     steps:
