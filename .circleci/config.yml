@@ -18,57 +18,35 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
+            - judokit-reactnative-sdk-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Install
           command: yarn install
       - save_cache:
-          key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}
+          key: judokit-reactnative-sdk-yarn-{{ checksum "package.json" }}
           paths: node_modules
-      - save_cache:
-          key: judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
-          paths:
-            - ios/Pods
-            - ios/Podfile.lock
-  yarn_install_sample_ios:
+  yarn_install_sample:
     executor: macos
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
+            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+            - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
       - run:
           name: Yarn Install
           working_directory: sample-app
           command: yarn install
       - save_cache:
-          key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
+          key: judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
           paths: sample-app/node_modules
       - save_cache:
-          key: judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+          key: judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
           paths: 
             - sample-app/ios/Pods
             - sample-app/ios/Podfile.lock
-  yarn_install_sample_android:
-    executor: android
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
-      - run:
-          name: Yarn Install
-          working_directory: sample-app
-          command: yarn install
-      - save_cache:
-          key: judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
-          paths: sample-app/node_modules
   build_sdk_js:
     executor: node
     steps:
@@ -129,10 +107,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
+            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+            - judokit-reactnative-sample-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
       - run:
           name: Build iOS Sample
           working_directory: sample-app/ios
@@ -148,15 +126,15 @@ jobs:
           paths:
             - sample-app/ios/DerivedData
   build_sample_android:
-    executor: android
+    executor: macos
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
+            - judokit-reactnative-sample-yarn-{{ checksum "sample-app/package.json" }}
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-android-gradle-{{ checksum "sample-app/android/build.gradle" }}
+            - judokit-reactnative-sample-gradle-{{ checksum "sample-app/android/build.gradle" }}
       - run:
           name: Prepare Google Services Json
           command: echo "$REACTNATIVE_ANDROID_GOOGLE_SERVICES_JSON" | base64 -d > sample-app/android/google-services.json
@@ -179,7 +157,7 @@ jobs:
           command: |
             ./gradlew assembleRelease
       - save_cache:
-          key: judokit-reactnative-sample-android-gradle-{{ checksum "sample-app/android/build.gradle" }}
+          key: judokit-reactnative-sample-gradle-{{ checksum "sample-app/android/build.gradle" }}
           paths:
             - ./sample-app/android/build/cache
       - persist_to_workspace:
@@ -407,8 +385,7 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
-      - yarn_install_sample_ios
-      - yarn_install_sample_android
+      - yarn_install_sample
       - build_sdk_js:
           requires:
             - yarn_install
@@ -418,11 +395,11 @@ workflows:
                 - /^v[0-9]+(\.[0-9]+)*$/
       - build_sample_ios:
           requires:
-            - yarn_install_sample_ios
+            - yarn_install_sample
       - build_sample_android:
           context: shared-secrets
           requires:
-            - yarn_install_sample_android
+            - yarn_install_sample
       - unit_test_sdk_js:
           requires:
             - build_sdk_js
