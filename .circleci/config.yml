@@ -332,6 +332,11 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
+          name: Install Nodejs
+          command: |
+            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+      - run:
           name: Run Unit Tests
           working_directory: sample-app/android
           command: ./gradlew test

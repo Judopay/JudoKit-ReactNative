@@ -387,7 +387,7 @@
 			sourceTree = "<group>";
 		};
 		00C302E01ABCB9EE00DB3ED1 /* Products */ = {
-			isa = PBXGrop;
+			isa = PBXGroup;
 			children = (
 				00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */,
 			);
