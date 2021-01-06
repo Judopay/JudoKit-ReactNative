@@ -173,6 +173,11 @@ jobs:
           keys:
             - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
       - run:
+          name: Install Nodejs
+          command: |
+            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+      - run:
           name: Prepare Google Services Json
           command: echo "$REACTNATIVE_ANDROID_GOOGLE_SERVICES_JSON" | base64 -d > sample-app/android/google-services.json
       - run:
