@@ -75,6 +75,12 @@ jobs:
           keys:
             - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
       - run:
+          name: Install Yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt update && sudo apt install yarn
+      - run:
           name: Yarn Install
           working_directory: sample-app
           command: yarn install
@@ -152,7 +158,7 @@ jobs:
             xcodebuild clean build \
               -workspace sample-app.xcworkspace \
               -scheme sample-app \
-              -configuration Release \
+              -configuration Debug \
               -sdk iphonesimulator \
               -derivedDataPath DerivedData
       - persist_to_workspace:
@@ -293,8 +299,8 @@ jobs:
           working_directory: sample-app/ios
           command: |
             build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
-              -project RNJudo.xcodeproj \
-              -scheme RNJudo \
+              -workspace sample-app.xcworkspace \
+              -scheme sample-app \
               -destination 'platform=iOS Simulator,name=iPhone 11' \
               -derivedDataPath DerivedData \
               test
