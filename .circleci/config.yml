@@ -12,35 +12,63 @@ executors:
       - image: circleci/android:api-29
 
 jobs:
-  get_dependencies_sdk:
+  get_dependencies_sdk_node:
     executor: node
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sdk-yarn-{{ checksum "package.json" }}
+            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Install
           command: yarn install
       - save_cache:
-          key: judokit-reactnative-sdk-yarn-{{ checksum "package.json" }}
+          key: judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
           paths: node_modules
-  # pod_install:
-  #   executor: macos
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
-  #     - run:
-  #         name: Pod Install
-  #         working_directory: ios
-  #         command: pod install
-  #     - save_cache:
-  #         key: judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
-  #         paths:
-  #           - ios/Pods
-  #           - ios/Podfile.lock
+  get_dependencies_sdk_ios:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }
+      - run:
+          name: Yarn Install
+          command: yarn install
+      - run:
+          name: Pod Install
+          working_directory: ios
+          command: pod install
+      - save_cache:
+          key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}
+          paths: node_modules
+      - save_cache:
+          key: judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
+          paths:
+            - ios/Pods
+            - ios/Podfile.lock
+  get_dependencies_sdk_android:
+    executor: android
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
+      - run:
+          name: Install Yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt update && sudo apt install yarn
+      - run:
+          name: Yarn Install
+          command: yarn install
+      - save_cache:
+          key: judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
+          paths: node_modules
   get_dependencies_sample_ios:
     executor: macos
     steps:
@@ -87,13 +115,13 @@ jobs:
       - save_cache:
           key: judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
           paths: sample-app/node_modules
-  build_sdk_js:
+  build_sdk_node:
     executor: node
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-{{ checksum "package.json" }}
+            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Bundle
           command: yarn react-native bundle --entry-file JudoPay.tsx --bundle-output bundle.js
@@ -101,50 +129,49 @@ jobs:
             root: .
             paths:
               - bundle.js
-  # build_sdk_ios:
-  #   executor: macos
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - judokit-reactnative-cocoapods-{{ checksum "ios/Podfile" }}
-  #     - run:
-  #         name: XCode Build
-  #         working_directory: ios
-  #         command: |
-  #           xcodebuild clean build \
-  #             -workspace RNJudo.xcworkspace \
-  #             -scheme RNJudo \
-  #             -configuration Release \
-  #             -sdk iphonesimulator \
-  #             -derivedDataPath DerivedData
-  #     - persist_to_workspace:
-  #           root: .
-  #           paths:
-  #             - ios/DerivedData
-  # build_sdk_android:
-  #   executor: android
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
-  #     - run:
-  #         name: Gradle Build
-  #         working_directory: android
-  #         command: ./gradlew clean build
-  #     - save_cache:
-  #         key: judokit-reactnative-gradle-{{ checksum "android/build.gradle" }}
-  #         paths:
-  #           - android/build/cache
-  #     - persist_to_workspace:
-  #         root: .
-  #         paths:
-  #           - android/build
+  build_sdk_ios:
+    executor: macos
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-cocoapods-{{ checksum "ios/Podfile" }}
+      - run:
+          name: XCode Build
+          working_directory: ios
+          command: |
+            xcodebuild clean build \
+              -workspace RNJudo.xcworkspace \
+              -scheme RNJudo \
+              -configuration Debug \
+              -sdk iphonesimulator \
+              -derivedDataPath DerivedData
+      - persist_to_workspace:
+            root: .
+            paths:
+              - ios/DerivedData
+  build_sdk_android:
+    executor: android
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-android-yarn-{{ checksum "packages.json" }}
+      - run:
+          name: Gradle Build
+          working_directory: android
+          command: |
+            ./gradlew clean assemble
+      - persist_to_workspace:
+          root: .
+          paths:
+            - android/build
   build_sample_ios:
     executor: macos
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/project
       - restore_cache:
           keys:
             - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
@@ -169,6 +196,8 @@ jobs:
     executor: android
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/project
       - restore_cache:
           keys:
             - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
@@ -201,13 +230,13 @@ jobs:
           root: .
           paths:
             - sample-app/android/build
-  unit_test_sdk_js:
+  unit_test_sdk_node:
     executor: node
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-{{ checksum "package.json" }}
+            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Test
           command: |
@@ -217,77 +246,13 @@ jobs:
             root: .
             paths:
               - coverage
-  # unit_test_sdk_ios:
-  #   executor: macos
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - judokit-reactnative-ios-cocoapods-{{ checksum "ios/Podfile" }}
-  #     - attach_workspace:
-  #         at: ~/project
-  #     - run:
-  #         name: Install Sonar Build Wrapper
-  #         command: |
-  #           curl -o /var/tmp/build-wrapper-macosx-x86.zip https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip
-  #           unzip /var/tmp/build-wrapper-macosx-x86.zip -d /var/tmp
-  #           sudo mkdir -p /opt/build-wrapper-macosx/bin
-  #           sudo mv /var/tmp/build-wrapper-macosx-x86/* /opt/build-wrapper-macosx/bin/
-  #           rm -rf /var/tmp/build-wrapper-macosx-x86
-  #           ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
-  #     - run:
-  #         name: Run Unit Tests
-  #         working_directory: ios
-  #         command: |
-  #           build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
-  #             -workspace RNJudo.xcworkspace \
-  #             -scheme RNJudo \
-  #             -destination 'platform=iOS Simulator,name=iPhone 11' \
-  #             -derivedDataPath DerivedData \
-  #             test
-  #     - run:
-  #         name: Covert XCode Coverage Reports to SonarQube Format
-  #         working_directory: ios
-  #         command: |
-  #           curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
-  #           chmod +x xccov-to-sonarqube-generic.sh
-  #           ./xccov-to-sonarqube-generic.sh DerivedData/Logs/Test/*.xcresult/ > build-wrapper-output/sonarqube-generic-coverage.xml
-  #           rm xccov-to-sonarqube-generic.sh
-  #     - persist_to_workspace:
-  #         root: .
-  #         paths:
-  #           - ios/DerivedData
-  #           - ios/build-wrapper-output
-  # unit_test_sdk_android:
-  #   executor: macos
-  #   steps:
-  #     - checkout
-  #     - attach_workspace:
-  #         at: ~/project
-  #     - run:
-  #         name: Install Android SDK
-  #         command: |
-  #           brew uninstall adoptopenjdk11
-  #           brew install adoptopenjdk/openjdk/adoptopenjdk8
-  #           brew install android-sdk
-  #           yes | sudo sdkmanager --licenses || true
-  #     - run:
-  #         name: Run Unit Tests
-  #         working_directory: android
-  #         command: |
-  #           export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
-  #           ./gradlew test generateCodeAnalysisReport
-  #     - persist_to_workspace:
-  #         root: .
-  #         paths:
-  #           - android/build
-  unit_test_sample_ios:
+  unit_test_sdk_ios:
     executor: macos
     steps:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
       - attach_workspace:
           at: ~/project
       - run:
@@ -301,17 +266,17 @@ jobs:
             ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
       - run:
           name: Run Unit Tests
-          working_directory: sample-app/ios
+          working_directory: ios
           command: |
             build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
-              -workspace sample-app.xcworkspace \
-              -scheme sample-app \
+              -workspace RNJudo.xcworkspace \
+              -scheme RNJudo \
               -destination 'platform=iOS Simulator,name=iPhone 11' \
               -derivedDataPath DerivedData \
               test
       - run:
           name: Covert XCode Coverage Reports to SonarQube Format
-          working_directory: sample-app/ios
+          working_directory: ios
           command: |
             curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
             chmod +x xccov-to-sonarqube-generic.sh
@@ -320,26 +285,82 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - sample-app/ios/DerivedData
-            - sample-app/ios/build-wrapper-output
-  unit_test_sample_android:
+            - ios/DerivedData
+            - ios/build-wrapper-output
+  unit_test_sdk_android:
     executor: android
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
       - attach_workspace:
           at: ~/project
       - run:
-          name: Install Nodejs
-          command: |
-            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-      - run:
           name: Run Unit Tests
-          working_directory: sample-app/android
-          command: ./gradlew test
+          working_directory: android
+          command: |
+            ./gradlew test generateCodeAnalysisReport
+      - persist_to_workspace:
+          root: .
+          paths:
+            - android/build
+  # unit_test_sample_ios:
+  #   executor: macos
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+  #     - attach_workspace:
+  #         at: ~/project
+  #     - run:
+  #         name: Install Sonar Build Wrapper
+  #         command: |
+  #           curl -o /var/tmp/build-wrapper-macosx-x86.zip https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip
+  #           unzip /var/tmp/build-wrapper-macosx-x86.zip -d /var/tmp
+  #           sudo mkdir -p /opt/build-wrapper-macosx/bin
+  #           sudo mv /var/tmp/build-wrapper-macosx-x86/* /opt/build-wrapper-macosx/bin/
+  #           rm -rf /var/tmp/build-wrapper-macosx-x86
+  #           ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
+  #     - run:
+  #         name: Run Unit Tests
+  #         working_directory: sample-app/ios
+  #         command: |
+  #           build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
+  #             -workspace sample-app.xcworkspace \
+  #             -scheme sample-app \
+  #             -destination 'platform=iOS Simulator,name=iPhone 11' \
+  #             -derivedDataPath DerivedData \
+  #             test
+  #     - run:
+  #         name: Covert XCode Coverage Reports to SonarQube Format
+  #         working_directory: sample-app/ios
+  #         command: |
+  #           curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
+  #           chmod +x xccov-to-sonarqube-generic.sh
+  #           ./xccov-to-sonarqube-generic.sh DerivedData/Logs/Test/*.xcresult/ > build-wrapper-output/sonarqube-generic-coverage.xml
+  #           rm xccov-to-sonarqube-generic.sh
+  #     - persist_to_workspace:
+  #         root: .
+  #         paths:
+  #           - sample-app/ios/DerivedData
+  #           - sample-app/ios/build-wrapper-output
+  # unit_test_sample_android:
+  #   executor: android
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
+  #     - attach_workspace:
+  #         at: ~/project
+  #     - run:
+  #         name: Install Nodejs
+  #         command: |
+  #           curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+  #           sudo apt-get install -y nodejs
+  #     - run:
+  #         name: Run Unit Tests
+  #         working_directory: sample-app/android
+  #         command: ./gradlew test
   release_sample_ios:
     executor: macos
     steps:
@@ -432,60 +453,64 @@ workflows:
   version: 2
   build:
     jobs:
-      - get_dependencies_sdk:
+      - get_dependencies_sdk_node:
           filters:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
+      - get_dependencies_sdk_ios
+      - get_dependencies_sdk_android
       - get_dependencies_sample_ios
       - get_dependencies_sample_android
-      - build_sdk_js:
+      - build_sdk_node:
           requires:
-            - get_dependencies_sdk
+            - get_dependencies_sdk_node
           filters:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
+      - build_sdk_ios:
+          requires:
+            - get_dependencies_sdk_ios
+      - build_sdk_android:
+          requires:
+            - get_dependencies_sdk_android
       - build_sample_ios:
           requires:
             - get_dependencies_sample_ios
+            - build_sdk_ios
       - build_sample_android:
           context: shared-secrets
           requires:
             - get_dependencies_sample_android
-      - unit_test_sdk_js:
+            - build_sdk_android
+      - unit_test_sdk_node:
           requires:
-            - build_sdk_js
-      # - unit_test_sdk_ios:
-      #     requires:
-      #       - build_sample_ios
-      # - unit_test_sdk_android:
-      #     requires:
-      #       - build_sample_android
-      - unit_test_sample_ios:
+            - build_sdk_node
+      - unit_test_sdk_ios:
           requires:
-            - build_sample_ios
-      - unit_test_sample_android:
+            - build_sdk_ios
+      - unit_test_sdk_android:
           requires:
-            - build_sample_android
+            - build_sdk_android
       - sonar_scan:
           context: shared-secrets
           requires:
             - unit_test_sdk_js
-          #  - unit_test_sdk_ios
-          #  - unit_test_sdk_android
+            - unit_test_sdk_ios
+            - unit_test_sdk_android
       - release_sample_ios:
           context: shared-secrets
-          # requires:
-          #  - unit_test_sample_ios
+          requires:
+           - build_sample_ios
           filters:
             branches:
               only:
                 - master
       - release_sample_android:
           context: shared-secrets
-          # requires:
-          #   - unit_test_sample_android
+          requires:
+            - build_sample_android
           filters:
             branches:
               only:
@@ -499,7 +524,7 @@ workflows:
       - release_sdk:
           context: shared-secrets
           requires:
-            - build_sdk_js
+            - build_sdk_node
           filters:
             branches:
               ignore:
