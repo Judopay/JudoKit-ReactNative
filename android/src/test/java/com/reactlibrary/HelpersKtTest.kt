@@ -269,16 +269,16 @@ class HelpersKtTest {
         assertTrue(methods.contains(PaymentMethod.CARD))
     }
 
-    @Test
-    fun `Given valid user configuration is provided and it contains 1 shl 2 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-GOOGLE_PAY should be returned`() {
-        every { configurationMock.getInt("paymentMethods") } returns (1 shl 2)
+    // @Test
+    // fun `Given valid user configuration is provided and it contains 1 shl 2 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-GOOGLE_PAY should be returned`() {
+    //     every { configurationMock.getInt("paymentMethods") } returns (1 shl 2)
 
-        val methods = getPaymentMethods(mapMock)
+    //     val methods = getPaymentMethods(mapMock)
 
-        assertNotNull(methods)
-        assertTrue(methods!!.size == 1)
-        assertTrue(methods.contains(PaymentMethod.GOOGLE_PAY))
-    }
+    //     assertNotNull(methods)
+    //     assertTrue(methods!!.size == 1)
+    //     assertTrue(methods.contains(PaymentMethod.GOOGLE_PAY))
+    // }
 
     @Test
     fun `Given valid user configuration is provided and it contains 1 shl 3 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-IDEAL should be returned`() {

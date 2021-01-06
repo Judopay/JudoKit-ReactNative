@@ -291,6 +291,9 @@ jobs:
     executor: android
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
       - attach_workspace:
           at: ~/project
       - run:
