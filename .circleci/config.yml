@@ -43,7 +43,7 @@ jobs:
           working_directory: ios
           command: pod install
       - save_cache:
-          key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}
+          key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
           paths: node_modules
       - save_cache:
           key: judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
@@ -164,7 +164,7 @@ jobs:
           name: Gradle Build
           working_directory: android
           command: |
-            ./gradlew clean assemble
+            ./gradlew clean assemble --no-daemon
       - persist_to_workspace:
           root: .
           paths:
@@ -228,7 +228,7 @@ jobs:
           name: Build Sample App APK
           working_directory: sample-app/android
           command: |
-            ./gradlew assembleRelease
+            ./gradlew assembleRelease --no-daemon
       - persist_to_workspace:
           root: .
           paths:
@@ -303,7 +303,7 @@ jobs:
           name: Run Unit Tests
           working_directory: android
           command: |
-            ./gradlew test generateCodeAnalysisReport
+            ./gradlew test generateCodeAnalysisReport --no-daemon
       - persist_to_workspace:
           root: .
           paths:
