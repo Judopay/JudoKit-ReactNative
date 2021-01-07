@@ -24,7 +24,9 @@ jobs:
           command: yarn install
       - save_cache:
           key: judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
-          paths: node_modules
+          paths:
+            - node_modules
+            - yarn.lock
   get_dependencies_sdk_ios:
     executor: macos
     steps:
@@ -44,7 +46,9 @@ jobs:
           command: pod install
       - save_cache:
           key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-          paths: node_modules
+          paths:
+            - node_modules
+            - yarn.lock
       - save_cache:
           key: judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
           paths:
@@ -68,7 +72,9 @@ jobs:
           command: yarn install
       - save_cache:
           key: judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
-          paths: node_modules
+          paths:
+            - node_modules
+            - yarn.lock
   get_dependencies_sample_ios:
     executor: macos
     steps:
@@ -89,7 +95,9 @@ jobs:
           command: pod install
       - save_cache:
           key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
-          paths: sample-app/node_modules
+          paths:
+            - sample-app/node_modules
+            - sample-app/yarn.lock
       - save_cache:
           key: judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
           paths: 
@@ -114,7 +122,9 @@ jobs:
           command: yarn install
       - save_cache:
           key: judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
-          paths: sample-app/node_modules
+          paths:
+            - sample-app/node_modules
+            - sample-app/yarn.lock
   build_sdk_node:
     executor: node
     steps:
@@ -432,9 +442,16 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
+      # Below step required because attaching a workspace uses absolute paths which
+      # must match the executor which persisted it
+      - run:
+          name: Create Workspace Directories
+          command: mkdir -p /Users/distiller/project
       - attach_workspace:
           at: ~/project
-      - run: /opt/run-scan.sh
+      - run:
+          name: Sonar Scan
+          command: /opt/run-scan.sh
   release_sdk:
     executor: node
     steps:
