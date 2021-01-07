@@ -491,7 +491,7 @@ jobs:
               PARAMS+=(-Dsonar.pullrequest.base=master)
               PARAMS+=(-Dsonar.pullrequest.key=$CIRCLE_PR_NUMBER)
               PARAMS+=(-Dsonar.pullrequest.branch=$BRANCH_NAME)
-              PARAMS+=(-Dsonar.pullrequest.provider=GitHub
+              PARAMS+=(-Dsonar.pullrequest.provider=GitHub)
             else
               echo "Couldnt find pull request. Running short-lived branch scan."
               PARAMS+=(-Dsonar.branch.name=$BRANCH_NAME)
