@@ -435,24 +435,70 @@ jobs:
               --groups "default-testers" \
               --release-notes-file ./notes.txt
   sonar_scan:
-    docker:
-      - image: gcr.io/opnf-management/sonar-scanner:latest
-        auth:
-          username: _json_key
-          password: $GCLOUD_SERVICE_KEY
+    executor: macos
     working_directory: ~/project
     steps:
       - checkout
       # Below step required because attaching a workspace uses absolute paths which
       # must match the executor which persisted it
-      - run:
-          name: Create Workspace Directories
-          command: mkdir -p /Users/distiller/project
+      # - run:
+      #     name: Create Workspace Directories
+      #     command: mkdir -p /Users/distiller/project
       - attach_workspace:
           at: ~/project
+      # - run:
+      #     name: Fix paths in coverage reports
+      #     command: |
+      #       find ./ios -type f -exec sed -i 's/\/Users\/distiller/\/root/g' {} \;
+      #       find ./android -type f -exec sed -i 's/\/'
       - run:
-          name: Sonar Scan
-          command: /opt/run-scan.sh
+          name: Install Sonar Scanner
+          command: |
+            export SONARSCANNER_VERSION=4.3.0.2102
+            curl -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARSCANNER_VERSION}-macosx.zip
+            sudo unzip -q sonarscanner.zip -d /opt
+            rm sonarscanner.zip
+            ln -s /opt/sonar-scanner-${SONARSCANNER_VERSION}-macosx/bin/sonar-scanner /usr/local/bin/sonar-scanner
+      - run:
+          name: Run Sonar Scan
+          command: |
+            export REPO_OWNER=Judopay
+            export REPO_NAME=$(basename `git config --get remote.origin.url` .git)
+            export LCOV_REPORTS=$(find . -name lcov.info | tr '\n' ',')
+            export JACOCO_REPORTS=$(find `pwd -P` -name jacocoTestReport.xml -o -name jacocoTestReportRelease.xml -o -name jacocoTestReportDebug.xml  | tr '\n' ',')
+            export JAVA_TEST_CLASSES_DIR=$(find `pwd -P` -wholename "*/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes" -o -wholename "*/testReleaseUnitTest/classes")
+            export GENERIC_COVERAGE_REPORTS=$(find `pwd -P` -name sonarqube-generic-coverage.xml)
+            export OBJC_BUILD_WRAPPER_OUTPUT_DIR=$(dirname $(find `pwd -P` -name build-wrapper-dump.json))
+            export BRANCH_NAME=$(git branch | grep \* | cut -d ' ' -f2)
+            PARAMS=(-Dsonar.host.url=https://sonarcloud.io)
+            PARAMS+=(-Dsonar.login=$SONARCLOUD_TOKEN)
+            PARAMS+=(-Dsonar.organization=judopay)
+            PARAMS+=(-Dsonar.projectKey=${REPO_OWNER}_${REPO_NAME})
+            PARAMS+=(-Dsonar.projectName=${REPO_NAME})
+            PARAMS+=(-Dsonar.sources=.)
+            PARAMS+=(-Dsonar.typescript.lcov.reportPaths=$LCOV_REPORTS)
+            PARAMS+=(-Dsonar.coverage.jacoco.xmlReportPaths=$JACOCO_REPORTS)
+            PARAMS+=(-Dsonar.java.test.binaries=$JAVA_TEST_CLASSES_DIR)
+            PARAMS+=(-Dsonar.coverageReportPaths=${GENERIC_COVERAGE_REPORTS})
+            PARAMS+=(-Dsonar.cfamily.build-wrapper-output=${OBJC_BUILD_WRAPPER_OUTPUT_DIR})
+            PARAMS+=(-Dsonar.cfamily.cache.enabled=false)
+            PARAMS+=(-Dproject.settings=.sonarscan)
+            if [ "$BRANCH_NAME" == "master" ]; then
+              echo "On master branch. Running default scan."
+            elif ! [ -z "$CIRCLE_PR_NUMBER" ]; then
+                echo "Pull request $CIRCLE_PR_NUMBER found. Running a pull request scan."
+                PARAMS+=(-Dsonar.pullrequest.github.repository=${REPO_OWNER}/${REPO_NAME})
+                PARAMS+=(-Dsonar.pullrequest.base=master)
+                PARAMS+=(-Dsonar.pullrequest.key=$CIRCLE_PR_NUMBER)
+                PARAMS+=(-Dsonar.pullrequest.branch=$BRANCH_NAME)
+                PARAMS+=(-Dsonar.pullrequest.provider=GitHub)
+              fi
+            else
+              echo "Couldnt find pull request. Running short-lived branch scan."
+              PARAMS+=(-Dsonar.branch.name=$BRANCH_NAME)
+              PARAMS+=(-Dsonar.branch.target=master)
+            fi
+            sonar-scanner "${PARAMS[@]}"
   release_sdk:
     executor: node
     steps:

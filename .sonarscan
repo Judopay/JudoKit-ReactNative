@@ -1,5 +1,2 @@
-sonar.exclusions=__tests__/**/*,node_modules/**/*,ios,android/**/*,sample-app/**/*
-sonar.tests=__tests__
-sonar.c.file.suffixes=-
-sonar.cpp.file.suffixes=-
-sonar.objc.file.suffixes=-
+sonar.exclusions=__tests__/**/*,android/src/test/**/*,ios/RNJudoTests/**/*,node_modules/**/*,sample-app/**/*
+sonar.tests=__tests__,android/src/test,ios/RNJudoTests
