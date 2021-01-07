@@ -386,8 +386,8 @@
 * THEN:  an 'invalid Site ID' exception should be thrown
 */
 - (void)test_OnInvalidSiteID_ThrowError {
-     NSDictionary *props = [self propertiesWithConfigurationValue:@123 forKey:@"siteId"];
-     XCTAssertThrows([RNWrappers configurationFromProperties:props]);
+    NSDictionary *props = [self propertiesWithConfigurationValue:@123 forKey:@"siteId"];
+    XCTAssertThrows([RNWrappers configurationFromProperties:props]);
 }
 
 /*
