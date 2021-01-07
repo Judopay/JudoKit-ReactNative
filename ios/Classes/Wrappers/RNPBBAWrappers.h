@@ -22,7 +22,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <JudoKit-iOS/JudoKit_iOS.h>
+#import <JudoKit_iOS/JudoKit_iOS.h>
 
 @interface RNPBBAWrappers : NSObject
 

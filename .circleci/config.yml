@@ -147,8 +147,9 @@ jobs:
               -workspace RNJudo.xcworkspace \
               -scheme RNJudo \
               -configuration Debug \
-              -sdk iphonesimulator \
-              -derivedDataPath DerivedData
+              -sdk iphoneos \
+              -derivedDataPath DerivedData \
+              -quiet
       - persist_to_workspace:
             root: .
             paths:
@@ -189,14 +190,16 @@ jobs:
               -workspace sample-app.xcworkspace \
               -scheme sample-app \
               -configuration Debug \
-              -sdk iphonesimulator \
-              -derivedDataPath DerivedData
+              -sdk iphoneos \
+              -derivedDataPath DerivedData \
+              -quiet
       - persist_to_workspace:
           root: .
           paths:
             - sample-app/ios/DerivedData
   build_sample_android:
     executor: android
+    resource_class: medium+
     steps:
       - checkout
       - attach_workspace:
