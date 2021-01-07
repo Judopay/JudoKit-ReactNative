@@ -200,7 +200,7 @@ jobs:
               -workspace sample-app.xcworkspace \
               -scheme sample-app \
               -configuration Debug \
-              -sdk iphoneos \
+              -sdk iphonesimulator \
               -derivedDataPath DerivedData \
               -quiet
       - persist_to_workspace:
