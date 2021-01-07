@@ -486,13 +486,12 @@ jobs:
             if [ "$BRANCH_NAME" == "master" ]; then
               echo "On master branch. Running default scan."
             elif ! [ -z "$CIRCLE_PR_NUMBER" ]; then
-                echo "Pull request $CIRCLE_PR_NUMBER found. Running a pull request scan."
-                PARAMS+=(-Dsonar.pullrequest.github.repository=${REPO_OWNER}/${REPO_NAME})
-                PARAMS+=(-Dsonar.pullrequest.base=master)
-                PARAMS+=(-Dsonar.pullrequest.key=$CIRCLE_PR_NUMBER)
-                PARAMS+=(-Dsonar.pullrequest.branch=$BRANCH_NAME)
-                PARAMS+=(-Dsonar.pullrequest.provider=GitHub)
-              fi
+              echo "Pull request $CIRCLE_PR_NUMBER found. Running a pull request scan."
+              PARAMS+=(-Dsonar.pullrequest.github.repository=${REPO_OWNER}/${REPO_NAME})
+              PARAMS+=(-Dsonar.pullrequest.base=master)
+              PARAMS+=(-Dsonar.pullrequest.key=$CIRCLE_PR_NUMBER)
+              PARAMS+=(-Dsonar.pullrequest.branch=$BRANCH_NAME)
+              PARAMS+=(-Dsonar.pullrequest.provider=GitHub
             else
               echo "Couldnt find pull request. Running short-lived branch scan."
               PARAMS+=(-Dsonar.branch.name=$BRANCH_NAME)
