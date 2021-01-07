@@ -647,6 +647,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7D72421A356EEAC9375BF818 /* Pods-RNJudo.debug.xcconfig */;
 			buildSettings = {
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -665,6 +666,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 279C05BF7E27DDBE62E491FC /* Pods-RNJudo.release.xcconfig */;
 			buildSettings = {
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
