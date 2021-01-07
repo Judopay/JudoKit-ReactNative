@@ -268,7 +268,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - judokit-reactnative-sdk-ios-yarn-{{ checksum "sample-app/package.json" }}-v1
+            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
       - restore_cache:
           keys:
             - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
