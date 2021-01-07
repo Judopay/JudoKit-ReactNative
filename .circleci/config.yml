@@ -157,7 +157,7 @@ jobs:
               -workspace RNJudo.xcworkspace \
               -scheme RNJudo \
               -configuration Debug \
-              -sdk iphonesimulator \
+              -sdk iphoneos \
               -derivedDataPath DerivedData \
               -quiet
       - persist_to_workspace:
@@ -200,7 +200,7 @@ jobs:
               -workspace sample-app.xcworkspace \
               -scheme sample-app \
               -configuration Debug \
-              -sdk iphonesimulator \
+              -sdk iphoneos \
               -derivedDataPath DerivedData \
               -quiet
       - persist_to_workspace:

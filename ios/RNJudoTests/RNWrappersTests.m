@@ -381,18 +381,6 @@
 /*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [siteId] property of the [configuration] dictionary is not an NSString
-*
-* THEN:  an 'invalid Site ID' exception should be thrown
-*/
-- (void)test_OnInvalidSiteID_ThrowError {
-    NSDictionary *props = [self propertiesWithConfigurationValue:@123 forKey:@"siteId"];
-    XCTAssertThrows([RNWrappers configurationFromProperties:props]);
-}
-
-/*
-* GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
-*
 * WHEN:  the [cardAddress] property of the [configuration] dictionary is not an NSDictionary
 *
 * THEN:  an 'invalid card address' exception should be thrown
