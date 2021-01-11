@@ -46,12 +46,12 @@ class HelpersKtTest {
 
         every { mapMock.getInt("transactionMode") } returns 1
 
-        every { mapMock.authorization } returns authorizationMock
-        every { authorizationMock.token } returns "token"
-        every { authorizationMock.secret } returns "secret"
-
         every { mapMock.getBoolean("sandboxed") } returns true
         every { configurationMock.getString("judoId") } returns "111111111"
+
+        every { mapMock.getMap("authorization") } returns authorizationMock
+        every { authorizationMock.getString("token") } returns "token"
+        every { authorizationMock.getString("secret") } returns "secret"
 
         // amount
         every { amountMock.getString("value") } returns "1.50"
