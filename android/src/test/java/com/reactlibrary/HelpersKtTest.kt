@@ -270,7 +270,7 @@ class HelpersKtTest {
     }
 
     @Test
-    fun `Given valid user configuration is provided and it contains 1 shl 2 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-GOOGLE_PAY`() {
+    fun `Given valid user configuration is provided and it contains 1 shl 2 as a value of paymentMethods when invoking getPaymentMethods then an array with only PaymentMethod-GOOGLE_PAY should be returned`() {
         every { configurationMock.getInt("paymentMethods") } returns (1 shl 2)
 
         val methods = getPaymentMethods(mapMock)
@@ -413,7 +413,7 @@ class HelpersKtTest {
     }
 
     @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 0 when invoking getGoogleTransactionConfiguration with the given configurations then a valid Judo object should be returned`() {
+    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 0 when invoking getGoogleTransactionConfiguration then a valid Judo object should be returned`() {
         every { mapMock.getInt("transactionMode") } returns -1
         val judo = getGoogleTransactionConfiguration(mapMock)
 
@@ -421,7 +421,7 @@ class HelpersKtTest {
     }
 
     @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 0 when invoking getPaymentMethodsConfiguration with the given configurations then a valid Judo object should be returned`() {
+    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 0 when invoking getPaymentMethodsConfiguration then a valid Judo object should be returned`() {
         every { mapMock.getInt("transactionMode") } returns 0
         val judo = getPaymentMethodsConfiguration(mapMock)
 
@@ -429,7 +429,7 @@ class HelpersKtTest {
     }
 
     @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 1 when invoking getPaymentMethodsConfiguration with the given configurations then a valid Judo object should be returned`() {
+    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 1 when invoking getPaymentMethodsConfiguration then a valid Judo object should be returned`() {
         every { mapMock.getInt("transactionMode") } returns 1
         val judo = getPaymentMethodsConfiguration(mapMock)
 
@@ -437,7 +437,7 @@ class HelpersKtTest {
     }
 
     @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 2 when invoking getPaymentMethodsConfiguration with the given configurations then a valid Judo object should be returned`() {
+    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 2 when invoking getPaymentMethodsConfiguration then a valid Judo object should be returned`() {
         every { mapMock.getInt("transactionMode") } returns 2
         val judo = getPaymentMethodsConfiguration(mapMock)
 
