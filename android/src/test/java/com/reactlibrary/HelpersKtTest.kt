@@ -445,7 +445,7 @@ class HelpersKtTest {
     }
 
     @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with an unexpected value when invoking getPaymentMethodsConfiguration with the given configurations then a valid Judo object should be returned`() {
+    fun `Given valid user configuration is provided and it contains transactionMode key with an unexpected value when invoking getPaymentMethodsConfiguration then a valid Judo object should be returned`() {
         every { mapMock.getInt("transactionMode") } returns -1
         val judo = getPaymentMethodsConfiguration(mapMock)
 
