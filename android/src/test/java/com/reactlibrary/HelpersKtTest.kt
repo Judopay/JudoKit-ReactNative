@@ -270,7 +270,7 @@ class HelpersKtTest {
     }
 
     @Test
-    fun `Given valid user configuration is provided and it contains 1 shl 2 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-GOOGLE_PAY should be returned`() {
+    fun `Given valid user configuration is provided and it contains 1 shl 2 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-GOOGLE_PAY`() {
         every { configurationMock.getInt("paymentMethods") } returns (1 shl 2)
 
         val methods = getPaymentMethods(mapMock)
