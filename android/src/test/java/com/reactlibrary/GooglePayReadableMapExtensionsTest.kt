@@ -7,9 +7,12 @@ import io.mockk.mockkClass
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
+@DisplayName("Testing Google Pay readable map extensions")
 class GooglePayReadableMapExtensionsTest {
 
     private val configMock = mockkClass(ReadableMap::class)
@@ -28,8 +31,8 @@ class GooglePayReadableMapExtensionsTest {
     private val isPhoneNumberRequired = true
     private val addressFormat = 1
 
-    @Before
-    fun before() {
+    @BeforeEach
+    fun setUp() {
         every { googlePayConfigurationMock.getString("countryCode") } returns countryCode
         every { googlePayConfigurationMock.getInt("environment") } returns environment
         every { googlePayConfigurationMock.getBoolean("isEmailRequired") } returns isEmailRequired
@@ -53,69 +56,87 @@ class GooglePayReadableMapExtensionsTest {
         every { sut.getMap("configuration") } returns configMock
     }
 
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking countryCode property then GB should be returned`() {
-        assertEquals(sut.countryCode, countryCode)
+    @Nested
+    @DisplayName("Given configuration object contains googlePayConfiguration")
+    inner class ConfigObjectContainsGooglePayConfig {
+
+        @Test
+        @DisplayName("when invoking countryCode property then GB should be returned")
+        fun returnGBOnCountryCode() {
+            assertEquals(sut.countryCode, countryCode)
+        }
+
+        @Test
+        @DisplayName("when invoking environmentValue property then environment value should be returned")
+        fun returnEnvironmentOnEnvironmentValue() {
+            assertEquals(sut.environmentValue, environment)
+        }
+
+        @Test
+        @DisplayName("when invoking isEmailRequired property then true should be returned")
+        fun returnTrueOnIsEmailRequired() {
+            assertTrue(sut.isEmailRequired!!)
+        }
+
+        @Test
+        @DisplayName("when invoking isBillingPhoneNumberRequired property then true should be returned")
+        fun returnTrueOnIsBillingPhoneNumberRequired() {
+            assertTrue(sut.isBillingPhoneNumberRequired!!)
+        }
+
+        @Test
+        @DisplayName("when invoking isShippingPhoneNumberRequired property then true should be returned")
+        fun returnTrueOnIsShippingPhoneNumberRequired() {
+            assertTrue(sut.isShippingPhoneNumberRequired!!)
+        }
+
+        @Test
+        @DisplayName("when invoking isBillingAddressRequired property then true should be returned")
+        fun returnTrueOnIsBillingAddressRequired() {
+            assertTrue(sut.isBillingAddressRequired!!)
+        }
+
+        @Test
+        @DisplayName("when invoking isShippingAddressRequired property then true should be returned")
+        fun returnTrueOnIsShippingAddressRequired() {
+            assertTrue(sut.isShippingAddressRequired!!)
+        }
+
+        @Test
+        @DisplayName("when invoking billingAddressParameters property then googlePayConfigurationMock should be returned")
+        fun returnGooglePayConfigurationMockOnBillingAddressParameters() {
+            assertEquals(sut.billingAddressParameters, billingAddressParametersMock)
+        }
+
+        @Test
+        @DisplayName("when invoking shippingAddressParameters property then shippingAddressParametersMock should be returned")
+        fun returnShippingAddressParametersMockOnShippingAddressParameters() {
+            assertEquals(sut.shippingAddressParameters, shippingAddressParametersMock)
+        }
+
+        @Test
+        @DisplayName("when invoking allowedCountryCodeList property then allowedCountryCodesMock should be returned")
+        fun returnAllowedCountryCodesMockOnAllowedCountryCodeList() {
+            assertEquals(sut.allowedCountryCodeList, allowedCountryCodesMock)
+        }
+
+        @Test
+        @DisplayName("and shippingAddressParameters has no allowedCountryCodes key when invoking allowedCountryCodeList property then null should be returned")
+        fun returnNullOnAllowedCountryCodeListWHenShippingAddressParametersHasNoAllowedCountryCodesKey() {
+            every { shippingAddressParametersMock.hasKey("allowedCountryCodes") } returns false
+            assertNull(sut.allowedCountryCodeList)
+        }
+
+        @Test
+        @DisplayName("when invoking addressFormat property then addressFormat should be returned")
+        fun returnAddressFormatOnAddressFormat() {
+            assertEquals(sut.addressFormat, addressFormat)
+        }
     }
 
     @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking environment property then environment value should be returned`() {
-        assertEquals(sut.environmentValue, environment)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking isEmailRequired property then true should be returned`() {
-        assertTrue(sut.isEmailRequired!!)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking isBillingPhoneNumberRequired property then isPhoneNumberRequired should be returned`() {
-        assertTrue(sut.isBillingPhoneNumberRequired!!)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking isShippingPhoneNumberRequired property then isPhoneNumberRequired should be returned`() {
-        assertTrue(sut.isShippingPhoneNumberRequired!!)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking isBillingAddressRequired property then true should be returned`() {
-        assertTrue(sut.isBillingAddressRequired!!)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking isShippingAddressRequired property then true should be returned`() {
-        assertTrue(sut.isShippingAddressRequired!!)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking billingAddressParameters property then googlePayConfigurationMock should be returned`() {
-        assertEquals(sut.billingAddressParameters, billingAddressParametersMock)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking shippingAddressParameters property then shippingAddressParametersMock should be returned`() {
-        assertEquals(sut.shippingAddressParameters, shippingAddressParametersMock)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking allowedCountryCodeList property then allowedCountryCodesMock should be returned`() {
-        assertEquals(sut.allowedCountryCodeList, allowedCountryCodesMock)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration and shippingAddressParameters has no allowedCountryCodes key when invoking allowedCountryCodeList property then null should be returned`() {
-        every { shippingAddressParametersMock.hasKey("allowedCountryCodes") } returns false
-        assertNull(sut.allowedCountryCodeList)
-    }
-
-    @Test
-    fun `Given configuration object contains googlePayConfiguration when invoking addressFormat property then addressFormat should be returned`() {
-        assertEquals(sut.addressFormat, addressFormat)
-    }
-
-    @Test
-    fun `Given configuration object has no googlePayConfiguration when invoking googlePayConfiguration properties then null should be returned for each one`() {
+    @DisplayName("Given configuration object has no googlePayConfiguration when invoking googlePayConfiguration properties then null should be returned for each one")
+    fun returnNullForEachPropertyOnGooglePayConfigurationWhenConfigObjectHasNoGooglePayConfiguration() {
         every { configMock.hasKey("googlePayConfiguration") } returns false
 
         assertNull(sut.countryCode)

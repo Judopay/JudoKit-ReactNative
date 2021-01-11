@@ -18,10 +18,13 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.charset.StandardCharsets
 
+@DisplayName("Testing Helpers class")
 class HelpersKtTest {
 
     private val configurationMock = mockkClass(ReadableMap::class)
@@ -38,8 +41,8 @@ class HelpersKtTest {
     private val pbbaConfigurationMock = mockkClass(ReadableMap::class)
     private val allowedCountryCodesMock = mockkClass(ReadableArray::class)
 
-    @Before
-    fun before() {
+    @BeforeEach
+    fun setUp() {
         mockkStatic("android.util.Base64")
         mockkStatic("android.net.Uri")
         every { Base64.encodeToString("token:secret".toByteArray(StandardCharsets.UTF_8), Base64.NO_WRAP) } returns "credentials"
@@ -134,379 +137,370 @@ class HelpersKtTest {
         every { pbbaConfigurationMock.getString("deeplinkURL") } returns "https://www.google.com"
         every { pbbaConfigurationMock.getString("deeplinkScheme") } returns "deep://link"
 
-        every { mapMock.configuration } returns configurationMock
+        every { mapMock.getMap("configuration") } returns configurationMock
     }
 
-    @Test
-    fun `Given valid user configuration is provided when invoking getAmount with the given configuration then a valid amount object should be returned`() {
-        val amount = getAmount(mapMock)
+    @Nested
+    @DisplayName("Given valid user configuration is provided")
+    inner class ValidUserConfig {
 
-        assertEquals(amount.amount, "1.50")
-        assertEquals(amount.currency, Currency.GBP)
+        @Test
+        @DisplayName("when invoking getAmount with the given configuration then a valid amount object should be returned")
+        fun returnAmountOnValidUserConfig() {
+            val amount = getAmount(mapMock)
+
+            assertEquals(amount.amount, "1.50")
+            assertEquals(amount.currency, Currency.GBP)
+        }
+
+        @Test
+        @DisplayName("and it contains no currency when invoking getAmount with the given configurations then a valid amount object should be returned with GBP as currency")
+        fun returnGbpWhenUserConfigHasNoCurrency() {
+            every { amountMock.getString("currency") } returns null
+
+            val amount = getAmount(mapMock)
+            assertEquals(amount.currency, Currency.GBP)
+        }
+
+        @Test
+        @DisplayName("when invoking getReference with the given configurations then a valid reference object should be returned")
+        fun returnReferenceObjectWhenInvokingGetReference() {
+            val reference = getReference(mapMock)
+
+            assertEquals(reference?.paymentReference, "paymentReference")
+            assertEquals(reference?.consumerReference, "consumerReference")
+            assertNotNull(reference?.metaData)
+        }
+
+        @Test
+        @DisplayName("and it contains no metadata key when invoking getReference with the given configurations then a valid reference object should be returned with null metaData")
+        fun returnReferenceObjectWithNullMetaData() {
+            every { referenceMock.hasKey("metadata") } returns false
+
+            val reference = getReference(mapMock)
+
+            assertEquals(reference?.paymentReference, "paymentReference")
+            assertEquals(reference?.consumerReference, "consumerReference")
+            assertNull(reference?.metaData)
+        }
+
+
+        @Test
+        @DisplayName("when invoking getPrimaryAccountDetails with the given configurations then a valid PrimaryAccountDetails object should be returned")
+        fun returnPrimaryAccountDetailsOnGetPrimaryAccountDetails() {
+            val account = getPrimaryAccountDetails(mapMock)
+
+            assertEquals(account?.name, "name")
+            assertEquals(account?.accountNumber, "accountNumber")
+            assertEquals(account?.dateOfBirth, "dateOfBirth")
+            assertEquals(account?.postCode, "postCode")
+        }
+
+        @Test
+        @DisplayName("when invoking getUIConfiguration with the given configurations then a valid UiConfiguration object should be returned")
+        fun returnUiConfigurationOnGetUIConfiguration() {
+            val configuration = getUIConfiguration(mapMock)
+
+            assertTrue(configuration!!.avsEnabled)
+            assertTrue(configuration.shouldPaymentMethodsDisplayAmount)
+        }
+
+        @Test
+        @DisplayName("and it contains no uiConfiguration key when invoking getUIConfiguration with the given configurations then null should be returned")
+        fun returnNullOnGetUiConfigurationWhenNoUiConfigurationIsSet() {
+            every { configurationMock.hasKey("uiConfiguration") } returns false
+
+            val configuration = getUIConfiguration(mapMock)
+            assertNull(configuration)
+        }
+
+        @Test
+        @DisplayName("when invoking getPaymentMethods with the given configurations then an array with all supported PaymentMethods should be returned")
+        fun returnArrayOfPaymentMethodsOnGetPaymentMethods() {
+            val methods = getPaymentMethods(mapMock)
+
+            assertNotNull(methods)
+            assertTrue(methods!!.contains(PaymentMethod.CARD))
+            assertTrue(methods.contains(PaymentMethod.GOOGLE_PAY))
+            assertTrue(methods.contains(PaymentMethod.IDEAL))
+        }
+
+        @Test
+        @DisplayName("and it contains no paymentMethods key when invoking getPaymentMethods with the given configurations then null should be returned")
+        fun returnNullOnGetPaymentMethodsWhenNoPaymentMethodsAreSet() {
+            every { configurationMock.hasKey("paymentMethods") } returns false
+
+            val methods = getPaymentMethods(mapMock)
+
+            assertNull(methods)
+        }
+
+        @Test
+        @DisplayName("and it contains 1 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-CARD should be returned")
+        fun returnCardOnGetPaymentMethodsWhenValueIsOne() {
+            every { configurationMock.getInt("paymentMethods") } returns 1
+
+            val methods = getPaymentMethods(mapMock)
+
+            assertNotNull(methods)
+            assertTrue(methods!!.size == 1)
+            assertTrue(methods.contains(PaymentMethod.CARD))
+        }
+
+        @Test
+        @DisplayName("and it contains 1 shl 2 as a value of paymentMethods when invoking getPaymentMethods then an array with only PaymentMethod-GOOGLE_PAY should be returned")
+        fun returnGooglePayOnGetPaymentMethodsWhenValueIsOneShlTwo() {
+            every { configurationMock.getInt("paymentMethods") } returns (1 shl 2)
+
+            val methods = getPaymentMethods(mapMock)
+
+            assertNotNull(methods)
+            assertTrue(methods!!.size == 1)
+            assertTrue(methods.contains(PaymentMethod.GOOGLE_PAY))
+        }
+
+        @Test
+        @DisplayName("and it contains 1 shl 3 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-IDEAL should be returned")
+        fun returnIdealOnGetPaymentMethodsWhenValueIsOneShlThree() {
+            every { configurationMock.getInt("paymentMethods") } returns (1 shl 3)
+
+            val methods = getPaymentMethods(mapMock)
+
+            assertNotNull(methods)
+            assertTrue(methods!!.size == 1)
+            assertTrue(methods.contains(PaymentMethod.IDEAL))
+        }
+
+        @Test
+        @DisplayName("when invoking getShippingParameters with the given configurations then a valid GooglePayShippingAddressParameters object should be returned")
+        fun returnValidGooglePayShippingAddressParametersOnGetShippingParameters() {
+            val params = getShippingParameters(mapMock)!!
+
+            assertTrue(params.phoneNumberRequired!!)
+            assertTrue(params.allowedCountryCodes!!.contains("US"))
+        }
+
+        @Test
+        @DisplayName("when invoking getBillingParameters with the given configurations then a valid GooglePayBillingAddressParameters object should be returned")
+        fun returnValidGooglePayBillingAddressParametersOnGetBillingParameters() {
+            val params = getBillingParameters(mapMock)!!
+
+            assertTrue(params.phoneNumberRequired!!)
+            assertEquals(params.format, GooglePayAddressFormat.FULL)
+        }
+
+        @Test
+        @DisplayName("when invoking getGooglePayConfiguration with the given configurations then a valid GooglePayConfiguration object should be returned")
+        fun returnValidGooglePayConfigurationOnGetGooglePayConfiguration() {
+            val params = getGooglePayConfiguration(mapMock)!!
+
+            assertEquals(params.isEmailRequired, true)
+            assertEquals(params.isBillingAddressRequired, true)
+            assertEquals(params.isShippingAddressRequired, true)
+            assertEquals(params.environment, GooglePayEnvironment.PRODUCTION)
+        }
+
+        @Test
+        @DisplayName("and it contains no googlePayConfiguration key when invoking getGooglePayConfiguration with the given configurations then null should be returned")
+        fun returnNullOnGetGooglePayConfigurationWhenNoGooglePayConfigurationKeyPresent() {
+            every { configurationMock.hasKey("googlePayConfiguration") } returns false
+
+            val params = getGooglePayConfiguration(mapMock)
+
+            assertNull(params)
+        }
+
+        @Test
+        @DisplayName("when invoking getPBBAConfiguration with the given configurations then a valid PBBAConfiguration object should be returned")
+        fun returnValidPBBAConfigurationOnGetPBBAConfiguration() {
+            val deeplinkUrl = mockk<Uri>(relaxed = true)
+            every { Uri.parse("https://www.google.com") } returns deeplinkUrl
+
+            val params = getPBBAConfiguration(mapMock)!!
+
+            assertEquals("123-123", params.mobileNumber)
+            assertEquals("example@mail.com", params.emailAddress)
+            assertEquals(deeplinkUrl, params.deepLinkURL)
+            assertEquals("deep://link", params.deepLinkScheme)
+        }
+
+        @Test
+        @DisplayName("and it contains no pbbaConfiguration key when invoking getPBBAConfiguration with the given configurations then null should be returned")
+        fun returnNullOnGetPBBAConfigurationWhenNoPbbaConfigurationKeyPresent() {
+            every { configurationMock.hasKey("pbbaConfiguration") } returns false
+
+            val params = getPBBAConfiguration(mapMock)
+
+            assertNull(params)
+        }
     }
 
-    @Test
-    fun `Given valid user configuration is provided and it contains no currency when invoking getAmount with the given configurations then a valid amount object should be returned with GBP as currency`() {
-        every { amountMock.getString("currency") } returns null
+    @Nested
+    @DisplayName("Given user configuration contains transactionType key")
+    inner class UserConfigContainsTransactionTypeKey {
 
-        val amount = getAmount(mapMock)
-        assertEquals(amount.currency, Currency.GBP)
+        @Test
+        @DisplayName("and value is 1 when invoking getWidgetType with the given configurations then PaymentWidgetType-PRE_AUTH should be returned")
+        fun returnPreAuthOnGetWidgetTypeWhenValueIsOne() {
+            every { mapMock.getInt("transactionType") } returns 1
+
+            val type = getTransactionTypeWidget(mapMock)
+            assertEquals(type, PaymentWidgetType.PRE_AUTH)
+        }
+
+        @Test
+        @DisplayName("and value is 2 when invoking getWidgetType with the given configurations then PaymentWidgetType-REGISTER_CARD should be returned")
+        fun returnRegisterCardOnGetWidgetTypeWhenValueIsTwo() {
+            every { mapMock.getInt("transactionType") } returns 2
+
+            val type = getTransactionTypeWidget(mapMock)
+            assertEquals(type, PaymentWidgetType.REGISTER_CARD)
+        }
+
+        @Test
+        @DisplayName("and value is 3 when invoking getWidgetType with the given configurations then PaymentWidgetType-CHECK_CARD should be returned")
+        fun returnCheckCardOnGetWidgetTypeWhenValueIsThree() {
+            every { mapMock.getInt("transactionType") } returns 3
+
+            val type = getTransactionTypeWidget(mapMock)
+            assertEquals(type, PaymentWidgetType.CHECK_CARD)
+        }
+
+        @Test
+        @DisplayName("and value is 4 when invoking getWidgetType with the given configurations then PaymentWidgetType-CREATE_CARD_TOKEN should be returned")
+        fun returnCreateCardTokenOnGetWidgetTypeWhenValueIsFour() {
+            every { mapMock.getInt("transactionType") } returns 4
+
+            val type = getTransactionTypeWidget(mapMock)
+            assertEquals(type, PaymentWidgetType.CREATE_CARD_TOKEN)
+        }
+
+        @Test
+        @DisplayName("and with any unknown value when invoking getWidgetType with the given configurations then PaymentWidgetType-CARD_PAYMENT should be returned")
+        fun returnCardPaymentOnGetWidgetTypeWhenUnknownValue() {
+            every { mapMock.getInt("transactionType") } returns 100
+
+            val type = getTransactionTypeWidget(mapMock)
+            assertEquals(type, PaymentWidgetType.CARD_PAYMENT)
+        }
     }
 
-    @Test
-    fun `Given valid user configuration is provided when invoking getReference with the given configurations then a valid reference object should be returned`() {
-        val reference = getReference(mapMock)
+    @Nested
+    @DisplayName("Given user configuration contains supportedCardNetworks key")
+    inner class UserConfigContainsSupportedCardNetworksKey {
 
-        assertEquals(reference?.paymentReference, "paymentReference")
-        assertEquals(reference?.consumerReference, "consumerReference")
-        assertNotNull(reference?.metaData)
+        @Test
+        @DisplayName("and 1 shl 8 as a value when invoking getCardNetworks with the given configurations then an array with all CardNetworks should be returned")
+        fun returnAllCardNetworksOnGetCardNetworksWhenValueOneShlEight() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 8)
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.contains(CardNetwork.VISA))
+            assertTrue(networks.contains(CardNetwork.MASTERCARD))
+            assertTrue(networks.contains(CardNetwork.MAESTRO))
+            assertTrue(networks.contains(CardNetwork.AMEX))
+            assertTrue(networks.contains(CardNetwork.CHINA_UNION_PAY))
+            assertTrue(networks.contains(CardNetwork.JCB))
+            assertTrue(networks.contains(CardNetwork.DISCOVER))
+            assertTrue(networks.contains(CardNetwork.DINERS_CLUB))
+        }
+
+        @Test
+        @DisplayName("and 1 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-VISA should be returned")
+        fun returnVisaOnGetCardNetworksWHenValueOne() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns 1
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.size == 1)
+            assertTrue(networks.contains(CardNetwork.VISA))
+        }
+
+        @Test
+        @DisplayName("and 1 shl 1 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-MASTERCARD should be returned")
+        fun returnMastercardOnGetCardNetworksWhenValueOneShlOne() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 1)
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.size == 1)
+            assertTrue(networks.contains(CardNetwork.MASTERCARD))
+        }
+
+        @Test
+        @DisplayName("and 1 shl 2 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-MAESTRO should be returned")
+        fun returnMaestroOnGetCardNetworksWhenValueOneShlTwo() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 2)
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.size == 1)
+            assertTrue(networks.contains(CardNetwork.MAESTRO))
+        }
+
+        @Test
+        @DisplayName("and 1 shl 3 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-AMEX should be returned")
+        fun returnAmexOnGetCardNetworksWhenValueOneShlThree() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 3)
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.size == 1)
+            assertTrue(networks.contains(CardNetwork.AMEX))
+        }
+
+        @Test
+        @DisplayName("and 1 shl 4 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-CHINA_UNION_PAY should be returned")
+        fun returnChinaUnionPayOnGetCardNetworksWhenValueOneShlFour() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 4)
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.size == 1)
+            assertTrue(networks.contains(CardNetwork.CHINA_UNION_PAY))
+        }
+
+        @Test
+        @DisplayName("and 1 shl 5 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-JCB should be returned")
+        fun returnJcbOnGetCardNetworksWhenValueOneShlFive() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 5)
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.size == 1)
+            assertTrue(networks.contains(CardNetwork.JCB))
+        }
+
+        @Test
+        @DisplayName("and 1 shl 6 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-DISCOVER should be returned")
+        fun returnDiscoverOnGetCardNetworksWhenValueOneShlSix() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 6)
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.size == 1)
+            assertTrue(networks.contains(CardNetwork.DISCOVER))
+        }
+
+        @Test
+        @DisplayName("and 1 shl 7 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-DINERS_CLUB should be returned")
+        fun returnDinersClubOnGetCardNetworksWhenValueOneShlSeven() {
+            every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 7)
+
+            val networks = getCardNetworks(mapMock)
+
+            assertNotNull(networks)
+            assertTrue(networks!!.size == 1)
+            assertTrue(networks.contains(CardNetwork.DINERS_CLUB))
+        }
     }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains no metadata key when invoking getReference with the given configurations then a valid reference object should be returned with null metaData`() {
-        every { referenceMock.hasKey("metadata") } returns false
-
-        val reference = getReference(mapMock)
-
-        assertEquals(reference?.paymentReference, "paymentReference")
-        assertEquals(reference?.consumerReference, "consumerReference")
-        assertNull(reference?.metaData)
-    }
-
-    @Test
-    fun `Given user configuration contains transactionType key with value 1 when invoking getWidgetType with the given configurations then PaymentWidgetType-PRE_AUTH should be returned`() {
-        every { mapMock.getInt("transactionType") } returns 1
-
-        val type = getTransactionTypeWidget(mapMock)
-        assertEquals(type, PaymentWidgetType.PRE_AUTH)
-    }
-
-    @Test
-    fun `Given user configuration contains transactionType key with value 2 when invoking getWidgetType with the given configurations then PaymentWidgetType-REGISTER_CARD should be returned`() {
-        every { mapMock.getInt("transactionType") } returns 2
-
-        val type = getTransactionTypeWidget(mapMock)
-        assertEquals(type, PaymentWidgetType.REGISTER_CARD)
-    }
-
-    @Test
-    fun `Given user configuration contains transactionType key with value 3 when invoking getWidgetType with the given configurations then PaymentWidgetType-CHECK_CARD should be returned`() {
-        every { mapMock.getInt("transactionType") } returns 3
-
-        val type = getTransactionTypeWidget(mapMock)
-        assertEquals(type, PaymentWidgetType.CHECK_CARD)
-    }
-
-    @Test
-    fun `Given user configuration contains transactionType key with value 4 when invoking getWidgetType with the given configurations then PaymentWidgetType-CREATE_CARD_TOKEN should be returned`() {
-        every { mapMock.getInt("transactionType") } returns 4
-
-        val type = getTransactionTypeWidget(mapMock)
-        assertEquals(type, PaymentWidgetType.CREATE_CARD_TOKEN)
-    }
-
-    @Test
-    fun `Given user configuration contains transactionType key with any unknown value when invoking getWidgetType with the given configurations then PaymentWidgetType-CARD_PAYMENT should be returned`() {
-        every { mapMock.getInt("transactionType") } returns 100
-
-        val type = getTransactionTypeWidget(mapMock)
-        assertEquals(type, PaymentWidgetType.CARD_PAYMENT)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided when invoking getPrimaryAccountDetails with the given configurations then a valid PrimaryAccountDetails object should be returned`() {
-        val account = getPrimaryAccountDetails(mapMock)
-
-        assertEquals(account?.name, "name")
-        assertEquals(account?.accountNumber, "accountNumber")
-        assertEquals(account?.dateOfBirth, "dateOfBirth")
-        assertEquals(account?.postCode, "postCode")
-    }
-
-    @Test
-    fun `Given valid user configuration is provided when invoking getUIConfiguration with the given configurations then a valid UiConfiguration object should be returned`() {
-        val configuration = getUIConfiguration(mapMock)
-
-        assertTrue(configuration!!.avsEnabled)
-        assertTrue(configuration.shouldPaymentMethodsDisplayAmount)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains no uiConfiguration key when invoking getUIConfiguration with the given configurations then null should be returned`() {
-        every { configurationMock.hasKey("uiConfiguration") } returns false
-
-        val configuration = getUIConfiguration(mapMock)
-        assertNull(configuration)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided when invoking getPaymentMethods with the given configurations then an array with all supported PaymentMethods should be returned`() {
-        val methods = getPaymentMethods(mapMock)
-
-        assertNotNull(methods)
-        assertTrue(methods!!.contains(PaymentMethod.CARD))
-        assertTrue(methods.contains(PaymentMethod.GOOGLE_PAY))
-        assertTrue(methods.contains(PaymentMethod.IDEAL))
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains no paymentMethods key when invoking getPaymentMethods with the given configurations then null should be returned`() {
-        every { configurationMock.hasKey("paymentMethods") } returns false
-
-        val methods = getPaymentMethods(mapMock)
-
-        assertNull(methods)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains 1 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-CARD should be returned`() {
-        every { configurationMock.getInt("paymentMethods") } returns 1
-
-        val methods = getPaymentMethods(mapMock)
-
-        assertNotNull(methods)
-        assertTrue(methods!!.size == 1)
-        assertTrue(methods.contains(PaymentMethod.CARD))
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains 1 shl 2 as a value of paymentMethods when invoking getPaymentMethods then an array with only PaymentMethod-GOOGLE_PAY should be returned`() {
-        every { configurationMock.getInt("paymentMethods") } returns (1 shl 2)
-
-        val methods = getPaymentMethods(mapMock)
-
-        assertNotNull(methods)
-        assertTrue(methods!!.size == 1)
-        assertTrue(methods.contains(PaymentMethod.GOOGLE_PAY))
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains 1 shl 3 as a value of paymentMethods when invoking getPaymentMethods with the given configurations then an array with only PaymentMethod-IDEAL should be returned`() {
-        every { configurationMock.getInt("paymentMethods") } returns (1 shl 3)
-
-        val methods = getPaymentMethods(mapMock)
-
-        assertNotNull(methods)
-        assertTrue(methods!!.size == 1)
-        assertTrue(methods.contains(PaymentMethod.IDEAL))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 shl 8 as a value when invoking getCardNetworks with the given configurations then an array with all CardNetworks should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 8)
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.contains(CardNetwork.VISA))
-        assertTrue(networks.contains(CardNetwork.MASTERCARD))
-        assertTrue(networks.contains(CardNetwork.MAESTRO))
-        assertTrue(networks.contains(CardNetwork.AMEX))
-        assertTrue(networks.contains(CardNetwork.CHINA_UNION_PAY))
-        assertTrue(networks.contains(CardNetwork.JCB))
-        assertTrue(networks.contains(CardNetwork.DISCOVER))
-        assertTrue(networks.contains(CardNetwork.DINERS_CLUB))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-VISA should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns 1
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.size == 1)
-        assertTrue(networks.contains(CardNetwork.VISA))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 shl 1 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-MASTERCARD should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 1)
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.size == 1)
-        assertTrue(networks.contains(CardNetwork.MASTERCARD))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 shl 2 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-MAESTRO should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 2)
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.size == 1)
-        assertTrue(networks.contains(CardNetwork.MAESTRO))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 shl 3 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-AMEX should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 3)
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.size == 1)
-        assertTrue(networks.contains(CardNetwork.AMEX))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 shl 4 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-CHINA_UNION_PAY should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 4)
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.size == 1)
-        assertTrue(networks.contains(CardNetwork.CHINA_UNION_PAY))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 shl 5 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-JCB should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 5)
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.size == 1)
-        assertTrue(networks.contains(CardNetwork.JCB))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 shl 6 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-DISCOVER should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 6)
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.size == 1)
-        assertTrue(networks.contains(CardNetwork.DISCOVER))
-    }
-
-    @Test
-    fun `Given user configuration contains supportedCardNetworks key with 1 shl 7 as a value when invoking getCardNetworks with the given configurations then an array with only CardNetwork-DINERS_CLUB should be returned`() {
-        every { configurationMock.getInt("supportedCardNetworks") } returns (1 shl 7)
-
-        val networks = getCardNetworks(mapMock)
-
-        assertNotNull(networks)
-        assertTrue(networks!!.size == 1)
-        assertTrue(networks.contains(CardNetwork.DINERS_CLUB))
-    }
-
-    @Test
-    fun `Given valid user configuration is provided when invoking getTransactionConfiguration with the given configurations then a valid Judo object should be returned`() {
-        every { mapMock.getInt("transactionType") } returns 1
-        val judo = getTransactionConfiguration(mapMock)
-
-        assertEquals(judo.paymentWidgetType, PaymentWidgetType.PRE_AUTH)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with 0 as value when invoking getGoogleTransactionConfiguration with the given configurations then a valid Judo object should be returned`() {
-        every { mapMock.getInt("transactionMode") } returns 0
-        val judo = getGoogleTransactionConfiguration(mapMock)
-
-        assertEquals(judo.paymentWidgetType, PaymentWidgetType.GOOGLE_PAY)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 0 when invoking getGoogleTransactionConfiguration then a valid Judo object should be returned`() {
-        every { mapMock.getInt("transactionMode") } returns -1
-        val judo = getGoogleTransactionConfiguration(mapMock)
-
-        assertEquals(judo.paymentWidgetType, PaymentWidgetType.PRE_AUTH_GOOGLE_PAY)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 0 when invoking getPaymentMethodsConfiguration then a valid Judo object should be returned`() {
-        every { mapMock.getInt("transactionMode") } returns 0
-        val judo = getPaymentMethodsConfiguration(mapMock)
-
-        assertEquals(judo.paymentWidgetType, PaymentWidgetType.PAYMENT_METHODS)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 1 when invoking getPaymentMethodsConfiguration then a valid Judo object should be returned`() {
-        every { mapMock.getInt("transactionMode") } returns 1
-        val judo = getPaymentMethodsConfiguration(mapMock)
-
-        assertEquals(judo.paymentWidgetType, PaymentWidgetType.PRE_AUTH_PAYMENT_METHODS)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with value different than 2 when invoking getPaymentMethodsConfiguration then a valid Judo object should be returned`() {
-        every { mapMock.getInt("transactionMode") } returns 2
-        val judo = getPaymentMethodsConfiguration(mapMock)
-
-        assertEquals(judo.paymentWidgetType, PaymentWidgetType.SERVER_TO_SERVER_PAYMENT_METHODS)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains transactionMode key with an unexpected value when invoking getPaymentMethodsConfiguration then a valid Judo object should be returned`() {
-        every { mapMock.getInt("transactionMode") } returns -1
-        val judo = getPaymentMethodsConfiguration(mapMock)
-
-        assertEquals(judo.paymentWidgetType, PaymentWidgetType.PAYMENT_METHODS)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided when invoking getShippingParameters with the given configurations then a valid GooglePayShippingAddressParameters object should be returned`() {
-        val params = getShippingParameters(mapMock)!!
-
-        assertTrue(params.phoneNumberRequired!!)
-        assertTrue(params.allowedCountryCodes!!.contains("US"))
-    }
-
-    @Test
-    fun `Given valid user configuration is provided when invoking getBillingParameters with the given configurations then a valid GooglePayBillingAddressParameters object should be returned`() {
-        val params = getBillingParameters(mapMock)!!
-
-        assertTrue(params.phoneNumberRequired!!)
-        assertEquals(params.format, GooglePayAddressFormat.FULL)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided when invoking getGooglePayConfiguration with the given configurations then a valid GooglePayConfiguration object should be returned`() {
-        val params = getGooglePayConfiguration(mapMock)!!
-
-        assertEquals(params.isEmailRequired, true)
-        assertEquals(params.isBillingAddressRequired, true)
-        assertEquals(params.isShippingAddressRequired, true)
-        assertEquals(params.environment, GooglePayEnvironment.PRODUCTION)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains no googlePayConfiguration key when invoking getGooglePayConfiguration with the given configurations then null should be returned`() {
-        every { configurationMock.hasKey("googlePayConfiguration") } returns false
-
-        val params = getGooglePayConfiguration(mapMock)
-
-        assertNull(params)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided when invoking getPBBAConfiguration with the given configurations then a valid PBBAConfiguration object should be returned`() {
-        val deeplinkUrl = mockk<Uri>(relaxed = true)
-        every { Uri.parse("https://www.google.com") } returns deeplinkUrl
-
-        val params = getPBBAConfiguration(mapMock)!!
-
-        assertEquals("123-123", params.mobileNumber)
-        assertEquals("example@mail.com", params.emailAddress)
-        assertEquals(deeplinkUrl, params.deepLinkURL)
-        assertEquals("deep://link", params.deepLinkScheme)
-    }
-
-    @Test
-    fun `Given valid user configuration is provided and it contains no pbbaConfiguration key when invoking getPBBAConfiguration with the given configurations then null should be returned`() {
-        every { configurationMock.hasKey("pbbaConfiguration") } returns false
-
-        val params = getPBBAConfiguration(mapMock)
-
-        assertNull(params)
-    }
-
 }

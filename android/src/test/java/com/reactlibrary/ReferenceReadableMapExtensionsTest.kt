@@ -6,9 +6,12 @@ import io.mockk.mockkClass
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
+@DisplayName("Testing Reference readable map extensions")
 class ReferenceReadableMapExtensionsTest {
 
     private val configMock = mockkClass(ReadableMap::class)
@@ -19,8 +22,8 @@ class ReferenceReadableMapExtensionsTest {
     private val consumerReference = "ref1"
     private val paymentReference = "ref2"
 
-    @Before
-    fun before() {
+    @BeforeEach
+    fun setUp() {
         every { referenceMock.getString("consumerReference") } returns consumerReference
         every { referenceMock.getString("paymentReference") } returns paymentReference
         every { referenceMock.getMap("metadata") } returns metadataMock
@@ -31,37 +34,55 @@ class ReferenceReadableMapExtensionsTest {
         every { sut.getMap("configuration") } returns configMock
     }
 
-    @Test
-    fun `Given configuration object contains reference when invoking consumerReference then the consumerReference string should be returned`() {
-        assertEquals(sut.consumerReference, consumerReference)
+    @Nested
+    @DisplayName("Given configuration object contains reference")
+    inner class ConfigObjectContainsReference {
+
+        @Test
+        @DisplayName("when invoking consumerReference then the consumerReference string should be returned")
+        fun returnConsumerReferenceOnConsumerReferenceCall() {
+            assertEquals(sut.consumerReference, consumerReference)
+        }
+
+        @Test
+        @DisplayName("when invoking paymentReference then the paymentReference string should be returned")
+        fun returnPaymentReferenceOnPaymentReferenceCall() {
+            assertEquals(sut.paymentReference, paymentReference)
+        }
+
+        @Test
+        @DisplayName("when invoking metadata then the value of metadata property should be returned")
+        fun returnMetadataOnMetadataCall() {
+            assertNotNull(sut.metadata)
+            assertEquals(sut.metadata, metadataMock)
+        }
+    }
+
+    @Nested
+    @DisplayName("Given configuration object has no reference")
+    inner class ConfigObjectHasNoReference {
+
+        @BeforeEach
+        internal fun setUp() {
+            every { configMock.getMap("reference") } returns null
+        }
+
+        @Test
+        @DisplayName("when invoking consumerReference then null should be returned")
+        fun returnNullOnConsumerReferenceCall() {
+            assertNull(sut.consumerReference)
+        }
+
+        @Test
+        @DisplayName("when invoking paymentReference then null should be returned")
+        fun returnNullOnPaymentReferenceCall() {
+            assertNull(sut.paymentReference)
+        }
     }
 
     @Test
-    fun `Given configuration object contains reference when invoking paymentReference then the paymentReference string should be returned`() {
-        assertEquals(sut.paymentReference, paymentReference)
-    }
-
-    @Test
-    fun `Given configuration object has no reference when invoking consumerReference then null should be returned`() {
-        every { configMock.getMap("reference") } returns null
-
-        assertNull(sut.consumerReference)
-    }
-
-    @Test
-    fun `Given configuration object has no reference when invoking paymentReference then null should be returned`() {
-        every { configMock.getMap("reference") } returns null
-        assertNull(sut.paymentReference)
-    }
-
-    @Test
-    fun `Given configuration object has reference when invoking metadata then the value of metadata property should be returned`() {
-        assertNotNull(sut.metadata)
-        assertEquals(sut.metadata, metadataMock)
-    }
-
-    @Test
-    fun `Given reference object has no metadata key when invoking metadata then null should be returned`() {
+    @DisplayName("Given reference object has no metadata key when invoking metadata then null should be returned")
+    fun returnNullOnMetadataCallWhenReferenceHasNoMetadataKey() {
         every { referenceMock.hasKey("metadata") } returns false
         assertNull(sut.metadata)
     }

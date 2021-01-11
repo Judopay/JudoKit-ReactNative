@@ -5,9 +5,12 @@ import io.mockk.every
 import io.mockk.mockkClass
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
+@DisplayName("Testing Amount readable map extensions")
 class AmountReadableMapExtensionsTest {
 
     private val configMock = mockkClass(ReadableMap::class)
@@ -17,34 +20,50 @@ class AmountReadableMapExtensionsTest {
     private val amount = "1.5"
     private val currency = "GBP"
 
-    @Before
-    fun before() {
+    @BeforeEach
+    fun setUp() {
         every { amountMock.getString("value") } returns amount
         every { amountMock.getString("currency") } returns currency
         every { configMock.getMap("amount") } returns amountMock
         every { sut.getMap("configuration") } returns configMock
     }
 
-    @Test
-    fun `Given configuration object contains amount when invoking amountValue then the amount string should be returned`() {
-        assertEquals(sut.amountValue, amount)
+    @Nested
+    @DisplayName("Given configuration object contains amount")
+    inner class ConfigObjectContainsAmount {
+
+        @Test
+        @DisplayName("when invoking amountValue then the amount string should be returned")
+        fun returnAmountStringOnAmountValue() {
+            assertEquals(sut.amountValue, amount)
+        }
+
+        @Test
+        @DisplayName("when invoking currencyValue then the currency string should be returned")
+        fun returnCurrencyStringOnCurrencyValue() {
+            assertEquals(sut.currencyValue, currency)
+        }
     }
 
-    @Test
-    fun `Given configuration object contains amount when invoking currencyValue then the currency string should be returned`() {
-        assertEquals(sut.currencyValue, currency)
-    }
+    @Nested
+    @DisplayName("Given configuration object has no amount ")
+    inner class ConfigObjectDoesNotContainAmount {
 
-    @Test
-    fun `Given configuration object has no amount when invoking amountValue then null should be returned`() {
-        every { configMock.getMap("amount") } returns null
-        assertNull(sut.amountValue)
-    }
+        @BeforeEach
+        internal fun setUp() {
+            every { configMock.getMap("amount") } returns null
+        }
 
-    @Test
-    fun `Given configuration object has no amount when invoking currencyValue then null should be returned`() {
-        every { configMock.getMap("amount") } returns null
-        assertNull(sut.currencyValue)
-    }
+        @Test
+        @DisplayName("when invoking amountValue then null should be returned")
+        fun returnNullOnAmountValue() {
+            assertNull(sut.amountValue)
+        }
 
+        @Test
+        @DisplayName("when invoking currencyValue then null should be returned")
+        fun returnNullOnCurrencyValue() {
+            assertNull(sut.currencyValue)
+        }
+    }
 }

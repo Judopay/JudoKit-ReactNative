@@ -5,9 +5,12 @@ import io.mockk.every
 import io.mockk.mockkClass
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
+@DisplayName("Testing PrimaryAccountDetails readable map extensions")
 class PrimaryAccountDetailsReadableMapExtensionsTest {
 
     private val configMock = mockkClass(ReadableMap::class)
@@ -19,8 +22,8 @@ class PrimaryAccountDetailsReadableMapExtensionsTest {
     private val dateOfBirth = "dateOfBirth"
     private val postCode = "postCode"
 
-    @Before
-    fun before() {
+    @BeforeEach
+    fun setUp() {
         every { primaryAccountDetailsMock.getString("name") } returns name
         every { primaryAccountDetailsMock.getString("accountNumber") } returns accountNumber
         every { primaryAccountDetailsMock.getString("dateOfBirth") } returns dateOfBirth
@@ -36,56 +39,70 @@ class PrimaryAccountDetailsReadableMapExtensionsTest {
         every { sut.getMap("configuration") } returns configMock
     }
 
-    @Test
-    fun `Given configuration object contains primaryAccountDetails when invoking name then the name string should be returned`() {
-        assertEquals(sut.name, name)
+    @Nested
+    @DisplayName("Given configuration object contains primaryAccountDetails")
+    inner class ConfigObjectContainsPrimaryAccountDetails {
+
+        @Test
+        @DisplayName("when invoking name then the name string should be returned")
+        fun returnNameOnNameCall() {
+            assertEquals(sut.name, name)
+        }
+
+        @Test
+        @DisplayName("when invoking accountNumber then the accountNumber string should be returned")
+        fun returnAccountNumberOnAccountNumberCall() {
+            assertEquals(sut.accountNumber, accountNumber)
+        }
+
+        @Test
+        @DisplayName("when invoking dateOfBirth then the dateOfBirth string should be returned")
+        fun returnDateOfBirthOnDateOfBirthCall() {
+            assertEquals(sut.dateOfBirth, dateOfBirth)
+        }
+
+        @Test
+        @DisplayName("when invoking postCode then the postCode string should be returned")
+        fun returnPostCodeOnPostCodeCall() {
+            assertEquals(sut.postCode, postCode)
+        }
     }
 
     @Test
-    fun `Given configuration object contains primaryAccountDetails when invoking accountNumber then the accountNumber string should be returned`() {
-        assertEquals(sut.accountNumber, accountNumber)
-    }
-
-    @Test
-    fun `Given configuration object contains primaryAccountDetails when invoking dateOfBirth then the dateOfBirth string should be returned`() {
-        assertEquals(sut.dateOfBirth, dateOfBirth)
-    }
-
-    @Test
-    fun `Given configuration object contains primaryAccountDetails when invoking postCode then the postCode string should be returned`() {
-        assertEquals(sut.postCode, postCode)
-    }
-
-    @Test
-    fun `Given primaryAccountDetails object has no name when invoking name then null should be returned`() {
+    @DisplayName("Given primaryAccountDetails object has no name when invoking name then null should be returned")
+    fun returnNullOnNameCallWhenNameKeyNotPresent() {
         every { primaryAccountDetailsMock.hasKey("name") } returns false
 
         assertNull(sut.name)
     }
 
     @Test
-    fun `Given primaryAccountDetails object has no accountNumber when invoking accountNumber then null should be returned`() {
+    @DisplayName("Given primaryAccountDetails object has no accountNumber when invoking accountNumber then null should be returned")
+    fun returnNullOnAccountNumberCallWhenAccountNumberKeyNotPresent() {
         every { primaryAccountDetailsMock.hasKey("accountNumber") } returns false
 
         assertNull(sut.accountNumber)
     }
 
     @Test
-    fun `Given primaryAccountDetails object has no dateOfBirth when invoking dateOfBirth then null should be returned`() {
+    @DisplayName("Given primaryAccountDetails object has no dateOfBirth when invoking dateOfBirth then null should be returned")
+    fun returnNullOnDateOfBirthCallWhenDateOfBirthKeyNotPresent() {
         every { primaryAccountDetailsMock.hasKey("dateOfBirth") } returns false
 
         assertNull(sut.dateOfBirth)
     }
 
     @Test
-    fun `Given primaryAccountDetails object has no postCode when invoking postCode then null should be returned`() {
+    @DisplayName("Given primaryAccountDetails object has no postCode when invoking postCode then null should be returned")
+    fun returnNullOnPostCodeCallWhenPostCodeKeyNotPresent() {
         every { primaryAccountDetailsMock.hasKey("postCode") } returns false
 
         assertNull(sut.postCode)
     }
 
     @Test
-    fun `Given configuration object has no primaryAccountDetails when invoking primaryAccountDetails properties then null should be returned for each one`() {
+    @DisplayName("Given configuration object has no primaryAccountDetails when invoking primaryAccountDetails properties then null should be returned for each one")
+    fun returnNullForEachPropertyOnPrimaryAccountDetailsCallWhenPrimaryAccountDetailsKeyNotPresent() {
         every { configMock.hasKey("primaryAccountDetails") } returns false
 
         assertNull(sut.name)

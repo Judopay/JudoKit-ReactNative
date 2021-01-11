@@ -19,9 +19,12 @@ import io.mockk.spyk
 import io.mockk.verify
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
+@DisplayName("Testing JudoReactNativeActivityEventListener")
 class JudoReactNativeActivityEventListenerTest {
 
     private val promiseMock = spyk<Promise>()
@@ -33,7 +36,7 @@ class JudoReactNativeActivityEventListenerTest {
 
     private val sut = JudoReactNativeActivityEventListener()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         mockkStatic("com.reactlibrary.HelpersKt")
         every { judoErrorMock.message } returns "Message"
@@ -42,30 +45,38 @@ class JudoReactNativeActivityEventListenerTest {
         every { getMappedResult(judoResultMock) } returns mappedJudoResultMock
     }
 
-    @Test
-    fun `Given onActivityResult is invoked when request code is different than JUDO_PAYMENT_WIDGET_REQUEST_CODE then nothing should happen`() {
-        sut.transactionPromise = promiseMock
-        sut.onActivityResult(activityMock, 100, 100, dataMock)
+    @Nested
+    @DisplayName("Given onActivityResult is invoked")
+    inner class OnActivityResultIsInvoked {
 
-        verify { promiseMock wasNot Called }
-        assertNotNull(sut.transactionPromise)
-    }
+        @Test
+        @DisplayName("when request code is different than JUDO_PAYMENT_WIDGET_REQUEST_CODE then nothing should happen")
+        fun nothingShouldHappenWhenRequestCodeDifferentThanJudoPaymentWidgetRequestCode() {
+            sut.transactionPromise = promiseMock
+            sut.onActivityResult(activityMock, 100, 100, dataMock)
 
-    @Test
-    fun `Given onActivityResult is invoked when requestCode is JUDO_PAYMENT_WIDGET_REQUEST_CODE and resultCode is PAYMENT_ERROR then promise should reject`() {
-        sut.transactionPromise = promiseMock
-        sut.onActivityResult(activityMock, JUDO_PAYMENT_WIDGET_REQUEST_CODE, PAYMENT_ERROR, dataMock)
+            verify { promiseMock wasNot Called }
+            assertNotNull(sut.transactionPromise)
+        }
 
-        verify { promiseMock.reject(eq(JUDO_PROMISE_REJECTION_CODE), "Message") }
-        assertNull(sut.transactionPromise)
-    }
+        @Test
+        @DisplayName("when requestCode is JUDO_PAYMENT_WIDGET_REQUEST_CODE and resultCode is PAYMENT_ERROR then promise should reject")
+        fun rejectPromiseWhenRequestCodeIsJudoPaymentWidgetRequestCodeAndResultCodeIsPaymentError() {
+            sut.transactionPromise = promiseMock
+            sut.onActivityResult(activityMock, JUDO_PAYMENT_WIDGET_REQUEST_CODE, PAYMENT_ERROR, dataMock)
 
-    @Test
-    fun `Given onActivityResult is invoked when requestCode is JUDO_PAYMENT_WIDGET_REQUEST_CODE and resultCode is PAYMENT_SUCCESS then promise should resolve with result object`() {
-        sut.transactionPromise = promiseMock
-        sut.onActivityResult(activityMock, JUDO_PAYMENT_WIDGET_REQUEST_CODE, PAYMENT_SUCCESS, dataMock)
+            verify { promiseMock.reject(eq(JUDO_PROMISE_REJECTION_CODE), "Message") }
+            assertNull(sut.transactionPromise)
+        }
 
-        verify { promiseMock.resolve(mappedJudoResultMock) }
-        assertNull(sut.transactionPromise)
+        @Test
+        @DisplayName("when requestCode is JUDO_PAYMENT_WIDGET_REQUEST_CODE and resultCode is PAYMENT_SUCCESS then promise should resolve with result object")
+        fun resolvePromiseWithResultObjectWhenRequestCodeIsJudoPaymentWidgetRequestCodeAndResultCodeIsPaymentSuccess() {
+            sut.transactionPromise = promiseMock
+            sut.onActivityResult(activityMock, JUDO_PAYMENT_WIDGET_REQUEST_CODE, PAYMENT_SUCCESS, dataMock)
+
+            verify { promiseMock.resolve(mappedJudoResultMock) }
+            assertNull(sut.transactionPromise)
+        }
     }
 }
