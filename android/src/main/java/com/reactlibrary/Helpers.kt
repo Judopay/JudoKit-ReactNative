@@ -25,6 +25,7 @@ import com.judokit.android.model.googlepay.GooglePayBillingAddressParameters
 import com.judokit.android.model.googlepay.GooglePayEnvironment
 import com.judokit.android.model.googlepay.GooglePayShippingAddressParameters
 
+
 internal fun getTransactionConfiguration(options: ReadableMap): Judo {
     val widgetType = getTransactionTypeWidget(options)
     return getJudoConfiguration(widgetType, options)
