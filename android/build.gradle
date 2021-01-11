@@ -228,8 +228,7 @@ def addJacocoTask(variant) {
             '**/R$*.class',
             '**/BuildConfig.*',
             '**/Manifest*.*',
-            '**/*test*.*',
-            'android/**/*.*'
+            '**/*test*.*'
     ]
 
     def sourceDirectories = files(variant.sourceSets.java.srcDirs.flatten())
