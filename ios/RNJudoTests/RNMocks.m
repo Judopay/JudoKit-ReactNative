@@ -40,6 +40,10 @@
     return [RNMocks.properties[@"configuration"] mutableCopy];
 }
 
++ (NSMutableDictionary *)authorization {
+    return [RNMocks.properties[@"authorization"] mutableCopy];
+}
+
 + (NSMutableDictionary *)applePayConfiguration {
     return [RNMocks.configuration[@"applePayConfiguration"] mutableCopy];
 }

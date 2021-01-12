@@ -231,7 +231,7 @@ PODS:
     - React
   - RNGestureHandler (1.7.0):
     - React
-  - RNJudopay (3.1.0):
+  - RNJudopay (3.1.1):
     - JudoKit-iOS (= 2.2.1)
     - React
   - RNReanimated (1.10.2):
@@ -389,7 +389,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
-  RNJudopay: 2e3addbc012e64eb1d29a4c9f4614d82bec2f855
+  RNJudopay: f424bec46080d7782f85fda1288d208dc867f1a0
   RNReanimated: 7de2dca51deacff78bb880f63c1389a24311b376
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   TrustKit: dac38bb37e49bdfeca41b1a19d020da38017b51c

@@ -6,9 +6,11 @@ import io.mockk.mockk
 import io.mockk.mockkClass
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
+@DisplayName("Testing Judo readable map extensions")
 class JudoReadableMapExtensionsTest {
     private val configMock = mockkClass(ReadableMap::class)
     private val sut = mockkClass(ReadableMap::class)
@@ -22,8 +24,8 @@ class JudoReadableMapExtensionsTest {
     private val paymentMethodValue = 1
     private val authorization = mockk<ReadableMap>(relaxed = true)
 
-    @Before
-    fun before() {
+    @BeforeEach
+    fun setUp() {
         every { configMock.getString("judoId") } returns judoId
         every { configMock.getInt("supportedCardNetworks") } returns cardNetworkValue
         every { configMock.getInt("paymentMethods") } returns paymentMethodValue
@@ -37,53 +39,63 @@ class JudoReadableMapExtensionsTest {
     }
 
     @Test
-    fun `Given configuration object contains transactionMode when invoking transactionMode then the transactionMode integer should be returned`() {
+    @DisplayName("Given configuration object contains transactionMode when invoking transactionMode then the transactionMode integer should be returned")
+    fun returnTransactionModeOnTransactionModeCall() {
         assertEquals(sut.transactionMode, transactionMode)
     }
 
     @Test
-    fun `Given configuration object contains token when invoking token then the token string should be returned`() {
+    @DisplayName("Given configuration object contains token when invoking token then the token string should be returned")
+    fun returnTokenOnTokenCall() {
         assertEquals(sut.authorization?.token, token)
     }
 
     @Test
-    fun `Given configuration object contains secret when invoking secret then the secret string should be returned`() {
+    @DisplayName("Given configuration object contains secret when invoking secret then the secret string should be returned")
+    fun returnSecretOnSecretCall() {
         assertEquals(sut.authorization?.secret, secret)
     }
 
     @Test
-    fun `Given configuration object contains sandboxed when invoking isSandboxed then the sandboxed boolean should be returned`() {
+    @DisplayName("Given configuration object contains sandboxed when invoking isSandboxed then the sandboxed boolean should be returned")
+    fun returnSandboxedOnSandboxedCall() {
         assertEquals(sut.isSandboxed, isSandboxed)
     }
 
     @Test
-    fun `Given configuration object contains judoId when invoking judoId then the judoId string should be returned`() {
+    @DisplayName("Given configuration object contains judoId when invoking judoId then the judoId string should be returned")
+    fun returnJudoIdOnJudoIdCall() {
         assertEquals(sut.judoId, judoId)
     }
 
     @Test
-    fun `Given configuration object contains supportedCardNetworks when invoking cardNetworkValue then the supportedCardNetworks integer should be returned`() {
+    @DisplayName("Given configuration object contains supportedCardNetworks when invoking cardNetworkValue then the supportedCardNetworks integer should be returned")
+    fun returnSupportedCardNetworksOnCardNetworkValueCall() {
         every { configMock.hasKey("supportedCardNetworks") } returns true
 
         assertEquals(sut.cardNetworkValue, cardNetworkValue)
     }
 
     @Test
-    fun `Given configuration object has no supportedCardNetworks key when invoking cardNetworkValue then null should be returned`() {
+    @DisplayName("Given configuration object has no supportedCardNetworks key when invoking cardNetworkValue then null should be returned")
+    fun returnNullOnCardNetworkCallWhenConfigObjectHasNoSupportedCardNetworksKey() {
         every { configMock.hasKey("supportedCardNetworks") } returns false
 
         assertNull(sut.cardNetworkValue)
     }
 
+
     @Test
-    fun `Given configuration object contains paymentMethods when invoking paymentMethodValue then the paymentMethods integer should be returned`() {
+    @DisplayName("Given configuration object contains paymentMethods when invoking paymentMethodValue then the paymentMethods integer should be returned")
+    fun returnPaymentMethodsOnPaymentMethodsCall() {
         every { configMock.hasKey("paymentMethods") } returns true
 
         assertEquals(sut.paymentMethodValue, paymentMethodValue)
     }
 
     @Test
-    fun `Given configuration object has no paymentMethods key when invoking paymentMethodValue then null should be returned`() {
+    @DisplayName("Given configuration object has no paymentMethods key when invoking paymentMethodValue then null should be returned")
+    fun returnNullOnPaymentMethodsCallWHenConfigObjectHasNoPaymentMethodsKey() {
         every { configMock.hasKey("paymentMethods") } returns false
 
         assertNull(sut.paymentMethodValue)

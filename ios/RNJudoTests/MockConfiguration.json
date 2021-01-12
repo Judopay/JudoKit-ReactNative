@@ -1,6 +1,8 @@
 {
-    "token": "example-token",
-    "secret": "example-secret",
+    "authorization": {
+        "token": "example-token",
+        "secret": "example-secret",
+    },
     "sandboxed": true,
     "transactionType": 0,
     "configuration": {
@@ -16,7 +18,6 @@
                 "example-key": "example-value"
             }
         },
-        "siteId": "example-site-id",
         "cardAddress": {
             "line1": "example-line-1",
             "line2": "example-line-2",

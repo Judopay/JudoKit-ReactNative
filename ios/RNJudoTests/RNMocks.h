@@ -32,6 +32,11 @@
 + (NSMutableDictionary *)properties;
 
 /**
+ * A reference to the mocked authorization parameters defined in the MockConfiguration.json file
+ */
++ (NSMutableDictionary *)authorization;
+
+/**
  * A reference to the mocked payment configuration defined in the MockConfiguration.json file
  */
 + (NSMutableDictionary *)configuration;

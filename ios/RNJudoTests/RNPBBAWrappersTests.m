@@ -1,5 +1,5 @@
 //
-//  RNApplePayWrappersTest.m
+//  RNPBBAWrappersTest.m
 //  RNJudo
 //
 //  Copyright (c) 2020 Alternative Payments Ltd
@@ -26,11 +26,11 @@
 #import "RNPBBAWrappers.h"
 #import "RNMocks.h"
 
-@interface RNApplePayWrappersTest : XCTestCase
+@interface RNPBBAWrappersTest : XCTestCase
 
 @end
 
-@implementation RNApplePayWrappersTest
+@implementation RNPBBAWrappersTest
 
 /*
  * GIVEN: a configuration NSDictionary is passed to the PBBA wrapper
@@ -39,7 +39,7 @@
  *
  * THEN:  a configured JPPBBAConfiguration instance should be returned
  */
-- (void)test_OnValidDictionary_ReturnApplePayConfiguration {
+- (void)test_OnValidDictionary_ReturnPBBAConfiguration {
     NSDictionary *mockConfig = RNMocks.configuration;
     XCTAssertNotNil([RNPBBAWrappers pbbaConfigurationFromConfiguration:mockConfig]);
 }

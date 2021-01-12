@@ -52,7 +52,7 @@
  * THEN:  a 'missing API token' exception should be thrown
  */
 - (void)test_OnMissingToken_ThrowError {
-    NSDictionary *props = [self propertiesByChangingValue:nil forKey:@"token"];
+    NSDictionary *props = [self propertiesWithAuthorizationValue:nil forKey:@"token"];
     XCTAssertThrows([RNWrappers judoSessionFromProperties:props]);
 }
 
@@ -64,7 +64,7 @@
 * THEN:  an 'invalid API token' exception should be thrown
 */
 - (void)test_OnInvalidToken_ThrowError {
-    NSDictionary *props = [self propertiesByChangingValue:@123 forKey:@"token"];
+    NSDictionary *props = [self propertiesWithAuthorizationValue:@123 forKey:@"token"];
     XCTAssertThrows([RNWrappers judoSessionFromProperties:props]);
 }
 
@@ -76,7 +76,7 @@
  * THEN:  a 'missing API secret' exception should be thrown
  */
 - (void)test_OnMissingSecret_ThrowError {
-    NSDictionary *props = [self propertiesByChangingValue:nil forKey:@"secret"];
+    NSDictionary *props = [self propertiesWithAuthorizationValue:nil forKey:@"secret"];
     XCTAssertThrows([RNWrappers judoSessionFromProperties:props]);
 }
 
@@ -88,7 +88,7 @@
 * THEN:  an 'invalid API secret' exception should be thrown
 */
 - (void)test_OnInvalidSecret_ThrowError {
-    NSDictionary *props = [self propertiesByChangingValue:@123 forKey:@"secret"];
+    NSDictionary *props = [self propertiesWithAuthorizationValue:@123 forKey:@"secret"];
     XCTAssertThrows([RNWrappers judoSessionFromProperties:props]);
 }
 
@@ -375,18 +375,6 @@
     NSDictionary *props = [self propertiesWithConfigurationValue:@123
                                                           forKey:@"metadata"
                                                 orDictionaryName:@"reference"];
-    XCTAssertThrows([RNWrappers configurationFromProperties:props]);
-}
-
-/*
-* GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
-*
-* WHEN:  the [siteId] property of the [configuration] dictionary is not an NSString
-*
-* THEN:  an 'invalid Site ID' exception should be thrown
-*/
-- (void)test_OnInvalidSiteID_ThrowError {
-    NSDictionary *props = [self propertiesWithConfigurationValue:@123 forKey:@"siteId"];
     XCTAssertThrows([RNWrappers configurationFromProperties:props]);
 }
 
@@ -891,7 +879,7 @@
  * THEN:  the correct card token value should be extracted
  */
 - (void)test_OnValidParameterFormat_FetchCardToken {
-    NSDictionary *props = [self propertiesWithConfigurationValue:@"hello" forKey:@"cardToken"];
+    NSDictionary *props = [self propertiesByChangingValue:@"hello" forKey:@"cardToken"];
     NSString *cardToken = [RNWrappers cardTokenFromProperties:props];
     XCTAssertEqual(cardToken, @"hello");
 }
@@ -902,7 +890,7 @@
  * THEN:  the correct receipt ID value should be extracted
  */
 - (void)test_OnValidParameterFormat_FetchReceiptId {
-    NSDictionary *props = [self propertiesWithConfigurationValue:@"hello" forKey:@"receiptId"];
+    NSDictionary *props = [self propertiesByChangingValue:@"hello" forKey:@"receiptId"];
     NSString *receiptId = [RNWrappers receiptIdFromProperties:props];
     XCTAssertEqual(receiptId, @"hello");
 }
@@ -913,6 +901,18 @@
                                             forKey:(NSString *)key {
     NSMutableDictionary *mockProps = RNMocks.properties;
     mockProps[key] = value;
+    return mockProps;
+}
+
+- (NSMutableDictionary *)propertiesWithAuthorizationValue:(id)value
+                                                   forKey:(NSString *)key {
+    
+    NSMutableDictionary *mockProps = RNMocks.properties;
+    NSMutableDictionary *mockAuthorization = RNMocks.authorization;
+    
+    mockAuthorization[key] = value;
+    mockProps[@"authorization"] = mockAuthorization;
+    
     return mockProps;
 }
 
