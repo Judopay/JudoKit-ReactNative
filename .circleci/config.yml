@@ -196,12 +196,15 @@ jobs:
           name: Build iOS Sample
           working_directory: sample-app/ios
           command: |
-            xcodebuild clean build \
+            xcodebuild clean archive \
               -workspace sample-app.xcworkspace \
               -scheme sample-app \
-              -configuration Debug \
-              -sdk iphonesimulator \
-              -derivedDataPath DerivedData \
+              -archivePath DerivedData/sampleapp.xcarchive \
+              -quiet
+            xcodebuild -exportArchive \
+              -archivePath DerivedData/sampleapp.xcarchive \
+              -exportPath DerivedData/sampleapp.ipa \
+              -exportOptionsPlist sample-app/Info.plist \
               -quiet
       - persist_to_workspace:
           root: .
@@ -245,7 +248,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - sample-app/android/build
+            - sample-app/android/app
   unit_test_sdk_node:
     executor: node
     steps:
@@ -405,7 +408,7 @@ jobs:
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json
             firebase appdistribution:distribute \
-              somepackage \
+              sample-app/ios/DerivedData/sampleapp.ipa \
               --app "$REACTNATIVE_IOS_FIREBASE_APP_ID" \
               --groups "default-testers" \
               --release-notes-file ./notes.txt
@@ -430,7 +433,7 @@ jobs:
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json
             firebase appdistribution:distribute \
-              sample-app/android/build/outputs/apk/release/somepackage.apk \
+              sample-app/android/app/build/outputs/apk/release/app-release.apk \
               --app "$REACTNATIVE_ANDROID_FIREBASE_APP_ID" \
               --groups "default-testers" \
               --release-notes-file ./notes.txt
