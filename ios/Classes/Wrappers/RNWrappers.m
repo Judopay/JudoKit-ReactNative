@@ -36,15 +36,15 @@
 //---------------------------------------------------
 
 + (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
-    
+
     NSDictionary *authorizationDict = [properties dictionaryForKey:@"authorization"];
 
     NSString *token = [authorizationDict stringForKey:@"token"];
     NSString *secret = [authorizationDict optionalStringForKey:@"secret"];
     NSString *paymentSession = [authorizationDict optionalStringForKey:@"paymentSession"];
-    
+
     JudoKit *judoKit;
-    
+
     if (secret) {
         JPBasicAuthorization *authorization = [JPBasicAuthorization authorizationWithToken:token
                                                                                  andSecret:secret];
@@ -54,7 +54,7 @@
                                                                              andPaymentSession:paymentSession];
         judoKit = [[JudoKit alloc] initWithAuthorization:authorization];
     }
-    
+
     NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
     judoKit.isSandboxed = isSandboxed.boolValue;
 
@@ -62,13 +62,13 @@
 }
 
 + (JPApiService *)apiServiceFromProperties:(NSDictionary *)properties {
-    
+
     NSDictionary *authorizationDict = [properties dictionaryForKey:@"authorization"];
 
     NSString *token = [authorizationDict stringForKey:@"token"];
     NSString *secret = [authorizationDict optionalStringForKey:@"secret"];
     NSString *paymentSession = [authorizationDict optionalStringForKey:@"paymentSession"];
-    
+
     NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
 
     if (secret) {
@@ -76,7 +76,7 @@
                                                                                  andSecret:secret];
         return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed.boolValue];
     }
-    
+
     JPSessionAuthorization *authorization = [JPSessionAuthorization authorizationWithToken:token
                                                                          andPaymentSession:paymentSession];
     return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed.boolValue];
@@ -103,14 +103,14 @@
         @(JPTransactionModePreAuth),
         @(JPTransactionModeServerToServer)
     ];
-    
+
     return availableModes[intType].intValue;
 }
 
 + (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
 
     NSDictionary *configurationDict = [properties dictionaryForKey:@"configuration"];
-    
+
     NSString *judoId = [configurationDict stringForKey:@"judoId"];
     JPAmount *amount = [RNWrappers amountFromConfiguration:configurationDict];
     JPReference *reference = [RNWrappers referenceFromConfiguration:configurationDict];
@@ -126,7 +126,7 @@
     configuration.paymentMethods = [RNWrappers paymentMethodsFromConfiguration:configurationDict];
     configuration.applePayConfiguration = [RNApplePayWrappers applePayConfigurationFromConfiguration:configurationDict];
     configuration.pbbaConfiguration = [RNPBBAWrappers pbbaConfigurationFromConfiguration:configurationDict];
-    
+
     return configuration;
 }
 
@@ -137,7 +137,7 @@
     if (!bitmask) {
         return JPCardNetworkTypeAll;
     }
-    
+
     if (BitmaskContains(bitmask.intValue, IOSCardNetworkAll)) {
         return JPCardNetworkTypeAll;
     }
@@ -216,7 +216,7 @@
     if (!bitmask) {
         return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal, JPPaymentMethod.pbba];
     }
-    
+
     if (BitmaskContains(bitmask.intValue, IOSPaymentMethodAll)) {
         return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal, JPPaymentMethod.pbba];
     }
@@ -309,7 +309,7 @@
 
     theme.captionBold = [UIFont fontWithName:[dictionary stringForKey:@"captionBoldFont"]
                                         size:[[dictionary numberForKey:@"captionBoldSize"] doubleValue]];
-    
+
     theme.jpBlackColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpBlackColor"]];
     theme.jpDarkGrayColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpDarkGrayColor"]];
     theme.jpGrayColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"jpGrayColor"]];
@@ -320,61 +320,68 @@
     theme.buttonTitleColor = [UIColor colorFromHexString:[dictionary hexColorForKey:@"buttonTitleColor"]];
     theme.backButtonImage = [UIImage imageNamed:[dictionary stringForKey:@"backButtonImage"]];
     theme.buttonCornerRadius = [[dictionary numberForKey:@"buttonCornerRadius"] doubleValue];
-    
+
     return theme;
 }
 
 + (JPPrimaryAccountDetails *)accountDetailsFromConfiguration:(NSDictionary *)configuration {
     NSDictionary *accountDetailsDictionary = [configuration optionalDictionaryForKey:@"primaryAccountDetails"];
-    
+
     JPPrimaryAccountDetails *details = [JPPrimaryAccountDetails new];
     details.name = [accountDetailsDictionary optionalStringForKey:@"name"];
     details.accountNumber = [accountDetailsDictionary optionalStringForKey:@"accountNumber"];
     details.dateOfBirth = [accountDetailsDictionary optionalStringForKey:@"dateOfBirth"];
     details.postCode = [accountDetailsDictionary optionalStringForKey:@"postCode"];
-    
+
     return details;
 }
 
 + (NSDictionary *)dictionaryFromResponse:(JPResponse *)response {
-    
+
     NSMutableDictionary *mappedResponse = [NSMutableDictionary new];
     
     [mappedResponse setValue:response.receiptId forKey:@"receiptId"];
     [mappedResponse setValue:response.paymentReference forKey:@"yourPaymentReference"];
+    [mappedResponse setValue:@(response.type) forKey:@"type"];
     [mappedResponse setValue:response.createdAt forKey:@"createdAt"];
+    [mappedResponse setValue:@(response.result) forKey:@"result"];
+    [mappedResponse setValue:response.message forKey:@"message"];
+    [mappedResponse setValue:response.judoId forKey:@"judoId"];
     [mappedResponse setValue:response.merchantName forKey:@"merchantName"];
     [mappedResponse setValue:response.appearsOnStatementAs forKey:@"appearsOnStatementAs"];
     [mappedResponse setValue:response.originalAmount forKey:@"originalAmount"];
     [mappedResponse setValue:response.netAmount forKey:@"netAmount"];
     [mappedResponse setValue:response.amount.amount forKey:@"amount"];
     [mappedResponse setValue:response.amount.currency forKey:@"currency"];
-    
+
     NSMutableDictionary *cardDetailsResponse = [NSMutableDictionary new];
     [cardDetailsResponse setValue:response.cardDetails.cardLastFour forKey:@"cardLastFour"];
     [cardDetailsResponse setValue:response.cardDetails.endDate forKey:@"endDate"];
     [cardDetailsResponse setValue:response.cardDetails.cardToken forKey:@"cardToken"];
-    [cardDetailsResponse setValue:response.cardDetails.cardCountry forKey:@"cardCountry"];
+    [cardDetailsResponse setValue:@(response.cardDetails.cardNetwork) forKey:@"cardNetwork"];
     [cardDetailsResponse setValue:response.cardDetails.bank forKey:@"bank"];
+    [cardDetailsResponse setValue:response.cardDetails.cardCategory forKey:@"cardCategory"];
+    [cardDetailsResponse setValue:response.cardDetails.cardCountry forKey:@"cardCountry"];
+    [cardDetailsResponse setValue:response.cardDetails.cardFunding forKey:@"cardFunding"];
     [cardDetailsResponse setValue:response.cardDetails.cardScheme forKey:@"cardScheme"];
-    
+
     [mappedResponse setValue:cardDetailsResponse forKey:@"cardDetails"];
-    
+
     NSMutableDictionary *consumerResponse = [NSMutableDictionary new];
     [consumerResponse setValue:response.consumer.consumerToken forKey:@"consumerToken"];
     [consumerResponse setValue:response.consumer.consumerReference forKey:@"consumerReference"];
-    
+
     [mappedResponse setValue:consumerResponse forKey:@"consumerResponse"];
-    
+
     NSMutableDictionary *orderDetailsResponse = [NSMutableDictionary new];
     [orderDetailsResponse setValue:response.orderDetails.orderId forKey:@"orderId"];
     [orderDetailsResponse setValue:response.orderDetails.orderStatus forKey:@"orderStatus"];
     [orderDetailsResponse setValue:response.orderDetails.orderFailureReason forKey:@"orderFailureReason"];
     [orderDetailsResponse setValue:response.orderDetails.timestamp forKey:@"timestamp"];
     [orderDetailsResponse setValue:@(response.orderDetails.amount) forKey:@"amount"];
-    
+
     [mappedResponse setValue:orderDetailsResponse forKey:@"orderDetails"];
-    
+
     return mappedResponse;
 }
 

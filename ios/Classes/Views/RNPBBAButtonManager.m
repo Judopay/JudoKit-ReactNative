@@ -23,7 +23,7 @@
 //  SOFTWARE.
 
 #import <React/RCTViewManager.h>
-#import <JudoKit_iOS/JudoKit_iOS.h>
+#import <JudoKit-iOS/JudoKit_iOS.h>
 
 @interface RNPBBAButtonManager: RCTViewManager
 @end

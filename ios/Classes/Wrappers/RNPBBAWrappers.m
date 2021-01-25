@@ -26,7 +26,7 @@
 #import "NSDictionary+JudoConvert.h"
 
 //TODO: iOS Project should add this to the JudoKit_iOS header
-#import <JudoKit_iOS/JPPBBAConfiguration.h>
+#import <JudoKit-iOS/JPPBBAConfiguration.h>
 
 @implementation RNPBBAWrappers
 
