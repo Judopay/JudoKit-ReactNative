@@ -53,11 +53,30 @@ internal fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
     return getJudoConfiguration(type, options)
 }
 
+internal fun getMappedType(type: String?): Int {
+    return when (type) {
+        "PreAuth" -> 1
+        "RegisterCard" -> 2
+        "CheckCard" -> 3
+        "Save" -> 4
+        else -> 0
+    }
+}
+
+internal fun getMappedResult(result: String?): Int {
+    return when (result) {
+        "Declined" -> 1
+        else -> 0
+    }
+}
+
 internal fun getMappedResult(result: JudoResult?): WritableMap {
     val map = Arguments.createMap()
     map.putString("receiptId", result?.receiptId)
     map.putString("yourPaymentReference", result?.yourPaymentReference)
+    map.putInt("type", getMappedType(result?.type))
     map.putString("createdAt", result?.createdAt.toString())
+    map.putInt("result", getMappedResult(result?.result))
     map.putString("merchantName", result?.merchantName)
     map.putString("appearsOnStatementAs", result?.appearsOnStatementAs)
     map.putString("originalAmount", result?.originalAmount.toString())
@@ -69,8 +88,11 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
     cardDetailsMap.putString("cardLastFour", result?.cardDetails?.lastFour)
     cardDetailsMap.putString("endDate", result?.cardDetails?.endDate)
     cardDetailsMap.putString("cardToken", result?.cardDetails?.token)
-    cardDetailsMap.putString("cardCountry", result?.cardDetails?.country)
+    result?.cardDetails?.type?.let { cardDetailsMap.putInt("cardNetwork", it) }
     cardDetailsMap.putString("bank", result?.cardDetails?.bank)
+    cardDetailsMap.putString("cardCategory", result?.cardDetails?.category)
+    cardDetailsMap.putString("cardCountry", result?.cardDetails?.country)
+    cardDetailsMap.putString("cardFunding", result?.cardDetails?.funding)
     cardDetailsMap.putString("cardScheme", result?.cardDetails?.scheme)
 
     map.putMap("cardDetails", cardDetailsMap)
