@@ -77,6 +77,8 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
     map.putInt("type", getMappedType(result?.type))
     map.putString("createdAt", result?.createdAt.toString())
     map.putInt("result", getMappedResult(result?.result))
+    map.putString("message", result?.message)
+    map.putString("judoId", result?.judoId)
     map.putString("merchantName", result?.merchantName)
     map.putString("appearsOnStatementAs", result?.appearsOnStatementAs)
     map.putString("originalAmount", result?.originalAmount.toString())
