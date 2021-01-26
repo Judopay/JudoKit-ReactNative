@@ -41,6 +41,9 @@ jobs:
           name: Yarn Install
           command: yarn install
       - run:
+          name: Pod Repo Update
+          command: pod repo update
+      - run:
           name: Pod Install
           working_directory: ios
           command: pod install
