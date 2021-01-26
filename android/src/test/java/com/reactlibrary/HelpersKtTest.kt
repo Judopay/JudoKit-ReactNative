@@ -2,10 +2,14 @@ package com.reactlibrary
 
 import android.net.Uri
 import android.util.Base64
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.judokit.android.api.model.response.CardToken
 import com.judokit.android.model.CardNetwork
 import com.judokit.android.model.Currency
+import com.judokit.android.model.JudoResult
 import com.judokit.android.model.PaymentMethod
 import com.judokit.android.model.PaymentWidgetType
 import com.judokit.android.model.googlepay.GooglePayAddressFormat
@@ -45,6 +49,8 @@ class HelpersKtTest {
     fun setUp() {
         mockkStatic("android.util.Base64")
         mockkStatic("android.net.Uri")
+        mockkStatic("com.facebook.react.bridge.Arguments")
+        every { Arguments.createMap() } returns JavaOnlyMap()
         every { Base64.encodeToString("token:secret".toByteArray(StandardCharsets.UTF_8), Base64.NO_WRAP) } returns "credentials"
 
         every { mapMock.getInt("transactionMode") } returns 1
@@ -501,6 +507,120 @@ class HelpersKtTest {
             assertNotNull(networks)
             assertTrue(networks!!.size == 1)
             assertTrue(networks.contains(CardNetwork.DINERS_CLUB))
+        }
+    }
+
+    @Nested
+    @DisplayName("Given getMappedType is called")
+    inner class CallGetMappedType {
+
+        @Test
+        @DisplayName("when value is PreAuth then 1 should be returned")
+        fun returnOneOnGetMappedTypeWhenValuePreAuth() {
+            val mappedType = getMappedType("PreAuth")
+
+            assertEquals(1, mappedType)
+        }
+
+        @Test
+        @DisplayName("when value is RegisterCard then 2 should be returned")
+        fun returnTwoOnGetMappedTypeWhenValueRegisterCard() {
+            val mappedType = getMappedType("RegisterCard")
+
+            assertEquals(2, mappedType)
+        }
+
+        @Test
+        @DisplayName("when value is CheckCard then 3 should be returned")
+        fun returnThreeOnGetMappedTypeWhenValueCheckCard() {
+            val mappedType = getMappedType("CheckCard")
+
+            assertEquals(3, mappedType)
+        }
+
+        @Test
+        @DisplayName("when value is Save then 4 should be returned")
+        fun returnFourOnGetMappedTypeWhenValueSave() {
+            val mappedType = getMappedType("Save")
+
+            assertEquals(4, mappedType)
+        }
+
+        @Test
+        @DisplayName("when value is undefined then 0 should be returned")
+        fun returnZer0OnGetMappedTypeWhenValueUndefined() {
+            val mappedType = getMappedType("undefined")
+
+            assertEquals(0, mappedType)
+        }
+    }
+
+    @Nested
+    @DisplayName("Given getMappedResult is called")
+    inner class CallGetMappedResult {
+
+        @Test
+        @DisplayName("when value is Declined then 1 should be returned")
+        fun returnOneOnGetMappedResultWhenValueDeclined() {
+            val mappedResult = getMappedResult("Declined")
+
+            assertEquals(1, mappedResult)
+        }
+
+        @Test
+        @DisplayName("when value is undefined then 0 should be returned")
+        fun returnZeroOnGetMappedResultWhenValueUndefined() {
+            val mappedResult = getMappedResult("undefined")
+
+            assertEquals(0, mappedResult)
+        }
+
+        @Test
+        @DisplayName("when JudoResult's type field is set to PreAuth, then map.getInt('type') should return 1")
+        fun mapShouldContainType(){
+            val mappedResult = getMappedResult(JudoResult(type = "PreAuth"))
+
+            assertEquals(1, mappedResult.getInt("type"))
+        }
+
+        @Test
+        @DisplayName("when JudoResult's receiptId field is set to receipt, then map.getString('receiptId') should return receipt")
+        fun mapShouldContainReceipt(){
+            val mappedResult = getMappedResult(JudoResult(receiptId = "receipt"))
+
+            assertEquals("receipt", mappedResult.getString("receiptId"))
+        }
+
+        @Test
+        @DisplayName("when JudoResult's cardDetails.category field is set to cardCategory, then map.getString('cardCategory') should return cardCategory")
+        fun mapShouldContainCardCategory(){
+            val mappedResult = getMappedResult(JudoResult(cardDetails = CardToken(category = "cardCategory")))
+
+            assertEquals("cardCategory", mappedResult.getMap("cardDetails")?.getString("cardCategory"))
+        }
+
+        @Test
+        @DisplayName("when JudoResult's cardDetails.country field is set to cardCountry, then map.getString('cardCountry') should return cardCountry")
+        fun mapShouldContainCardCountry(){
+            val mappedResult = getMappedResult(JudoResult(cardDetails = CardToken(country = "cardCountry")))
+
+            assertEquals("cardCountry", mappedResult.getMap("cardDetails")?.getString("cardCountry"))
+        }
+
+        @Test
+        @DisplayName("when JudoResult's cardDetails.funding field is set to cardFunding, then map.getString('cardFunding') should return cardFunding")
+        fun mapShouldContainCardFunding(){
+            val mappedResult = getMappedResult(JudoResult(cardDetails = CardToken(funding = "cardFunding")))
+
+            assertEquals("cardFunding", mappedResult.getMap("cardDetails")?.getString("cardFunding"))
+        }
+
+        @Test
+        @DisplayName("when JudoResult's cardDetails.scheme field is set to cardScheme, then map.getString('cardScheme') should return cardScheme")
+        fun mapShouldContainCardScheme(){
+            val mappedResult = getMappedResult(JudoResult(cardDetails = CardToken(scheme = "cardScheme")))
+
+            assertEquals("cardScheme", mappedResult.getMap("cardDetails")?.getString("cardScheme"))
         }
     }
 }
