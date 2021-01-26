@@ -30,6 +30,11 @@ export enum JudoTransactionMode {
     ServerToServer
 }
 
+export enum JudoTransactionResult {
+    Success,
+    Declined
+}
+
 export interface JudoAmount {
     value: string
     currency: string
@@ -116,12 +121,15 @@ export interface JudoAccountDetails {
 }
 
 export interface JudoCardDetails {
-    bank?: string
-    cardCountry?: string
     cardLastFour?: string
-    cardScheme?: string
-    cardToken?: string
     endDate?: string
+    cardToken?: string
+    cardNetwork?: JudoCardNetwork
+    bank?: string
+    cardCategory?: string
+    cardCountry?: string
+    cardFunding?: string
+    cardScheme?: string
 }
 
 export interface JudoConsumer {
@@ -131,18 +139,18 @@ export interface JudoConsumer {
 
 export interface JudoResponse {
     receiptId?: string
-    originalReceiptId?: string
-    partnerServiceFee?: string
     yourPaymentReference?: string
-    type?: string
+    type?: JudoTransactionType
     createdAt?: string
+    result?: JudoTransactionResult
+    message?: string
+    judoId?: string
     merchantName?: string
     appearsOnStatementAs?: string
     originalAmount?: string
     netAmount?: string
     amount?: string
     currency?: string
-    result?: string
     cardDetails?: JudoCardDetails
     consumerResponse?: JudoConsumer
 }
