@@ -19,6 +19,7 @@ class JudoReadableMapExtensionsTest {
     private val token = "token"
     private val secret = "secret"
     private val isSandboxed = true
+    private val isInitialRecurringPayment = true
     private val judoId = "judoId"
     private val cardNetworkValue = 1
     private val paymentMethodValue = 1
@@ -99,5 +100,11 @@ class JudoReadableMapExtensionsTest {
         every { configMock.hasKey("paymentMethods") } returns false
 
         assertNull(sut.paymentMethodValue)
+    }
+
+    @Test
+    @DisplayName("Given configuration object contains isInitialRecurringPayment when invoking isInitialRecurringPayment then the isInitialRecurringPayment boolean should be returned")
+    fun returnIsInitialRecurringPaymentOnIsInitialRecurringPaymentCall() {
+        assertEquals(sut.isInitialRecurringPayment, isInitialRecurringPayment)
     }
 }

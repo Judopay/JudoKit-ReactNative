@@ -119,6 +119,7 @@
                                                                       amount:amount
                                                                    reference:reference];
 
+    configuration.isInitialRecurringPayment = [configurationDict boolForKey:@"isInitialRecurringPayment"];
     configuration.uiConfiguration = [RNWrappers uiConfigurationFromConfiguration:configurationDict];
     configuration.supportedCardNetworks = [RNWrappers cardNetworksFromConfiguration:configurationDict];
     configuration.primaryAccountDetails = [RNWrappers accountDetailsFromConfiguration:configurationDict];
@@ -339,7 +340,7 @@
 + (NSDictionary *)dictionaryFromResponse:(JPResponse *)response {
 
     NSMutableDictionary *mappedResponse = [NSMutableDictionary new];
-    
+
     [mappedResponse setValue:response.receiptId forKey:@"receiptId"];
     [mappedResponse setValue:response.paymentReference forKey:@"yourPaymentReference"];
     [mappedResponse setValue:@(response.type) forKey:@"type"];

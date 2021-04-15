@@ -5,25 +5,25 @@ import android.os.Bundle
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
-import com.judokit.android.Judo
-import com.judokit.android.api.model.Authorization
-import com.judokit.android.api.model.BasicAuthorization
-import com.judokit.android.api.model.PaymentSessionAuthorization
-import com.judokit.android.model.Amount
-import com.judokit.android.model.CardNetwork
-import com.judokit.android.model.Currency
-import com.judokit.android.model.GooglePayConfiguration
-import com.judokit.android.model.JudoResult
-import com.judokit.android.model.PBBAConfiguration
-import com.judokit.android.model.PaymentMethod
-import com.judokit.android.model.PaymentWidgetType
-import com.judokit.android.model.PrimaryAccountDetails
-import com.judokit.android.model.Reference
-import com.judokit.android.model.UiConfiguration
-import com.judokit.android.model.googlepay.GooglePayAddressFormat
-import com.judokit.android.model.googlepay.GooglePayBillingAddressParameters
-import com.judokit.android.model.googlepay.GooglePayEnvironment
-import com.judokit.android.model.googlepay.GooglePayShippingAddressParameters
+import com.judopay.judokit.android.Judo
+import com.judopay.judokit.android.api.model.Authorization
+import com.judopay.judokit.android.api.model.BasicAuthorization
+import com.judopay.judokit.android.api.model.PaymentSessionAuthorization
+import com.judopay.judokit.android.model.Amount
+import com.judopay.judokit.android.model.CardNetwork
+import com.judopay.judokit.android.model.Currency
+import com.judopay.judokit.android.model.GooglePayConfiguration
+import com.judopay.judokit.android.model.JudoResult
+import com.judopay.judokit.android.model.PBBAConfiguration
+import com.judopay.judokit.android.model.PaymentMethod
+import com.judopay.judokit.android.model.PaymentWidgetType
+import com.judopay.judokit.android.model.PrimaryAccountDetails
+import com.judopay.judokit.android.model.Reference
+import com.judopay.judokit.android.model.UiConfiguration
+import com.judopay.judokit.android.model.googlepay.GooglePayAddressFormat
+import com.judopay.judokit.android.model.googlepay.GooglePayBillingAddressParameters
+import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
+import com.judopay.judokit.android.model.googlepay.GooglePayShippingAddressParameters
 
 internal fun getTransactionConfiguration(options: ReadableMap): Judo {
     val widgetType = getTransactionTypeWidget(options)
@@ -131,6 +131,7 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
             .setPrimaryAccountDetails(primaryAccountDetails)
             .setGooglePayConfiguration(googlePayConfiguration)
             .setPBBAConfiguration(pbbaConfiguration)
+            .setInitialRecurringPayment(options.isInitialRecurringPayment)
             .build()
 }
 

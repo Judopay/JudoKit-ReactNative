@@ -166,7 +166,10 @@ export const getStoredData = async (state: any): Promise<object> => {
             shouldPaymentMethodsVerifySecurityCode: settings.list[6].data[3].value,
             shouldPaymentButtonDisplayAmount: settings.list[6].data[4].value,
             shouldPaymentMethodsDisplayAmount: settings.list[6].data[5].value,
-          }
+          },
+
+          //InitialRecurringPayment
+          isInitialRecurringPayment: settings.list[6].data[6].value as boolean,
         }
       }
     } else {

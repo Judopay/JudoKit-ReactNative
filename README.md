@@ -63,7 +63,6 @@ JudoPay's React Native module and sample app. This module is a wrapper around th
                 // Android JSC is installed from npm
                 url("$rootDir/../node_modules/jsc-android/dist")
             }
-            maven { url 'http://dl.bintray.com/judopay/maven' }
         }
     }
 
