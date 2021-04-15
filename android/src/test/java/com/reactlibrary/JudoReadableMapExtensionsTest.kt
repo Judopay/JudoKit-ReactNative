@@ -30,6 +30,7 @@ class JudoReadableMapExtensionsTest {
         every { configMock.getString("judoId") } returns judoId
         every { configMock.getInt("supportedCardNetworks") } returns cardNetworkValue
         every { configMock.getInt("paymentMethods") } returns paymentMethodValue
+        every { configMock.getBoolean("isInitialRecurringPayment") } returns isInitialRecurringPayment
 
         every { sut.getMap("configuration") } returns configMock
         every { sut.getInt("transactionMode") } returns transactionMode
