@@ -234,7 +234,7 @@
 - (void)test_OnMerchantCapabilityValueZero_Enable3DS {
     NSDictionary *config = [self configurationByChangingValue:@0 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.merchantCapabilities, JPMerchantCapability3DS);
+    XCTAssertEqual(appleConfig.merchantCapabilities, JPMerchantCapabilityThreeDS);
 }
 
 /*
@@ -286,7 +286,7 @@
 - (void)test_OnMerchantCapabilityValueOne_EnableAll {
     NSDictionary *config = [self configurationByChangingValue:@16 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    int value = JPMerchantCapability3DS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
+    int value = JPMerchantCapabilityThreeDS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
     XCTAssertEqual(appleConfig.merchantCapabilities, value);
 }
 
