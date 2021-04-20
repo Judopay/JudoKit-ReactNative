@@ -339,7 +339,7 @@
 + (NSDictionary *)dictionaryFromResponse:(JPResponse *)response {
 
     NSMutableDictionary *mappedResponse = [NSMutableDictionary new];
-    
+
     [mappedResponse setValue:response.receiptId forKey:@"receiptId"];
     [mappedResponse setValue:response.paymentReference forKey:@"yourPaymentReference"];
     [mappedResponse setValue:@(response.type) forKey:@"type"];

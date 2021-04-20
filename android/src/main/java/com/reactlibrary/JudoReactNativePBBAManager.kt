@@ -2,7 +2,7 @@ package com.reactlibrary
 
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
-import com.judokit.android.ui.common.PayByBankButton
+import com.judopay.judokit.android.ui.common.PayByBankButton
 
 class JudoReactNativePBBAManager: SimpleViewManager<PayByBankButton>() {
 

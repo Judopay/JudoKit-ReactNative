@@ -162,6 +162,7 @@ android {
         pickFirst 'lib/armeabi-v7a/libc++_shared.so'
         exclude 'META-INF/AL2.0'
         exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/*.kotlin_module'
     }
 }
 
@@ -176,7 +177,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     implementation 'com.readystatesoftware.chuck:library:1.1.0'
-    implementation 'com.judokit.android:judokit-android:2.0.9'
+    implementation 'com.judopay:judokit-android:2.1.1'
     implementation 'cards.pay:paycardsrecognizer:1.1.0'
 
     if (enableHermes) {

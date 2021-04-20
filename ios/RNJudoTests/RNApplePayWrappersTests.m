@@ -740,27 +740,27 @@
 
 - (NSMutableDictionary *)configurationByChangingValue:(id)value
                                                forKey:(NSString *)key {
-    
+
     NSMutableDictionary *mockConfig = RNMocks.configuration;
     NSMutableDictionary *mockAppleConfig = RNMocks.applePayConfiguration;
-    
+
     mockAppleConfig[key] = value;
     mockConfig[@"applePayConfiguration"] = mockAppleConfig;
-    
+
     return mockConfig;
 }
 
 - (NSMutableDictionary *)configurationByChangingValue:(id)value
                                                forKey:(NSString *)key
                                          forArrayName:(NSString *)name {
-    
+
     NSMutableDictionary *mockConfig = RNMocks.configuration;
     NSMutableDictionary *mockAppleConfig = RNMocks.applePayConfiguration;
-    
+
     NSArray *items = mockAppleConfig[name];
     NSMutableDictionary *firstItem = [items.firstObject mutableCopy];
     firstItem[key] = value;
-    
+
     mockAppleConfig[name] = @[firstItem];
     mockConfig[@"applePayConfiguration"] = mockAppleConfig;
 

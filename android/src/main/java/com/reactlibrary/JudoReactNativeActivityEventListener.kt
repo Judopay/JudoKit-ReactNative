@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Promise
-import com.judokit.android.JUDO_ERROR
-import com.judokit.android.JUDO_RESULT
-import com.judokit.android.PAYMENT_ERROR
-import com.judokit.android.PAYMENT_SUCCESS
-import com.judokit.android.model.JudoError
-import com.judokit.android.model.JudoResult
+import com.judopay.judokit.android.JUDO_ERROR
+import com.judopay.judokit.android.JUDO_RESULT
+import com.judopay.judokit.android.PAYMENT_ERROR
+import com.judopay.judokit.android.PAYMENT_SUCCESS
+import com.judopay.judokit.android.model.JudoError
+import com.judopay.judokit.android.model.JudoResult
 
 class JudoReactNativeActivityEventListener : BaseActivityEventListener() {
 

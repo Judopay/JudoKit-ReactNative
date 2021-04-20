@@ -4,7 +4,7 @@ import android.app.Activity
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
-import com.judokit.android.Judo
+import com.judopay.judokit.android.Judo
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.justRun

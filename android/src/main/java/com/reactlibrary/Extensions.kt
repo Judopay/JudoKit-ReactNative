@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import com.judokit.android.JUDO_OPTIONS
-import com.judokit.android.Judo
-import com.judokit.android.JudoActivity
+import com.judopay.judokit.android.JUDO_OPTIONS
+import com.judopay.judokit.android.Judo
+import com.judopay.judokit.android.JudoActivity
 
 internal val ReadableMap.configuration: ReadableMap?
     get() = getMap("configuration")
@@ -60,6 +60,9 @@ internal val ReadableMap.consumerReference: String?
 
 internal val ReadableMap.paymentReference: String?
     get() = reference?.getString("paymentReference")
+
+internal val ReadableMap.isInitialRecurringPayment: Boolean?
+    get() = configuration?.getBoolean("isInitialRecurringPayment")
 
 internal val ReadableMap.metadata: ReadableMap?
     get() {
