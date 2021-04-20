@@ -19,7 +19,7 @@ class JudoReadableMapExtensionsTest {
     private val token = "token"
     private val secret = "secret"
     private val isSandboxed = true
-    private val isInitialRecurringPayment = true
+    private val isInitialRecurringPayment = false
     private val judoId = "judoId"
     private val cardNetworkValue = 1
     private val paymentMethodValue = 1
