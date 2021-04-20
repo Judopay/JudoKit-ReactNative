@@ -104,7 +104,6 @@ const configuration = (): JudoConfiguration => {
         applePayConfiguration: applePayConfiguration,
         googlePayConfiguration: googlePayConfiguration,
         pbbaConfiguration: pbbaConfiguration,
-        isInitialRecurringPayment: false
     }
 }
 

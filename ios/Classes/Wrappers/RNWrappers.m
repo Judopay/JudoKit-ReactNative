@@ -119,7 +119,6 @@
                                                                       amount:amount
                                                                    reference:reference];
 
-    configuration.isInitialRecurringPayment = [configurationDict boolForKey:@"isInitialRecurringPayment"];
     configuration.uiConfiguration = [RNWrappers uiConfigurationFromConfiguration:configurationDict];
     configuration.supportedCardNetworks = [RNWrappers cardNetworksFromConfiguration:configurationDict];
     configuration.primaryAccountDetails = [RNWrappers accountDetailsFromConfiguration:configurationDict];

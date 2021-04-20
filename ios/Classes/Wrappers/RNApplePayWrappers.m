@@ -34,9 +34,9 @@
 //---------------------------------------------------
 
 + (JPApplePayConfiguration *)applePayConfigurationFromConfiguration:(NSDictionary *)configuration {
-    
+
     NSDictionary *dictionary = [configuration optionalDictionaryForKey:@"applePayConfiguration"];
-    
+
     if (!dictionary) {
         return nil;
     }
@@ -48,12 +48,12 @@
     NSNumber *shippingFieldNumber = [dictionary optionalNumberForKey:@"requiredShippingContactFields"];
 
     NSArray *paymentSummaryItems = [RNApplePayWrappers summaryItemsFromAppleConfiguration:dictionary];
-    
+
     JPApplePayConfiguration *appleConfiguration = [[JPApplePayConfiguration alloc] initWithMerchantId:merchantId
                                                                                              currency:currency
                                                                                           countryCode:countryCode
                                                                                   paymentSummaryItems:paymentSummaryItems];
-    
+
     appleConfiguration.merchantCapabilities = [RNApplePayWrappers merchantCapabilitiesFromAppleConfiguration:dictionary];
     appleConfiguration.supportedCardNetworks = [RNWrappers cardNetworksFromConfiguration:configuration];
     appleConfiguration.shippingMethods = [RNApplePayWrappers shippingMethodsFromAppleConfiguration:dictionary];
@@ -61,7 +61,7 @@
     appleConfiguration.requiredBillingContactFields = [RNApplePayWrappers contactFieldsFromContactFieldValue:billingFieldNumber.intValue];
     appleConfiguration.requiredShippingContactFields = [RNApplePayWrappers contactFieldsFromContactFieldValue:shippingFieldNumber.intValue];
     appleConfiguration.returnedContactInfo = [RNApplePayWrappers returnedInfoFromAppleConfiguration:dictionary];
-    
+
     return appleConfiguration;
 }
 
@@ -70,87 +70,87 @@
 //---------------------------------------------------
 
 + (NSArray<JPPaymentSummaryItem *> *)summaryItemsFromAppleConfiguration:(NSDictionary *)appleConfiguration {
-    
+
     NSArray *summaryItemsArray = [appleConfiguration arrayForKey:@"paymentSummaryItems"];
     NSMutableArray<JPPaymentSummaryItem *> *summaryItems = [NSMutableArray new];
-    
+
     for (NSDictionary *summaryItemDict in summaryItemsArray) {
         JPPaymentSummaryItem *item = [self summaryItemFromDictionary:summaryItemDict];
         [summaryItems addObject:item];
     }
-    
+
     return summaryItems;
 }
 
 + (JPPaymentSummaryItem *)summaryItemFromDictionary:(NSDictionary *)dictionary {
-    
+
     NSString *label = [dictionary stringForKey:@"label"];
     NSString *amountString = [dictionary stringForKey:@"amount"];
     NSNumber *type = [dictionary optionalNumberForKey:@"type"];
 
     NSDecimalNumber *amount = [NSDecimalNumber decimalNumberWithString:amountString];
-    
+
     if (!type) {
         return [JPPaymentSummaryItem itemWithLabel:label amount:amount];
     }
-    
+
     return [JPPaymentSummaryItem itemWithLabel:label amount:amount type:type.intValue];
 }
 
 + (JPMerchantCapability)merchantCapabilitiesFromAppleConfiguration:(NSDictionary *)appleConfiguration {
-    
+
     NSNumber *bitmask = [appleConfiguration optionalNumberForKey:@"merchantCapabilities"];
-    
+
     if (!bitmask) {
-        return JPMerchantCapabilityThreeDS;
+        return JPMerchantCapability3DS;
     }
-        
+
     if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityAll)) {
-        return JPMerchantCapabilityThreeDS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
+        return JPMerchantCapability3DS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
     }
-    
+
     JPMerchantCapability capabilities = 0;
 
     if (BitmaskContains(bitmask.intValue, IOSApplePayCapability3DS)) {
-        capabilities |= JPMerchantCapabilityThreeDS;
+        capabilities |= JPMerchantCapability3DS;
     }
-    
+
     if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityEMV)) {
         capabilities |= JPMerchantCapabilityEMV;
     }
-    
+
     if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityCredit)) {
         capabilities |= JPMerchantCapabilityCredit;
     }
-    
+
     if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityDebit)) {
         capabilities |= JPMerchantCapabilityDebit;
     }
-    
+
     return capabilities;
 }
 
 + (NSArray<JPPaymentShippingMethod *> *)shippingMethodsFromAppleConfiguration:(NSDictionary *)appleConfiguration {
-    
+
     NSArray *shippingMethodsArray = [appleConfiguration optionalArrayForKey:@"shippingMethods"];
     NSMutableArray *mappedShippingMethods = [NSMutableArray new];
-    
+
     for (NSDictionary *shippingMethodDict in shippingMethodsArray) {
         JPPaymentShippingMethod *method = [self shippingMethodFromDictionary:shippingMethodDict];
         [mappedShippingMethods addObject:method];
     }
-    
+
     return mappedShippingMethods;
 }
 
 + (JPPaymentShippingMethod *)shippingMethodFromDictionary:(NSDictionary *)dictionary {
-    
+
     NSString *identifier = [dictionary stringForKey:@"identifier"];
     NSString *detail = [dictionary stringForKey:@"detail"];
     NSString *label = [dictionary stringForKey:@"label"];
     NSString *amountString = [dictionary stringForKey:@"amount"];
     NSNumber *typeNumber = [dictionary numberForKey:@"type"];
-    
+
     return [[JPPaymentShippingMethod alloc] initWithIdentifier:identifier
                                                         detail:detail
                                                          label:label
@@ -159,9 +159,9 @@
 }
 
 + (JPPaymentShippingType)shippingTypeFromDictionary:(NSDictionary *)dictionary {
-    
+
     NSNumber *shippingTypeNumber = [dictionary optionalNumberForKey:@"shippingType"];
-    
+
     switch (shippingTypeNumber.intValue) {
         case IOSShippingTypeDelivery:
             return JPShippingTypeDelivery;
@@ -179,54 +179,54 @@
 }
 
 + (JPContactField)contactFieldsFromContactFieldValue:(int)bitmask {
-    
+
     JPContactField contactFields = JPContactFieldNone;
-    
+
     if (BitmaskContains(bitmask, IOSAppleContactFieldAll)) {
         return JPContactFieldAll;
     }
-    
+
     if (BitmaskContains(bitmask, IOSAppleContactFieldPostalAddress)) {
         contactFields |= JPContactFieldPostalAddress;
     }
-    
+
     if (BitmaskContains(bitmask, IOSAppleContactFieldEmail)) {
         contactFields |= JPContactFieldEmail;
     }
-    
+
     if (BitmaskContains(bitmask, IOSAppleContactFieldName)) {
         contactFields |= JPContactFieldName;
     }
-    
+
     if (BitmaskContains(bitmask, IOSAppleContactFieldPhone)) {
         contactFields |= JPContactFieldPhone;
     }
-    
+
     return contactFields;
 }
 
 + (JPReturnedInfo)returnedInfoFromAppleConfiguration:(NSDictionary *)appleConfiguration {
-    
+
     NSNumber *bitmask = [appleConfiguration optionalNumberForKey:@"returnedInfo"];
 
     if (!bitmask) {
         return JPReturnedInfoNone;
     }
-    
+
     if (BitmaskContains(bitmask.intValue, IOSAppleReturnedInfoAll)) {
         return JPReturnedInfoAll;
     }
-    
+
     JPReturnedInfo returnedInfo = JPReturnedInfoNone;
 
     if (BitmaskContains(bitmask.intValue, IOSAppleReturnedInfoBilling)) {
         returnedInfo |= JPReturnedInfoBillingContacts;
     }
-    
+
     if (BitmaskContains(bitmask.intValue, IOSAppleReturnedInfoShipping)) {
         returnedInfo |= JPReturnedInfoShippingContacts;
     }
-    
+
     return returnedInfo;
 }
 

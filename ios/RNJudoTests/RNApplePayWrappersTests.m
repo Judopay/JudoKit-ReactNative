@@ -234,7 +234,7 @@
 - (void)test_OnMerchantCapabilityValueZero_Enable3DS {
     NSDictionary *config = [self configurationByChangingValue:@0 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    XCTAssertEqual(appleConfig.merchantCapabilities, JPMerchantCapabilityThreeDS);
+    XCTAssertEqual(appleConfig.merchantCapabilities, JPMerchantCapability3DS);
 }
 
 /*
@@ -286,7 +286,7 @@
 - (void)test_OnMerchantCapabilityValueOne_EnableAll {
     NSDictionary *config = [self configurationByChangingValue:@16 forKey:@"merchantCapabilities"];
     JPApplePayConfiguration *appleConfig = [RNApplePayWrappers applePayConfigurationFromConfiguration:config];
-    int value = JPMerchantCapabilityThreeDS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
+    int value = JPMerchantCapability3DS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
     XCTAssertEqual(appleConfig.merchantCapabilities, value);
 }
 
@@ -740,27 +740,27 @@
 
 - (NSMutableDictionary *)configurationByChangingValue:(id)value
                                                forKey:(NSString *)key {
-    
+
     NSMutableDictionary *mockConfig = RNMocks.configuration;
     NSMutableDictionary *mockAppleConfig = RNMocks.applePayConfiguration;
-    
+
     mockAppleConfig[key] = value;
     mockConfig[@"applePayConfiguration"] = mockAppleConfig;
-    
+
     return mockConfig;
 }
 
 - (NSMutableDictionary *)configurationByChangingValue:(id)value
                                                forKey:(NSString *)key
                                          forArrayName:(NSString *)name {
-    
+
     NSMutableDictionary *mockConfig = RNMocks.configuration;
     NSMutableDictionary *mockAppleConfig = RNMocks.applePayConfiguration;
-    
+
     NSArray *items = mockAppleConfig[name];
     NSMutableDictionary *firstItem = [items.firstObject mutableCopy];
     firstItem[key] = value;
-    
+
     mockAppleConfig[name] = @[firstItem];
     mockConfig[@"applePayConfiguration"] = mockAppleConfig;
 

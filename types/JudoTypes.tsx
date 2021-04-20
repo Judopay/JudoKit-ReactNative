@@ -14,7 +14,6 @@ export interface JudoConfiguration {
     applePayConfiguration?: JudoApplePayConfiguration
     googlePayConfiguration?: JudoGooglePayConfiguration
     pbbaConfiguration?: JudoPBBAConfiguration
-    isInitialRecurringPayment: boolean
 }
 
 export enum JudoTransactionType {
