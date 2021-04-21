@@ -16,27 +16,27 @@ jobs:
     executor: node
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Install
           command: yarn install
-#      - save_cache:
-#          key: judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
-#          paths:
-#            - node_modules
-#            - yarn.lock
+      - save_cache:
+          key: judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+            - yarn.lock
   get_dependencies_sdk_ios:
     executor: macos
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
       - run:
           name: Yarn Install
           command: yarn install
@@ -47,23 +47,23 @@ jobs:
           name: Pod Install
           working_directory: ios
           command: pod install
-#      - save_cache:
-#          key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-#          paths:
-#            - node_modules
-#            - yarn.lock
-#      - save_cache:
-#          key: judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
-#          paths:
-#            - ios/Pods
-#            - ios/Podfile.lock
+      - save_cache:
+          key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
+          paths:
+            - node_modules
+            - yarn.lock
+      - save_cache:
+          key: judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
+          paths:
+            - ios/Pods
+            - ios/Podfile.lock
   get_dependencies_sdk_android:
     executor: android
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
       - run:
           name: Install Yarn
           command: |
@@ -73,11 +73,11 @@ jobs:
       - run:
           name: Yarn Install
           command: yarn install
-#      - save_cache:
-#          key: judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
-#          paths:
-#            - node_modules
-#            - yarn.lock
+      - save_cache:
+          key: judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+            - yarn.lock
   get_dependencies_sample_ios:
     executor: macos
     steps:
@@ -96,23 +96,23 @@ jobs:
           name: Pod Install
           working_directory: sample-app/ios
           command: pod install
-#      - save_cache:
-#          key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
-#          paths:
-#            - sample-app/node_modules
-#            - sample-app/yarn.lock
-#      - save_cache:
-#          key: judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
-#          paths:
-#            - sample-app/ios/Pods
-#            - sample-app/ios/Podfile.lock
+      - save_cache:
+          key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
+          paths:
+            - sample-app/node_modules
+            - sample-app/yarn.lock
+      - save_cache:
+          key: judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+          paths:
+            - sample-app/ios/Pods
+            - sample-app/ios/Podfile.lock
   get_dependencies_sample_android:
     executor: android
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
       - run:
           name: Install Yarn
           command: |
@@ -123,18 +123,18 @@ jobs:
           name: Yarn Install
           working_directory: sample-app
           command: yarn install
-#      - save_cache:
-#          key: judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
-#          paths:
-#            - sample-app/node_modules
-#            - sample-app/yarn.lock
+      - save_cache:
+          key: judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
+          paths:
+            - sample-app/node_modules
+            - sample-app/yarn.lock
   build_sdk_node:
     executor: node
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Bundle
           command: yarn react-native bundle --entry-file JudoPay.tsx --bundle-output bundle.js
@@ -146,12 +146,12 @@ jobs:
     executor: macos
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
       - run:
           name: XCode Build
           working_directory: ios
@@ -171,9 +171,9 @@ jobs:
     executor: android
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
       - run:
           name: Gradle Build
           working_directory: android
@@ -189,12 +189,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/project
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
       - run:
           name: Build iOS Sample
           working_directory: sample-app/ios
@@ -220,9 +220,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/project
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
       - run:
           name: Install Nodejs
           command: |
@@ -256,9 +256,9 @@ jobs:
     executor: node
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Test
           command: |
@@ -272,12 +272,12 @@ jobs:
     executor: macos
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
       - attach_workspace:
           at: ~/project
       - run:
@@ -317,9 +317,9 @@ jobs:
     executor: android
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
       - attach_workspace:
           at: ~/project
       - run:
