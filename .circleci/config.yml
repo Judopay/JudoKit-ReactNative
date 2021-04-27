@@ -512,7 +512,9 @@ jobs:
           at: ~/project
       - run:
           name: Release SDK
-          command: yarn publish
+          command: |
+            echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
+            yarn publish
   report_to_jira:
     docker:
       - image: gcr.io/opnf-management/deployer:latest
