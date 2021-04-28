@@ -2,7 +2,7 @@
     "name": "judokit-react-native",
     "title": "Judopay React Native Module",
     "version": "3.3.1",
-    "description": "A React-Native module for the Judopay native SDKs to take payments on iOS and Android.",
+    "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
     "main": "JudoPay.tsx",
     "scripts": {
         "test": "jest --coverage",
