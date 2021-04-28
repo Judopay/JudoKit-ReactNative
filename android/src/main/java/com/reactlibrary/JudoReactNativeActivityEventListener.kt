@@ -7,6 +7,7 @@ import com.facebook.react.bridge.Promise
 import com.judopay.judokit.android.JUDO_ERROR
 import com.judopay.judokit.android.JUDO_RESULT
 import com.judopay.judokit.android.PAYMENT_ERROR
+import com.judopay.judokit.android.PAYMENT_CANCELLED
 import com.judopay.judokit.android.PAYMENT_SUCCESS
 import com.judopay.judokit.android.model.JudoError
 import com.judopay.judokit.android.model.JudoResult
@@ -27,7 +28,7 @@ class JudoReactNativeActivityEventListener : BaseActivityEventListener() {
         }
 
         when (resultCode) {
-            PAYMENT_ERROR -> {
+            PAYMENT_ERROR, PAYMENT_CANCELLED -> {
                 val error = data.getParcelableExtra<JudoError>(JUDO_ERROR)
                 transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, error?.message)
             }
