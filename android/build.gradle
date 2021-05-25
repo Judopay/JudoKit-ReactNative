@@ -103,7 +103,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 
-    implementation 'com.judopay:judokit-android:2.1.1'
+    implementation 'com.judopay:judokit-android:2.1.3'
 
     //JUnit 5
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5_version"
