@@ -1,12 +1,12 @@
 import { NativeModules } from 'react-native'
-import { JudoResponse } from '../types/JudoTypes'
+import { JudoResponse, JudoTransactionType, JudoTransactionResult } from '../types/JudoTypes'
 
 const response: JudoResponse = {
     receiptId: 'receiptId',
     yourPaymentReference: 'paymentRef',
-    type: 'payment',
+    type: JudoTransactionType.Payment,
     createdAt: '12345678',
-    result: 'response_result',
+    result: JudoTransactionResult.Success,
     merchantName: 'merchantName',
     appearsOnStatementAs: 'nothing',
     originalAmount: '1100.0',

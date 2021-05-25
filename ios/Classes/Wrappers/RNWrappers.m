@@ -112,6 +112,8 @@
     NSDictionary *configurationDict = [properties dictionaryForKey:@"configuration"];
 
     NSString *judoId = [configurationDict stringForKey:@"judoId"];
+    NSNumber *isInitialRecurringPayment = [configurationDict optionalBoolForKey:@"isInitialRecurringPayment"];
+
     JPAmount *amount = [RNWrappers amountFromConfiguration:configurationDict];
     JPReference *reference = [RNWrappers referenceFromConfiguration:configurationDict];
 
@@ -119,6 +121,7 @@
                                                                       amount:amount
                                                                    reference:reference];
 
+    configuration.isInitialRecurringPayment = isInitialRecurringPayment;
     configuration.uiConfiguration = [RNWrappers uiConfigurationFromConfiguration:configurationDict];
     configuration.supportedCardNetworks = [RNWrappers cardNetworksFromConfiguration:configurationDict];
     configuration.primaryAccountDetails = [RNWrappers accountDetailsFromConfiguration:configurationDict];
