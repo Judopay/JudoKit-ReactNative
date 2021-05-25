@@ -21,7 +21,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - JudoKit-iOS (2.3.0):
+  - JudoKit-iOS (2.4.1):
     - DeviceDNA
     - TrustKit
     - ZappMerchantLib
@@ -231,8 +231,8 @@ PODS:
     - React
   - RNGestureHandler (1.7.0):
     - React
-  - RNJudopay (3.2.0):
-    - JudoKit-iOS (= 2.3.0)
+  - RNJudopay (3.3.2):
+    - JudoKit-iOS (= 2.4.1)
     - React
   - RNReanimated (1.10.2):
     - React
@@ -249,7 +249,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (= 2.3.0)
+  - JudoKit-iOS (= 2.4.1)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -365,7 +365,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  JudoKit-iOS: e3313110eb823d630d41c188b5fc73ba8eded67b
+  JudoKit-iOS: 434ac818c35ce0fbc7bdd00b93516295d668b496
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -389,13 +389,13 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
-  RNJudopay: cb93737ff2a4551b8cb55c9850b7ab2df2401b08
+  RNJudopay: 57e54b68f2eecbb24b13780642be8bf3f033f6b8
   RNReanimated: 7de2dca51deacff78bb880f63c1389a24311b376
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   TrustKit: dac38bb37e49bdfeca41b1a19d020da38017b51c
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: e20b362c3e89d0f18130d9504fb946d7e7d49558
+PODFILE CHECKSUM: 176c18f6d22055142435b448609defb23ad0a208
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
