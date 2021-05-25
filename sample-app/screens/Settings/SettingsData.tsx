@@ -356,6 +356,12 @@ export const SettingsData = {
                     "type": SettingsPickType.Switch,
                     "value": true,
                 } as SettingsListItem,
+                {
+                    "title": "Initial recurring payment",
+                    "subtitle": "Turn on to set initialRecurringPayment flag to true.",
+                    "type": SettingsPickType.Switch,
+                    "value": false,
+                } as SettingsListItem,
             ]
         }
     ]

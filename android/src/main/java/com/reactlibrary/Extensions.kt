@@ -62,8 +62,7 @@ internal val ReadableMap.paymentReference: String?
     get() = reference?.getString("paymentReference")
 
 internal val ReadableMap.isInitialRecurringPayment: Boolean?
-    // TODO: return configuration?.getBoolean("isInitialRecurringPayment") instead of false
-    get() = false
+    get() = configuration?.getBoolean("isInitialRecurringPayment")
 
 internal val ReadableMap.metadata: ReadableMap?
     get() {

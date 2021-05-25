@@ -2,7 +2,7 @@ import 'react-native'
 
 import configuration from './JudoTestDefaults'
 import JudoPay from "../JudoPay";
-import {JudoAuthorization, JudoTransactionMode, JudoTransactionType} from '../types/JudoTypes'
+import {JudoAuthorization, JudoTransactionMode, JudoTransactionType, JudoTransactionResult} from '../types/JudoTypes'
 
 test('JudoPay after init has isSandboxed = true', () => {
     const authorization: JudoAuthorization = {
@@ -45,8 +45,8 @@ test('invokeTransaction will return mocked JudoResponse', async () => {
     expect(data.merchantName).toEqual('merchantName')
     expect(data.receiptId).toEqual('receiptId')
     expect(data.yourPaymentReference).toEqual('paymentRef')
-    expect(data.type).toEqual('payment')
-    expect(data.result).toEqual('response_result')
+    expect(data.type).toEqual(JudoTransactionType.Payment)
+    expect(data.result).toEqual(JudoTransactionResult.Success)
     expect(data.originalAmount).toEqual('1100.0')
     expect(data.netAmount).toEqual('1100.0')
     expect(data.currency).toEqual('USD')
@@ -73,8 +73,8 @@ test('invokeApplePay will return mocked JudoResponse', async () => {
     expect(data.merchantName).toEqual('merchantName')
     expect(data.receiptId).toEqual('receiptId')
     expect(data.yourPaymentReference).toEqual('paymentRef')
-    expect(data.type).toEqual('payment')
-    expect(data.result).toEqual('response_result')
+    expect(data.type).toEqual(JudoTransactionType.Payment)
+    expect(data.result).toEqual(JudoTransactionResult.Success)
     expect(data.originalAmount).toEqual('1100.0')
     expect(data.netAmount).toEqual('1100.0')
     expect(data.currency).toEqual('USD')
@@ -101,8 +101,8 @@ test('invokeGooglePay will return mocked JudoResponse', async () => {
     expect(data.merchantName).toEqual('merchantName')
     expect(data.receiptId).toEqual('receiptId')
     expect(data.yourPaymentReference).toEqual('paymentRef')
-    expect(data.type).toEqual('payment')
-    expect(data.result).toEqual('response_result')
+    expect(data.type).toEqual(JudoTransactionType.Payment)
+    expect(data.result).toEqual(JudoTransactionResult.Success)
     expect(data.originalAmount).toEqual('1100.0')
     expect(data.netAmount).toEqual('1100.0')
     expect(data.currency).toEqual('USD')
@@ -129,8 +129,8 @@ test('invokePaymentMethodScreen will return mocked JudoResponse', async () => {
     expect(data.merchantName).toEqual('merchantName')
     expect(data.receiptId).toEqual('receiptId')
     expect(data.yourPaymentReference).toEqual('paymentRef')
-    expect(data.type).toEqual('payment')
-    expect(data.result).toEqual('response_result')
+    expect(data.type).toEqual(JudoTransactionType.Payment)
+    expect(data.result).toEqual(JudoTransactionResult.Success)
     expect(data.originalAmount).toEqual('1100.0')
     expect(data.netAmount).toEqual('1100.0')
     expect(data.currency).toEqual('USD')
@@ -154,8 +154,8 @@ test('invokePayByBankApp will return mocked JudoResponse', async () => {
     expect(data.merchantName).toEqual('merchantName')
     expect(data.receiptId).toEqual('receiptId')
     expect(data.yourPaymentReference).toEqual('paymentRef')
-    expect(data.type).toEqual('payment')
-    expect(data.result).toEqual('response_result')
+    expect(data.type).toEqual(JudoTransactionType.Payment)
+    expect(data.result).toEqual(JudoTransactionResult.Success)
     expect(data.originalAmount).toEqual('1100.0')
     expect(data.netAmount).toEqual('1100.0')
     expect(data.currency).toEqual('USD')
@@ -183,8 +183,8 @@ test('performTokenTransaction will return mocked JudoResponse', async () => {
     expect(data.merchantName).toEqual('merchantName')
     expect(data.receiptId).toEqual('receiptId')
     expect(data.yourPaymentReference).toEqual('paymentRef')
-    expect(data.type).toEqual('payment')
-    expect(data.result).toEqual('response_result')
+    expect(data.type).toEqual(JudoTransactionType.Payment)
+    expect(data.result).toEqual(JudoTransactionResult.Success)
     expect(data.originalAmount).toEqual('1100.0')
     expect(data.netAmount).toEqual('1100.0')
     expect(data.currency).toEqual('USD')

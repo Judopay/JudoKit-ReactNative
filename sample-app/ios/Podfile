@@ -8,6 +8,12 @@ pre_install do |installer|
   replace = "_currentFrame.CGImage ;} else { [super displayLayer:layer];"
   op = `sed -ie "s/#{find}/#{replace}/" ../node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m`
   puts("Image fix for ios14 done")
+
+  ## Fix for XCode 12.5
+  find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
+  "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
+  find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
+  "RCTBridgeModuleNameForClass(module))", "RCTBridgeModuleNameForClass(Class(module)))")
 end
 
 target 'sample-app' do
@@ -56,4 +62,18 @@ target 'sample-app' do
     pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
   end
+end
+
+## Fix for XCode 12.5
+def find_and_replace(dir, findstr, replacestr)
+  Dir[dir].each do |name|
+      text = File.read(name)
+      replace = text.gsub(findstr,replacestr)
+      if text != replace
+          puts "Fix: " + name
+          File.open(name, "w") { |file| file.puts replace }
+          STDOUT.flush
+      end
+  end
+  Dir[dir + '*/'].each(&method(:find_and_replace))
 end
