@@ -11,7 +11,8 @@ import {
     JudoAmount,
     JudoTransactionMode,
     JudoTransactionType,
-    JudoConfiguration
+    JudoConfiguration,
+    JudoTransactionResult
 } from '../types/JudoTypes'
 import { JudoApplePayConfiguration } from '../types/JudoApplePayTypes'
 import { JudoGooglePayConfiguration } from '../types/JudoGooglePayTypes'
@@ -84,9 +85,9 @@ test('check JudoResponse model fields', () => {
     const judoResponse: JudoResponse = {
         receiptId: 'receiptId',
         yourPaymentReference: 'paymentRef',
-        type: 'someType',
+        type: JudoTransactionType.Payment,
         createdAt: 'someCreationTime',
-        result: 'any result',
+        result: JudoTransactionResult.Success,
         merchantName: 'best merchant name',
         appearsOnStatementAs: 'as',
         originalAmount: 'amounting',

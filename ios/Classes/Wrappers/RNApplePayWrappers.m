@@ -102,17 +102,17 @@
     NSNumber *bitmask = [appleConfiguration optionalNumberForKey:@"merchantCapabilities"];
 
     if (!bitmask) {
-        return JPMerchantCapability3DS;
+        return JPMerchantCapabilityThreeDS;
     }
 
     if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityAll)) {
-        return JPMerchantCapability3DS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
+        return JPMerchantCapabilityThreeDS | JPMerchantCapabilityEMV | JPMerchantCapabilityCredit | JPMerchantCapabilityDebit;
     }
 
     JPMerchantCapability capabilities = 0;
 
     if (BitmaskContains(bitmask.intValue, IOSApplePayCapability3DS)) {
-        capabilities |= JPMerchantCapability3DS;
+        capabilities |= JPMerchantCapabilityThreeDS;
     }
 
     if (BitmaskContains(bitmask.intValue, IOSApplePayCapabilityEMV)) {

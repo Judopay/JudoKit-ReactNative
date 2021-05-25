@@ -29,15 +29,6 @@ export const reference = (): JudoReference => {
     }
 }
 
-const cardAddress: JudoAddress = {
-    line1: 'example-address-1',
-    line2: 'example-address-2',
-    line3: 'example-address-3',
-    postCode: 'example-postcode',
-    town: 'example-town',
-    countryCode: 826,
-}
-
 const theme: JudoTheme = {
     largeTitleFont: 'Quicksand-Bold',
     largeTitleSize: 18,
@@ -96,7 +87,6 @@ const configuration = (): JudoConfiguration => {
         judoId: '<YOUR JUDO ID>',
         amount: amount,
         reference: reference(),
-        cardAddress: cardAddress,
         uiConfiguration: uiConfiguration,
         paymentMethods: paymentMethods,
         supportedCardNetworks: supportedCardNetworks,
@@ -104,6 +94,7 @@ const configuration = (): JudoConfiguration => {
         applePayConfiguration: applePayConfiguration,
         googlePayConfiguration: googlePayConfiguration,
         pbbaConfiguration: pbbaConfiguration,
+        isInitialRecurringPayment: false
     }
 }
 
