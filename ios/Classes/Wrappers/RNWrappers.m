@@ -247,6 +247,11 @@
 
 + (JPAddress *)cardAddressFromConfiguration:(NSDictionary *)configuration {
     NSDictionary *addressDictionary = [configuration optionalDictionaryForKey:@"cardAddress"];
+
+    if (!addressDictionary) {
+        return nil;
+    }
+
     return [[JPAddress alloc] initWithLine1:[addressDictionary optionalStringForKey:@"line1"]
                                       line2:[addressDictionary optionalStringForKey:@"line2"]
                                       line3:[addressDictionary optionalStringForKey:@"line3"]
@@ -329,6 +334,10 @@
 
 + (JPPrimaryAccountDetails *)accountDetailsFromConfiguration:(NSDictionary *)configuration {
     NSDictionary *accountDetailsDictionary = [configuration optionalDictionaryForKey:@"primaryAccountDetails"];
+
+    if (!accountDetailsDictionary) {
+        return nil;
+    }
 
     JPPrimaryAccountDetails *details = [JPPrimaryAccountDetails new];
     details.name = [accountDetailsDictionary optionalStringForKey:@"name"];

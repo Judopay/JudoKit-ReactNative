@@ -11,6 +11,7 @@ import {
   JudoReturnedInfo,
   JudoGooglePayEnvironment,
 } from 'judo-react-native'
+import { defaultPrimaryAccountDetails } from '../../helpers/JudoDefaults'
 
 const applePayment: HomeListItem = {
     "title": "Apple Pay payment",
@@ -167,7 +168,8 @@ export const getStoredData = async (state: any): Promise<object> => {
             shouldPaymentButtonDisplayAmount: settings.list[6].data[4].value,
             shouldPaymentMethodsDisplayAmount: settings.list[6].data[5].value,
           },
-            isInitialRecurringPayment: settings.list[6].data[6].value
+          isInitialRecurringPayment: settings.list[6].data[6].value,
+          primaryAccountDetails: settings.list[6].data[7].value ? defaultPrimaryAccountDetails : undefined
         }
       }
     } else {

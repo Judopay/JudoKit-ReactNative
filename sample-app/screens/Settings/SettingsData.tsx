@@ -362,6 +362,12 @@ export const SettingsData = {
                     "type": SettingsPickType.Switch,
                     "value": false,
                 } as SettingsListItem,
+                {
+                    "title": "Primary account details",
+                    "subtitle": "Inject primary account details",
+                    "type": SettingsPickType.Switch,
+                    "value": true,
+                } as SettingsListItem,
             ]
         }
     ]
