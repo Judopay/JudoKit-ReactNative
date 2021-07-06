@@ -302,12 +302,16 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
 }
 
 internal fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetails? {
-    return PrimaryAccountDetails.Builder()
+    return if (options.primaryAccountDetails != null) {
+        PrimaryAccountDetails.Builder()
             .setName(options.name)
             .setAccountNumber(options.accountNumber)
             .setDateOfBirth(options.dateOfBirth)
             .setPostCode(options.postCode)
             .build()
+    } else {
+        null
+    }
 }
 
 internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration? {

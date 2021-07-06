@@ -75,11 +75,11 @@ const paymentMethods: JudoPaymentMethod =
 const supportedCardNetworks: JudoCardNetwork =
     JudoCardNetwork.Visa | JudoCardNetwork.Mastercard | JudoCardNetwork.Amex
 
-const primaryAccountDetails: JudoAccountDetails = {
-    name: 'example-name',
-    accountNumber: 'example-account-number',
-    dateOfBirth: 'example-date-of-birth',
-    postCode: 'example-post-code',
+export const defaultPrimaryAccountDetails: JudoAccountDetails = {
+    name: 'test-account-name',
+    accountNumber: '4015434234',
+    dateOfBirth: '1970-10-11',
+    postCode: 'EC2A',
 }
 
 const configuration = (): JudoConfiguration => {
@@ -90,7 +90,7 @@ const configuration = (): JudoConfiguration => {
         uiConfiguration: uiConfiguration,
         paymentMethods: paymentMethods,
         supportedCardNetworks: supportedCardNetworks,
-        primaryAccountDetails: primaryAccountDetails,
+        primaryAccountDetails: defaultPrimaryAccountDetails,
         applePayConfiguration: applePayConfiguration,
         googlePayConfiguration: googlePayConfiguration,
         pbbaConfiguration: pbbaConfiguration,
