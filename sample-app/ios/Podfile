@@ -22,7 +22,7 @@ target 'sample-app' do
   # Pods for sample-app
   pod 'CocoaDebug', "1.2.9"
   # Override the dependency from .podspec file - should be removed when new SDK version will be released
-  pod "JudoKit-iOS", "2.4.1"
+  pod "JudoKit-iOS", "2.4.2"
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -62,6 +62,12 @@ target 'sample-app' do
     pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
   end
+end
+
+post_install do |installer|
+  ## Fix for XCode 12.5 beta
+  find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
+  "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
 end
 
 ## Fix for XCode 12.5
