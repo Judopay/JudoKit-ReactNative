@@ -46,6 +46,14 @@ JudoPay's React Native module and sample app. This module is a wrapper around th
     }
     ```
 
+-   Make sure that you use Android Gradle plugin version 4.0.1+ in your `android/build.gradle`:
+
+    ```
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.1'
+    }
+    ```
+
 -   Add the Judopay maven repository to `allprojects / repositories` in your `android/build.gradle`:
 
     ```
