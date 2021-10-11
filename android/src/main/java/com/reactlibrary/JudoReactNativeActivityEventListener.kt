@@ -18,10 +18,10 @@ class JudoReactNativeActivityEventListener : BaseActivityEventListener() {
     internal var transactionPromise: Promise? = null
 
     override fun onActivityResult(
-        activity: Activity,
+        activity: Activity?,
         requestCode: Int,
         resultCode: Int,
-        data: Intent
+        data: Intent?
     ) {
 
         if (data == null || resultCode == RESULT_CANCELED || requestCode != JUDO_PAYMENT_WIDGET_REQUEST_CODE) {
