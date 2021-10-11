@@ -1,6 +1,7 @@
 package com.reactlibrary
 
 import android.app.Activity
+import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Promise
