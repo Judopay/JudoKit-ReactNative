@@ -29,7 +29,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 1
+const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 65520
 const val JUDO_PROMISE_REJECTION_CODE = "JUDO_ERROR"
 
 class JudoReactNativeModule internal constructor(val context: ReactApplicationContext) :

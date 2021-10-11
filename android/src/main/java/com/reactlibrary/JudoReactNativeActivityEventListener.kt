@@ -1,6 +1,7 @@
 package com.reactlibrary
 
 import android.app.Activity
+import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Promise
@@ -17,25 +18,29 @@ class JudoReactNativeActivityEventListener : BaseActivityEventListener() {
     internal var transactionPromise: Promise? = null
 
     override fun onActivityResult(
-        activity: Activity,
+        activity: Activity?,
         requestCode: Int,
         resultCode: Int,
-        data: Intent
+        data: Intent?
     ) {
 
-        if (requestCode != JUDO_PAYMENT_WIDGET_REQUEST_CODE) {
+        if (data == null || resultCode == RESULT_CANCELED || requestCode != JUDO_PAYMENT_WIDGET_REQUEST_CODE) {
             return
         }
 
-        when (resultCode) {
-            PAYMENT_ERROR, PAYMENT_CANCELLED -> {
-                val error = data.getParcelableExtra<JudoError>(JUDO_ERROR)
-                transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, error?.message)
+        try {
+            when (resultCode) {
+                PAYMENT_ERROR, PAYMENT_CANCELLED -> {
+                    val error = data.getParcelableExtra<JudoError>(JUDO_ERROR)
+                    transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, error?.message)
+                }
+                PAYMENT_SUCCESS -> {
+                    val result = data.getParcelableExtra<JudoResult>(JUDO_RESULT)
+                    transactionPromise?.resolve(getMappedResult(result))
+                }
             }
-            PAYMENT_SUCCESS -> {
-                val result = data.getParcelableExtra<JudoResult>(JUDO_RESULT)
-                transactionPromise?.resolve(getMappedResult(result))
-            }
+        } catch (throwable: Throwable) {
+            transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, throwable.message)
         }
 
         transactionPromise = null
