@@ -23,19 +23,23 @@ class JudoReactNativeActivityEventListener : BaseActivityEventListener() {
         data: Intent
     ) {
 
-        if (requestCode != JUDO_PAYMENT_WIDGET_REQUEST_CODE) {
+        if (data == null || resultCode == RESULT_CANCELED || requestCode != JUDO_PAYMENT_WIDGET_REQUEST_CODE) {
             return
         }
 
-        when (resultCode) {
-            PAYMENT_ERROR, PAYMENT_CANCELLED -> {
-                val error = data.getParcelableExtra<JudoError>(JUDO_ERROR)
-                transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, error?.message)
+        try {
+            when (resultCode) {
+                PAYMENT_ERROR, PAYMENT_CANCELLED -> {
+                    val error = data.getParcelableExtra<JudoError>(JUDO_ERROR)
+                    transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, error?.message)
+                }
+                PAYMENT_SUCCESS -> {
+                    val result = data.getParcelableExtra<JudoResult>(JUDO_RESULT)
+                    transactionPromise?.resolve(getMappedResult(result))
+                }
             }
-            PAYMENT_SUCCESS -> {
-                val result = data.getParcelableExtra<JudoResult>(JUDO_RESULT)
-                transactionPromise?.resolve(getMappedResult(result))
-            }
+        } catch (throwable: Throwable) {
+            transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, throwable.message)
         }
 
         transactionPromise = null
