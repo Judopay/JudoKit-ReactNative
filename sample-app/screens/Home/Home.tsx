@@ -192,9 +192,17 @@ export default class Home extends Component<HomeProps> {
     try {
       const judo = new JudoPay(this.getAuthorization())
       judo.isSandboxed = this.state.isSandboxed
-      const response = await judo.invokeApplePay(mode, this.state.configuration)
-      if (response != null) {
-        this.props.navigation.navigate('Receipt', { receipt: response })
+
+      const config = this.state.configuration
+      const isApplePayAvailable = await judo.isApplePayAvailableWithConfiguration(config)
+
+      if (isApplePayAvailable) {
+        const response = await judo.invokeApplePay(mode, config)
+        if (response != null) {
+          this.props.navigation.navigate('Receipt', { receipt: response })
+        }
+      } else {
+        await showMessage('Error', 'ApplePay is not available for given configuration')
       }
     } catch (error) {
       await showMessage('Error', error.message)

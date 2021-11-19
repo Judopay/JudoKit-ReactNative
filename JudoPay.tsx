@@ -108,6 +108,18 @@ class JudoPay {
     }
 
     /**
+     * A method used to verify if ApplePay is supported for given configuration object
+     *
+     * This needs to be invoked before invoking ApplePay transactions.
+     *
+     * @returns an asynchronous boolean value that indicates if ApplePay is available.
+     */
+    public isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean> {
+        const params = this.generateJudoParameters(configuration)
+        return NativeModules.RNJudo.isApplePayAvailableWithConfiguration(params)
+    }
+
+    /**
      * A method for invoking the Judo UI for card transactions.
      * Supported operations - payments, pre-auths, register card, save card, check card.
      *
@@ -201,7 +213,7 @@ class JudoPay {
     public async invokePayByBankApp(
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generatePayByBankAppParameters(configuration)
+        const params = this.generateJudoParameters(configuration)
         return NativeModules.RNJudo.invokePayByBankApp(params)
     }
 
@@ -229,7 +241,7 @@ class JudoPay {
     // Private helper methods
     //------------------------------------------------------------------
 
-    private readonly generatePayByBankAppParameters = (
+    private readonly generateJudoParameters = (
         configuration: JudoConfiguration
     ): Record<string, any> => {
         return {

@@ -7,7 +7,7 @@ pre_install do |installer|
   replace = "_currentFrame.CGImage ;} else { [super displayLayer:layer];"
   op = `sed -ie "s/#{find}/#{replace}/" ../node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m`
   puts("Image fix for ios14 done")
-  
+
   ## Fix for XCode 12.5
   find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
   "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
@@ -19,7 +19,7 @@ target 'RNJudo' do
   use_frameworks!
 
   # Pods for RNJudo
-  pod "JudoKit-iOS", "2.4.1"
+  pod "JudoKit-iOS", "2.4.6"
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"

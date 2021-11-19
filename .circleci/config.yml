@@ -137,7 +137,7 @@ jobs:
             - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
       - run:
           name: Yarn Bundle
-          command: yarn react-native bundle --entry-file JudoPay.tsx --bundle-output bundle.js
+          command: export SET NODE_OPTIONS=--openssl-legacy-provider && yarn react-native bundle --entry-file JudoPay.tsx --bundle-output bundle.js
       - persist_to_workspace:
             root: .
             paths:
