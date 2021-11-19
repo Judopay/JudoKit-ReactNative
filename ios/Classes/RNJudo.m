@@ -62,6 +62,15 @@ RCT_REMAP_METHOD(isBankingAppAvailable,
     resolve(boolValue);
 }
 
+RCT_REMAP_METHOD(isApplePayAvailableWithConfiguration,
+                 properties:(NSDictionary *)properties
+                 isApplePayAvailableWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+    NSNumber *boolValue = [NSNumber numberWithBool:[JudoKit isApplePayAvailableWithConfiguration:configuration]];
+    resolve(boolValue);
+}
+
 RCT_REMAP_METHOD(invokeTransaction,
                  properties:(NSDictionary *)properties
                  invokePaymentWithResolver:(RCTPromiseResolveBlock)resolve

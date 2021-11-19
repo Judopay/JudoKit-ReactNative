@@ -1,6 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - CocoaDebug (1.2.9)
+  - CocoaDebug (1.7.2)
   - DeviceDNA (1.1.3)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
@@ -21,7 +21,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - JudoKit-iOS (2.4.3):
+  - JudoKit-iOS (2.4.6):
     - DeviceDNA
     - TrustKit
     - ZappMerchantLib
@@ -231,8 +231,8 @@ PODS:
     - React
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNJudopay (3.3.6):
-    - JudoKit-iOS (= 2.4.3)
+  - RNJudopay (3.3.7):
+    - JudoKit-iOS (= 2.4.6)
     - React
   - RNReanimated (1.13.3):
     - React-Core
@@ -243,13 +243,13 @@ PODS:
   - ZappMerchantLib (3.1.0)
 
 DEPENDENCIES:
-  - CocoaDebug (= 1.2.9)
+  - CocoaDebug (= 1.7.2)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (= 2.4.3)
+  - JudoKit-iOS (= 2.4.6)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -358,14 +358,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  CocoaDebug: dd6e66b87694522a630cf043f05aa205326a17c4
+  CocoaDebug: 61cf93ada6ce8f3407507dc01f9b874d91ac1d5c
   DeviceDNA: c3d7ba1669cebf7965407e7022769e5a5eda8c35
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  JudoKit-iOS: 1a7dcf70f450065a90167c857299e05e265ba760
+  JudoKit-iOS: 6bae2c86694670141c784b7b26df53d9a9631ebb
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -389,13 +389,13 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNJudopay: 7af07af2d82999e1bb2806ce433da7a479556510
+  RNJudopay: 055c57e1969706f0874ad509f4c73e15e59deaaf
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   TrustKit: dac38bb37e49bdfeca41b1a19d020da38017b51c
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: 7cde751eaf7a9af3f7ae795f68b23c8d07e4e6ed
+PODFILE CHECKSUM: dacd20b0a9aa7067972d1258ea8e51f4699b1dfa
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
