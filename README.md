@@ -60,9 +60,9 @@ JudoPay's React Native module and sample app. This module is a wrapper around th
     allprojects {
         repositories {
             mavenLocal()
+
+            mavenCentral()
             google()
-            jcenter()
-            maven { url 'https://jitpack.io' }
             maven {
                 // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
                 url("$rootDir/../node_modules/react-native/android")
