@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start --reset-cache",
     "test": "jest",
     "clean": "rm -rf node_modules && rm -rf ./ios/build && rm -rf ./android/app/build",
     "update-ios": "cd ios && pod update JudoKit-iOS && cd ..",

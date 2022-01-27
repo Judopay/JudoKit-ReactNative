@@ -144,6 +144,9 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
                         is JudoPaymentResult.Error -> {
                             promise.reject(JUDO_PROMISE_REJECTION_CODE, data.error.message)
                         }
+                        else -> {
+                            // noop
+                        }
                     }
                 }
             }
