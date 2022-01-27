@@ -1,6 +1,9 @@
 package com.judopay.wallet;
 
 import android.app.Application;
+
+import com.chuckerteam.chucker.api.ChuckerCollector;
+import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -9,7 +12,6 @@ import com.facebook.soloader.SoLoader;
 import com.judopay.judokit.android.api.factory.JudoApiServiceFactory;
 import com.reactlibrary.JudoReactNativePackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.readystatesoftware.chuck.ChuckInterceptor;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
@@ -53,7 +55,12 @@ public class MainApplication extends Application implements ReactApplication {
     public void onCreate() {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
-        ChuckInterceptor interceptor = new ChuckInterceptor(this);
+        ChuckerInterceptor interceptor =  new ChuckerInterceptor.Builder(this)
+                .collector(new ChuckerCollector(this))
+                .maxContentLength(250000L)
+                .alwaysReadResponseBody(false)
+                .build();
+
         JudoApiServiceFactory.setExternalInterceptors(Collections.singletonList(interceptor));
     }
 }
