@@ -182,6 +182,8 @@ export default class Home extends Component<HomeProps> {
       )
       if (response != null) {
         this.props.navigation.navigate('Receipt', { receipt: response })
+      } else {
+        await showMessage('Error', "invokeTransaction returned null response")
       }
     } catch (error) {
       await showMessage('Error', error.message)

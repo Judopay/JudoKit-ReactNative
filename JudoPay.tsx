@@ -151,13 +151,18 @@ class JudoPay {
     public async performTokenTransaction(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration,
-        token: string
+        token: string,
+        securityCode: string,
+        cardholderName: string
     ): Promise<JudoResponse> {
         const params = this.generateTransactionModeParameters(
             mode,
             configuration
         )
         params['cardToken'] = token
+        params['securityCode'] = securityCode
+        params['cardholderName'] = cardholderName
+
         return NativeModules.RNJudo.performTokenTransaction(params)
     }
 

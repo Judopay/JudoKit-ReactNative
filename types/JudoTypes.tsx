@@ -15,6 +15,34 @@ export interface JudoConfiguration {
     googlePayConfiguration?: JudoGooglePayConfiguration
     pbbaConfiguration?: JudoPBBAConfiguration
     isInitialRecurringPayment?: boolean
+    networkTimeout?: NetworkTimeout,
+    challengeRequestIndicator?: ChallengeRequestIndicator,
+    scaExemption?: ScaExemption,
+    mobileNumber?: string,
+    phoneCountryCode?: string,
+    emailAddress?: string,
+    threeDSTwoMaxTimeout?: string,
+    threeDSTwoMessageVersion?: string
+}
+
+export enum ChallengeRequestIndicator {
+    NoPreference = "noPreference",
+    NoChallenge = "noChallenge",
+    ChallengePreferred = "challengePreferred",
+    ChallengeAsMandate = "challengeAsMandate"
+}
+
+export enum ScaExemption {
+    LowValue = "lowValue",
+    SecureCorporate = "secureCorporate",
+    TrustedBeneficiary = "trustedBeneficiary",
+    TransactionRiskAnalysis = "transactionRiskAnalysis"
+}
+
+export interface NetworkTimeout {
+    connectTimeout?: number,
+    readTimeout?: number,
+    writeTimeout?: number
 }
 
 export enum JudoTransactionType {
@@ -54,6 +82,7 @@ export interface JudoAddress {
     postCode?: string
     town?: string
     countryCode?: number
+    billingCountry?: string
 }
 
 export interface JudoUIConfiguration {
@@ -61,6 +90,7 @@ export interface JudoUIConfiguration {
     shouldPaymentMethodsDisplayAmount: boolean
     shouldPaymentButtonDisplayAmount: boolean
     shouldPaymentMethodsVerifySecurityCode: boolean
+    shouldAskForBillingInformation?: boolean
     theme?: JudoTheme
 }
 

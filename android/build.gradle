@@ -86,6 +86,8 @@ repositories {
     mavenCentral()
     google()
 
+    maven { url 'https://vocalinkzapp.jfrog.io/artifactory/merchant-library-maven/' }
+
     maven { url "$projectDir/../node_modules/react-native/android" }
 }
 
@@ -99,7 +101,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 
-    implementation 'com.judopay:judokit-android:2.1.10'
+    implementation 'com.judopay:judokit-android:3.0.2'
 
     //JUnit 5
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5_version"

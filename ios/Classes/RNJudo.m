@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
 
 @property (nonatomic, strong) JudoKit *judoKit;
 @property (nonatomic, strong) JPApiService *apiService;
-@property (nonatomic, strong) JP3DSService *threeDSService;
+@property (nonatomic, strong) JPCardTransactionService *transactionService;
 @property (nonatomic, strong) JPCompletionBlock completionBlock;
 
 @end
@@ -104,31 +104,23 @@ RCT_REMAP_METHOD(performTokenTransaction,
                  performTokenTransactionWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    self.apiService = [RNWrappers apiServiceFromProperties:properties];
-    self.threeDSService = [[JP3DSService alloc] initWithApiService:self.apiService];
+    self.transactionService = [RNWrappers cardTransactionServiceFromProperties:properties];
     self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
 
     JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
     JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-
-    NSString *cardToken = [RNWrappers cardTokenFromProperties:properties];
-    JPTokenRequest *tokenRequest = [[JPTokenRequest alloc] initWithConfiguration:configuration
-                                                                    andCardToken:cardToken];
-
-    __weak typeof(self) weakSelf = self;
-
+    
+    JPCardTransactionDetails *details = [[JPCardTransactionDetails new] initWithConfiguration:configuration];
+    details.cardToken = [RNWrappers cardTokenFromProperties:properties];
+    details.secureCode = [RNWrappers securityCodeFromProperties:properties];
+    details.cardholderName = [RNWrappers cardholderNameFromProperties:properties];
+    
     if (transactionMode == JPTransactionModePreAuth) {
-        [self.apiService invokePreAuthTokenPaymentWithRequest:tokenRequest
-                                                andCompletion:^(JPResponse *response, JPError *error) {
-            [weakSelf handleResponse:response andError:error];
-        }];
+        [self.transactionService invokePreAuthTokenPaymentWithDetails:details andCompletion:self.completionBlock];
         return;
     }
 
-    [self.apiService invokeTokenPaymentWithRequest:tokenRequest
-                                     andCompletion:^(JPResponse *response, JPError *error) {
-        [weakSelf handleResponse:response andError:error];
-    }];
+    [self.transactionService invokeTokenPaymentWithDetails:details andCompletion:self.completionBlock];
 }
 
 RCT_REMAP_METHOD(fetchTransactionDetails,
@@ -191,20 +183,24 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
         NSError *error = [[NSError alloc] initWithDomain:RNJudoErrorDomain
                                                     code:0
                                                 userInfo:exception.userInfo];
-
         reject(kJudoPromiseRejectionCode, exception.reason, error);
     }
 }
 
-- (void)handleResponse:(JPResponse *)response andError:(JPError *)error {
-
-    if (error.code != Judo3DSRequestError) {
-        self.completionBlock(response, error);
-        return;
-    }
-
-    JP3DSConfiguration *configuration = [JP3DSConfiguration configurationWithError:error];
-    [self.threeDSService invoke3DSecureWithConfiguration:configuration completion:self.completionBlock];
+- (JPCompletionBlock)completionBlockWithResolve:(RCTPromiseResolveBlock)resolve
+                                      andReject:(RCTPromiseRejectBlock)reject {
+    return ^(JPResponse *response, NSError *error) {
+        if (error) {
+            if (error.code == JPError.judoUserDidCancelError.code) {
+                reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
+                return;
+            }
+            reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
+        } else {
+            NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
+            resolve(mappedResponse);
+        }
+    };
 }
 
 //----------------------------------------------
@@ -217,25 +213,6 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
 
 + (BOOL)requiresMainQueueSetup {
     return YES;
-}
-
-- (JPCompletionBlock)completionBlockWithResolve:(RCTPromiseResolveBlock)resolve
-                                      andReject:(RCTPromiseRejectBlock)reject {
-
-    return ^(JPResponse *response, NSError *error) {
-        if (error) {
-
-            if (error.code == JPError.judoUserDidCancelError.code) {
-                reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
-                return;
-            }
-
-            reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
-        } else {
-            NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
-            resolve(mappedResponse);
-        }
-    };
 }
 
 @end

@@ -15,9 +15,9 @@ import com.judopay.judokit.android.api.model.response.Receipt
 import com.judopay.judokit.android.api.model.response.toCardVerificationModel
 import com.judopay.judokit.android.api.model.response.toJudoPaymentResult
 import com.judopay.judokit.android.api.model.response.toJudoResult
-import com.judopay.judokit.android.model.JudoPaymentResult
-import com.judopay.judokit.android.model.JudoResult
-import com.judopay.judokit.android.model.PaymentWidgetType
+import com.judopay.judokit.android.model.*
+import com.judopay.judokit.android.service.CardTransactionManager
+import com.judopay.judokit.android.service.CardTransactionManagerResultListener
 import com.judopay.judokit.android.toTokenRequest
 import com.judopay.judokit.android.ui.cardverification.THREE_DS_ONE_DIALOG_FRAGMENT_TAG
 import com.judopay.judokit.android.ui.cardverification.ThreeDSOneCardVerificationDialogFragment
@@ -33,9 +33,10 @@ const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 65520
 const val JUDO_PROMISE_REJECTION_CODE = "JUDO_ERROR"
 
 class JudoReactNativeModule internal constructor(val context: ReactApplicationContext) :
-    ReactContextBaseJavaModule(context) {
+    ReactContextBaseJavaModule(context), CardTransactionManagerResultListener {
 
     private val listener = JudoReactNativeActivityEventListener()
+    internal var transactionPromise: Promise? = null
 
     /**
      * A broadcast receiver to catch Pay by Bank app /order/bank/sale response event.
@@ -106,59 +107,72 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
     @ReactMethod
     fun performTokenTransaction(options: ReadableMap, promise: Promise) {
         try {
+            val activity = context.currentActivity as FragmentActivity
+            val manager = CardTransactionManager.getInstance(activity)
 
             val judo = getTokenTransactionConfiguration(options)
 
-            val service = JudoApiServiceFactory.createApiService(context, judo)
-
             val cardToken = options.cardToken
-            val securityCode = options.securityCode
 
             if (cardToken == null) {
                 promise.reject(JUDO_PROMISE_REJECTION_CODE, "No card token found")
                 return
             }
 
-            val tokenTransactionCallback = object : Callback<JudoApiCallResult<Receipt>> {
+            val details = TransactionDetails.Builder()
+                .setCardHolderName(options.cardholderName)
+                .setSecurityNumber(options.securityCode)
+                .setCardToken(cardToken)
 
-                override fun onFailure(call: Call<JudoApiCallResult<Receipt>>, t: Throwable) {
-                    promise.reject(t)
-                }
+                .setEmail(judo.emailAddress)
+                .setCountryCode(judo.address?.countryCode.toString())
+                .setPhoneCountryCode(judo.phoneCountryCode)
+                .setMobileNumber(judo.mobileNumber)
+                .setAddressLine1(judo.address?.line1)
+                .setAddressLine2(judo.address?.line2)
+                .setAddressLine3(judo.address?.line3)
+                .setCity(judo.address?.town)
+                .setPostalCode(judo.address?.postCode)
+                .build()
 
-                override fun onResponse(call: Call<JudoApiCallResult<Receipt>>, response: Response<JudoApiCallResult<Receipt>>) {
-
-                    if (response.body() == null) {
-                        promise.reject(JUDO_PROMISE_REJECTION_CODE, "Response body is empty")
-                        return
-                    }
-
-                    when (val data = response.body()?.toJudoPaymentResult(context.resources)) {
-                        is JudoPaymentResult.Success -> {
-                            val receipt = (response.body() as JudoApiCallResult.Success).data
-                            if (receipt != null && receipt.is3dSecureRequired) {
-                                handleThreeDSAuthentication(promise, service, receipt)
-                            } else {
-                                promise.resolve(getMappedResult(receipt?.toJudoResult()))
-                            }
-                        }
-                        is JudoPaymentResult.Error -> {
-                            promise.reject(JUDO_PROMISE_REJECTION_CODE, data.error.message)
-                        }
-                        else -> {
-                            // noop
-                        }
-                    }
-                }
-            }
+            transactionPromise = promise
 
             when (judo.paymentWidgetType) {
-                PaymentWidgetType.CARD_PAYMENT -> service.tokenPayment(judo.toTokenRequest(cardToken, securityCode)).enqueue(tokenTransactionCallback)
-                PaymentWidgetType.PRE_AUTH -> service.preAuthTokenPayment(judo.toTokenRequest(cardToken, securityCode)).enqueue(tokenTransactionCallback)
+                PaymentWidgetType.CARD_PAYMENT -> manager.paymentWithToken(details, JudoReactNativeModule::class.java.name)
+                PaymentWidgetType.PRE_AUTH -> manager.preAuthWithToken(details, JudoReactNativeModule::class.java.name)
                 else -> promise.reject(JUDO_PROMISE_REJECTION_CODE, "${judo.paymentWidgetType.name} payment widget type is not valid for token transactions")
             }
-
         } catch (exception: Exception) {
             promise.reject(exception)
+        }
+    }
+
+    override fun initialize() {
+        super.initialize()
+
+        val activity =  context.currentActivity as FragmentActivity
+        CardTransactionManager.getInstance(activity).registerResultListener(this)
+    }
+
+    override fun invalidate() {
+        super.invalidate()
+
+        val activity =  context.currentActivity as FragmentActivity
+        CardTransactionManager.getInstance(activity).unRegisterResultListener(this)
+    }
+
+    override fun onCardTransactionResult(result: JudoPaymentResult) {
+        transactionPromise?.let {
+            if (result is JudoPaymentResult.Success) {
+                it.resolve(getMappedResult(result.result))
+            } else {
+                val message = when (result) {
+                    is JudoPaymentResult.Error -> result.error.message
+                    is JudoPaymentResult.UserCancelled -> result.error.message
+                    else -> "The transaction was unsuccessful"
+                }
+                it.reject(JUDO_PROMISE_REJECTION_CODE, message)
+            }
         }
     }
 
@@ -175,41 +189,5 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
         listener.transactionPromise = promise
         val intent = configuration.toJudoActivityIntent(it)
         it.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE)
-    }
-
-    private fun handleThreeDSAuthentication(promise: Promise, service: JudoApiService, receipt: Receipt) {
-        val callback = object : ThreeDSOneCompletionCallback {
-            override fun onSuccess(success: JudoPaymentResult) {
-                handleSuccessfulThreeDSTransaction(success, promise)
-            }
-
-            override fun onFailure(error: JudoPaymentResult) {
-                handleFailedThreeDSTransaction(error, promise)
-            }
-        }
-
-        val fragment = ThreeDSOneCardVerificationDialogFragment(
-                service,
-                receipt.toCardVerificationModel(),
-                callback
-        )
-        fragment.show((context.currentActivity as FragmentActivity).supportFragmentManager, THREE_DS_ONE_DIALOG_FRAGMENT_TAG)
-    }
-
-    private fun handleFailedThreeDSTransaction(error: JudoPaymentResult, promise: Promise) {
-        val message = when (error) {
-            is JudoPaymentResult.Error -> error.error.message
-            is JudoPaymentResult.UserCancelled -> error.error.message
-            else -> "The transaction was unsuccessful"
-        }
-        promise.reject(JUDO_PROMISE_REJECTION_CODE, message)
-    }
-
-    private fun handleSuccessfulThreeDSTransaction(success: JudoPaymentResult, promise: Promise) {
-        if (success is JudoPaymentResult.Success) {
-            promise.resolve(getMappedResult(success.result))
-        } else {
-            promise.reject(JUDO_PROMISE_REJECTION_CODE, "Unknown error occured")
-        }
     }
 }

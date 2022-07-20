@@ -9,17 +9,8 @@ import com.judopay.judokit.android.Judo
 import com.judopay.judokit.android.api.model.Authorization
 import com.judopay.judokit.android.api.model.BasicAuthorization
 import com.judopay.judokit.android.api.model.PaymentSessionAuthorization
-import com.judopay.judokit.android.model.Amount
-import com.judopay.judokit.android.model.CardNetwork
-import com.judopay.judokit.android.model.Currency
-import com.judopay.judokit.android.model.GooglePayConfiguration
-import com.judopay.judokit.android.model.JudoResult
-import com.judopay.judokit.android.model.PBBAConfiguration
-import com.judopay.judokit.android.model.PaymentMethod
-import com.judopay.judokit.android.model.PaymentWidgetType
-import com.judopay.judokit.android.model.PrimaryAccountDetails
-import com.judopay.judokit.android.model.Reference
-import com.judopay.judokit.android.model.UiConfiguration
+import com.judopay.judokit.android.api.model.request.Address
+import com.judopay.judokit.android.model.*
 import com.judopay.judokit.android.model.googlepay.GooglePayAddressFormat
 import com.judopay.judokit.android.model.googlepay.GooglePayBillingAddressParameters
 import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
@@ -118,21 +109,71 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
     val primaryAccountDetails = getPrimaryAccountDetails(options)
     val googlePayConfiguration = getGooglePayConfiguration(options)
     val pbbaConfiguration = getPBBAConfiguration(options)
+    val timeouts = getNetworkTimeout(options)
+    val challengeRequestIndicator = getChallengeRequestIndicator(options)
+    val scaExemption = getScaExemption(options)
+    val address = getAddress(options)
 
     return Judo.Builder(type)
-            .setAuthorization(authorization)
-            .setIsSandboxed(options.isSandboxed)
-            .setJudoId(options.judoId)
-            .setAmount(amount)
-            .setReference(reference)
-            .setSupportedCardNetworks(cardNetworks)
-            .setPaymentMethods(paymentMethods)
-            .setUiConfiguration(uiConfiguration)
-            .setPrimaryAccountDetails(primaryAccountDetails)
-            .setGooglePayConfiguration(googlePayConfiguration)
-            .setPBBAConfiguration(pbbaConfiguration)
-            .setInitialRecurringPayment(options.isInitialRecurringPayment)
+        .setAuthorization(authorization)
+        .setIsSandboxed(options.isSandboxed)
+        .setJudoId(options.judoId)
+        .setAmount(amount)
+        .setReference(reference)
+        .setSupportedCardNetworks(cardNetworks)
+        .setPaymentMethods(paymentMethods)
+        .setUiConfiguration(uiConfiguration)
+        .setPrimaryAccountDetails(primaryAccountDetails)
+        .setGooglePayConfiguration(googlePayConfiguration)
+        .setPBBAConfiguration(pbbaConfiguration)
+        .setInitialRecurringPayment(options.isInitialRecurringPayment)
+        .setNetworkTimeout(timeouts)
+        .setChallengeRequestIndicator(challengeRequestIndicator)
+        .setScaExemption(scaExemption)
+        .setMobileNumber(options.mobileNumber)
+        .setEmailAddress(options.emailAddress)
+        .setThreeDSTwoMaxTimeout(options.threeDSTwoMaxTimeout)
+        .setThreeDSTwoMessageVersion(options.threeDSTwoMessageVersion)
+        .setPhoneCountryCode(options.phoneCountryCode)
+        .setAddress(address)
+        .build()
+}
+
+internal fun getAddress(options: ReadableMap): Address? {
+    if (options.cardAddress != null) {
+        return Address.Builder()
+            .setLine1(options.cardAddressLine1)
+            .setLine2(options.cardAddressLine2)
+            .setLine3(options.cardAddressLine3)
+            .setTown(options.cardAddressTown)
+            .setPostCode(options.cardAddressPostCode)
+            .setBillingCountry(options.cardAddressBillingCountry)
+            .setCountryCode(options.cardAddressCountryCode)
             .build()
+    }
+    return null
+}
+
+internal fun getNetworkTimeout(options: ReadableMap): NetworkTimeout? {
+    val networkTimeout = options.networkTimeout
+    if (networkTimeout != null) {
+        return NetworkTimeout.Builder()
+            .setConnectTimeout(options.networkConnectTimeout)
+            .setReadTimeout(options.networkReadTimeout)
+            .setWriteTimeout(options.networkWriteTimeout)
+            .build()
+    }
+    return null
+}
+
+internal fun getChallengeRequestIndicator(options: ReadableMap): ChallengeRequestIndicator? {
+    val challengeRequestIndicator = ChallengeRequestIndicator.values().firstOrNull { it.value == options.challengeRequestIndicator }
+    return challengeRequestIndicator ?: ChallengeRequestIndicator.CHALLENGE_AS_MANDATE
+}
+
+internal fun getScaExemption(options: ReadableMap): ScaExemption {
+    val scaExemption = ScaExemption.values().firstOrNull { it.value == options.scaExemption }
+    return scaExemption ?: ScaExemption.LOW_VALUE
 }
 
 internal fun getAuthorization(options: ReadableMap): Authorization {
@@ -140,16 +181,16 @@ internal fun getAuthorization(options: ReadableMap): Authorization {
 
     options.secret?.let { secret ->
         return BasicAuthorization.Builder()
-                .setApiToken(token)
-                .setApiSecret(secret)
-                .build()
+            .setApiToken(token)
+            .setApiSecret(secret)
+            .build()
     }
 
     options.paymentSession?.let { paymentSession ->
         return PaymentSessionAuthorization.Builder()
-                .setApiToken(token)
-                .setPaymentSession(paymentSession)
-                .build()
+            .setApiToken(token)
+            .setPaymentSession(paymentSession)
+            .build()
     }
 
     throw IllegalArgumentException("No secret or payment session in the authorization")
@@ -174,16 +215,16 @@ internal fun getAmount(options: ReadableMap): Amount {
         else -> Currency.valueOf(currencyValue)
     }
     return Amount.Builder()
-            .setAmount(options.amountValue)
-            .setCurrency(currency)
-            .build()
+        .setAmount(options.amountValue)
+        .setCurrency(currency)
+        .build()
 }
 
 internal fun getReference(options: ReadableMap): Reference? {
 
     var builder = Reference.Builder()
-            .setConsumerReference(options.consumerReference)
-            .setPaymentReference(options.paymentReference)
+        .setConsumerReference(options.consumerReference)
+        .setPaymentReference(options.paymentReference)
 
     val metadataMap = options.metadata
     metadataMap?.let {
@@ -291,11 +332,12 @@ internal fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
 internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
     return if (options.uiConfiguration != null) {
         UiConfiguration.Builder()
-                .setAvsEnabled(options.isAVSEnabled)
-                .setShouldPaymentMethodsDisplayAmount(options.shouldPaymentMethodsDisplayAmount)
-                .setShouldPaymentButtonDisplayAmount(options.shouldPaymentButtonDisplayAmount)
-                .setShouldPaymentMethodsVerifySecurityCode(options.shouldPaymentMethodsVerifySecurityCode)
-                .build()
+            .setAvsEnabled(options.isAVSEnabled)
+            .setShouldPaymentMethodsDisplayAmount(options.shouldPaymentMethodsDisplayAmount)
+            .setShouldPaymentButtonDisplayAmount(options.shouldPaymentButtonDisplayAmount)
+            .setShouldPaymentMethodsVerifySecurityCode(options.shouldPaymentMethodsVerifySecurityCode)
+            .setShouldAskForBillingInformation(options.shouldAskForBillingInformation)
+            .build()
     } else {
         null
     }
@@ -326,14 +368,14 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
 
     return if (options.googlePayConfiguration != null) {
         GooglePayConfiguration.Builder()
-                .setTransactionCountryCode(options.countryCode)
-                .setEnvironment(environment)
-                .setIsEmailRequired(options.isEmailRequired)
-                .setIsBillingAddressRequired(options.isBillingAddressRequired)
-                .setBillingAddressParameters(billingParameters)
-                .setIsShippingAddressRequired(options.isShippingAddressRequired)
-                .setShippingAddressParameters(shippingParameters)
-                .build()
+            .setTransactionCountryCode(options.countryCode)
+            .setEnvironment(environment)
+            .setIsEmailRequired(options.isEmailRequired)
+            .setIsBillingAddressRequired(options.isBillingAddressRequired)
+            .setBillingAddressParameters(billingParameters)
+            .setIsShippingAddressRequired(options.isShippingAddressRequired)
+            .setShippingAddressParameters(shippingParameters)
+            .build()
     } else {
         null
     }
@@ -345,8 +387,8 @@ internal fun getBillingParameters(options: ReadableMap): GooglePayBillingAddress
         else -> GooglePayAddressFormat.FULL
     }
     return GooglePayBillingAddressParameters(
-            addressFormat,
-            options.isBillingPhoneNumberRequired
+        addressFormat,
+        options.isBillingPhoneNumberRequired
     )
 }
 
@@ -361,8 +403,8 @@ internal fun getShippingParameters(options: ReadableMap): GooglePayShippingAddre
     }
 
     return GooglePayShippingAddressParameters(
-            allowedCountryCodes,
-            options.isShippingPhoneNumberRequired
+        allowedCountryCodes,
+        options.isShippingPhoneNumberRequired
     )
 }
 
@@ -375,11 +417,11 @@ internal fun getPBBAConfiguration(options: ReadableMap): PBBAConfiguration? {
         }
 
         PBBAConfiguration.Builder()
-                .setMobileNumber(options.mobileNumber)
-                .setEmailAddress(options.emailAddress)
-                .setDeepLinkURL(deeplinkUri)
-                .setDeepLinkScheme(options.deeplinkScheme)
-                .build()
+            .setMobileNumber(options.pbbaMobileNumber)
+            .setEmailAddress(options.pbbaEmailAddress)
+            .setDeepLinkURL(deeplinkUri)
+            .setDeepLinkScheme(options.deeplinkScheme)
+            .build()
     } else {
         null
     }
