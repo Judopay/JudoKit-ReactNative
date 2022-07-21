@@ -14,6 +14,9 @@ import { showMessage } from '../../helpers/utils'
 
 interface State {
   cardToken: string | undefined;
+  securityCode: string | undefined;
+  cardholderName: string | undefined;
+  cardScheme: string | undefined;
 }
 
 export default class TokenPayments extends Component<TokenPaymentProps, State> {
@@ -21,7 +24,12 @@ export default class TokenPayments extends Component<TokenPaymentProps, State> {
 
   constructor(props: TokenPaymentProps) {
     super(props)
-    this.state = { cardToken: undefined }
+    this.state = {
+      cardToken: undefined,
+      securityCode: "341",
+      cardholderName: "CHALLENGE",
+      cardScheme: "visa"
+    }
     this.invokeSaveCard = this.invokeSaveCard.bind(this)
     this.completeTransaction = this.completeTransaction.bind(this)
   }
@@ -38,7 +46,7 @@ export default class TokenPayments extends Component<TokenPaymentProps, State> {
         configuration,
       )
 
-      this.setState({ cardToken: response.cardDetails?.cardToken })
+      this.setState({ ...this.state, ...(response.cardDetails || {})  })
     } catch (error) {
       showMessage(error.message)
     }
@@ -56,7 +64,10 @@ export default class TokenPayments extends Component<TokenPaymentProps, State> {
       const response = await judo.performTokenTransaction(
         mode,
         configuration,
-        this.state.cardToken,
+        this.state.cardToken || "",
+          this.state.securityCode || "",
+          this.state.cardholderName || "",
+          this.state.cardScheme || ""
       )
 
       if (response != null) {

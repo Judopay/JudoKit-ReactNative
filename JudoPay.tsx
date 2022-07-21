@@ -144,24 +144,29 @@ class JudoPay {
      *
      * @param mode - a JudoTransactionMode value that defines if the transaction is either a payment or pre-auth.
      * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
-     * @param token - the saved card token string.
+     * @param cardToken - the saved card token string.
+     * @param securityCode - the saved card token security code.
+     * @param cardholderName - the saved card token cardholder name.
+     * @param cardScheme - the saved card token scheme name.
      *
      * @returns an asynchronous JudoResponse object, containing the transaction results.
      */
     public async performTokenTransaction(
         mode: JudoTransactionMode,
         configuration: JudoConfiguration,
-        token: string,
+        cardToken: string,
         securityCode: string,
-        cardholderName: string
+        cardholderName: string,
+        cardScheme: string
     ): Promise<JudoResponse> {
         const params = this.generateTransactionModeParameters(
             mode,
             configuration
         )
-        params['cardToken'] = token
+        params['cardToken'] = cardToken
         params['securityCode'] = securityCode
         params['cardholderName'] = cardholderName
+        params['cardScheme'] = cardScheme
 
         return NativeModules.RNJudo.performTokenTransaction(params)
     }

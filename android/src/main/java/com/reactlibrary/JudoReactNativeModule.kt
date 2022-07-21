@@ -122,8 +122,8 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
             val details = TransactionDetails.Builder()
                 .setCardHolderName(options.cardholderName)
                 .setSecurityNumber(options.securityCode)
+                .setCardType(options.cardType)
                 .setCardToken(cardToken)
-
                 .setEmail(judo.emailAddress)
                 .setCountryCode(judo.address?.countryCode.toString())
                 .setPhoneCountryCode(judo.phoneCountryCode)

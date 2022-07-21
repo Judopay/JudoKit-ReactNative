@@ -29,6 +29,10 @@
 #import "NSDictionary+JudoConvert.h"
 #import "UIColor+RNAdditions.h"
 
+static NSString *const kCardSchemeVISA = @"visa";
+static NSString *const kCardSchemeMasterCard = @"mastercard";
+static NSString *const kCardSchemeAMEX = @"amex";
+
 @implementation RNWrappers
 
 //---------------------------------------------------
@@ -39,7 +43,6 @@
     id<JPAuthorization> authorization = [RNWrappers authorizationFromProperties:properties];
     JudoKit *judoKit = [[JudoKit alloc] initWithAuthorization:authorization];
     judoKit.isSandboxed = [RNWrappers isSandboxedFromProperties:properties];
-    
     return judoKit;
 }
 
@@ -104,22 +107,21 @@
     return availableModes[intType].intValue;
 }
 
-// TODO: JPNetworkTimeout not exposed in JudoKit, uncomment when fixed
-//+ (JPNetworkTimeout *)networkTimeoutFromProperties:(NSDictionary *)properties {
-//    NSDictionary *networkTimeout = [properties optionalDictionaryForKey:@"networkTimeout"];
-//
-//    if (!networkTimeout) {
-//        return nil;
-//    }
-//
-//    NSTimeInterval connectTimeout = [networkTimeout numberForKey:@"connectTimeout"].doubleValue;
-//    NSTimeInterval readTimeout = [networkTimeout numberForKey:@"readTimeout"].doubleValue;
-//    NSTimeInterval writeTimeout = [networkTimeout numberForKey:@"writeTimeout"].doubleValue;
-//
-//    return [[JPNetworkTimeout alloc] initWithConnectTimeout:connectTimeout
-//                                             andReadTimeout:readTimeout
-//                                            andWriteTimeout:writeTimeout];
-//}
++ (JPNetworkTimeout *)networkTimeoutFromProperties:(NSDictionary *)properties {
+    NSDictionary *networkTimeout = [properties optionalDictionaryForKey:@"networkTimeout"];
+
+    if (!networkTimeout) {
+        return nil;
+    }
+
+    NSTimeInterval connectTimeout = [networkTimeout numberForKey:@"connectTimeout"].doubleValue;
+    NSTimeInterval readTimeout = [networkTimeout numberForKey:@"readTimeout"].doubleValue;
+    NSTimeInterval writeTimeout = [networkTimeout numberForKey:@"writeTimeout"].doubleValue;
+
+    return [[JPNetworkTimeout alloc] initWithConnectTimeout:connectTimeout
+                                             andReadTimeout:readTimeout
+                                            andWriteTimeout:writeTimeout];
+}
 
 + (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
 
@@ -143,9 +145,7 @@
     configuration.paymentMethods = [RNWrappers paymentMethodsFromConfiguration:configurationDict];
     configuration.applePayConfiguration = [RNApplePayWrappers applePayConfigurationFromConfiguration:configurationDict];
     configuration.pbbaConfiguration = [RNPBBAWrappers pbbaConfigurationFromConfiguration:configurationDict];
-
-    // TODO: JPNetworkTimeout not exposed in JudoKit, uncomment when fixed
-    // configuration.networkTimeout = [RNWrappers networkTimeoutFromProperties:configurationDict];
+    configuration.networkTimeout = [RNWrappers networkTimeoutFromProperties:configurationDict];
         
     NSString *scaExemption = [configurationDict optionalStringForKey:@"scaExemption"];
     NSString *challengeRequestIndicator = [configurationDict optionalStringForKey:@"challengeRequestIndicator"];
@@ -241,6 +241,24 @@
 
 + (NSString *)receiptIdFromProperties:(NSDictionary *)properties {
     return [properties optionalStringForKey:@"receiptId"];
+}
+
++ (JPCardNetworkType)cardTypeFromProperties:(NSDictionary *)properties {
+    NSString *cardScheme = [properties optionalStringForKey:@"cardScheme"].lowercaseString;
+    
+    if ([kCardSchemeVISA isEqualToString:cardScheme]) {
+        return JPCardNetworkTypeVisa;
+    }
+    
+    if ([kCardSchemeMasterCard isEqualToString:cardScheme]) {
+        return JPCardNetworkTypeMasterCard;
+    }
+    
+    if ([kCardSchemeAMEX isEqualToString:cardScheme]) {
+        return JPCardNetworkTypeAMEX;
+    }
+    
+    return JPCardNetworkTypeUnknown;
 }
 
 //---------------------------------------------------

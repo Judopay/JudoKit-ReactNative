@@ -277,7 +277,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (= 3.0.1)
+  - JudoKit-iOS (from `../../../JudoKit-iOS`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -315,7 +315,6 @@ SPEC REPOS:
     - CocoaDebug
     - DeviceDNA
     - Judo3DS2_iOS
-    - JudoKit-iOS
     - OpenSSL-Universal
     - TrustKit
     - ZappMerchantLib
@@ -331,6 +330,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  JudoKit-iOS:
+    :path: "../../../JudoKit-iOS"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -428,6 +429,6 @@ SPEC CHECKSUMS:
   Yoga: b5db822228963b87948afa7a5a531088607151dc
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: 4d6f8e035ec2a48d0d26f63204f608077fd95047
+PODFILE CHECKSUM: 04ed6f9f47bbf378af7acf25b8523812e4563216
 
 COCOAPODS: 1.11.3

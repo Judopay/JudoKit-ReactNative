@@ -18,9 +18,9 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		15742E742268C519005EA3C4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15742E732268C519005EA3C4 /* Foundation.framework */; };
-		27D2DC8F67522DF154D89848 /* Pods_sample_appTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4186EDED9F416B7120B4C /* Pods_sample_appTests.framework */; };
 		30659D722446F40600A5A712 /* CocoaDebugSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30659D712446F40600A5A712 /* CocoaDebugSupport.swift */; };
-		461B7392BFB176042E51F44D /* Pods_sample_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AE79C1C1BD39676C615191A /* Pods_sample_app.framework */; };
+		441C1FD805337E384BEAB490 /* libPods-sample-app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F9FD7A27974EA2A3C3EEE6 /* libPods-sample-app.a */; };
+		47525D1B35C981395D9A9B3C /* libPods-sample-appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77EAF3377B221A15E22E8942 /* libPods-sample-appTests.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -318,10 +318,10 @@
 		5D3C956833013C1384550386 /* Pods-sample-appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-appTests.debug.xcconfig"; path = "Target Support Files/Pods-sample-appTests/Pods-sample-appTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		722AC16CE384570886DB8602 /* Pods-sample-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-app.release.xcconfig"; path = "Target Support Files/Pods-sample-app/Pods-sample-app.release.xcconfig"; sourceTree = "<group>"; };
+		77EAF3377B221A15E22E8942 /* libPods-sample-appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-sample-appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
-		7AE79C1C1BD39676C615191A /* Pods_sample_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_sample_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7FC4186EDED9F416B7120B4C /* Pods_sample_appTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_sample_appTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		83F9FD7A27974EA2A3C3EEE6 /* libPods-sample-app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-sample-app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2E7E259D25C2B1126F55E3F /* Pods-sample-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-app.debug.xcconfig"; path = "Target Support Files/Pods-sample-app/Pods-sample-app.debug.xcconfig"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		E15EF491D1A8B07C27419713 /* Pods-sample-appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample-appTests.debug.xcconfig"; path = "Target Support Files/Pods-sample-appTests/Pods-sample-appTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -335,7 +335,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27D2DC8F67522DF154D89848 /* Pods_sample_appTests.framework in Frameworks */,
+				47525D1B35C981395D9A9B3C /* libPods-sample-appTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,7 +345,7 @@
 			files = (
 				15742E742268C519005EA3C4 /* Foundation.framework in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
-				461B7392BFB176042E51F44D /* Pods_sample_app.framework in Frameworks */,
+				441C1FD805337E384BEAB490 /* libPods-sample-app.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,8 +491,8 @@
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
-				7AE79C1C1BD39676C615191A /* Pods_sample_app.framework */,
-				7FC4186EDED9F416B7120B4C /* Pods_sample_appTests.framework */,
+				83F9FD7A27974EA2A3C3EEE6 /* libPods-sample-app.a */,
+				77EAF3377B221A15E22E8942 /* libPods-sample-appTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -603,7 +603,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				B01A36F8E5E792A7816A2F08 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -625,6 +624,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				3CF2E0A730F0090B9F6BA1D1 /* [CP] Embed Pods Frameworks */,
+				CDD085AC4EC0E89CE8F337A1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1025,76 +1025,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-sample-app/Pods-sample-app-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/CocoaDebug/CocoaDebug.framework",
-				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
-				"${BUILT_PRODUCTS_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework",
-				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
-				"${BUILT_PRODUCTS_DIR}/JudoKit-iOS/JudoKit_iOS.framework",
-				"${BUILT_PRODUCTS_DIR}/RCTTypeSafety/RCTTypeSafety.framework",
-				"${BUILT_PRODUCTS_DIR}/RNCAsyncStorage/RNCAsyncStorage.framework",
-				"${BUILT_PRODUCTS_DIR}/RNCMaskedView/RNCMaskedView.framework",
-				"${BUILT_PRODUCTS_DIR}/RNGestureHandler/RNGestureHandler.framework",
-				"${BUILT_PRODUCTS_DIR}/RNJudopay/RNJudopay.framework",
-				"${BUILT_PRODUCTS_DIR}/RNReanimated/RNReanimated.framework",
-				"${BUILT_PRODUCTS_DIR}/RNScreens/RNScreens.framework",
-				"${BUILT_PRODUCTS_DIR}/React-Core-60309c9c/React.framework",
-				"${BUILT_PRODUCTS_DIR}/React-CoreModules/CoreModules.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTAnimation/RCTAnimation.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTBlob/RCTBlob.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTImage/RCTImage.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTLinking/RCTLinking.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTNetwork/RCTNetwork.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTSettings/RCTSettings.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTText/RCTText.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTVibration/RCTVibration.framework",
-				"${BUILT_PRODUCTS_DIR}/React-cxxreact/cxxreact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsi/jsi.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsiexecutor/jsireact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsinspector/jsinspector.framework",
-				"${BUILT_PRODUCTS_DIR}/ReactCommon/ReactCommon.framework",
-				"${BUILT_PRODUCTS_DIR}/TrustKit/TrustKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
-				"${BUILT_PRODUCTS_DIR}/ZappMerchantLib/ZappMerchantLib.framework",
-				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
-				"${BUILT_PRODUCTS_DIR}/react-native-safe-area-context/react_native_safe_area_context.framework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/DeviceDNA/DeviceDNA.framework/DeviceDNA",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Judo3DS2_iOS/Judo3DS2_iOS.framework/Judo3DS2_iOS",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaDebug.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBReactNativeSpec.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JudoKit_iOS.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTTypeSafety.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNCAsyncStorage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNCMaskedView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNGestureHandler.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNJudopay.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNReanimated.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNScreens.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreModules.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTAnimation.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTBlob.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTLinking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTNetwork.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTSettings.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTText.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTVibration.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/cxxreact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsi.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsireact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsinspector.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactCommon.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TrustKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZappMerchantLib.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/react_native_safe_area_context.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceDNA.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Judo3DS2_iOS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
@@ -1126,40 +1062,380 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B01A36F8E5E792A7816A2F08 /* [CP] Embed Pods Frameworks */ = {
+		CDD085AC4EC0E89CE8F337A1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-sample-appTests/Pods-sample-appTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
-				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
-				"${BUILT_PRODUCTS_DIR}/RNCAsyncStorage/RNCAsyncStorage.framework",
-				"${BUILT_PRODUCTS_DIR}/React-Core/React.framework",
-				"${BUILT_PRODUCTS_DIR}/React-cxxreact/cxxreact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsi/jsi.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsiexecutor/jsireact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsinspector/jsinspector.framework",
-				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
-				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-sample-app/Pods-sample-app-resources.sh",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/App.storyboard",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_7z.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_7z@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_7z@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_aac.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_aac@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_aac@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_apk.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_apk@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_apk@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_avi.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_avi@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_avi@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_bin.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_bin@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_bin@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_bmp.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_bmp@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_bmp@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_css.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_css@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_css@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dat.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dat@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dat@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_db.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_db@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_db@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_default.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_default@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_default@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dll.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dll@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dll@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dmg.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dmg@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_dmg@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_doc.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_doc@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_doc@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_eps.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_eps@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_eps@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_fla.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_fla@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_fla@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_flv.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_flv@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_flv@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_folder_empty.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_folder_empty@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_folder_empty@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_folder_not_empty.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_folder_not_empty@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_folder_not_empty@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_gif.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_gif@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_gif@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_html.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_html@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_html@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ipa.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ipa@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ipa@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_jar.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_jar@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_jar@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_java.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_java@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_java@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_jpg.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_jpg@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_jpg@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_js.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_js@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_js@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_json.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_json@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_json@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_keynote.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_keynote@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_keynote@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_md.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_md@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_md@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_midi.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_midi@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_midi@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mov.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mov@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mov@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mp3.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mp3@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mp3@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mp4.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mp4@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mp4@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mpg.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mpg@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_mpg@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_numbers.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_numbers@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_numbers@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ogg.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ogg@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ogg@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_pages.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_pages@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_pages@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_pdf.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_pdf@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_pdf@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_php.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_php@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_php@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_plist.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_plist@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_plist@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_png.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_png@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_png@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ppt.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ppt@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ppt@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_psd.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_psd@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_psd@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_sql.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_sql@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_sql@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_svg.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_svg@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_svg@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_swift.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_swift@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_swift@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_tif.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_tif@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_tif@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_torrent.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_torrent@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_torrent@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ttf.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ttf@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_ttf@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_txt.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_txt@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_txt@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_wav.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_wav@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_wav@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_wmv.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_wmv@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_wmv@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_xls.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_xls@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_xls@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_xml.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_xml@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_xml@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_zip.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_zip@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/FileType/icon_file_type_zip@3x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_app@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_bugs@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_close@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_down@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_logs@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_mail@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_network@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_sandbox@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/images/_icon_file_type_up@2x.png",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Logs.storyboard",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Manager.storyboard",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Network.storyboard",
+				"${PODS_ROOT}/CocoaDebug/Sources/Resources/NetworkCell.xib",
+				"${PODS_ROOT}/../../../../JudoKit-iOS/Resources/icons.bundle",
+				"${PODS_ROOT}/../../../../JudoKit-iOS/Resources/resources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit_iOS.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ZappMerchantLib/ZappMerchantLibResources.bundle",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNCAsyncStorage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/cxxreact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsi.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsireact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsinspector.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/App.storyboardc",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_7z.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_7z@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_7z@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_aac.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_aac@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_aac@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_apk.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_apk@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_apk@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_avi.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_avi@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_avi@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_bin.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_bin@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_bin@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_bmp.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_bmp@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_bmp@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_css.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_css@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_css@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dat.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dat@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dat@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_db.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_db@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_db@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_default.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_default@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_default@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dll.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dll@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dll@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dmg.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dmg@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_dmg@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_doc.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_doc@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_doc@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_eps.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_eps@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_eps@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_fla.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_fla@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_fla@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_flv.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_flv@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_flv@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_folder_empty.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_folder_empty@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_folder_empty@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_folder_not_empty.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_folder_not_empty@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_folder_not_empty@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_gif.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_gif@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_gif@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_html.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_html@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_html@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ipa.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ipa@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ipa@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_jar.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_jar@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_jar@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_java.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_java@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_java@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_jpg.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_jpg@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_jpg@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_js.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_js@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_js@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_json.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_json@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_json@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_keynote.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_keynote@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_keynote@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_md.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_md@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_md@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_midi.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_midi@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_midi@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mov.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mov@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mov@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mp3.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mp3@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mp3@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mp4.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mp4@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mp4@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mpg.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mpg@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_mpg@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_numbers.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_numbers@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_numbers@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ogg.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ogg@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ogg@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_pages.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_pages@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_pages@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_pdf.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_pdf@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_pdf@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_php.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_php@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_php@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_plist.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_plist@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_plist@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_png.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_png@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_png@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ppt.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ppt@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ppt@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_psd.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_psd@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_psd@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_sql.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_sql@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_sql@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_svg.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_svg@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_svg@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_swift.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_swift@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_swift@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_tif.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_tif@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_tif@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_torrent.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_torrent@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_torrent@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ttf.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ttf@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_ttf@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_txt.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_txt@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_txt@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_wav.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_wav@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_wav@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_wmv.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_wmv@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_wmv@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_xls.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_xls@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_xls@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_xml.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_xml@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_xml@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_zip.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_zip@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icon_file_type_zip@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_app@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_bugs@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_close@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_down@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_logs@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_mail@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_network@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_sandbox@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/_icon_file_type_up@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Logs.storyboardc",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Manager.storyboardc",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Network.storyboardc",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/NetworkCell.nib",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icons.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/resources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKit_iOS.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ZappMerchantLibResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-sample-appTests/Pods-sample-appTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-sample-app/Pods-sample-app-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FC879EBB336107F95E46DE36 /* [CP] Check Pods Manifest.lock */ = {
@@ -1247,7 +1523,7 @@
 					"$(SRCROOT)/../node_modules/react-native-judo-rn/ios",
 				);
 				INFOPLIST_FILE = "sample-appTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -1279,7 +1555,7 @@
 					"$(SRCROOT)/../node_modules/react-native-judo-rn/ios",
 				);
 				INFOPLIST_FILE = "sample-appTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -1304,20 +1580,18 @@
 				CODE_SIGN_ENTITLEMENTS = "sample-app/sample-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = SE94G3734N;
-				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "sample-app/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 3.3.7;
+				MARKETING_VERSION = 4.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1342,19 +1616,17 @@
 				CODE_SIGN_ENTITLEMENTS = "sample-app/sample-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = SE94G3734N;
-				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "sample-app/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 3.3.7;
+				MARKETING_VERSION = 4.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

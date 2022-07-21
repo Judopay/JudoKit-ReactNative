@@ -7,6 +7,11 @@ import com.facebook.react.bridge.ReadableMap
 import com.judopay.judokit.android.JUDO_OPTIONS
 import com.judopay.judokit.android.Judo
 import com.judopay.judokit.android.JudoActivity
+import com.judopay.judokit.android.model.CardNetwork
+
+const val CARD_SCHEME_VISA = "visa"
+const val CARD_SCHEME_MASTERCARD = "mastercard"
+const val CARD_SCHEME_AMEX = "amex"
 
 internal fun ReadableMap?.hasKey(key: String): Boolean {
     if (this != null) {
@@ -44,6 +49,22 @@ internal val ReadableMap.cardholderName: String?
             return getString("cardholderName")
         }
         return null
+    }
+
+internal val ReadableMap.cardType: CardNetwork
+    get() {
+        val cardScheme = if (hasKey("cardScheme")) {
+            getString("cardScheme") ?: ""
+        } else {
+            ""
+        }
+
+        return when (cardScheme.lowercase()) {
+            CARD_SCHEME_VISA -> CardNetwork.VISA
+            CARD_SCHEME_MASTERCARD -> CardNetwork.MASTERCARD
+            CARD_SCHEME_AMEX -> CardNetwork.AMEX
+            else -> CardNetwork.OTHER
+        }
     }
 
 internal val ReadableMap.judoId: String?

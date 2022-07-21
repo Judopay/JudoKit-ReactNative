@@ -48,6 +48,8 @@
 
 + (JPCardTransactionService *)cardTransactionServiceFromProperties:(NSDictionary *)properties;
 
++ (id<JPAuthorization>)authorizationFromProperties:(NSDictionary *)properties;
+
 /**
  * A method that returns the correct TransactionType value based on the passed dictionary parameters
  * TransactionType is set to switch between Payment, PreAuth, Register Card, Check Card and Save Card transactions
@@ -101,6 +103,8 @@
 + (NSString *)securityCodeFromProperties:(NSDictionary *)properties;
 
 + (NSString *)cardholderNameFromProperties:(NSDictionary *)properties;
+
++ (JPCardNetworkType)cardTypeFromProperties:(NSDictionary *)properties;
 
 /**
 * A method that returns the receipt ID contained in the properties dictionary

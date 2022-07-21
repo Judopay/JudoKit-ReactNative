@@ -114,6 +114,7 @@ RCT_REMAP_METHOD(performTokenTransaction,
     details.cardToken = [RNWrappers cardTokenFromProperties:properties];
     details.secureCode = [RNWrappers securityCodeFromProperties:properties];
     details.cardholderName = [RNWrappers cardholderNameFromProperties:properties];
+    details.cardType = [RNWrappers cardTypeFromProperties:properties];
     
     if (transactionMode == JPTransactionModePreAuth) {
         [self.transactionService invokePreAuthTokenPaymentWithDetails:details andCompletion:self.completionBlock];
@@ -195,7 +196,15 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
                 reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
                 return;
             }
-            reject(kJudoPromiseRejectionCode, @"Transaction failed",  error);
+            
+            NSString *description = error.userInfo[NSLocalizedDescriptionKey];
+            NSString *message = @"Transaction failed";
+            
+            if (description && description.length > 0) {
+                message = description;
+            }
+            
+            reject(kJudoPromiseRejectionCode, message, error);
         } else {
             NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
             resolve(mappedResponse);
