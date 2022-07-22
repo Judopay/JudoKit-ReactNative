@@ -22,7 +22,7 @@ PODS:
     - glog
   - glog (0.3.5)
   - Judo3DS2_iOS (1.0.1)
-  - JudoKit-iOS (3.0.1):
+  - JudoKit-iOS (3.0.2):
     - DeviceDNA (~> 2.0.0)
     - Judo3DS2_iOS (~> 1.0.1)
     - TrustKit
@@ -236,7 +236,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (= 3.0.1)
+  - JudoKit-iOS (= 3.0.2)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -332,7 +332,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Judo3DS2_iOS: c1ccf49ecacddb4559a73fb7eae6e680e2355b21
-  JudoKit-iOS: ff5d3b707ad4882137f96873dc269ab0bff6e030
+  JudoKit-iOS: 4a96c63d4cfb45bb1a68a1891b2ebaeaa8a46be1
   OpenSSL-Universal: ee0a7a25f2042782e2df405e66db3e429198e392
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -357,6 +357,6 @@ SPEC CHECKSUMS:
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: 6bb46c40404eecc0382339713acaab405fe57ff2
+PODFILE CHECKSUM: bd8176c4a34cb7668ac5120fb4a4145962a52c2c
 
 COCOAPODS: 1.11.3

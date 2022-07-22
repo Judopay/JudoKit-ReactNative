@@ -23,7 +23,7 @@ PODS:
     - glog
   - glog (0.3.5)
   - Judo3DS2_iOS (1.0.1)
-  - JudoKit-iOS (3.0.1):
+  - JudoKit-iOS (3.0.2):
     - DeviceDNA (~> 2.0.0)
     - Judo3DS2_iOS (~> 1.0.1)
     - TrustKit
@@ -259,8 +259,8 @@ PODS:
     - React
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNJudopay (3.3.9):
-    - JudoKit-iOS (= 3.0.1)
+  - RNJudopay (3.4.0):
+    - JudoKit-iOS (= 3.0.2)
     - React
   - RNReanimated (1.13.3):
     - React-Core
@@ -277,7 +277,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (from `../../../JudoKit-iOS`)
+  - JudoKit-iOS (= 3.0.2)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -315,6 +315,7 @@ SPEC REPOS:
     - CocoaDebug
     - DeviceDNA
     - Judo3DS2_iOS
+    - JudoKit-iOS
     - OpenSSL-Universal
     - TrustKit
     - ZappMerchantLib
@@ -330,8 +331,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
-  JudoKit-iOS:
-    :path: "../../../JudoKit-iOS"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -397,7 +396,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Judo3DS2_iOS: c1ccf49ecacddb4559a73fb7eae6e680e2355b21
-  JudoKit-iOS: ff5d3b707ad4882137f96873dc269ab0bff6e030
+  JudoKit-iOS: 4a96c63d4cfb45bb1a68a1891b2ebaeaa8a46be1
   OpenSSL-Universal: ee0a7a25f2042782e2df405e66db3e429198e392
   RCTRequired: c689bd96375408b455d1cda431d76e8226f6c726
   RCTTypeSafety: 9c1123190d064e9077e4dba96d51b93d10e0a8a5
@@ -422,13 +421,13 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNJudopay: 6b6682baf431932fc645bd0b8081517ee10201a7
+  RNJudopay: 59ecac539b097bb2481520c595d2f959d42c761c
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   TrustKit: dac38bb37e49bdfeca41b1a19d020da38017b51c
   Yoga: b5db822228963b87948afa7a5a531088607151dc
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: 04ed6f9f47bbf378af7acf25b8523812e4563216
+PODFILE CHECKSUM: eb6dec5a4c1da33a1e38fc109563043fe04517e8
 
 COCOAPODS: 1.11.3

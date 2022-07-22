@@ -1245,8 +1245,8 @@
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Manager.storyboard",
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/Network.storyboard",
 				"${PODS_ROOT}/CocoaDebug/Sources/Resources/NetworkCell.xib",
-				"${PODS_ROOT}/../../../../JudoKit-iOS/Resources/icons.bundle",
-				"${PODS_ROOT}/../../../../JudoKit-iOS/Resources/resources.bundle",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/icons.bundle",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/resources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit_iOS.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ZappMerchantLib/ZappMerchantLibResources.bundle",
 			);

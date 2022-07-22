@@ -19,7 +19,7 @@ target 'RNJudo' do
   # use_frameworks!
 
   # Pods for RNJudo
-  pod "JudoKit-iOS", "3.0.1"
+  pod "JudoKit-iOS", "3.0.2"
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
