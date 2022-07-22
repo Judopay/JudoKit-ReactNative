@@ -66,6 +66,32 @@ export const Payments = {
     ]
 }
 
+export const ScaExemptions = {
+    list: [
+        {
+            "data": [
+                { "entry": "Low value", "value": "lowValue" } as PickerItem,
+                { "entry": "Secure corporate", "value": "secureCorporate" } as PickerItem,
+                { "entry": "Trusted beneficiary", "value": "trustedBeneficiary" } as PickerItem,
+                { "entry": "Transaction risk analysis", "value": "transactionRiskAnalysis" } as PickerItem,
+            ]
+        }
+    ]
+}
+
+export const ChallengeRequestIndicators = {
+    list: [
+        {
+            "data": [
+                { "entry": "No preference", "value": "noPreference" } as PickerItem,
+                { "entry": "No challenge", "value": "noChallenge" } as PickerItem,
+                { "entry": "Challenge preferred", "value": "challengePreferred" } as PickerItem,
+                { "entry": "Challenge as mandate", "value": "challengeAsMandate" } as PickerItem,
+            ]
+        }
+    ]
+}
+
 export const MerchantCapabilities = {
     list: [
         {
@@ -367,6 +393,104 @@ export const SettingsData = {
                     "subtitle": "Inject primary account details",
                     "type": SettingsPickType.Switch,
                     "value": true,
+                } as SettingsListItem,
+            ]
+        },
+        {
+            "title": "3DS 2.0",
+            "data": [
+                {
+                    "title": "Enable billing information screen",
+                    "subtitle": "Asks user for billing information",
+                    "type": SettingsPickType.Switch,
+                    "value": true,
+                } as SettingsListItem,
+                {
+                    "title": "Challenge request indicator",
+                    "subtitle": "Select challenge request indicator",
+                    "type": SettingsPickType.SinglePicker,
+                    "value": "challengeAsMandate",
+                    "valueArray": [],
+                    "pickItems": SettingsPickArray.ChallengeRequestIndicators
+                } as SettingsListItem,
+                {
+                    "title": "SCA exemption",
+                    "subtitle": "Select SCA exemption",
+                    "type": SettingsPickType.SinglePicker,
+                    "value": "lowValue",
+                    "valueArray": [],
+                    "pickItems": SettingsPickArray.ScaExemptions
+                } as SettingsListItem,
+                {
+                    "title": "Protocol message version",
+                    "subtitle": "Set preffered protocol message version",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "2.2.0"
+                } as SettingsListItem,
+                {
+                    "title": "3DS 2.0 max timeout",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "30"
+                } as SettingsListItem,
+            ]
+        },
+        {
+            "title": "Address",
+            "data": [
+                {
+                    "title": "Enable card address",
+                    "type": SettingsPickType.Switch,
+                    "value": false,
+                } as SettingsListItem,
+                {
+                    "title": "Line 1",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "My house"
+                } as SettingsListItem,
+                {
+                    "title": "Line 2",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "My street"
+                } as SettingsListItem,
+                {
+                    "title": "Line 3",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "My area"
+                } as SettingsListItem,
+                {
+                    "title": "Town",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "My town"
+                } as SettingsListItem,
+                {
+                    "title": "Post code",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "TR14 8PA"
+                } as SettingsListItem,
+                {
+                    "title": "Billing country",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "826"
+                } as SettingsListItem,
+                {
+                    "title": "Country code",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "826"
+                } as SettingsListItem,
+                {
+                    "title": "Phone country code",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "44"
+                } as SettingsListItem,
+                {
+                    "title": "Mobile number",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "0799999999"
+                } as SettingsListItem,
+                {
+                    "title": "Email address",
+                    "type": SettingsPickType.TextPicker,
+                    "value": "email@address.com"
                 } as SettingsListItem,
             ]
         }

@@ -29,6 +29,10 @@
 #import "NSDictionary+JudoConvert.h"
 #import "UIColor+RNAdditions.h"
 
+static NSString *const kCardSchemeVISA = @"visa";
+static NSString *const kCardSchemeMasterCard = @"mastercard";
+static NSString *const kCardSchemeAMEX = @"amex";
+
 @implementation RNWrappers
 
 //---------------------------------------------------
@@ -36,50 +40,46 @@
 //---------------------------------------------------
 
 + (JudoKit *)judoSessionFromProperties:(NSDictionary *)properties {
-
-    NSDictionary *authorizationDict = [properties dictionaryForKey:@"authorization"];
-
-    NSString *token = [authorizationDict stringForKey:@"token"];
-    NSString *secret = [authorizationDict optionalStringForKey:@"secret"];
-    NSString *paymentSession = [authorizationDict optionalStringForKey:@"paymentSession"];
-
-    JudoKit *judoKit;
-
-    if (secret) {
-        JPBasicAuthorization *authorization = [JPBasicAuthorization authorizationWithToken:token
-                                                                                 andSecret:secret];
-        judoKit = [[JudoKit alloc] initWithAuthorization:authorization];
-    } else {
-        JPSessionAuthorization *authorization = [JPSessionAuthorization authorizationWithToken:token
-                                                                             andPaymentSession:paymentSession];
-        judoKit = [[JudoKit alloc] initWithAuthorization:authorization];
-    }
-
-    NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
-    judoKit.isSandboxed = isSandboxed.boolValue;
-
+    id<JPAuthorization> authorization = [RNWrappers authorizationFromProperties:properties];
+    JudoKit *judoKit = [[JudoKit alloc] initWithAuthorization:authorization];
+    judoKit.isSandboxed = [RNWrappers isSandboxedFromProperties:properties];
     return judoKit;
 }
 
 + (JPApiService *)apiServiceFromProperties:(NSDictionary *)properties {
+    BOOL isSandboxed = [RNWrappers isSandboxedFromProperties:properties];
+    id<JPAuthorization> authorization = [RNWrappers authorizationFromProperties:properties];
 
+    return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed];
+}
+
++ (id<JPAuthorization>)authorizationFromProperties:(NSDictionary *)properties {
     NSDictionary *authorizationDict = [properties dictionaryForKey:@"authorization"];
 
     NSString *token = [authorizationDict stringForKey:@"token"];
     NSString *secret = [authorizationDict optionalStringForKey:@"secret"];
     NSString *paymentSession = [authorizationDict optionalStringForKey:@"paymentSession"];
-
-    NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
-
+    
     if (secret) {
-        JPBasicAuthorization *authorization = [JPBasicAuthorization authorizationWithToken:token
-                                                                                 andSecret:secret];
-        return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed.boolValue];
+        return [JPBasicAuthorization authorizationWithToken:token andSecret:secret];
     }
 
-    JPSessionAuthorization *authorization = [JPSessionAuthorization authorizationWithToken:token
-                                                                         andPaymentSession:paymentSession];
-    return [[JPApiService alloc] initWithAuthorization:authorization isSandboxed:isSandboxed.boolValue];
+    return [JPSessionAuthorization authorizationWithToken:token andPaymentSession:paymentSession];
+}
+
++ (BOOL)isSandboxedFromProperties:(NSDictionary *)properties {
+    NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
+    return isSandboxed.boolValue;
+}
+
++ (JPCardTransactionService *)cardTransactionServiceFromProperties:(NSDictionary *)properties {
+    BOOL isSandboxed = [RNWrappers isSandboxedFromProperties:properties];
+    id<JPAuthorization> authorization = [RNWrappers authorizationFromProperties:properties];
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+
+    return [[JPCardTransactionService alloc] initWithAuthorization:authorization
+                                                       isSandboxed:isSandboxed
+                                                  andConfiguration:configuration];
 }
 
 + (JPTransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
@@ -107,6 +107,22 @@
     return availableModes[intType].intValue;
 }
 
++ (JPNetworkTimeout *)networkTimeoutFromProperties:(NSDictionary *)properties {
+    NSDictionary *networkTimeout = [properties optionalDictionaryForKey:@"networkTimeout"];
+
+    if (!networkTimeout) {
+        return nil;
+    }
+
+    NSTimeInterval connectTimeout = [networkTimeout numberForKey:@"connectTimeout"].doubleValue;
+    NSTimeInterval readTimeout = [networkTimeout numberForKey:@"readTimeout"].doubleValue;
+    NSTimeInterval writeTimeout = [networkTimeout numberForKey:@"writeTimeout"].doubleValue;
+
+    return [[JPNetworkTimeout alloc] initWithConnectTimeout:connectTimeout
+                                             andReadTimeout:readTimeout
+                                            andWriteTimeout:writeTimeout];
+}
+
 + (JPConfiguration *)configurationFromProperties:(NSDictionary *)properties {
 
     NSDictionary *configurationDict = [properties dictionaryForKey:@"configuration"];
@@ -129,7 +145,36 @@
     configuration.paymentMethods = [RNWrappers paymentMethodsFromConfiguration:configurationDict];
     configuration.applePayConfiguration = [RNApplePayWrappers applePayConfigurationFromConfiguration:configurationDict];
     configuration.pbbaConfiguration = [RNPBBAWrappers pbbaConfigurationFromConfiguration:configurationDict];
+    configuration.networkTimeout = [RNWrappers networkTimeoutFromProperties:configurationDict];
+        
+    NSString *scaExemption = [configurationDict optionalStringForKey:@"scaExemption"];
+    NSString *challengeRequestIndicator = [configurationDict optionalStringForKey:@"challengeRequestIndicator"];
+    NSString *mobileNumber = [configurationDict optionalStringForKey:@"mobileNumber"];
+    NSString *emailAddress = [configurationDict optionalStringForKey:@"emailAddress"];
+    NSString *threeDSTwoMessageVersion = [configurationDict optionalStringForKey:@"threeDSTwoMessageVersion"];
+    NSNumber *threeDSTwoMaxTimeout = [configurationDict optionalNumberForKey:@"threeDSTwoMaxTimeout"];
+    NSString *phoneCountryCode = [configurationDict optionalStringForKey:@"phoneCountryCode"];
 
+    configuration.mobileNumber = mobileNumber;
+    configuration.emailAddress = emailAddress;
+    configuration.phoneCountryCode = phoneCountryCode;
+
+    if (scaExemption) {
+        configuration.scaExemption = scaExemption;
+    }
+
+    if (challengeRequestIndicator) {
+        configuration.challengeRequestIndicator = challengeRequestIndicator;
+    }
+    
+    if (threeDSTwoMessageVersion) {
+        configuration.threeDSTwoMessageVersion = threeDSTwoMessageVersion;
+    }
+
+    if (threeDSTwoMaxTimeout) {
+        configuration.threeDSTwoMaxTimeout = threeDSTwoMaxTimeout.intValue;
+    }
+    
     return configuration;
 }
 
@@ -186,8 +231,34 @@
     return [properties optionalStringForKey:@"cardToken"];
 }
 
++ (NSString *)securityCodeFromProperties:(NSDictionary *)properties {
+    return [properties optionalStringForKey:@"securityCode"];
+}
+
++ (NSString *)cardholderNameFromProperties:(NSDictionary *)properties {
+    return [properties optionalStringForKey:@"cardholderName"];
+}
+
 + (NSString *)receiptIdFromProperties:(NSDictionary *)properties {
     return [properties optionalStringForKey:@"receiptId"];
+}
+
++ (JPCardNetworkType)cardTypeFromProperties:(NSDictionary *)properties {
+    NSString *cardScheme = [properties optionalStringForKey:@"cardScheme"].lowercaseString;
+    
+    if ([kCardSchemeVISA isEqualToString:cardScheme]) {
+        return JPCardNetworkTypeVisa;
+    }
+    
+    if ([kCardSchemeMasterCard isEqualToString:cardScheme]) {
+        return JPCardNetworkTypeMasterCard;
+    }
+    
+    if ([kCardSchemeAMEX isEqualToString:cardScheme]) {
+        return JPCardNetworkTypeAMEX;
+    }
+    
+    return JPCardNetworkTypeUnknown;
 }
 
 //---------------------------------------------------
@@ -251,13 +322,14 @@
     if (!addressDictionary) {
         return nil;
     }
-
-    return [[JPAddress alloc] initWithLine1:[addressDictionary optionalStringForKey:@"line1"]
-                                      line2:[addressDictionary optionalStringForKey:@"line2"]
-                                      line3:[addressDictionary optionalStringForKey:@"line3"]
-                                       town:[addressDictionary optionalStringForKey:@"town"]
-                                countryCode:[addressDictionary optionalNumberForKey:@"countryCode"]
-                                   postCode:[addressDictionary optionalStringForKey:@"postCode"]];
+    
+    return [[JPAddress alloc] initWithAddress1:[addressDictionary optionalStringForKey:@"line1"]
+                                      address2:[addressDictionary optionalStringForKey:@"line2"]
+                                      address3:[addressDictionary optionalStringForKey:@"line3"]
+                                          town:[addressDictionary optionalStringForKey:@"town"]
+                                billingCountry:[addressDictionary optionalStringForKey:@"billingCountry"]
+                                      postCode:[addressDictionary optionalStringForKey:@"postCode"]
+                                   countryCode:[addressDictionary optionalNumberForKey:@"countryCode"]];
 }
 
 + (JPUIConfiguration *)uiConfigurationFromConfiguration:(NSDictionary *)configuration {
@@ -274,12 +346,17 @@
     NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldPaymentMethodsDisplayAmount"];
     NSNumber *isPayButtonAmountVisible = [dictionary boolForKey:@"shouldPaymentButtonDisplayAmount"];
     NSNumber *isSecureCodeCheckEnabled = [dictionary boolForKey:@"shouldPaymentMethodsVerifySecurityCode"];
-
+    NSNumber *shouldAskForBillingInformation = [dictionary optionalBoolForKey:@"shouldAskForBillingInformation"];
+    
     uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
     uiConfiguration.shouldPaymentMethodsDisplayAmount = shouldDisplayAmount.boolValue;
     uiConfiguration.shouldPaymentButtonDisplayAmount = isPayButtonAmountVisible.boolValue;
     uiConfiguration.shouldPaymentMethodsVerifySecurityCode = isSecureCodeCheckEnabled.boolValue;
-
+    
+    if (shouldAskForBillingInformation) {
+        uiConfiguration.shouldAskForBillingInformation = shouldAskForBillingInformation.boolValue;
+    }
+    
     uiConfiguration.theme = [self themeFromUIConfiguration:dictionary];
 
     return uiConfiguration;

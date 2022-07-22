@@ -105,6 +105,8 @@ export const getStoredData = async (state: any): Promise<object> => {
       const settings = JSON.parse(value)
 
       const configuration = state.configuration
+      const timeout = settings.list[7].data[4].value
+      const code = settings.list[8].data[7].value
 
       return {
 
@@ -167,9 +169,27 @@ export const getStoredData = async (state: any): Promise<object> => {
             shouldPaymentMethodsVerifySecurityCode: settings.list[6].data[3].value,
             shouldPaymentButtonDisplayAmount: settings.list[6].data[4].value,
             shouldPaymentMethodsDisplayAmount: settings.list[6].data[5].value,
+            shouldAskForBillingInformation: settings.list[7].data[0].value
           },
           isInitialRecurringPayment: settings.list[6].data[6].value,
-          primaryAccountDetails: settings.list[6].data[7].value ? defaultPrimaryAccountDetails : undefined
+          primaryAccountDetails: settings.list[6].data[7].value ? defaultPrimaryAccountDetails : undefined,
+
+          challengeRequestIndicator: settings.list[7].data[1].value,
+          scaExemption: settings.list[7].data[2].value,
+          mobileNumber: settings.list[8].data[9].value,
+          phoneCountryCode: settings.list[8].data[8].value,
+          emailAddress: settings.list[8].data[10].value,
+          threeDSTwoMessageVersion: settings.list[7].data[3].value,
+          threeDSTwoMaxTimeout: timeout && timeout.length > 0 ? parseInt(timeout) : undefined,
+          cardAddress: settings.list[8].data[0].value ? {
+            line1: settings.list[8].data[1].value,
+            line2: settings.list[8].data[2].value,
+            line3: settings.list[8].data[3].value,
+            town: settings.list[8].data[4].value,
+            postCode: settings.list[8].data[5].value,
+            billingCountry: settings.list[8].data[6].value,
+            countryCode: code && code.length > 0 ? parseInt(code) : undefined,
+          } : undefined,
         }
       }
     } else {

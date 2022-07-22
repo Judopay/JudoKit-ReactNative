@@ -90,6 +90,8 @@ class HelpersKtTest {
         every { uiConfigurationMock.getBoolean("shouldPaymentMethodsDisplayAmount") } returns true
         every { uiConfigurationMock.getBoolean("shouldPaymentButtonDisplayAmount") } returns true
         every { uiConfigurationMock.getBoolean("shouldPaymentMethodsVerifySecurityCode") } returns true
+        every { uiConfigurationMock.getBoolean("shouldAskForBillingInformation") } returns true
+        every { uiConfigurationMock.hasKey("shouldAskForBillingInformation") } returns true
 
         every { configurationMock.hasKey("uiConfiguration") } returns true
         every { configurationMock.getMap("uiConfiguration") } returns uiConfigurationMock
