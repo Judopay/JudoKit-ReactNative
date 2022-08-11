@@ -468,11 +468,6 @@ export const SettingsData = {
                     "value": "TR14 8PA"
                 } as SettingsListItem,
                 {
-                    "title": "Billing country",
-                    "type": SettingsPickType.TextPicker,
-                    "value": "826"
-                } as SettingsListItem,
-                {
                     "title": "Country code",
                     "type": SettingsPickType.TextPicker,
                     "value": "826"
