@@ -164,16 +164,7 @@ internal val ReadableMap.cardAddressTown: String?
 internal val ReadableMap.cardAddressCountryCode: Int?
     get() {
         if (cardAddress.hasKey("countryCode")) {
-            return cardAddress?.getString("countryCode")?.toInt()
-        }
-
-        return null
-    }
-
-internal val ReadableMap.cardAddressBillingCountry: String?
-    get() {
-        if (cardAddress.hasKey("billingCountry")) {
-            return cardAddress?.getString("billingCountry")
+            return cardAddress?.getInt("countryCode")
         }
 
         return null
@@ -231,7 +222,7 @@ internal val ReadableMap.emailAddress: String?
 internal val ReadableMap.threeDSTwoMaxTimeout: Int?
     get() {
         if (configuration.hasKey("threeDSTwoMaxTimeout")) {
-            return configuration?.getString("threeDSTwoMaxTimeout")?.toInt()
+            return configuration?.getInt("threeDSTwoMaxTimeout")
         }
         return null
     }

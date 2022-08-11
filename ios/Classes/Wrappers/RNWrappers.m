@@ -327,7 +327,6 @@ static NSString *const kCardSchemeAMEX = @"amex";
                                       address2:[addressDictionary optionalStringForKey:@"line2"]
                                       address3:[addressDictionary optionalStringForKey:@"line3"]
                                           town:[addressDictionary optionalStringForKey:@"town"]
-                                billingCountry:[addressDictionary optionalStringForKey:@"billingCountry"]
                                       postCode:[addressDictionary optionalStringForKey:@"postCode"]
                                    countryCode:[addressDictionary optionalNumberForKey:@"countryCode"]];
 }

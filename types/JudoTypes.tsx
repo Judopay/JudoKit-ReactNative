@@ -82,7 +82,6 @@ export interface JudoAddress {
     postCode?: string
     town?: string
     countryCode?: number
-    billingCountry?: string
 }
 
 export interface JudoUIConfiguration {

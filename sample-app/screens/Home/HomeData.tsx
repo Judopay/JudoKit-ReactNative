@@ -106,8 +106,10 @@ export const getStoredData = async (state: any): Promise<object> => {
 
       const configuration = state.configuration
       const timeout = settings.list[7].data[4].value
-      const code = settings.list[8].data[7].value
+      const code = settings.list[8].data[6].value
 
+      const isCardAddressEnabled = settings.list[8].data[0].value
+      
       return {
 
         isSandboxed: settings.list[0].data[0].value as boolean,
@@ -176,18 +178,17 @@ export const getStoredData = async (state: any): Promise<object> => {
 
           challengeRequestIndicator: settings.list[7].data[1].value,
           scaExemption: settings.list[7].data[2].value,
-          mobileNumber: settings.list[8].data[9].value,
-          phoneCountryCode: settings.list[8].data[8].value,
-          emailAddress: settings.list[8].data[10].value,
+          mobileNumber: isCardAddressEnabled ? settings.list[8].data[8].value : undefined,
+          phoneCountryCode: isCardAddressEnabled ? settings.list[8].data[7].value : undefined,
+          emailAddress: isCardAddressEnabled ? settings.list[8].data[9].value : undefined,
           threeDSTwoMessageVersion: settings.list[7].data[3].value,
           threeDSTwoMaxTimeout: timeout && timeout.length > 0 ? parseInt(timeout) : undefined,
-          cardAddress: settings.list[8].data[0].value ? {
+          cardAddress: isCardAddressEnabled ? {
             line1: settings.list[8].data[1].value,
             line2: settings.list[8].data[2].value,
             line3: settings.list[8].data[3].value,
             town: settings.list[8].data[4].value,
             postCode: settings.list[8].data[5].value,
-            billingCountry: settings.list[8].data[6].value,
             countryCode: code && code.length > 0 ? parseInt(code) : undefined,
           } : undefined,
         }
