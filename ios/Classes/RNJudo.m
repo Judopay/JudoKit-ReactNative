@@ -192,7 +192,7 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
                                       andReject:(RCTPromiseRejectBlock)reject {
     return ^(JPResponse *response, NSError *error) {
         if (error) {
-            if (error.code == JPError.judoUserDidCancelError.code) {
+            if (error.code == JPError.userDidCancelError.code) {
                 reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
                 return;
             }
