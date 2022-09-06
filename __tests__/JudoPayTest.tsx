@@ -174,7 +174,10 @@ test('performTokenTransaction will return mocked JudoResponse', async () => {
     const data = await judoPay.performTokenTransaction(
         JudoTransactionMode.Payment,
         configuration,
-        'sample-token'
+        'sample-token',
+        'security-code',
+        'Cardholder Name',
+        'card scheme'
     )
 
     expect(data.amount).toEqual('1000.0')
