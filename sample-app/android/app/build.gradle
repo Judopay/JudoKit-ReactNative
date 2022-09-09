@@ -122,8 +122,8 @@ android {
         applicationId "com.judopay.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 346
-        versionName "3.4.3(2)"
+        versionCode 347
+        versionName "3.4.3(3)"
         multiDexEnabled true
     }
     splits {
