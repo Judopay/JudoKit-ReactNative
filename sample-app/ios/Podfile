@@ -22,7 +22,7 @@ target 'sample-app' do
   # Pods for sample-app
   pod 'CocoaDebug', "1.7.2"
   # Override the dependency from .podspec file - should be removed when new SDK version will be released
-  pod "JudoKit-iOS", "3.1.0"
+  pod "JudoKit-iOS", "3.1.2"
   
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"

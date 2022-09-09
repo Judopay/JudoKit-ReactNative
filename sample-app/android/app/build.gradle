@@ -122,8 +122,8 @@ android {
         applicationId "com.judopay.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 344
-        versionName "3.4.2(1)"
+        versionCode 346
+        versionName "3.4.3(2)"
         multiDexEnabled true
     }
     splits {
@@ -177,7 +177,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     implementation "com.github.chuckerteam.chucker:library:3.5.2"
-    implementation 'com.judopay:judokit-android:3.0.4'
+    implementation 'com.judopay:judokit-android:3.0.9'
 
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermes-engine/android/"
