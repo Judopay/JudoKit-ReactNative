@@ -165,15 +165,9 @@ internal fun getNetworkTimeout(options: ReadableMap): NetworkTimeout? {
     return null
 }
 
-internal fun getChallengeRequestIndicator(options: ReadableMap): ChallengeRequestIndicator? {
-    val challengeRequestIndicator = ChallengeRequestIndicator.values().firstOrNull { it.value == options.challengeRequestIndicator }
-    return challengeRequestIndicator ?: ChallengeRequestIndicator.CHALLENGE_AS_MANDATE
-}
+internal fun getChallengeRequestIndicator(options: ReadableMap): ChallengeRequestIndicator? = ChallengeRequestIndicator.values().firstOrNull { it.value == options.challengeRequestIndicator }
 
-internal fun getScaExemption(options: ReadableMap): ScaExemption {
-    val scaExemption = ScaExemption.values().firstOrNull { it.value == options.scaExemption }
-    return scaExemption ?: ScaExemption.LOW_VALUE
-}
+internal fun getScaExemption(options: ReadableMap): ScaExemption? = ScaExemption.values().firstOrNull { it.value == options.scaExemption }
 
 internal fun getAuthorization(options: ReadableMap): Authorization {
     val token = options.token

@@ -70,6 +70,7 @@ export const ScaExemptions = {
     list: [
         {
             "data": [
+                { "entry": "Don't set" } as PickerItem,
                 { "entry": "Low value", "value": "lowValue" } as PickerItem,
                 { "entry": "Secure corporate", "value": "secureCorporate" } as PickerItem,
                 { "entry": "Trusted beneficiary", "value": "trustedBeneficiary" } as PickerItem,
@@ -83,6 +84,7 @@ export const ChallengeRequestIndicators = {
     list: [
         {
             "data": [
+                { "entry": "Don't set" } as PickerItem,
                 { "entry": "No preference", "value": "noPreference" } as PickerItem,
                 { "entry": "No challenge", "value": "noChallenge" } as PickerItem,
                 { "entry": "Challenge preferred", "value": "challengePreferred" } as PickerItem,
