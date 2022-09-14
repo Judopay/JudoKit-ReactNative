@@ -23,7 +23,7 @@ PODS:
     - glog
   - glog (0.3.5)
   - Judo3DS2_iOS (1.1.1)
-  - JudoKit-iOS (3.1.2):
+  - JudoKit-iOS (3.1.3):
     - DeviceDNA (~> 2.0.0)
     - Judo3DS2_iOS (~> 1.1.1)
     - TrustKit
@@ -259,8 +259,8 @@ PODS:
     - React
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNJudopay (3.4.3):
-    - JudoKit-iOS (= 3.1.2)
+  - RNJudopay (3.4.4):
+    - JudoKit-iOS (= 3.1.3)
     - React
   - RNReanimated (1.13.3):
     - React-Core
@@ -277,7 +277,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (= 3.1.2)
+  - JudoKit-iOS (= 3.1.3)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -396,7 +396,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Judo3DS2_iOS: 1699474533e69b69593c6a76b42645cb240f618a
-  JudoKit-iOS: 1c1fc609b79cef170b3f914daf152f3712c494a9
+  JudoKit-iOS: 5cf695508b309a32de91cf295dd6ad1dbd6da7b7
   OpenSSL-Universal: ee0a7a25f2042782e2df405e66db3e429198e392
   RCTRequired: c689bd96375408b455d1cda431d76e8226f6c726
   RCTTypeSafety: 9c1123190d064e9077e4dba96d51b93d10e0a8a5
@@ -421,13 +421,13 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNJudopay: 66bc774e4f7b83a6165f1c6de6312eb0460eab63
+  RNJudopay: 8710d40eef0e2da2491e41e3c8f77b3a54cffbdc
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   TrustKit: dac38bb37e49bdfeca41b1a19d020da38017b51c
   Yoga: b5db822228963b87948afa7a5a531088607151dc
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: 5927dbdf6cbc460602402a7ca0d8e08cc4b7c3c4
+PODFILE CHECKSUM: e1c5b2b1a0c1d4d60e34d6cca22cce35ad328027
 
 COCOAPODS: 1.11.3
