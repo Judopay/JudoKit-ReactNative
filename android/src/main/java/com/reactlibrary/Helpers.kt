@@ -16,6 +16,26 @@ import com.judopay.judokit.android.model.googlepay.GooglePayBillingAddressParame
 import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
 import com.judopay.judokit.android.model.googlepay.GooglePayShippingAddressParameters
 
+// For consistency with:
+// https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L36
+private const val TRANSACTION_TYPE_PAYMENT = "payment"
+private const val TRANSACTION_TYPE_PRE_AUTH = "preauth"
+private const val TRANSACTION_TYPE_REGISTER = "register"
+private const val TRANSACTION_TYPE_REGISTER_CARD = "registercard"
+private const val TRANSACTION_TYPE_SAVE_CARD = "save"
+private const val TRANSACTION_TYPE_CHECK_CARD = "checkcard"
+
+// For consistency with:
+// https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Transaction/JPTransactionType.h#L30
+private enum class TransactionType(val value: Int, val typeAsStrings: List<String>? = null) {
+    PAYMENT(1, listOf(TRANSACTION_TYPE_PAYMENT)),
+    PRE_AUTH(2, listOf(TRANSACTION_TYPE_PRE_AUTH)),
+    REGISTER_CARD(3, listOf(TRANSACTION_TYPE_REGISTER, TRANSACTION_TYPE_REGISTER_CARD)),
+    CHECK_CARD(4, listOf(TRANSACTION_TYPE_CHECK_CARD)),
+    SAVE_CARD(5, listOf(TRANSACTION_TYPE_SAVE_CARD)),
+    UNKNOWN(Int.MAX_VALUE)
+}
+
 internal fun getTransactionConfiguration(options: ReadableMap): Judo {
     val widgetType = getTransactionTypeWidget(options)
     return getJudoConfiguration(widgetType, options)
@@ -45,13 +65,10 @@ internal fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
 }
 
 internal fun getMappedType(type: String?): Int {
-    return when (type) {
-        "PreAuth" -> 1
-        "RegisterCard" -> 2
-        "CheckCard" -> 3
-        "Save" -> 4
-        else -> 0
-    }
+    val typeInLowercase = type?.lowercase()
+    val typeValue = TransactionType.values().firstOrNull { it.typeAsStrings?.contains(typeInLowercase) ?: false }
+
+    return typeValue?.value ?: TransactionType.UNKNOWN.value
 }
 
 internal fun getMappedResult(result: String?): Int {

@@ -46,11 +46,12 @@ export interface NetworkTimeout {
 }
 
 export enum JudoTransactionType {
-    Payment,
-    PreAuth,
-    RegisterCard,
-    CheckCard,
-    SaveCard
+    Payment = 1,
+    PreAuth = 2,
+    RegisterCard = 3,
+    CheckCard = 4,
+    SaveCard = 5,
+    Unknown = Number.MAX_SAFE_INTEGER
 }
 
 export enum JudoTransactionMode {

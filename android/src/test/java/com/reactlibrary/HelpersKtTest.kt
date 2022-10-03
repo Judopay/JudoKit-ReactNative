@@ -517,43 +517,43 @@ class HelpersKtTest {
     inner class CallGetMappedType {
 
         @Test
-        @DisplayName("when value is PreAuth then 1 should be returned")
+        @DisplayName("when value is PreAuth then 2 should be returned")
         fun returnOneOnGetMappedTypeWhenValuePreAuth() {
             val mappedType = getMappedType("PreAuth")
-
-            assertEquals(1, mappedType)
-        }
-
-        @Test
-        @DisplayName("when value is RegisterCard then 2 should be returned")
-        fun returnTwoOnGetMappedTypeWhenValueRegisterCard() {
-            val mappedType = getMappedType("RegisterCard")
 
             assertEquals(2, mappedType)
         }
 
         @Test
-        @DisplayName("when value is CheckCard then 3 should be returned")
-        fun returnThreeOnGetMappedTypeWhenValueCheckCard() {
-            val mappedType = getMappedType("CheckCard")
+        @DisplayName("when value is RegisterCard then 3 should be returned")
+        fun returnTwoOnGetMappedTypeWhenValueRegisterCard() {
+            val mappedType = getMappedType("RegisterCard")
 
             assertEquals(3, mappedType)
         }
 
         @Test
-        @DisplayName("when value is Save then 4 should be returned")
-        fun returnFourOnGetMappedTypeWhenValueSave() {
-            val mappedType = getMappedType("Save")
+        @DisplayName("when value is CheckCard then 4 should be returned")
+        fun returnThreeOnGetMappedTypeWhenValueCheckCard() {
+            val mappedType = getMappedType("CheckCard")
 
             assertEquals(4, mappedType)
         }
 
         @Test
-        @DisplayName("when value is undefined then 0 should be returned")
+        @DisplayName("when value is Save then 5 should be returned")
+        fun returnFourOnGetMappedTypeWhenValueSave() {
+            val mappedType = getMappedType("Save")
+
+            assertEquals(5, mappedType)
+        }
+
+        @Test
+        @DisplayName("when value is undefined then Int.MAX_VALUE should be returned")
         fun returnZer0OnGetMappedTypeWhenValueUndefined() {
             val mappedType = getMappedType("undefined")
 
-            assertEquals(0, mappedType)
+            assertEquals(Int.MAX_VALUE, mappedType)
         }
     }
 
@@ -582,7 +582,7 @@ class HelpersKtTest {
         fun mapShouldContainType(){
             val mappedResult = getMappedResult(JudoResult(type = "PreAuth"))
 
-            assertEquals(1, mappedResult.getInt("type"))
+            assertEquals(2, mappedResult.getInt("type"))
         }
 
         @Test
