@@ -21,10 +21,10 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Judo3DS2_iOS (1.1.1)
-  - JudoKit-iOS (3.1.2):
+  - Judo3DS2_iOS (1.1.2)
+  - JudoKit-iOS (3.1.6):
     - DeviceDNA (~> 2.0.0)
-    - Judo3DS2_iOS (~> 1.1.1)
+    - Judo3DS2_iOS (~> 1.1.2)
     - TrustKit
     - ZappMerchantLib
   - OpenSSL-Universal (1.1.1700)
@@ -236,7 +236,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (= 3.1.2)
+  - JudoKit-iOS (= 3.1.6)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -331,8 +331,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Judo3DS2_iOS: 1699474533e69b69593c6a76b42645cb240f618a
-  JudoKit-iOS: 1c1fc609b79cef170b3f914daf152f3712c494a9
+  Judo3DS2_iOS: 90b820a50035cb08ccc1b2e22900b856132c79a5
+  JudoKit-iOS: eabd569f41993ddd46273a63aa5c255cef473308
   OpenSSL-Universal: ee0a7a25f2042782e2df405e66db3e429198e392
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -357,6 +357,6 @@ SPEC CHECKSUMS:
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: b26e88a3a3456f8ae48d5f44fe9bcd17a5a88e55
+PODFILE CHECKSUM: 697d0d38cedb02c077c830bd5d3dab848ad81c11
 
 COCOAPODS: 1.11.3
