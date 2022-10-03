@@ -21,7 +21,7 @@ export interface JudoConfiguration {
     mobileNumber?: string,
     phoneCountryCode?: string,
     emailAddress?: string,
-    threeDSTwoMaxTimeout?: number,
+    threeDSTwoMaxTimeout?: string,
     threeDSTwoMessageVersion?: string
 }
 

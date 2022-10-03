@@ -378,17 +378,17 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests-resources.sh",
-				"${PODS_ROOT}/JudoKit-iOS/Resources/icons.bundle",
-				"${PODS_ROOT}/JudoKit-iOS/Resources/resources.bundle",
-				"${PODS_ROOT}/JudoKit-iOS/Resources/CountriesList.json",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/judokit-icons.bundle",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/judokit-resources.bundle",
+				"${PODS_ROOT}/JudoKit-iOS/Resources/judokit-countries-list.json",
 				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit_iOS.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ZappMerchantLib/ZappMerchantLibResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/icons.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/resources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CountriesList.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/judokit-icons.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/judokit-resources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/judokit-countries-list.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKit_iOS.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ZappMerchantLibResources.bundle",
 			);
