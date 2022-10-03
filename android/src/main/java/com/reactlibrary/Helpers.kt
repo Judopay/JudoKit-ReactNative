@@ -16,6 +16,21 @@ import com.judopay.judokit.android.model.googlepay.GooglePayBillingAddressParame
 import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
 import com.judopay.judokit.android.model.googlepay.GooglePayShippingAddressParameters
 
+// For consistency with:
+// https://github.com/Judopay/JudoKit-iOS/blob/abd34bbfe4784fb5f074ed30f93d6743ba295622/Source/Models/Response/JPResponse.m#L32
+private const val STATUS_DECLINED = "declined"
+private const val STATUS_SUCCESS = "success"
+private const val STATUS_ERROR = "error"
+
+// For consistency with:
+// https://github.com/Judopay/JudoKit-iOS/blob/abd34bbfe4784fb5f074ed30f93d6743ba295622/Source/Models/Transaction/JPTransactionResult.h#L27
+private enum class TransactionResult(val value: Int, val status: String? = null) {
+    ERROR(0, STATUS_ERROR),
+    SUCCESS(1, STATUS_SUCCESS),
+    DECLINED(2, STATUS_DECLINED),
+    UNKNOWN(Int.MAX_VALUE)
+}
+
 internal fun getTransactionConfiguration(options: ReadableMap): Judo {
     val widgetType = getTransactionTypeWidget(options)
     return getJudoConfiguration(widgetType, options)
@@ -54,11 +69,13 @@ internal fun getMappedType(type: String?): Int {
     }
 }
 
+// consistent with:
+// https://github.com/Judopay/JudoKit-iOS/blob/abd34bbfe4784fb5f074ed30f93d6743ba295622/Source/Models/Response/JPResponse.m#L125
 internal fun getMappedResult(result: String?): Int {
-    return when (result) {
-        "Declined" -> 1
-        else -> 0
-    }
+    val resultInLowercase = result?.lowercase()
+    val resultValue = TransactionResult.values().firstOrNull { it.status == resultInLowercase }
+
+    return resultValue?.value ?: TransactionResult.UNKNOWN.value
 }
 
 internal fun getMappedResult(result: JudoResult?): WritableMap {

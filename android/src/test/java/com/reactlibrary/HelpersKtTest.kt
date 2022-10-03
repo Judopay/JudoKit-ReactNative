@@ -562,19 +562,35 @@ class HelpersKtTest {
     inner class CallGetMappedResult {
 
         @Test
-        @DisplayName("when value is Declined then 1 should be returned")
-        fun returnOneOnGetMappedResultWhenValueDeclined() {
+        @DisplayName("when value is Declined then 2 should be returned")
+        fun returnTwoOnGetMappedResultWhenValueDeclined() {
             val mappedResult = getMappedResult("Declined")
+
+            assertEquals(2, mappedResult)
+        }
+
+        @Test
+        @DisplayName("when value is Success then 1 should be returned")
+        fun returnOneOnGetMappedResultWhenValueSuccess() {
+            val mappedResult = getMappedResult("Success")
 
             assertEquals(1, mappedResult)
         }
 
         @Test
-        @DisplayName("when value is undefined then 0 should be returned")
-        fun returnZeroOnGetMappedResultWhenValueUndefined() {
-            val mappedResult = getMappedResult("undefined")
+        @DisplayName("when value is Error then 0 should be returned")
+        fun returnOneOnGetMappedResultWhenValueError() {
+            val mappedResult = getMappedResult("Error")
 
             assertEquals(0, mappedResult)
+        }
+
+        @Test
+        @DisplayName("when value is undefined then Int.MAX_VALUE should be returned")
+        fun returnIntMaxOnGetMappedResultWhenValueUndefined() {
+            val mappedResult = getMappedResult("undefined")
+
+            assertEquals(Int.MAX_VALUE, mappedResult)
         }
 
         @Test
