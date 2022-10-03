@@ -85,15 +85,20 @@ static NSString *const kCardSchemeAMEX = @"amex";
 + (JPTransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
     int type = [properties numberForKey:@"transactionType"].intValue;
 
-    NSArray<NSNumber *> *availableTypes = @[
-        @(JPTransactionTypePayment),
-        @(JPTransactionTypePreAuth),
-        @(JPTransactionTypeRegisterCard),
-        @(JPTransactionTypeCheckCard),
-        @(JPTransactionTypeSaveCard)
-    ];
-
-    return availableTypes[type].intValue;
+    switch (type) {
+        case 1:
+            return JPTransactionTypePayment;
+        case 2:
+            return JPTransactionTypePreAuth;
+        case 3:
+            return JPTransactionTypeRegisterCard;
+        case 4:
+            return JPTransactionTypeCheckCard;
+        case 5:
+            return JPTransactionTypeSaveCard;
+        default:
+            return JPTransactionTypeUnknown;
+    }
 }
 
 + (JPTransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
