@@ -435,9 +435,25 @@ static NSString *const kCardSchemeAMEX = @"amex";
         result = @1;
     }
     
+    NSNumber *type = @0;
+
+    switch (response.type) {
+        case JPTransactionTypePreAuth:
+            type = @1;
+            break;
+        case JPTransactionTypeCheckCard:
+            type = @3;
+            break;
+        case JPTransactionTypeSaveCard:
+            type = @4;
+            break;
+        default:
+            break;
+    }
+    
     [mappedResponse setValue:response.receiptId forKey:@"receiptId"];
     [mappedResponse setValue:response.paymentReference forKey:@"yourPaymentReference"];
-    [mappedResponse setValue:@(response.type) forKey:@"type"];
+    [mappedResponse setValue:type forKey:@"type"];
     [mappedResponse setValue:response.createdAt forKey:@"createdAt"];
     [mappedResponse setValue:result forKey:@"result"];
     [mappedResponse setValue:response.message forKey:@"message"];
