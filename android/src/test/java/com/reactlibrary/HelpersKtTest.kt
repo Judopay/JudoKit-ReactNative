@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.nio.charset.StandardCharsets
 
 @DisplayName("Testing Helpers class")
@@ -348,48 +349,49 @@ class HelpersKtTest {
     inner class UserConfigContainsTransactionTypeKey {
 
         @Test
-        @DisplayName("and value is 1 when invoking getWidgetType with the given configurations then PaymentWidgetType-PRE_AUTH should be returned")
+        @DisplayName("and value is 2 when invoking getWidgetType with the given configurations then PaymentWidgetType-PRE_AUTH should be returned")
         fun returnPreAuthOnGetWidgetTypeWhenValueIsOne() {
-            every { mapMock.getInt("transactionType") } returns 1
+            every { mapMock.getInt("transactionType") } returns 2
 
             val type = getTransactionTypeWidget(mapMock)
             assertEquals(type, PaymentWidgetType.PRE_AUTH)
         }
 
         @Test
-        @DisplayName("and value is 2 when invoking getWidgetType with the given configurations then PaymentWidgetType-REGISTER_CARD should be returned")
+        @DisplayName("and value is 3 when invoking getWidgetType with the given configurations then PaymentWidgetType-REGISTER_CARD should be returned")
         fun returnRegisterCardOnGetWidgetTypeWhenValueIsTwo() {
-            every { mapMock.getInt("transactionType") } returns 2
+            every { mapMock.getInt("transactionType") } returns 3
 
             val type = getTransactionTypeWidget(mapMock)
             assertEquals(type, PaymentWidgetType.REGISTER_CARD)
         }
 
         @Test
-        @DisplayName("and value is 3 when invoking getWidgetType with the given configurations then PaymentWidgetType-CHECK_CARD should be returned")
+        @DisplayName("and value is 4 when invoking getWidgetType with the given configurations then PaymentWidgetType-CHECK_CARD should be returned")
         fun returnCheckCardOnGetWidgetTypeWhenValueIsThree() {
-            every { mapMock.getInt("transactionType") } returns 3
+            every { mapMock.getInt("transactionType") } returns 4
 
             val type = getTransactionTypeWidget(mapMock)
             assertEquals(type, PaymentWidgetType.CHECK_CARD)
         }
 
         @Test
-        @DisplayName("and value is 4 when invoking getWidgetType with the given configurations then PaymentWidgetType-CREATE_CARD_TOKEN should be returned")
+        @DisplayName("and value is 5 when invoking getWidgetType with the given configurations then PaymentWidgetType-CREATE_CARD_TOKEN should be returned")
         fun returnCreateCardTokenOnGetWidgetTypeWhenValueIsFour() {
-            every { mapMock.getInt("transactionType") } returns 4
+            every { mapMock.getInt("transactionType") } returns 5
 
             val type = getTransactionTypeWidget(mapMock)
             assertEquals(type, PaymentWidgetType.CREATE_CARD_TOKEN)
         }
 
         @Test
-        @DisplayName("and with any unknown value when invoking getWidgetType with the given configurations then PaymentWidgetType-CARD_PAYMENT should be returned")
+        @DisplayName("and with any unknown value when invoking getWidgetType with the given configurations then IllegalArgumentException should be thrown")
         fun returnCardPaymentOnGetWidgetTypeWhenUnknownValue() {
             every { mapMock.getInt("transactionType") } returns 100
 
-            val type = getTransactionTypeWidget(mapMock)
-            assertEquals(type, PaymentWidgetType.CARD_PAYMENT)
+            assertThrows<IllegalArgumentException> {
+                getTransactionTypeWidget(mapMock)
+            }
         }
     }
 

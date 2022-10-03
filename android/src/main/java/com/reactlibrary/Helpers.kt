@@ -207,11 +207,12 @@ internal fun getAuthorization(options: ReadableMap): Authorization {
 }
 
 internal fun getTransactionTypeWidget(options: ReadableMap) = when (options.getInt("transactionType")) {
-    1 -> PaymentWidgetType.PRE_AUTH
-    2 -> PaymentWidgetType.REGISTER_CARD
-    3 -> PaymentWidgetType.CHECK_CARD
-    4 -> PaymentWidgetType.CREATE_CARD_TOKEN
-    else -> PaymentWidgetType.CARD_PAYMENT
+    1 -> PaymentWidgetType.CARD_PAYMENT
+    2 -> PaymentWidgetType.PRE_AUTH
+    3 -> PaymentWidgetType.REGISTER_CARD
+    4 -> PaymentWidgetType.CHECK_CARD
+    5 -> PaymentWidgetType.CREATE_CARD_TOKEN
+    else -> throw IllegalArgumentException("Unknown transaction type")
 }
 
 internal fun getTransactionModeWidget(options: ReadableMap) = when (options.getInt("transactionMode")) {
