@@ -148,6 +148,7 @@ internal fun getAddress(options: ReadableMap): Address? {
             .setTown(options.cardAddressTown)
             .setPostCode(options.cardAddressPostCode)
             .setCountryCode(options.cardAddressCountryCode)
+            .setState(options.cardAddressState)
             .build()
     }
     return null

@@ -22,13 +22,13 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Judo3DS2_iOS (1.1.2)
-  - JudoKit-iOS (3.1.6):
+  - Judo3DS2_iOS (1.1.3)
+  - JudoKit-iOS (3.1.8):
     - DeviceDNA (~> 2.0.0)
-    - Judo3DS2_iOS (~> 1.1.2)
+    - Judo3DS2_iOS (~> 1.1.3)
     - TrustKit
     - ZappMerchantLib
-  - OpenSSL-Universal (1.1.1700)
+  - OpenSSL-Universal (1.1.1900)
   - RCTRequired (0.62.3)
   - RCTTypeSafety (0.62.3):
     - FBLazyVector (= 0.62.3)
@@ -259,8 +259,8 @@ PODS:
     - React
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNJudopay (3.4.7):
-    - JudoKit-iOS (= 3.1.6)
+  - RNJudopay (3.4.8):
+    - JudoKit-iOS (= 3.1.8)
     - React
   - RNReanimated (1.13.3):
     - React-Core
@@ -277,7 +277,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - JudoKit-iOS (= 3.1.6)
+  - JudoKit-iOS (= 3.1.8)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -395,9 +395,9 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 587095d51601d15e04d21658df4bb7f030d0e7e1
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Judo3DS2_iOS: 90b820a50035cb08ccc1b2e22900b856132c79a5
-  JudoKit-iOS: eabd569f41993ddd46273a63aa5c255cef473308
-  OpenSSL-Universal: ee0a7a25f2042782e2df405e66db3e429198e392
+  Judo3DS2_iOS: b2396a1f0aa3e8d428fdd887c8b6eae5d3aa4f79
+  JudoKit-iOS: b895bcb673eeb7159b89b92ad0249cc9ef91c551
+  OpenSSL-Universal: 84efb8a29841f2764ac5403e0c4119a28b713346
   RCTRequired: c689bd96375408b455d1cda431d76e8226f6c726
   RCTTypeSafety: 9c1123190d064e9077e4dba96d51b93d10e0a8a5
   React: 1618bf33d410e5c30e313341fad837d7a82ae75e
@@ -421,13 +421,13 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNJudopay: bbd51f2aac348306df2059424cb504459987c074
+  RNJudopay: 76f76d496014b479576526a92d658f6111d699a5
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   TrustKit: dac38bb37e49bdfeca41b1a19d020da38017b51c
   Yoga: b5db822228963b87948afa7a5a531088607151dc
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
-PODFILE CHECKSUM: fb198b6f0746e31e0a36d7fcdaafb45c17cccc1a
+PODFILE CHECKSUM: ae2e1662b4411b59ad7c22682c23834d24906420
 
 COCOAPODS: 1.11.3

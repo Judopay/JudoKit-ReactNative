@@ -328,7 +328,8 @@ static NSString *const kCardSchemeAMEX = @"amex";
                                       address3:[addressDictionary optionalStringForKey:@"line3"]
                                           town:[addressDictionary optionalStringForKey:@"town"]
                                       postCode:[addressDictionary optionalStringForKey:@"postCode"]
-                                   countryCode:[addressDictionary optionalNumberForKey:@"countryCode"]];
+                                   countryCode:[addressDictionary optionalNumberForKey:@"countryCode"]
+                                         state:[addressDictionary optionalStringForKey:@"state"]];
 }
 
 + (JPUIConfiguration *)uiConfigurationFromConfiguration:(NSDictionary *)configuration {
