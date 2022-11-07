@@ -37,6 +37,7 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
 
     private val listener = JudoReactNativeActivityEventListener()
     internal var transactionPromise: Promise? = null
+    private var isSubscribedToCardTransactionResults = false
 
     /**
      * A broadcast receiver to catch Pay by Bank app /order/bank/sale response event.
@@ -107,6 +108,8 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
     @ReactMethod
     fun performTokenTransaction(options: ReadableMap, promise: Promise) {
         try {
+            ensureIsSubscribedToCardTransactionResults()
+
             val activity = context.currentActivity as FragmentActivity
             val manager = CardTransactionManager.getInstance(activity)
 
@@ -147,18 +150,34 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
         }
     }
 
+    private fun ensureIsSubscribedToCardTransactionResults() {
+        if (isSubscribedToCardTransactionResults) {
+            return
+        }
+
+        val activity =  context.currentActivity
+        activity?.let {
+            isSubscribedToCardTransactionResults = true
+            CardTransactionManager.getInstance(activity as FragmentActivity).registerResultListener(this)
+        }
+    }
+
+    private fun unsubscribeFromCardTransactionResults() {
+        val activity =  context.currentActivity
+        activity?.let {
+            isSubscribedToCardTransactionResults = false
+            CardTransactionManager.getInstance(activity as FragmentActivity).unRegisterResultListener(this)
+        }
+    }
+
     override fun initialize() {
         super.initialize()
-
-        val activity =  context.currentActivity as FragmentActivity
-        CardTransactionManager.getInstance(activity).registerResultListener(this)
+        ensureIsSubscribedToCardTransactionResults()
     }
 
     override fun invalidate() {
         super.invalidate()
-
-        val activity =  context.currentActivity as FragmentActivity
-        CardTransactionManager.getInstance(activity).unRegisterResultListener(this)
+        unsubscribeFromCardTransactionResults()
     }
 
     override fun onCardTransactionResult(result: JudoPaymentResult) {
