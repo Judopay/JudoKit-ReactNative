@@ -170,6 +170,15 @@ internal val ReadableMap.cardAddressCountryCode: Int?
         return null
     }
 
+internal val ReadableMap.cardAddressState: String?
+    get() {
+        if (cardAddress.hasKey("state")) {
+            return cardAddress?.getString("state")
+        }
+
+        return null
+    }
+
 internal val ReadableMap.networkConnectTimeout: Long?
     get() = networkTimeout?.getDouble("connectTimeout")?.toLong()
 

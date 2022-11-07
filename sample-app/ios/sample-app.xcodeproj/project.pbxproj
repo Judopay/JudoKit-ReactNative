@@ -650,7 +650,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = SE94G3734N;
+						DevelopmentTeam = 95V535S6TQ;
 						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -1582,9 +1582,9 @@
 				CODE_SIGN_ENTITLEMENTS = "sample-app/sample-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = SE94G3734N;
+				DEVELOPMENT_TEAM = 95V535S6TQ;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "sample-app/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1593,13 +1593,13 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 3.4.7;
+				MARKETING_VERSION = 3.4.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.judopay.react-native-sample";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.judopay.react-native-sample-app";
 				PRODUCT_NAME = "RN Judopay demo";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "sample-app/sample-app-Bridging-Header.h";
@@ -1618,8 +1618,8 @@
 				CODE_SIGN_ENTITLEMENTS = "sample-app/sample-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SE94G3734N;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 95V535S6TQ;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "sample-app/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1628,13 +1628,13 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 3.4.7;
+				MARKETING_VERSION = 3.4.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.judopay.react-native-sample";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.judopay.react-native-sample-app";
 				PRODUCT_NAME = "RN Judopay demo";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "sample-app/sample-app-Bridging-Header.h";
