@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { storageKey, store } from '../../helpers/AsyncStore'
 import Dialog from 'react-native-dialog'
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
@@ -13,14 +13,16 @@ import {
   ApplePayContactFields,
   AppleShippingTypes,
   AppleReturnInfoTypes,
-  GooglePayEnvironments, ScaExemptions, ChallengeRequestIndicators
+  GooglePayEnvironments,
+  ScaExemptions,
+  ChallengeRequestIndicators,
 } from './SettingsData'
 
 import {
   PickerItem,
   SettingsListItem,
   SettingsPickArray,
-  SettingsPickType
+  SettingsPickType,
 } from './SettingsProps'
 
 import {
@@ -39,12 +41,12 @@ export default class Settings extends Component {
     settingsData: SettingsData,
     settingSelected: {} as SettingsListItem,
     textPickerVisible: false,
-    spinner: false
+    spinner: false,
   }
 
   /**
-  * Lifecycle
-  */
+   * Lifecycle
+   */
   componentDidMount() {
     this.getData()
   }
@@ -59,8 +61,10 @@ export default class Settings extends Component {
       await AsyncStorage.setItem(storageKey, JSON.stringify(data)).then(() => {
         this.setState({ spinner: false })
       })
-    } catch (e) {
-      console.log("store data error " + e.message)
+    } catch (error) {
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      console.log('store data error ' + message)
     }
   }
 
@@ -70,48 +74,50 @@ export default class Settings extends Component {
       if (value !== null) {
         this.setState({ settingsData: JSON.parse(value) })
       }
-    } catch (e) {
-      console.log("get data error " + e.message)
+    } catch (error) {
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      console.log('get data error ' + message)
     }
   }
 
   /**
-  * Show actions
-  */
+   * Show actions
+   */
   showPickerDialog(item: SettingsListItem) {
     this.setState({
       textPickerVisible: true,
-      settingSelected: item
+      settingSelected: item,
     })
   }
 
   /**
-  * Action handlers
-  */
+   * Action handlers
+   */
   handleDialogTextInputChange(text: string) {
-    const item = this.state.settingSelected;
+    const item = this.state.settingSelected
     item.value = text
     this.setState({ item })
   }
 
   handleDialogCloseAction() {
-    this.setState({ textPickerVisible: false });
+    this.setState({ textPickerVisible: false })
     this.storeData(this.state.settingsData)
   }
 
   handlePickerItemPressed(item: PickerItem, settingsItem: SettingsListItem) {
-    let settingItem;
-    if (settingsItem.type == SettingsPickType.SinglePicker) {
-      settingItem = this.state.settingSelected;
+    let settingItem
+    if (settingsItem.type === SettingsPickType.SinglePicker) {
+      settingItem = this.state.settingSelected
       settingItem.value = item.value
       settingItem.subtitle = item.entry
       this.setState({ settingItem })
       this.handleDialogCloseAction()
     } else {
-      settingItem = this.state.settingSelected;
-      const index = settingItem.valueArray!.indexOf(item.value, 0);
+      settingItem = this.state.settingSelected
+      const index = settingItem.valueArray!.indexOf(item.value, 0)
       if (index > -1) {
-        settingItem.valueArray!.splice(index, 1);
+        settingItem.valueArray!.splice(index, 1)
       } else {
         settingItem.valueArray!.push(item.value)
       }
@@ -121,7 +127,7 @@ export default class Settings extends Component {
   }
 
   handleSettingsItemPressed(item: SettingsListItem) {
-    if (item.type == SettingsPickType.Switch) {
+    if (item.type === SettingsPickType.Switch) {
       item.value = !item.value
       this.setState({ item })
       this.storeData(this.state.settingsData)
@@ -131,65 +137,94 @@ export default class Settings extends Component {
   }
 
   /**
-  * Settings list setup
-  */
+   * Settings list setup
+   */
   getSettingsListItem(item: SettingsListItem) {
     return (
       <TouchableHighlight
-        underlayColor='gray'
-        onPress={() => { this.handleSettingsItemPressed(item) }}
+        underlayColor="gray"
+        onPress={() => {
+          this.handleSettingsItemPressed(item)
+        }}
       >
         <View style={styles.listItem}>
           <View>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.subtitle}>
-              {item.value
-                && item.type == SettingsPickType.TextPicker
+              {item.value && item.type === SettingsPickType.TextPicker
                 ? item.value
-                : item.subtitle}</Text>
+                : item.subtitle}
+            </Text>
           </View>
-          {item.type == SettingsPickType.Switch
-            ? <Switch onValueChange={() => { this.handleSettingsItemPressed(item) }} value={item.value} />
-            : <View />}
-
+          {item.type === SettingsPickType.Switch ? (
+            <Switch
+              onValueChange={() => {
+                this.handleSettingsItemPressed(item)
+              }}
+              value={item.value}
+            />
+          ) : (
+            <View />
+          )}
         </View>
       </TouchableHighlight>
-    );
+    )
   }
 
   /**
-  * Pickers setup
-  */
+   * Pickers setup
+   */
   getPickerListItem(item: PickerItem, settingsItem: SettingsListItem) {
     return (
       <TouchableHighlight
-        underlayColor='gray'
-        onPress={() => { this.handlePickerItemPressed(item, settingsItem) }}
+        underlayColor="gray"
+        onPress={() => {
+          this.handlePickerItemPressed(item, settingsItem)
+        }}
       >
         <View style={[styles.listItem, { paddingLeft: 10 }]}>
           <Text style={[styles.title, { fontSize: 16 }]}>{item.entry}</Text>
-          {settingsItem.valueArray!.indexOf(item.value, 0) > -1 || settingsItem.value == item.value
-            ? <Image
-              style={{ width: 10, height: 10, alignItems: 'center', padding: 10 }}
-              source={require('../../resources/ic_check.png')} />
-            : <View />}
+          {settingsItem.valueArray!.indexOf(item.value, 0) > -1 ||
+          settingsItem.value === item.value ? (
+            <Image
+              style={{
+                width: 10,
+                height: 10,
+                alignItems: 'center',
+                padding: 10,
+              }}
+              source={require('../../resources/ic_check.png')}
+            />
+          ) : (
+            <View />
+          )}
         </View>
       </TouchableHighlight>
-    );
+    )
   }
 
   getPickerDataList(settingItem: SettingsListItem): any {
     switch (settingItem.pickItems) {
-      case SettingsPickArray.Currencies: return Currencies.list
-      case SettingsPickArray.CardNetworks: return CardNetworks.list
-      case SettingsPickArray.Payment: return Payments.list
-      case SettingsPickArray.MerchantCapabilities: return MerchantCapabilities.list
-      case SettingsPickArray.ApplePayContactFields: return ApplePayContactFields.list
-      case SettingsPickArray.AppleShippingTypes: return AppleShippingTypes.list
-      case SettingsPickArray.AppleReturnInfoTypes: return AppleReturnInfoTypes.list
-      case SettingsPickArray.GooglePayEnvironments: return GooglePayEnvironments.list
-      case SettingsPickArray.ScaExemptions: return ScaExemptions.list
-      case SettingsPickArray.ChallengeRequestIndicators: return ChallengeRequestIndicators.list
+      case SettingsPickArray.Currencies:
+        return Currencies.list
+      case SettingsPickArray.CardNetworks:
+        return CardNetworks.list
+      case SettingsPickArray.Payment:
+        return Payments.list
+      case SettingsPickArray.MerchantCapabilities:
+        return MerchantCapabilities.list
+      case SettingsPickArray.ApplePayContactFields:
+        return ApplePayContactFields.list
+      case SettingsPickArray.AppleShippingTypes:
+        return AppleShippingTypes.list
+      case SettingsPickArray.AppleReturnInfoTypes:
+        return AppleReturnInfoTypes.list
+      case SettingsPickArray.GooglePayEnvironments:
+        return GooglePayEnvironments.list
+      case SettingsPickArray.ScaExemptions:
+        return ScaExemptions.list
+      case SettingsPickArray.ChallengeRequestIndicators:
+        return ChallengeRequestIndicators.list
     }
   }
 
@@ -200,24 +235,29 @@ export default class Settings extends Component {
           defaultValue={settingsItem.value}
           style={{ color: 'black' }}
           wrapperStyle={styles.inputDialog}
-          onChangeText={(text: string) => { this.handleDialogTextInputChange(text) }} />
+          onChangeText={(text: string) => {
+            this.handleDialogTextInputChange(text)
+          }}
+        />
       )
     } else {
       return (
-        <View style={{ height: 350}}>
+        <View style={{ height: 350 }}>
           <SectionList
             sections={this.getPickerDataList(settingsItem)}
-            keyExtractor={(item) => item.value}
-            renderItem={({ item }) => this.getPickerListItem(item, settingsItem)}
+            keyExtractor={item => item.value}
+            renderItem={({ item }) =>
+              this.getPickerListItem(item, settingsItem)
+            }
           />
-       </View>
+        </View>
       )
     }
   }
 
   /**
-  * Component lifecycle
-  */
+   * Component lifecycle
+   */
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -232,33 +272,37 @@ export default class Settings extends Component {
           renderItem={({ item }) => this.getSettingsListItem(item)}
           renderSectionHeader={({ section: { title } }) => (
             <View>
-              <View style={styles.separator}/>
+              <View style={styles.separator} />
               <Text style={styles.header}>{title}</Text>
             </View>
           )}
         />
         <View>
           <Dialog.Container visible={this.state.textPickerVisible}>
-            <Dialog.Title>
-              {`${this.state.settingSelected.title}`}
-            </Dialog.Title>
+            <Dialog.Title>{`${this.state.settingSelected.title}`}</Dialog.Title>
             {this.getPickerType(this.state.settingSelected)}
-            <Dialog.Button label="Cancel" onPress={this.handleDialogCloseAction.bind(this)} />
-            <Dialog.Button label="Ok" onPress={this.handleDialogCloseAction.bind(this)} />
+            <Dialog.Button
+              label="Cancel"
+              onPress={this.handleDialogCloseAction.bind(this)}
+            />
+            <Dialog.Button
+              label="Ok"
+              onPress={this.handleDialogCloseAction.bind(this)}
+            />
           </Dialog.Container>
         </View>
       </SafeAreaView>
-    );
+    )
   }
 }
 
 /**
-* Styles
-*/
+ * Styles
+ */
 const styles = StyleSheet.create({
   separator: {
     height: 2,
-    backgroundColor: '#e9e9e9'
+    backgroundColor: '#e9e9e9',
   },
   container: {
     flex: 1,
@@ -274,7 +318,7 @@ const styles = StyleSheet.create({
   },
   inputDialog: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#A9ADAE",
+    borderBottomColor: '#A9ADAE',
   },
   header: {
     paddingLeft: 20,
@@ -283,18 +327,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: 'normal',
     color: '#7dbeb4',
-    backgroundColor: '#f2f2f2'
+    backgroundColor: '#f2f2f2',
   },
   title: {
     fontSize: 14,
-    color: '#000'
+    color: '#000',
   },
   subtitle: {
     fontSize: 12,
     width: 300,
-    color: 'gray'
+    color: 'gray',
   },
   spinnerTextStyle: {
-    color: '#FFF'
-  }
-});
+    color: '#FFF',
+  },
+})

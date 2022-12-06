@@ -9,11 +9,10 @@ import {
 } from 'react-native'
 import JudoPay, { JudoPBBAButton } from 'judo-react-native'
 import { isIos } from '../../helpers/utils'
-import { TouchableOpacity as AndroidTouchableOpacity } from 'react-native-gesture-handler'
-import PayByBankAppProps from "./PayByBankAppProps";
+import PayByBankAppProps from './PayByBankAppProps'
 
 interface State {
-  isBankingAppAvailable: boolean | undefined;
+  isBankingAppAvailable: boolean | undefined
 }
 
 export default class PayByBankApp extends Component<PayByBankAppProps, State> {
@@ -21,24 +20,27 @@ export default class PayByBankApp extends Component<PayByBankAppProps, State> {
 
   constructor(props: any) {
     super(props)
-    this.state = {isBankingAppAvailable: undefined}
+    this.state = { isBankingAppAvailable: undefined }
     this.invokePayByBankApp = this.invokePayByBankApp.bind(this)
   }
 
   async componentDidMount() {
-    const {authorization} = this.props.route.params
+    const { authorization } = this.props.route.params
     const judo = new JudoPay(authorization)
-    this.setState({isBankingAppAvailable: await judo.isBankingAppAvailable()})
+    this.setState({ isBankingAppAvailable: await judo.isBankingAppAvailable() })
   }
 
   async invokePayByBankApp() {
-    const { authorization, configuration, isSandboxed } = this.props.route.params
+    const { authorization, configuration, isSandboxed } =
+      this.props.route.params
 
     try {
       const judo = new JudoPay(authorization)
-      judo.isSandboxed = isSandboxed;
+      judo.isSandboxed = isSandboxed
       const response = await judo.invokePayByBankApp(configuration)
-      if (!response) return
+      if (!response) {
+        return
+      }
 
       this.props.navigation.pop()
     } catch (error) {
@@ -47,20 +49,19 @@ export default class PayByBankApp extends Component<PayByBankAppProps, State> {
   }
 
   pbbaButton() {
-    return isIos ? (
+    const flexStyle = {
+      style: {
+        flex: 1,
+      },
+    }
+
+    return (
       <TouchableOpacity
         style={styles.pbbaButton}
         onPress={this.invokePayByBankApp}
       >
-        <JudoPBBAButton style={{ flex: 1 }} />
+        <JudoPBBAButton {...flexStyle} />
       </TouchableOpacity>
-    ) : (
-      <AndroidTouchableOpacity
-        style={styles.pbbaButton}
-        onPress={this.invokePayByBankApp}
-      >
-        <JudoPBBAButton style={{ flex: 1 }} />
-      </AndroidTouchableOpacity>
     )
   }
 
@@ -72,7 +73,11 @@ export default class PayByBankApp extends Component<PayByBankAppProps, State> {
     return (
       <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="light-content" backgroundColor="#3216ac" />
-        <View style={styles.container}>{this.state.isBankingAppAvailable ? this.pbbaButton() : this.noBankAppText()}</View>
+        <View style={styles.container}>
+          {this.state.isBankingAppAvailable
+            ? this.pbbaButton()
+            : this.noBankAppText()}
+        </View>
       </SafeAreaView>
     )
   }

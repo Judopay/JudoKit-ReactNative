@@ -15,33 +15,33 @@ export interface JudoConfiguration {
     googlePayConfiguration?: JudoGooglePayConfiguration
     pbbaConfiguration?: JudoPBBAConfiguration
     isInitialRecurringPayment?: boolean
-    networkTimeout?: NetworkTimeout,
-    challengeRequestIndicator?: ChallengeRequestIndicator,
-    scaExemption?: ScaExemption,
-    mobileNumber?: string,
-    phoneCountryCode?: string,
-    emailAddress?: string,
-    threeDSTwoMaxTimeout?: number,
+    networkTimeout?: NetworkTimeout
+    challengeRequestIndicator?: ChallengeRequestIndicator
+    scaExemption?: ScaExemption
+    mobileNumber?: string
+    phoneCountryCode?: string
+    emailAddress?: string
+    threeDSTwoMaxTimeout?: number
     threeDSTwoMessageVersion?: string
 }
 
 export enum ChallengeRequestIndicator {
-    NoPreference = "noPreference",
-    NoChallenge = "noChallenge",
-    ChallengePreferred = "challengePreferred",
-    ChallengeAsMandate = "challengeAsMandate"
+    NoPreference = 'noPreference',
+    NoChallenge = 'noChallenge',
+    ChallengePreferred = 'challengePreferred',
+    ChallengeAsMandate = 'challengeAsMandate'
 }
 
 export enum ScaExemption {
-    LowValue = "lowValue",
-    SecureCorporate = "secureCorporate",
-    TrustedBeneficiary = "trustedBeneficiary",
-    TransactionRiskAnalysis = "transactionRiskAnalysis"
+    LowValue = 'lowValue',
+    SecureCorporate = 'secureCorporate',
+    TrustedBeneficiary = 'trustedBeneficiary',
+    TransactionRiskAnalysis = 'transactionRiskAnalysis'
 }
 
 export interface NetworkTimeout {
-    connectTimeout?: number,
-    readTimeout?: number,
+    connectTimeout?: number
+    readTimeout?: number
     writeTimeout?: number
 }
 

@@ -1,5 +1,3 @@
-import {ChallengeRequestIndicators, ScaExemptions} from "./SettingsData";
-
 export enum SettingsPickType {
   Switch,
   TextPicker,
@@ -17,19 +15,19 @@ export enum SettingsPickArray {
   AppleReturnInfoTypes,
   GooglePayEnvironments,
   ScaExemptions,
-  ChallengeRequestIndicators
+  ChallengeRequestIndicators,
 }
 
 export type SettingsListItem = {
-  title: string,
-  subtitle: string,
-  type: SettingsPickType,
-  value: any,
-  valueArray?: string[],
-  pickItems?: SettingsPickArray,
+  title: string
+  subtitle: string
+  type: SettingsPickType
+  value: any
+  valueArray?: string[]
+  pickItems?: SettingsPickArray
 }
 
 export type PickerItem = {
-  entry: string,
-  value: string,
+  entry: string
+  value: string
 }

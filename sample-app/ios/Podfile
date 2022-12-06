@@ -1,93 +1,49 @@
-# Uncomment the next line to define a global platform for your project
-platform :ios, '11.0'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-pre_install do |installer|
-  puts("Image fix for ios14: remove this when upgradeing to >= 0.63.3")
-  find = "_currentFrame.CGImage;"
-  replace = "_currentFrame.CGImage ;} else { [super displayLayer:layer];"
-  op = `sed -ie "s/#{find}/#{replace}/" ../node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m`
-  puts("Image fix for ios14 done")
+platform :ios, '12.4'
+install! 'cocoapods', :deterministic_uuids => false
 
-  ## Fix for XCode 12.5
-  find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
-  "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
-  find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
-  "RCTBridgeModuleNameForClass(module))", "RCTBridgeModuleNameForClass(Class(module)))")
-end
+production = ENV["PRODUCTION"] == "1"
 
 target 'sample-app' do
+  config = use_native_modules!
+
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-#   use_frameworks!
+  # use_frameworks!
+
   # Pods for sample-app
   pod 'CocoaDebug', "1.7.2"
   # Override the dependency from .podspec file - should be removed when new SDK version will be released
-  pod "JudoKit-iOS", "3.1.8"
+#  pod "JudoKit-iOS", "3.1.10"
   
-  pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
-  pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
-  pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
-  pod 'RCTTypeSafety', :path => "../node_modules/react-native/Libraries/TypeSafety"
-  pod 'React', :path => '../node_modules/react-native/'
-  pod 'React-Core', :path => '../node_modules/react-native/'
-  pod 'React-CoreModules', :path => '../node_modules/react-native/React/CoreModules'
-  pod 'React-Core/DevSupport', :path => '../node_modules/react-native/'
-  pod 'React-RCTActionSheet', :path => '../node_modules/react-native/Libraries/ActionSheetIOS'
-  pod 'React-RCTAnimation', :path => '../node_modules/react-native/Libraries/NativeAnimation'
-  pod 'React-RCTBlob', :path => '../node_modules/react-native/Libraries/Blob'
-  pod 'React-RCTImage', :path => '../node_modules/react-native/Libraries/Image'
-  pod 'React-RCTLinking', :path => '../node_modules/react-native/Libraries/LinkingIOS'
-  pod 'React-RCTNetwork', :path => '../node_modules/react-native/Libraries/Network'
-  pod 'React-RCTSettings', :path => '../node_modules/react-native/Libraries/Settings'
-  pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text'
-  pod 'React-RCTVibration', :path => '../node_modules/react-native/Libraries/Vibration'
-  pod 'React-Core/RCTWebSocket', :path => '../node_modules/react-native/'
+  # Flags change depending on the env values.
+  flags = get_default_flags()
 
-  pod 'React-cxxreact', :path => '../node_modules/react-native/ReactCommon/cxxreact'
-  pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
-  pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
-  pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
-  pod 'ReactCommon/callinvoker', :path => '../node_modules/react-native/ReactCommon'
-  pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
-  pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :production => production,
+    :hermes_enabled => flags[:hermes_enabled],
+    :fabric_enabled => flags[:fabric_enabled],
+    :flipper_configuration => FlipperConfiguration.enabled,
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
 
-  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
-  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
-  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
-  use_native_modules!
   target 'sample-appTests' do
-    inherit! :search_paths
+    inherit! :complete
+    requires_app_host = true
     # Pods for testing
-
-    pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
-
   end
 end
 
 post_install do |installer|
-  ## Fix for XCode 12.5 beta
-  find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
-  "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-    # some older pods don't support some architectures, anything over iOS 11 resolves that
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
-    end
-  end
+  react_native_post_install(installer)
+  __apply_Xcode_12_5_M1_post_install_workaround(installer)
 
-end
-
-## Fix for XCode 12.5
-def find_and_replace(dir, findstr, replacestr)
-  Dir[dir].each do |name|
-      text = File.read(name)
-      replace = text.gsub(findstr,replacestr)
-      if text != replace
-          puts "Fix: " + name
-          File.open(name, "w") { |file| file.puts replace }
-          STDOUT.flush
-      end
+  installer.pods_project.build_configurations.each do |config|
+    # https://khushwanttanwar.medium.com/xcode-12-compilation-errors-while-running-with-ios-14-simulators-5731c91326e9
+    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
   end
-  Dir[dir + '*/'].each(&method(:find_and_replace))
 end

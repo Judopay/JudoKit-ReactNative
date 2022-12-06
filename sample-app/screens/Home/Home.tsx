@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import {store} from '../../helpers/AsyncStore'
-import {getStoredData, HomeScreenData} from './HomeData'
-import HomeProps, {HomeListItem, HomeListType} from './HomeProps'
+import React, { Component } from 'react'
+import { store } from '../../helpers/AsyncStore'
+import { getStoredData, HomeScreenData } from './HomeData'
+import HomeProps, { HomeListItem, HomeListType } from './HomeProps'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 import {
@@ -15,13 +15,15 @@ import {
   View,
 } from 'react-native'
 
-import JudoPay, {JudoTransactionMode, JudoTransactionType,} from 'judo-react-native'
-import configuration, {reference} from '../../helpers/JudoDefaults'
-import {showMessage} from '../../helpers/utils'
-import {JudoAuthorization} from 'judo-react-native'
+import JudoPay, {
+  JudoTransactionMode,
+  JudoTransactionType,
+  JudoAuthorization,
+} from 'judo-react-native'
+import configuration, { reference } from '../../helpers/JudoDefaults'
+import { showMessage } from '../../helpers/utils'
 
 export default class Home extends Component<HomeProps> {
-
   state = {
     authorization: undefined,
     configuration: configuration(),
@@ -42,14 +44,14 @@ export default class Home extends Component<HomeProps> {
   }
 
   componentWillUnmount() {
-    Linking.removeAllListeners("url")
+    Linking.removeAllListeners('url')
     store.dispatch({ type: '' })
   }
 
   async getConfiguration(callback: Function) {
     this.setState({ spinner: true })
-    const configuration = await getStoredData(this.state)
-    this.setState(configuration, () => {
+    const config = await getStoredData(this.state)
+    this.setState(config, () => {
       this.setState({ spinner: false }, () => {
         callback()
       })
@@ -57,12 +59,11 @@ export default class Home extends Component<HomeProps> {
   }
 
   async handleDeepLinkIfNeeded() {
-
-    Linking.addEventListener("url", ({url}) => {
+    Linking.addEventListener('url', ({ url }) => {
       this.updateDeepLinkURL(url, () => {
         this.handlePBBATransaction()
       })
-    });
+    })
 
     const url = await Linking.getInitialURL()
 
@@ -173,7 +174,6 @@ export default class Home extends Component<HomeProps> {
 
   async invokeTransaction(type: JudoTransactionType) {
     try {
-
       const judo = new JudoPay(this.getAuthorization())
       judo.isSandboxed = this.state.isSandboxed
       const response = await judo.invokeTransaction(
@@ -183,10 +183,12 @@ export default class Home extends Component<HomeProps> {
       if (response != null) {
         this.props.navigation.navigate('Receipt', { receipt: response })
       } else {
-        await showMessage('Error', "invokeTransaction returned null response")
+        await showMessage('Error', 'invokeTransaction returned null response')
       }
     } catch (error) {
-      await showMessage('Error', error.message)
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      await showMessage('Error', message)
     }
   }
 
@@ -196,7 +198,8 @@ export default class Home extends Component<HomeProps> {
       judo.isSandboxed = this.state.isSandboxed
 
       const config = this.state.configuration
-      const isApplePayAvailable = await judo.isApplePayAvailableWithConfiguration(config)
+      const isApplePayAvailable =
+        await judo.isApplePayAvailableWithConfiguration(config)
 
       if (isApplePayAvailable) {
         const response = await judo.invokeApplePay(mode, config)
@@ -204,10 +207,15 @@ export default class Home extends Component<HomeProps> {
           this.props.navigation.navigate('Receipt', { receipt: response })
         }
       } else {
-        await showMessage('Error', 'ApplePay is not available for given configuration')
+        await showMessage(
+          'Error',
+          'ApplePay is not available for given configuration',
+        )
       }
     } catch (error) {
-      await showMessage('Error', error.message)
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      await showMessage('Error', message)
     }
   }
 
@@ -223,7 +231,9 @@ export default class Home extends Component<HomeProps> {
         this.props.navigation.navigate('Receipt', { receipt: response })
       }
     } catch (error) {
-      await showMessage('Error', error.message)
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      await showMessage('Error', message)
     }
   }
 
@@ -231,7 +241,7 @@ export default class Home extends Component<HomeProps> {
     this.props.navigation.navigate('PayByBankApp', {
       authorization: this.getAuthorization(),
       configuration: { ...this.state.configuration, reference: reference() },
-      isSandboxed: this.state.isSandboxed
+      isSandboxed: this.state.isSandboxed,
     })
   }
 
@@ -239,14 +249,14 @@ export default class Home extends Component<HomeProps> {
     this.props.navigation.navigate('TokenPayments', {
       authorization: this.getAuthorization(),
       configuration: { ...this.state.configuration, reference: reference() },
-      isSandboxed: this.state.isSandboxed
+      isSandboxed: this.state.isSandboxed,
     })
   }
 
   displayTransactionDetails() {
     this.props.navigation.navigate('TransactionDetails', {
       authorization: this.getAuthorization(),
-      isSandboxed: this.state.isSandboxed
+      isSandboxed: this.state.isSandboxed,
     })
   }
 
@@ -262,27 +272,27 @@ export default class Home extends Component<HomeProps> {
         this.props.navigation.navigate('Receipt', { receipt: response })
       }
     } catch (error) {
-      await showMessage('Error', error.message)
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      await showMessage('Error', message)
     }
   }
 
   getAuthorization = (): JudoAuthorization => {
-
-    const authorization = this.state.authorization;
+    const authorization = this.state.authorization
 
     if (!authorization) {
-      throw new Error('No authorization parameter in state');
+      throw new Error('No authorization parameter in state')
     }
 
-    const token = authorization['token'] as string;
-    const secret = authorization['secret'] as string;
-    const paymentSession = authorization['paymentSession'] as string;
+    const token = authorization['token'] as string
+    const secret = authorization['secret'] as string
+    const paymentSession = authorization['paymentSession'] as string
 
     if (secret && secret.length > 0) {
-
       return {
         token: token,
-        secret: secret
+        secret: secret,
       }
     }
 

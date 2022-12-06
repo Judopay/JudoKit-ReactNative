@@ -1,7 +1,11 @@
 import { NativeModules } from 'react-native'
-import { JudoResponse, JudoTransactionType, JudoTransactionResult } from '../types/JudoTypes'
+import {
+    JudoResponse,
+    JudoTransactionType,
+    JudoTransactionResult
+} from '../types/JudoTypes'
 
-const response: JudoResponse = {
+const mockResponse: JudoResponse = {
     receiptId: 'receiptId',
     yourPaymentReference: 'paymentRef',
     type: JudoTransactionType.Payment,
@@ -16,11 +20,12 @@ const response: JudoResponse = {
 }
 
 NativeModules.RNJudo = {
-    invokeTransaction: jest.fn(() => Promise.resolve(response)),
-    invokeApplePay: jest.fn(() => Promise.resolve(response)),
-    invokeGooglePay: jest.fn(() => Promise.resolve(response)),
-    invokePaymentMethodScreen: jest.fn(() => Promise.resolve(response)),
-    invokePayByBankApp: jest.fn(() => Promise.resolve(response)),
-    performTokenTransaction: jest.fn(() => Promise.resolve(response)),
-    isBankingAppAvailable: jest.fn(() => Promise.resolve(false))
+    invokeTransaction: jest.fn(() => Promise.resolve(mockResponse)),
+    invokeApplePay: jest.fn(() => Promise.resolve(mockResponse)),
+    invokeGooglePay: jest.fn(() => Promise.resolve(mockResponse)),
+    invokePaymentMethodScreen: jest.fn(() => Promise.resolve(mockResponse)),
+    invokePayByBankApp: jest.fn(() => Promise.resolve(mockResponse)),
+    performTokenTransaction: jest.fn(() => Promise.resolve(mockResponse)),
+    isBankingAppAvailable: jest.fn(() => Promise.resolve(false)),
+    isApplePayAvailableWithConfiguration: jest.fn(() => Promise.resolve(false))
 }

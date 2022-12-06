@@ -26,7 +26,7 @@
 		44B2907D244E491B009DF232 /* NSDictionary+JudoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B29075244E491A009DF232 /* NSDictionary+JudoConvert.m */; };
 		44B2907E244E491B009DF232 /* RNApplePayWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907A244E491B009DF232 /* RNApplePayWrappers.m */; };
 		44B2907F244E491B009DF232 /* RNWrappers.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B2907B244E491B009DF232 /* RNWrappers.m */; };
-		91D3E9495876992A8B1FFFEE /* libPods-RNJudo-RNJudoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B2E709D2A9CC701279124F8 /* libPods-RNJudo-RNJudoTests.a */; };
+		AD16583B292D17890022AAD6 /* libPods-RNJudo-RNJudoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD16583A292D17890022AAD6 /* libPods-RNJudo-RNJudoTests.a */; };
 		B3E7B58A1CC2AC0600A0062D /* RNJudo.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNJudo.m */; };
 /* End PBXBuildFile section */
 
@@ -57,11 +57,9 @@
 		01C87484245069DD0035A1C1 /* UIColor+RNAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+RNAdditions.h"; sourceTree = "<group>"; };
 		0A314097569FF3064749EF21 /* Pods-RNJudo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo.release.xcconfig"; path = "Target Support Files/Pods-RNJudo/Pods-RNJudo.release.xcconfig"; sourceTree = "<group>"; };
 		134814201AA4EA6300B7C361 /* libRNJudo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNJudo.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		1B2E709D2A9CC701279124F8 /* libPods-RNJudo-RNJudoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNJudo-RNJudoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3007CBC1249B86BA0014CFC2 /* RNPBBAWrappers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNPBBAWrappers.h; sourceTree = "<group>"; };
 		3007CBC2249B86BA0014CFC2 /* RNPBBAWrappers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNPBBAWrappers.m; sourceTree = "<group>"; };
 		3007CBC8249B8AB10014CFC2 /* RNPBBAWrappersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNPBBAWrappersTests.m; sourceTree = "<group>"; };
-		302793822464861900436747 /* RNJudoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNJudoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3027938D2464863900436747 /* MockConfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockConfiguration.json; sourceTree = "<group>"; };
 		3027938E2464863A00436747 /* RNApplePayWrappersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNApplePayWrappersTests.m; sourceTree = "<group>"; };
 		3027938F2464863A00436747 /* RNMocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNMocks.m; sourceTree = "<group>"; };
@@ -82,9 +80,12 @@
 		82FF801E2448A9EE002A72CF /* RNTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTypes.h; sourceTree = "<group>"; };
 		8822DAF687BA111CD8B958EB /* Pods-RNJudo-RNJudoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo-RNJudoTests.debug.xcconfig"; path = "Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8EB06DB5CF8F5FED0E90F44C /* libPods-RNJudo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNJudo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD16583A292D17890022AAD6 /* libPods-RNJudo-RNJudoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-RNJudo-RNJudoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD16583C292D19210022AAD6 /* RNJudoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNJudoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3E7B5881CC2AC0600A0062D /* RNJudo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNJudo.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNJudo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNJudo.m; sourceTree = "<group>"; };
 		DEFD65C5479404919665AF19 /* Pods-RNJudo-RNJudoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo-RNJudoTests.release.xcconfig"; path = "Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests.release.xcconfig"; sourceTree = "<group>"; };
+		E4E7A42AAC2906CA01D268CD /* libPods-RNJudo-RNJudoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNJudo-RNJudoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3BD3206358AE029C8AD5B0C /* Pods-RNJudo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNJudo.debug.xcconfig"; path = "Target Support Files/Pods-RNJudo/Pods-RNJudo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,7 +95,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				302793872464861A00436747 /* libRNJudo.a in Frameworks */,
-				91D3E9495876992A8B1FFFEE /* libPods-RNJudo-RNJudoTests.a in Frameworks */,
+				AD16583B292D17890022AAD6 /* libPods-RNJudo-RNJudoTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,8 +188,8 @@
 				44674005246433F50012DB4C /* RNJudoTests */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				9B6791AF87E7C37C6CE084D2 /* Pods */,
-				302793822464861900436747 /* RNJudoTests.xctest */,
 				BD4E27522E8A79E29A16EB7B /* Frameworks */,
+				AD16583C292D19210022AAD6 /* RNJudoTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -206,8 +207,9 @@
 		BD4E27522E8A79E29A16EB7B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD16583A292D17890022AAD6 /* libPods-RNJudo-RNJudoTests.a */,
 				8EB06DB5CF8F5FED0E90F44C /* libPods-RNJudo.a */,
-				1B2E709D2A9CC701279124F8 /* libPods-RNJudo-RNJudoTests.a */,
+				E4E7A42AAC2906CA01D268CD /* libPods-RNJudo-RNJudoTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -233,7 +235,7 @@
 			);
 			name = RNJudoTests;
 			productName = RNJudoTests;
-			productReference = 302793822464861900436747 /* RNJudoTests.xctest */;
+			productReference = AD16583C292D19210022AAD6 /* RNJudoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		58B511DA1A9E6C8500147676 /* RNJudo */ = {
@@ -335,12 +337,16 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNJudo-RNJudoTests/Pods-RNJudo-RNJudoTests-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/DeviceDNA/DeviceDNA.framework/DeviceDNA",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Flipper-DoubleConversion/double-conversion.framework/double-conversion",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Flipper-Glog/glog.framework/glog",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Judo3DS2_iOS/Judo3DS2_iOS.framework/Judo3DS2_iOS",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceDNA.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/double-conversion.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Judo3DS2_iOS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
 			);
@@ -382,6 +388,7 @@
 				"${PODS_ROOT}/JudoKit-iOS/Resources/judokit-resources.bundle",
 				"${PODS_ROOT}/JudoKit-iOS/Resources/judokit-countries-list.json",
 				"${PODS_CONFIGURATION_BUILD_DIR}/JudoKit-iOS/JudoKit_iOS.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ZappMerchantLib/ZappMerchantLibResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -390,6 +397,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/judokit-resources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/judokit-countries-list.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JudoKit_iOS.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ZappMerchantLibResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,7 +462,6 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
-				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 95V535S6TQ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				HEADER_SEARCH_PATHS = (
@@ -491,7 +498,7 @@
 					"$(SRCROOT)/../sample-app/ios/Pods/Headers/Public/**",
 				);
 				INFOPLIST_FILE = RNJudoTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -514,11 +521,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 95V535S6TQ;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = RNJudoTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.judopay.RNJudoTests;
@@ -530,7 +536,6 @@
 		58B511ED1A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -559,6 +564,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -576,7 +582,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -584,7 +590,6 @@
 		58B511EE1A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -613,6 +618,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -623,6 +629,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -633,7 +640,6 @@
 			baseConfigurationReference = F3BD3206358AE029C8AD5B0C /* Pods-RNJudo.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -653,7 +659,6 @@
 			baseConfigurationReference = 0A314097569FF3064749EF21 /* Pods-RNJudo.release.xcconfig */;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

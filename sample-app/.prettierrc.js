@@ -1,5 +1,5 @@
 module.exports = {
-  parser: 'flow',
+  arrowParens: 'avoid',
   semi: false,
   singleQuote: true,
   trailingComma: 'all',

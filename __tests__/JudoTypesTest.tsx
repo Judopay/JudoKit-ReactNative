@@ -120,7 +120,7 @@ test('check JudoAmount model fields', () => {
     expect(Object.keys(judoAmount).length).toBe(2)
 })
 
-test('check JudoTransactionType model fields', () => {
+test('check JudoConfiguration model fields', () => {
     const judoConfiguration: JudoConfiguration = {
         judoId: 'judoId',
         amount: judoAmount,

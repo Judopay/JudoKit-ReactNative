@@ -1,5 +1,6 @@
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from "../../App";
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { RootStackParamList } from '../../App'
 
 export enum HomeListType {
   Payment,
@@ -20,16 +21,16 @@ export enum HomeListType {
 }
 
 export type HomeListItem = {
-  title: string,
-  subtitle: string,
-  type: HomeListType,
+  title: string
+  subtitle: string
+  type: HomeListType
 }
 
-type HomeScreenNavigationProp = StackNavigationProp<
-    RootStackParamList,
-    'Home'
-    >;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>
+
+type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>
 
 export default interface HomeProps {
   navigation: HomeScreenNavigationProp
+  route: HomeRouteProp
 }

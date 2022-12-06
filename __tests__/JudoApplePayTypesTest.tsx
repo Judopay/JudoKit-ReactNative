@@ -93,6 +93,7 @@ test('check JudoReturnedInfo model fields', () => {
 })
 
 test('check JudoApplePayConfiguration model fields', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const applePayConfiguration: JudoApplePayConfiguration = {
         merchantId: 'id777',
         countryCode: 'some code',

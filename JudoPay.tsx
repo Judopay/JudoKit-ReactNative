@@ -58,7 +58,6 @@ export type { JudoPBBAConfiguration } from './types/JudoPBBATypes'
 export { JudoPBBAButton }
 
 class JudoPay {
-
     //------------------------------------------------------------------
     // Private properties
     //------------------------------------------------------------------
@@ -114,7 +113,9 @@ class JudoPay {
      *
      * @returns an asynchronous boolean value that indicates if ApplePay is available.
      */
-    public isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean> {
+    public isApplePayAvailableWithConfiguration(
+        configuration: JudoConfiguration
+    ): Promise<boolean> {
         const params = this.generateJudoParameters(configuration)
         return NativeModules.RNJudo.isApplePayAvailableWithConfiguration(params)
     }
@@ -159,15 +160,15 @@ class JudoPay {
         cardholderName: string,
         cardScheme: string
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionModeParameters(
-            mode,
-            configuration
-        )
-        params['cardToken'] = cardToken
-        params['securityCode'] = securityCode
-        params['cardholderName'] = cardholderName
-        params['cardScheme'] = cardScheme
-
+        const params = {
+            ...this.generateTransactionModeParameters(mode, configuration),
+            ...{
+                cardToken,
+                securityCode,
+                cardholderName,
+                cardScheme
+            }
+        }
         return NativeModules.RNJudo.performTokenTransaction(params)
     }
 
@@ -285,17 +286,10 @@ class JudoPay {
         }
     }
 
-    private readonly generateTransactionDetailsParameters = (
-        receiptId: string
-    ): Record<string, any> => {
-        return {
-            authorization: this.generateAuthorizationParameters(),
-            sandboxed: this.isSandboxed,
-            receiptId: receiptId
-        }
-    }
-
-    private readonly generateAuthorizationParameters = (): Record<string, any> => {
+    private readonly generateAuthorizationParameters = (): Record<
+        string,
+        any
+    > => {
         if (this.authorization.secret) {
             return {
                 token: this.authorization.token,

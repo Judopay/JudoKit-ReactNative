@@ -7,35 +7,41 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native'
-import { JudoTransactionType, JudoTransactionMode } from 'judo-react-native'
-import TokenPaymentProps from './TokenPaymentsProps'
-import JudoPay from 'judo-react-native'
+import JudoPay, {
+  JudoTransactionType,
+  JudoTransactionMode,
+} from 'judo-react-native'
+import TokenPaymentsProps from './TokenPaymentsProps'
 import { showMessage } from '../../helpers/utils'
 
 interface State {
-  cardToken: string | undefined;
-  securityCode: string | undefined;
-  cardholderName: string | undefined;
-  cardScheme: string | undefined;
+  cardToken: string | undefined
+  securityCode: string | undefined
+  cardholderName: string | undefined
+  cardScheme: string | undefined
 }
 
-export default class TokenPayments extends Component<TokenPaymentProps, State> {
+export default class TokenPayments extends Component<
+  TokenPaymentsProps,
+  State
+> {
   state: State
 
-  constructor(props: TokenPaymentProps) {
+  constructor(props: TokenPaymentsProps) {
     super(props)
     this.state = {
       cardToken: undefined,
-      securityCode: "341",
-      cardholderName: "CHALLENGE",
-      cardScheme: "visa"
+      securityCode: '341',
+      cardholderName: 'CHALLENGE',
+      cardScheme: 'visa',
     }
     this.invokeSaveCard = this.invokeSaveCard.bind(this)
     this.completeTransaction = this.completeTransaction.bind(this)
   }
 
   async invokeSaveCard() {
-    const { authorization, configuration, isSandboxed } = this.props.route.params
+    const { authorization, configuration, isSandboxed } =
+      this.props.route.params
 
     try {
       const judo = new JudoPay(authorization)
@@ -46,35 +52,40 @@ export default class TokenPayments extends Component<TokenPaymentProps, State> {
         configuration,
       )
 
-      this.setState({ ...this.state, ...(response.cardDetails || {})  })
+      this.setState({ ...this.state, ...(response.cardDetails || {}) })
     } catch (error) {
-      showMessage(error.message)
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      await showMessage('Error', message)
     }
   }
 
   async completeTransaction(mode: JudoTransactionMode) {
-    const { authorization, configuration, isSandboxed } = this.props.route.params
+    const { authorization, configuration, isSandboxed } =
+      this.props.route.params
 
     try {
       const judo = new JudoPay(authorization)
       judo.isSandboxed = isSandboxed
 
-      if (this.state.cardToken == undefined) return
+      if (this.state.cardToken === undefined) return
 
       const response = await judo.performTokenTransaction(
         mode,
         configuration,
-        this.state.cardToken || "",
-          this.state.securityCode || "",
-          this.state.cardholderName || "",
-          this.state.cardScheme || ""
+        this.state.cardToken || '',
+        this.state.securityCode || '',
+        this.state.cardholderName || '',
+        this.state.cardScheme || '',
       )
 
       if (response != null) {
         this.props.navigation.navigate('Receipt', { receipt: response })
       }
     } catch (error) {
-      showMessage(error.message)
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      await showMessage('Error', message)
     }
   }
 
@@ -98,11 +109,11 @@ export default class TokenPayments extends Component<TokenPaymentProps, State> {
           <TouchableOpacity
             style={[
               styles.buttonStyle,
-              this.state.cardToken == undefined
+              this.state.cardToken === undefined
                 ? styles.disabled
                 : styles.enabled,
             ]}
-            disabled={this.state.cardToken == undefined}
+            disabled={this.state.cardToken === undefined}
             onPress={() =>
               this.completeTransaction(JudoTransactionMode.Payment)
             }
@@ -112,11 +123,11 @@ export default class TokenPayments extends Component<TokenPaymentProps, State> {
           <TouchableOpacity
             style={[
               styles.buttonStyle,
-              this.state.cardToken == undefined
+              this.state.cardToken === undefined
                 ? styles.disabled
                 : styles.enabled,
             ]}
-            disabled={this.state.cardToken == undefined}
+            disabled={this.state.cardToken === undefined}
             onPress={() =>
               this.completeTransaction(JudoTransactionMode.PreAuth)
             }
