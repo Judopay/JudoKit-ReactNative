@@ -128,13 +128,19 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
                  properties:(NSDictionary *)properties
                  fetchTransactionDetailsWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    @try {
+        self.apiService = [RNWrappers apiServiceFromProperties:properties];
+        self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
 
-    self.apiService = [RNWrappers apiServiceFromProperties:properties];
-    self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
+        NSString *receiptId = [RNWrappers receiptIdFromProperties:properties];
 
-    NSString *receiptId = [RNWrappers receiptIdFromProperties:properties];
-
-    [self.apiService fetchTransactionWithReceiptId:receiptId completion:self.completionBlock];
+        [self.apiService fetchTransactionWithReceiptId:receiptId completion:self.completionBlock];
+    } @catch (NSException *exception) {
+        NSError *error = [[NSError alloc] initWithDomain:RNJudoErrorDomain
+                                                    code:0
+                                                userInfo:exception.userInfo];
+        reject(kJudoPromiseRejectionCode, exception.reason, error);
+    }
 }
 
 //----------------------------------------------
@@ -204,7 +210,17 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
                 message = description;
             }
             
-            reject(kJudoPromiseRejectionCode, message, error);
+            // TODO: RCTJSErrorFromCodeMessageAndNSError expects an NSError instane in userInfo[NSUnderlyingErrorKey]
+            // which in case of a 3DS SDK error is a NSString ('JP3DSSDKRuntimeException') - so it crashes
+            // ! this should be fixed in JudoKit-iOS, and the folowing workaround removed ASAP
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+            [userInfo removeObjectForKey:NSUnderlyingErrorKey];
+            NSError *myError = [[NSError alloc] initWithDomain:error.domain
+                                                          code:error.code
+                                                      userInfo:[NSDictionary dictionaryWithDictionary:userInfo]];
+            
+            
+            reject(kJudoPromiseRejectionCode, message, myError);
         } else {
             NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];
             resolve(mappedResponse);

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -18,20 +19,22 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Judopay © 2012-2020" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KU1-6g-rYy">
-                    <rect key="frame" x="157.5" y="844" width="99" height="12"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="10"/>
-                    <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Judopay © 2012-2022" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KU1-6g-rYy">
+                    <rect key="frame" x="137.5" y="839" width="139" height="17"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                    <color key="textColor" systemColor="systemGrayColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_judo_logo" translatesAutoresizingMaskIntoConstraints="NO" id="Vrk-TE-8eF">
-                    <rect key="frame" x="157" y="183" width="100" height="530"/>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="judopay-logo" translatesAutoresizingMaskIntoConstraints="NO" id="Vrk-TE-8eF">
+                    <rect key="frame" x="106" y="384" width="203" height="129"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="100" id="XAp-3H-OtS"/>
+                        <constraint firstAttribute="width" constant="203" id="6Zc-P3-F1i"/>
+                        <constraint firstAttribute="height" constant="129" id="vbI-dD-kyU"/>
                     </constraints>
+                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="Vrk-TE-8eF" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="QFm-hF-7DY"/>
                 <constraint firstItem="KU1-6g-rYy" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Qgd-in-jK1"/>
@@ -39,10 +42,16 @@
                 <constraint firstItem="Vrk-TE-8eF" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fy5-n8-Cm7"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <point key="canvasLocation" x="548" y="455"/>
+            <point key="canvasLocation" x="547.82608695652175" y="454.6875"/>
         </view>
     </objects>
     <resources>
-        <image name="ic_judo_logo" width="832" height="530"/>
+        <image name="judopay-logo" width="820" height="522"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

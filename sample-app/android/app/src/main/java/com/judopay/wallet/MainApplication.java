@@ -2,9 +2,11 @@ package com.judopay.wallet;
 
 import android.app.Application;
 
+import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.chuckerteam.chucker.api.ChuckerCollector;
 import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.clipboard.ClipboardPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -32,11 +34,13 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.asList(
                     new MainReactPackage(),
+                    new ClipboardPackage(),
                     new AsyncStoragePackage(),
                     new RNScreensPackage(),
                     new SafeAreaContextPackage(),
                     new RNGestureHandlerPackage(),
-                    new JudoReactNativePackage()
+                    new JudoReactNativePackage(),
+                    new SnackbarPackage()
             );
         }
 

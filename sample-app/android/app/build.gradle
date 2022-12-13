@@ -77,6 +77,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -122,8 +123,8 @@ android {
         applicationId "com.judopay.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3481
-        versionName "3.4.8(1)"
+        versionCode 3505
+        versionName "3.5.0(5)"
         multiDexEnabled true
     }
     splits {
@@ -167,7 +168,6 @@ android {
 }
 
 dependencies {
-    implementation project(':@react-native-community_async-storage')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -177,7 +177,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     implementation "com.github.chuckerteam.chucker:library:3.5.2"
-    implementation 'com.judopay:judokit-android:3.0.11'
+    implementation 'com.judopay:judokit-android:3.0.13'
 
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermes-engine/android/"
