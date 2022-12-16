@@ -1584,7 +1584,7 @@
 				CODE_SIGN_ENTITLEMENTS = "sample-app/sample-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 95V535S6TQ;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -1621,7 +1621,7 @@
 				CODE_SIGN_ENTITLEMENTS = "sample-app/sample-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 95V535S6TQ;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "sample-app/Info.plist";

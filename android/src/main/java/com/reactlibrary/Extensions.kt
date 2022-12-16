@@ -103,6 +103,9 @@ internal val ReadableMap.paymentReference: String?
 internal val ReadableMap.isInitialRecurringPayment: Boolean?
     get() = configuration?.getBoolean("isInitialRecurringPayment")
 
+internal val ReadableMap.isDelayedAuthorisation: Boolean?
+    get() = configuration?.getBoolean("isDelayedAuthorisation")
+
 internal val ReadableMap.networkTimeout: ReadableMap?
     get() {
         if (configuration.hasKey("networkTimeout")) {
