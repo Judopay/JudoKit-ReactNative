@@ -1,12 +1,13 @@
 {
     "name": "judokit-react-native",
     "title": "Judopay React Native Module",
-    "version": "3.4.8",
+    "version": "3.5.0",
     "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
     "main": "JudoPay.tsx",
     "scripts": {
         "test": "jest --coverage",
-        "lint": "tsc && eslint '*/**/*.{js,ts,tsx}' --quiet"
+        "lint": "tsc && eslint '*/**/*.{ts,tsx}' --quiet",
+        "format": "prettier --write \"**/*.+(tsx|ts)\""
     },
     "files": [
         "JudoPay.tsx",
@@ -52,6 +53,7 @@
         "eslint-plugin-react": "^7.19.0",
         "eslint-plugin-react-hooks": "^2.5.0",
         "jest": "^25.3.0",
+        "prettier": "^2.7.1",
         "react": "16.9.0",
         "react-native": "0.61.5"
     },

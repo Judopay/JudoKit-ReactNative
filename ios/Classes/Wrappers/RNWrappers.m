@@ -28,6 +28,7 @@
 #import "RNTypes.h"
 #import "NSDictionary+JudoConvert.h"
 #import "UIColor+RNAdditions.h"
+#import <Judo3DS2_iOS/Judo3DS2_iOS.h>
 
 static NSString *const kCardSchemeVISA = @"visa";
 static NSString *const kCardSchemeMasterCard = @"mastercard";
@@ -129,6 +130,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
 
     NSString *judoId = [configurationDict stringForKey:@"judoId"];
     NSNumber *isInitialRecurringPayment = [configurationDict optionalBoolForKey:@"isInitialRecurringPayment"];
+    NSNumber *isDelayedAuthorisation = [configurationDict optionalBoolForKey:@"isDelayedAuthorisation"];
 
     JPAmount *amount = [RNWrappers amountFromConfiguration:configurationDict];
     JPReference *reference = [RNWrappers referenceFromConfiguration:configurationDict];
@@ -137,7 +139,14 @@ static NSString *const kCardSchemeAMEX = @"amex";
                                                                       amount:amount
                                                                    reference:reference];
 
-    configuration.isInitialRecurringPayment = isInitialRecurringPayment;
+    if (isInitialRecurringPayment) {
+        configuration.isInitialRecurringPayment = isInitialRecurringPayment.boolValue;
+    }
+
+    if (isDelayedAuthorisation) {
+        configuration.isDelayedAuthorisation = isDelayedAuthorisation.boolValue;
+    }
+
     configuration.uiConfiguration = [RNWrappers uiConfigurationFromConfiguration:configurationDict];
     configuration.supportedCardNetworks = [RNWrappers cardNetworksFromConfiguration:configurationDict];
     configuration.primaryAccountDetails = [RNWrappers accountDetailsFromConfiguration:configurationDict];
@@ -246,15 +255,15 @@ static NSString *const kCardSchemeAMEX = @"amex";
 + (JPCardNetworkType)cardTypeFromProperties:(NSDictionary *)properties {
     NSString *cardScheme = [properties optionalStringForKey:@"cardScheme"].lowercaseString;
     
-    if ([kCardSchemeVISA isEqualToString:cardScheme]) {
+    if ([cardScheme containsString:kCardSchemeVISA]) {
         return JPCardNetworkTypeVisa;
     }
     
-    if ([kCardSchemeMasterCard isEqualToString:cardScheme]) {
+    if ([cardScheme containsString:kCardSchemeMasterCard]) {
         return JPCardNetworkTypeMasterCard;
     }
     
-    if ([kCardSchemeAMEX isEqualToString:cardScheme]) {
+    if ([cardScheme containsString:kCardSchemeAMEX]) {
         return JPCardNetworkTypeAMEX;
     }
     
@@ -342,24 +351,332 @@ static NSString *const kCardSchemeAMEX = @"amex";
         return uiConfiguration;
     }
 
-    NSNumber *isAVSEnabled = [dictionary boolForKey:@"isAVSEnabled"];
-    NSNumber *shouldDisplayAmount = [dictionary boolForKey:@"shouldPaymentMethodsDisplayAmount"];
-    NSNumber *isPayButtonAmountVisible = [dictionary boolForKey:@"shouldPaymentButtonDisplayAmount"];
-    NSNumber *isSecureCodeCheckEnabled = [dictionary boolForKey:@"shouldPaymentMethodsVerifySecurityCode"];
+    NSNumber *isAVSEnabled = [dictionary optionalBoolForKey:@"isAVSEnabled"];
+    NSNumber *shouldDisplayAmount = [dictionary optionalBoolForKey:@"shouldPaymentMethodsDisplayAmount"];
+    NSNumber *isPayButtonAmountVisible = [dictionary optionalBoolForKey:@"shouldPaymentButtonDisplayAmount"];
+    NSNumber *isSecureCodeCheckEnabled = [dictionary optionalBoolForKey:@"shouldPaymentMethodsVerifySecurityCode"];
     NSNumber *shouldAskForBillingInformation = [dictionary optionalBoolForKey:@"shouldAskForBillingInformation"];
     
-    uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
-    uiConfiguration.shouldPaymentMethodsDisplayAmount = shouldDisplayAmount.boolValue;
-    uiConfiguration.shouldPaymentButtonDisplayAmount = isPayButtonAmountVisible.boolValue;
-    uiConfiguration.shouldPaymentMethodsVerifySecurityCode = isSecureCodeCheckEnabled.boolValue;
+    if (isAVSEnabled) {
+        uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
+    }
+
+    if (shouldDisplayAmount) {
+        uiConfiguration.shouldPaymentMethodsDisplayAmount = shouldDisplayAmount.boolValue;
+    }
+
+    if (isPayButtonAmountVisible) {
+        uiConfiguration.shouldPaymentButtonDisplayAmount = isPayButtonAmountVisible.boolValue;
+    }
+
+    if (isSecureCodeCheckEnabled) {
+        uiConfiguration.shouldPaymentMethodsVerifySecurityCode = isSecureCodeCheckEnabled.boolValue;
+    }
     
     if (shouldAskForBillingInformation) {
         uiConfiguration.shouldAskForBillingInformation = shouldAskForBillingInformation.boolValue;
     }
     
     uiConfiguration.theme = [self themeFromUIConfiguration:dictionary];
+    uiConfiguration.threeDSUICustomization = [self threeDSUICustomization:dictionary];
 
     return uiConfiguration;
+}
+
++ (JP3DSUICustomization *)threeDSUICustomization:(NSDictionary *)uiCustomization {
+    NSDictionary *dictionary = [uiCustomization optionalDictionaryForKey:@"threeDSUIConfiguration"];
+
+    if (!dictionary) {
+        return nil;
+    }
+
+    NSDictionary *buttonCustomizations = [dictionary optionalDictionaryForKey:@"buttonCustomizations"];
+    NSDictionary *toolbarCustomizations = [dictionary optionalDictionaryForKey:@"toolbarCustomization"];
+    NSDictionary *labelCustomizations = [dictionary optionalDictionaryForKey:@"labelCustomization"];
+    NSDictionary *textBoxCustomizations = [dictionary optionalDictionaryForKey:@"textBoxCustomization"];
+
+    JP3DSUICustomization *customization = [JP3DSUICustomization new];
+
+    if (buttonCustomizations) {
+        NSDictionary *submitButtonCustomization = [buttonCustomizations optionalDictionaryForKey:@"SUBMIT"];
+        NSDictionary *continueButtonCustomization = [buttonCustomizations optionalDictionaryForKey:@"CONTINUE"];
+        NSDictionary *nextButtonCustomization = [buttonCustomizations optionalDictionaryForKey:@"NEXT"];
+        NSDictionary *cancelButtonCustomization = [buttonCustomizations optionalDictionaryForKey:@"CANCEL"];
+        NSDictionary *resendButtonCustomization = [buttonCustomizations optionalDictionaryForKey:@"RESEND"];
+
+        if (submitButtonCustomization) {
+            JP3DSButtonCustomization *submitCustomization = [JP3DSButtonCustomization new];
+
+            NSString *textFontName = [submitButtonCustomization optionalStringForKey:@"textFontName"];
+            NSString *textColor = [submitButtonCustomization optionalStringForKey:@"textColor"];
+            NSString *backgroundColor = [submitButtonCustomization optionalStringForKey:@"backgroundColor"];
+            NSNumber *cornerRadius = [submitButtonCustomization optionalNumberForKey:@"cornerRadius"];
+            NSNumber *textFontSize = [submitButtonCustomization optionalNumberForKey:@"textFontSize"];
+
+            if (textFontName) {
+                [submitCustomization setTextFontName:textFontName];
+            }
+
+            if (textColor) {
+                [submitCustomization setTextColor:textColor];
+            }
+
+            if (backgroundColor) {
+                [submitCustomization setBackgroundColor:backgroundColor];
+            }
+
+            if (cornerRadius) {
+                [submitCustomization setCornerRadius:cornerRadius.integerValue];
+            }
+
+            if (textFontSize) {
+                [submitCustomization setTextFontSize:textFontSize.integerValue];
+            }
+
+            [customization setButtonCustomization:submitCustomization ofType:JP3DSButtonTypeSubmit];
+        }
+
+        if (continueButtonCustomization) {
+            JP3DSButtonCustomization *continueCustomization = [JP3DSButtonCustomization new];
+
+            NSString *textFontName = [continueButtonCustomization optionalStringForKey:@"textFontName"];
+            NSString *textColor = [continueButtonCustomization optionalStringForKey:@"textColor"];
+            NSString *backgroundColor = [continueButtonCustomization optionalStringForKey:@"backgroundColor"];
+            NSNumber *cornerRadius = [continueButtonCustomization optionalNumberForKey:@"cornerRadius"];
+            NSNumber *textFontSize = [continueButtonCustomization optionalNumberForKey:@"textFontSize"];
+
+            if (textFontName) {
+                [continueCustomization setTextFontName:textFontName];
+            }
+
+            if (textColor) {
+                [continueCustomization setTextColor:textColor];
+            }
+
+            if (backgroundColor) {
+                [continueCustomization setBackgroundColor:backgroundColor];
+            }
+
+            if (cornerRadius) {
+                [continueCustomization setCornerRadius:cornerRadius.integerValue];
+            }
+
+            if (textFontSize) {
+                [continueCustomization setTextFontSize:textFontSize.integerValue];
+            }
+
+            [customization setButtonCustomization:continueCustomization ofType:JP3DSButtonTypeContinue];
+        }
+
+        if (nextButtonCustomization) {
+            JP3DSButtonCustomization *nextCustomization = [JP3DSButtonCustomization new];
+
+            NSString *textFontName = [nextButtonCustomization optionalStringForKey:@"textFontName"];
+            NSString *textColor = [nextButtonCustomization optionalStringForKey:@"textColor"];
+            NSString *backgroundColor = [nextButtonCustomization optionalStringForKey:@"backgroundColor"];
+            NSNumber *cornerRadius = [nextButtonCustomization optionalNumberForKey:@"cornerRadius"];
+            NSNumber *textFontSize = [nextButtonCustomization optionalNumberForKey:@"textFontSize"];
+
+            if (textFontName) {
+                [nextCustomization setTextFontName:textFontName];
+            }
+
+            if (textColor) {
+                [nextCustomization setTextColor:textColor];
+            }
+
+            if (backgroundColor) {
+                [nextCustomization setBackgroundColor:backgroundColor];
+            }
+
+            if (cornerRadius) {
+                [nextCustomization setCornerRadius:cornerRadius.integerValue];
+            }
+
+            if (textFontSize) {
+                [nextCustomization setTextFontSize:textFontSize.integerValue];
+            }
+
+            [customization setButtonCustomization:nextCustomization ofType:JP3DSButtonTypeNext];
+        }
+
+        if (cancelButtonCustomization) {
+            JP3DSButtonCustomization *cancelCustomization = [JP3DSButtonCustomization new];
+
+            NSString *textFontName = [cancelButtonCustomization optionalStringForKey:@"textFontName"];
+            NSString *textColor = [cancelButtonCustomization optionalStringForKey:@"textColor"];
+            NSString *backgroundColor = [cancelButtonCustomization optionalStringForKey:@"backgroundColor"];
+            NSNumber *cornerRadius = [cancelButtonCustomization optionalNumberForKey:@"cornerRadius"];
+            NSNumber *textFontSize = [cancelButtonCustomization optionalNumberForKey:@"textFontSize"];
+
+            if (textFontName) {
+                [cancelCustomization setTextFontName:textFontName];
+            }
+
+            if (textColor) {
+                [cancelCustomization setTextColor:textColor];
+            }
+
+            if (backgroundColor) {
+                [cancelCustomization setBackgroundColor:backgroundColor];
+            }
+
+            if (cornerRadius) {
+                [cancelCustomization setCornerRadius:cornerRadius.integerValue];
+            }
+
+            if (textFontSize) {
+                [cancelCustomization setTextFontSize:textFontSize.integerValue];
+            }
+
+            [customization setButtonCustomization:cancelCustomization ofType:JP3DSButtonTypeCancel];
+        }
+
+        if (resendButtonCustomization) {
+            JP3DSButtonCustomization *resendCustomization = [JP3DSButtonCustomization new];
+
+            NSString *textFontName = [resendButtonCustomization optionalStringForKey:@"textFontName"];
+            NSString *textColor = [resendButtonCustomization optionalStringForKey:@"textColor"];
+            NSString *backgroundColor = [resendButtonCustomization optionalStringForKey:@"backgroundColor"];
+            NSNumber *cornerRadius = [resendButtonCustomization optionalNumberForKey:@"cornerRadius"];
+            NSNumber *textFontSize = [resendButtonCustomization optionalNumberForKey:@"textFontSize"];
+
+            if (textFontName) {
+                [resendCustomization setTextFontName:textFontName];
+            }
+
+            if (textColor) {
+                [resendCustomization setTextColor:textColor];
+            }
+
+            if (backgroundColor) {
+                [resendCustomization setBackgroundColor:backgroundColor];
+            }
+
+            if (cornerRadius) {
+                [resendCustomization setCornerRadius:cornerRadius.integerValue];
+            }
+
+            if (textFontSize) {
+                [resendCustomization setTextFontSize:textFontSize.integerValue];
+            }
+
+            [customization setButtonCustomization:resendCustomization ofType:JP3DSButtonTypeResend];
+        }
+    }
+
+    if (labelCustomizations) {
+        JP3DSLabelCustomization *labelCustomization = [JP3DSLabelCustomization new];
+
+        NSString *textFontName = [labelCustomizations optionalStringForKey:@"textFontName"];
+        NSString *textColor = [labelCustomizations optionalStringForKey:@"textColor"];
+        NSString *headingTextFontName = [labelCustomizations optionalStringForKey:@"headingTextFontName"];
+        NSString *headingTextColor = [labelCustomizations optionalStringForKey:@"headingTextColor"];
+        NSNumber *headingTextFontSize = [labelCustomizations optionalNumberForKey:@"headingTextFontSize"];
+        NSNumber *textFontSize = [labelCustomizations optionalNumberForKey:@"textFontSize"];
+
+        if (textFontName) {
+            [labelCustomization setTextFontName:textFontName];
+        }
+
+        if (textColor) {
+            [labelCustomization setTextColor:textColor];
+        }
+
+        if (headingTextFontName) {
+            [labelCustomization setHeadingTextFontName:headingTextFontName];
+        }
+
+        if (headingTextColor) {
+            [labelCustomization setHeadingTextColor:headingTextColor];
+        }
+
+        if (headingTextFontSize) {
+            [labelCustomization setHeadingTextFontSize:headingTextFontSize.integerValue];
+        }
+
+        if (textFontSize) {
+            [labelCustomization setTextFontSize:textFontSize.integerValue];
+        }
+
+        [customization setLabelCustomization:labelCustomization];
+    }
+
+    if (toolbarCustomizations) {
+        JP3DSToolbarCustomization *toolbarCustomization = [JP3DSToolbarCustomization new];
+
+        NSNumber *textFontSize = [toolbarCustomizations optionalNumberForKey:@"textFontSize"];
+        NSString *textFontName = [toolbarCustomizations optionalStringForKey:@"textFontName"];
+        NSString *textColor = [toolbarCustomizations optionalStringForKey:@"textColor"];
+        NSString *backgroundColor = [toolbarCustomizations optionalStringForKey:@"backgroundColor"];
+        NSString *headerText = [toolbarCustomizations optionalStringForKey:@"headerText"];
+        NSString *buttonText = [toolbarCustomizations optionalStringForKey:@"buttonText"];
+
+        if (textFontName) {
+            [toolbarCustomization setTextFontName:textFontName];
+        }
+
+        if (textColor) {
+            [toolbarCustomization setTextColor:textColor];
+        }
+
+        if (backgroundColor) {
+            [toolbarCustomization setBackgroundColor:backgroundColor];
+        }
+
+        if (headerText) {
+            [toolbarCustomization setHeaderText:headerText];
+        }
+
+        if (buttonText) {
+            [toolbarCustomization setButtonText:buttonText];
+        }
+
+        if (textFontSize) {
+            [toolbarCustomization setTextFontSize:textFontSize.integerValue];
+        }
+
+        [customization setToolbarCustomization:toolbarCustomization];
+    }
+
+    if (textBoxCustomizations) {
+        JP3DSTextBoxCustomization *textBoxCustomization = [JP3DSTextBoxCustomization new];
+
+        NSString *textFontName = [textBoxCustomizations optionalStringForKey:@"textFontName"];
+        NSString *textColor = [textBoxCustomizations optionalStringForKey:@"textColor"];
+        NSString *borderColor = [textBoxCustomizations optionalStringForKey:@"borderColor"];
+        NSNumber *borderWidth = [textBoxCustomizations optionalNumberForKey:@"borderWidth"];
+        NSNumber *cornerRadius = [textBoxCustomizations optionalNumberForKey:@"cornerRadius"];
+        NSNumber *textFontSize = [textBoxCustomizations optionalNumberForKey:@"textFontSize"];
+
+        if (textFontName) {
+            [textBoxCustomization setTextFontName:textFontName];
+        }
+
+        if (textColor) {
+            [textBoxCustomization setTextColor:textColor];
+        }
+
+        if (borderColor) {
+            [textBoxCustomization setBorderColor:borderColor];
+        }
+
+        if (borderWidth) {
+            [textBoxCustomization setBorderWidth:borderWidth.integerValue];
+        }
+
+        if (cornerRadius) {
+            [textBoxCustomization setCornerRadius:cornerRadius.integerValue];
+        }
+
+        if (textFontSize) {
+            [textBoxCustomization setTextFontSize:textFontSize.integerValue];
+        }
+
+        [customization setTextBoxCustomization:textBoxCustomization];
+    }
+
+    return customization;
 }
 
 + (JPTheme *)themeFromUIConfiguration:(NSDictionary *)uiConfiguration {
@@ -463,38 +780,108 @@ static NSString *const kCardSchemeAMEX = @"amex";
     [mappedResponse setValue:response.appearsOnStatementAs forKey:@"appearsOnStatementAs"];
     [mappedResponse setValue:response.originalAmount forKey:@"originalAmount"];
     [mappedResponse setValue:response.netAmount forKey:@"netAmount"];
-    [mappedResponse setValue:response.amount.amount forKey:@"amount"];
-    [mappedResponse setValue:response.amount.currency forKey:@"currency"];
 
-    NSMutableDictionary *cardDetailsResponse = [NSMutableDictionary new];
-    [cardDetailsResponse setValue:response.cardDetails.cardLastFour forKey:@"cardLastFour"];
-    [cardDetailsResponse setValue:response.cardDetails.endDate forKey:@"endDate"];
-    [cardDetailsResponse setValue:response.cardDetails.cardToken forKey:@"cardToken"];
-    [cardDetailsResponse setValue:@(response.cardDetails.cardNetwork) forKey:@"cardNetwork"];
-    [cardDetailsResponse setValue:response.cardDetails.bank forKey:@"bank"];
-    [cardDetailsResponse setValue:response.cardDetails.cardCategory forKey:@"cardCategory"];
-    [cardDetailsResponse setValue:response.cardDetails.cardCountry forKey:@"cardCountry"];
-    [cardDetailsResponse setValue:response.cardDetails.cardFunding forKey:@"cardFunding"];
-    [cardDetailsResponse setValue:response.cardDetails.cardScheme forKey:@"cardScheme"];
+    JPAmount *amount = response.amount;
 
-    [mappedResponse setValue:cardDetailsResponse forKey:@"cardDetails"];
+    if (amount) {
+        [mappedResponse setValue:amount.amount forKey:@"amount"];
+        [mappedResponse setValue:amount.currency forKey:@"currency"];
+    }
 
-    NSMutableDictionary *consumerResponse = [NSMutableDictionary new];
-    [consumerResponse setValue:response.consumer.consumerToken forKey:@"consumerToken"];
-    [consumerResponse setValue:response.consumer.consumerReference forKey:@"consumerReference"];
+    JPCardDetails *cardDetails = response.cardDetails;
 
-    [mappedResponse setValue:consumerResponse forKey:@"consumerResponse"];
+    if (cardDetails) {
+        NSMutableDictionary *cardDetailsDictionary = [NSMutableDictionary new];
 
-    NSMutableDictionary *orderDetailsResponse = [NSMutableDictionary new];
-    [orderDetailsResponse setValue:response.orderDetails.orderId forKey:@"orderId"];
-    [orderDetailsResponse setValue:response.orderDetails.orderStatus forKey:@"orderStatus"];
-    [orderDetailsResponse setValue:response.orderDetails.orderFailureReason forKey:@"orderFailureReason"];
-    [orderDetailsResponse setValue:response.orderDetails.timestamp forKey:@"timestamp"];
-    [orderDetailsResponse setValue:@(response.orderDetails.amount) forKey:@"amount"];
+        if (cardDetails.cardLastFour) {
+            cardDetailsDictionary[@"cardLastFour"] = cardDetails.cardLastFour;
+        }
 
-    [mappedResponse setValue:orderDetailsResponse forKey:@"orderDetails"];
+        if (cardDetails.endDate) {
+            cardDetailsDictionary[@"endDate"] = cardDetails.endDate;
+        }
 
-    return mappedResponse;
-}
+        if (cardDetails.cardToken) {
+            cardDetailsDictionary[@"cardToken"] = cardDetails.cardToken;
+        }
+
+        cardDetailsDictionary[@"cardNetwork"] = @(cardDetails.cardNetwork);
+
+        if (cardDetails.bank) {
+            cardDetailsDictionary[@"bank"] = cardDetails.bank;
+        }
+
+        if (cardDetails.cardCategory) {
+            cardDetailsDictionary[@"cardCategory"] = cardDetails.cardCategory;
+        }
+
+        if (cardDetails.cardCountry) {
+            cardDetailsDictionary[@"cardCountry"] = cardDetails.cardCountry;
+        }
+
+        if (cardDetails.cardFunding) {
+            cardDetailsDictionary[@"cardFunding"] = cardDetails.cardFunding;
+        }
+
+        if (cardDetails.cardScheme) {
+            cardDetailsDictionary[@"cardScheme"] = cardDetails.cardScheme;
+        }
+
+        if (cardDetails.cardHolderName) {
+            cardDetailsDictionary[@"cardHolderName"] = cardDetails.cardHolderName;
+        }
+
+        [mappedResponse setValue:[NSDictionary dictionaryWithDictionary:cardDetailsDictionary]
+                          forKey:@"cardDetails"];
+    }
+
+    JPConsumer *consumer = response.consumer;
+
+    if (consumer) {
+        NSMutableDictionary *consumerDictionary = [NSMutableDictionary new];
+
+        if (consumer.consumerToken) {
+            consumerDictionary[@"consumerToken"] = consumer.consumerToken;
+        }
+
+        if (consumer.consumerReference) {
+            consumerDictionary[@"consumerReference"] = consumer.consumerReference;
+        }
+
+        if (consumerDictionary.count > 0) {
+            [mappedResponse setValue:[NSDictionary dictionaryWithDictionary:consumerDictionary]
+                              forKey:@"consumerResponse"];
+        }
+    }
+
+    JPOrderDetails *orderDetails = response.orderDetails;
+
+    if (orderDetails) {
+        NSMutableDictionary *orderDetailsDictionary = [NSMutableDictionary new];
+
+        if (orderDetails.orderId) {
+            orderDetailsDictionary[@"orderId"] = orderDetails.orderId;
+        }
+
+        if (orderDetails.orderStatus) {
+            orderDetailsDictionary[@"orderStatus"] = orderDetails.orderStatus;
+        }
+
+        if (orderDetails.orderFailureReason) {
+            orderDetailsDictionary[@"orderFailureReason"] = orderDetails.orderFailureReason;
+        }
+
+        if (orderDetails.timestamp) {
+            orderDetailsDictionary[@"timestamp"] = orderDetails.timestamp;
+        }
+
+        orderDetailsDictionary[@"amount"] = @(orderDetails.amount);
+
+        [mappedResponse setValue:[NSDictionary dictionaryWithDictionary:orderDetailsDictionary]
+                          forKey:@"orderDetails"];
+    }
+
+    return [NSDictionary dictionaryWithDictionary:mappedResponse];
+    }
 
 @end

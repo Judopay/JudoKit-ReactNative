@@ -9,6 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.facebook.react.bridge.*
 import com.judopay.judokit.android.Judo
 import com.judopay.judokit.android.api.JudoApiService
+import com.judopay.judokit.android.api.error.toJudoError
 import com.judopay.judokit.android.api.factory.JudoApiServiceFactory
 import com.judopay.judokit.android.api.model.response.JudoApiCallResult
 import com.judopay.judokit.android.api.model.response.Receipt
@@ -31,6 +32,7 @@ import retrofit2.Response
 
 const val JUDO_PAYMENT_WIDGET_REQUEST_CODE = 65520
 const val JUDO_PROMISE_REJECTION_CODE = "JUDO_ERROR"
+const val REQUEST_FAILED_MESSAGE = "The request was unsuccessful."
 
 class JudoReactNativeModule internal constructor(val context: ReactApplicationContext) :
     ReactContextBaseJavaModule(context), CardTransactionManagerResultListener {
@@ -114,13 +116,14 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
             val manager = CardTransactionManager.getInstance(activity)
 
             val judo = getTokenTransactionConfiguration(options)
-
             val cardToken = options.cardToken
 
             if (cardToken == null) {
                 promise.reject(JUDO_PROMISE_REJECTION_CODE, "No card token found")
                 return
             }
+
+            manager.configureWith(judo)
 
             val details = TransactionDetails.Builder()
                 .setCardHolderName(options.cardholderName)
@@ -147,6 +150,56 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
             }
         } catch (exception: Exception) {
             promise.reject(exception)
+        }
+    }
+
+    @ReactMethod
+    fun fetchTransactionDetails(options: ReadableMap, promise: Promise) {
+        try {
+            val judo = getJudoConfigurationForApiService(options)
+            val receiptId = options.receiptId ?: ""
+
+            val service = JudoApiServiceFactory.createApiService(context, judo)
+
+            val fetchTransactionDetailsCallback = object : Callback<JudoApiCallResult<Receipt>> {
+                override fun onResponse(
+                    call: Call<JudoApiCallResult<Receipt>>,
+                    response: Response<JudoApiCallResult<Receipt>>
+                ) {
+                    when (val result = response.body()) {
+                        is JudoApiCallResult.Success -> {
+                            val receipt = result.data
+                            if (receipt != null) {
+                                val judoResult = receipt.toJudoResult()
+                                promise.resolve(getMappedResult(judoResult))
+                            } else {
+                                promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
+                            }
+                        }
+                        is JudoApiCallResult.Failure -> {
+                            val message = result.error?.message ?: REQUEST_FAILED_MESSAGE
+                            promise.reject(JUDO_PROMISE_REJECTION_CODE, message)
+                        }
+                        else -> {
+                            promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
+                        }
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<JudoApiCallResult<Receipt>>,
+                    throwable: Throwable
+                ) {
+                    promise.reject(JUDO_PROMISE_REJECTION_CODE, throwable.localizedMessage, throwable)
+                }
+            }
+
+            service
+                .fetchTransactionWithReceiptId(receiptId)
+                .enqueue(fetchTransactionDetailsCallback)
+
+        } catch (error: Exception) {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
         }
     }
 

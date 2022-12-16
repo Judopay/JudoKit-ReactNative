@@ -54,21 +54,24 @@ internal val ReadableMap.cardholderName: String?
 internal val ReadableMap.cardType: CardNetwork
     get() {
         val cardScheme = if (hasKey("cardScheme")) {
-            getString("cardScheme") ?: ""
+            getString("cardScheme")?.lowercase() ?: ""
         } else {
             ""
         }
 
-        return when (cardScheme.lowercase()) {
-            CARD_SCHEME_VISA -> CardNetwork.VISA
-            CARD_SCHEME_MASTERCARD -> CardNetwork.MASTERCARD
-            CARD_SCHEME_AMEX -> CardNetwork.AMEX
+        return when {
+            cardScheme.contains(CARD_SCHEME_VISA)  -> CardNetwork.VISA
+            cardScheme.contains(CARD_SCHEME_MASTERCARD) -> CardNetwork.MASTERCARD
+            cardScheme.contains(CARD_SCHEME_AMEX) -> CardNetwork.AMEX
             else -> CardNetwork.OTHER
         }
     }
 
 internal val ReadableMap.judoId: String?
     get() = configuration?.getString("judoId")
+
+internal val ReadableMap.receiptId: String?
+    get() = getString("receiptId")
 
 internal val ReadableMap.token: String?
     get() = authorization?.getString("token")
@@ -99,6 +102,9 @@ internal val ReadableMap.paymentReference: String?
 
 internal val ReadableMap.isInitialRecurringPayment: Boolean?
     get() = configuration?.getBoolean("isInitialRecurringPayment")
+
+internal val ReadableMap.isDelayedAuthorisation: Boolean?
+    get() = configuration?.getBoolean("isDelayedAuthorisation")
 
 internal val ReadableMap.networkTimeout: ReadableMap?
     get() {
@@ -272,6 +278,182 @@ internal val ReadableMap.uiConfiguration: ReadableMap?
     get() {
         if (configuration.hasKey("uiConfiguration")) {
             return configuration?.getMap("uiConfiguration")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUIConfiguration: ReadableMap?
+    get() {
+        if (uiConfiguration.hasKey("threeDSUIConfiguration")) {
+            return uiConfiguration?.getMap("threeDSUIConfiguration")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUITextBoxCustomization: ReadableMap?
+    get() {
+        if (threeDSUIConfiguration.hasKey("textBoxCustomization")) {
+            return threeDSUIConfiguration?.getMap("textBoxCustomization")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUIButtonCustomizations: ReadableMap?
+    get() {
+        if (threeDSUIConfiguration.hasKey("buttonCustomizations")) {
+            return threeDSUIConfiguration?.getMap("buttonCustomizations")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUISubmitButtonCustomization: ReadableMap?
+    get() {
+        if (threeDSUIButtonCustomizations.hasKey("SUBMIT")) {
+            return threeDSUIButtonCustomizations?.getMap("SUBMIT")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUIContinueButtonCustomization: ReadableMap?
+    get() {
+        if (threeDSUIButtonCustomizations.hasKey("CONTINUE")) {
+            return threeDSUIButtonCustomizations?.getMap("CONTINUE")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUINextButtonCustomization: ReadableMap?
+    get() {
+        if (threeDSUIButtonCustomizations.hasKey("NEXT")) {
+            return threeDSUIButtonCustomizations?.getMap("NEXT")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUICancelButtonCustomization: ReadableMap?
+    get() {
+        if (threeDSUIButtonCustomizations.hasKey("CANCEL")) {
+            return threeDSUIButtonCustomizations?.getMap("CANCEL")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUIResendButtonCustomization: ReadableMap?
+    get() {
+        if (threeDSUIButtonCustomizations.hasKey("RESEND")) {
+            return threeDSUIButtonCustomizations?.getMap("RESEND")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUIToolbarCustomization: ReadableMap?
+    get() {
+        if (threeDSUIConfiguration.hasKey("toolbarCustomization")) {
+            return threeDSUIConfiguration?.getMap("toolbarCustomization")
+        }
+        return null
+    }
+
+internal val ReadableMap.threeDSUILabelCustomization: ReadableMap?
+    get() {
+        if (threeDSUIConfiguration.hasKey("labelCustomization")) {
+            return threeDSUIConfiguration?.getMap("labelCustomization")
+        }
+        return null
+    }
+
+internal val ReadableMap.textFontName: String?
+    get() {
+        if (hasKey("textFontName")) {
+            return getString("textFontName")
+        }
+        return null
+    }
+
+internal val ReadableMap.textColor: String?
+    get() {
+        if (hasKey("textColor")) {
+            return getString("textColor")
+        }
+        return null
+    }
+
+internal val ReadableMap.backgroundColor: String?
+    get() {
+        if (hasKey("backgroundColor")) {
+            return getString("backgroundColor")
+        }
+        return null
+    }
+
+internal val ReadableMap.headerText: String?
+    get() {
+        if (hasKey("headerText")) {
+            return getString("headerText")
+        }
+        return null
+    }
+
+internal val ReadableMap.buttonText: String?
+    get() {
+        if (hasKey("buttonText")) {
+            return getString("buttonText")
+        }
+        return null
+    }
+
+internal val ReadableMap.headingTextFontName: String?
+    get() {
+        if (hasKey("headingTextFontName")) {
+            return getString("headingTextFontName")
+        }
+        return null
+    }
+
+internal val ReadableMap.headingTextColor: String?
+    get() {
+        if (hasKey("headingTextColor")) {
+            return getString("headingTextColor")
+        }
+        return null
+    }
+
+internal val ReadableMap.borderColor: String?
+    get() {
+        if (hasKey("borderColor")) {
+            return getString("borderColor")
+        }
+        return null
+    }
+
+internal val ReadableMap.textFontSize: Int?
+    get() {
+        if (hasKey("textFontSize")) {
+            return getInt("textFontSize")
+        }
+        return null
+    }
+
+internal val ReadableMap.cornerRadius: Int?
+    get() {
+        if (hasKey("cornerRadius")) {
+            return getInt("cornerRadius")
+        }
+        return null
+    }
+
+internal val ReadableMap.headingTextFontSize: Int?
+    get() {
+        if (hasKey("headingTextFontSize")) {
+            return getInt("headingTextFontSize")
+        }
+        return null
+    }
+
+internal val ReadableMap.borderWidth: Int?
+    get() {
+        if (hasKey("borderWidth")) {
+            return getInt("borderWidth")
         }
         return null
     }

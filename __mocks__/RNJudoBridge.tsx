@@ -1,5 +1,9 @@
 import { NativeModules } from 'react-native'
-import { JudoResponse, JudoTransactionType, JudoTransactionResult } from '../types/JudoTypes'
+import {
+    JudoResponse,
+    JudoTransactionType,
+    JudoTransactionResult
+} from '../types/JudoTypes'
 
 const response: JudoResponse = {
     receiptId: 'receiptId',
