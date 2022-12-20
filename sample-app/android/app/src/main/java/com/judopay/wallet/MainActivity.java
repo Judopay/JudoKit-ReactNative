@@ -19,7 +19,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "judo-sample-app";
+        return "judo-kit-sample";
     }
 
     /**

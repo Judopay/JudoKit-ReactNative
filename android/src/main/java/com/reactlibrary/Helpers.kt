@@ -5,6 +5,11 @@ import android.os.Bundle
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
+import com.judopay.judo3ds2.customization.ButtonCustomization
+import com.judopay.judo3ds2.customization.LabelCustomization
+import com.judopay.judo3ds2.customization.TextBoxCustomization
+import com.judopay.judo3ds2.customization.ToolbarCustomization
+import com.judopay.judo3ds2.customization.UiCustomization
 import com.judopay.judokit.android.Judo
 import com.judopay.judokit.android.api.model.Authorization
 import com.judopay.judokit.android.api.model.BasicAuthorization
@@ -87,6 +92,7 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
     cardDetailsMap.putString("cardCountry", result?.cardDetails?.country)
     cardDetailsMap.putString("cardFunding", result?.cardDetails?.funding)
     cardDetailsMap.putString("cardScheme", result?.cardDetails?.scheme)
+    cardDetailsMap.putString("cardHolderName", result?.cardDetails?.cardHolderName)
 
     map.putMap("cardDetails", cardDetailsMap)
 
@@ -97,6 +103,27 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
     map.putMap("consumer", consumerMap)
 
     return map
+}
+
+internal fun getJudoConfigurationForApiService(options: ReadableMap): Judo {
+    val authorization = getAuthorization(options)
+
+    val amount = Amount.Builder()
+        .setAmount("0.00")
+        .setCurrency(Currency.GBP)
+        .build()
+
+    val reference = Reference.Builder()
+        .setConsumerReference("reference")
+        .build()
+
+    return Judo.Builder(PaymentWidgetType.CARD_PAYMENT)
+        .setIsSandboxed(options.isSandboxed)
+        .setJudoId("000000")
+        .setAuthorization(authorization)
+        .setAmount(amount)
+        .setReference(reference)
+        .build()
 }
 
 internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap): Judo {
@@ -127,6 +154,7 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
         .setGooglePayConfiguration(googlePayConfiguration)
         .setPBBAConfiguration(pbbaConfiguration)
         .setInitialRecurringPayment(options.isInitialRecurringPayment)
+        .setDelayedAuthorisation(options.isDelayedAuthorisation)
         .setNetworkTimeout(timeouts)
         .setChallengeRequestIndicator(challengeRequestIndicator)
         .setScaExemption(scaExemption)
@@ -331,7 +359,105 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
             .setShouldPaymentButtonDisplayAmount(options.shouldPaymentButtonDisplayAmount)
             .setShouldPaymentMethodsVerifySecurityCode(options.shouldPaymentMethodsVerifySecurityCode)
             .setShouldAskForBillingInformation(options.shouldAskForBillingInformation)
+            .setThreeDSUiCustomization(getThreeDSUiCustomization(options))
             .build()
+    } else {
+        null
+    }
+}
+
+internal fun getThreeDSUiCustomization(options: ReadableMap): UiCustomization? {
+    return if (options.threeDSUIConfiguration != null) {
+
+        val uiCustomization = UiCustomization()
+
+        options.threeDSUIToolbarCustomization?.let {
+            uiCustomization.setToolbarCustomization(ToolbarCustomization().apply {
+                setTextFontName(it.textFontName)
+                setTextColor(it.textColor)
+                setTextFontSize(it.textFontSize)
+                setBackgroundColor(it.backgroundColor)
+                setHeaderText(it.headerText)
+                setButtonText(it.buttonText)
+            })
+        }
+
+        options.threeDSUILabelCustomization?.let {
+            uiCustomization.setLabelCustomization(LabelCustomization().apply {
+                setTextFontName(it.textFontName)
+                setTextColor(it.textColor)
+                setTextFontSize(it.textFontSize)
+                setHeadingTextFontName(it.headingTextFontName)
+                setHeadingTextColor(it.headingTextColor)
+                setHeadingTextFontSize(it.headingTextFontSize)
+            })
+        }
+
+        options.threeDSUITextBoxCustomization?.let {
+            uiCustomization.setTextBoxCustomization(TextBoxCustomization().apply {
+                setTextFontName(it.textFontName)
+                setTextColor(it.textColor)
+                setTextFontSize(it.textFontSize)
+                setBorderWidth(it.borderWidth)
+                setBorderColor(it.borderColor)
+                setCornerRadius(it.cornerRadius)
+            })
+        }
+
+        if (options.threeDSUIButtonCustomizations != null) {
+
+            options.threeDSUISubmitButtonCustomization?.let {
+                uiCustomization.setButtonCustomization(ButtonCustomization().apply {
+                    setTextFontName(it.textFontName)
+                    setTextColor(it.textColor)
+                    setTextFontSize(it.textFontSize)
+                    setBackgroundColor(it.backgroundColor)
+                    setCornerRadius(it.cornerRadius)
+                }, UiCustomization.ButtonType.SUBMIT)
+            }
+
+            options.threeDSUINextButtonCustomization?.let {
+                uiCustomization.setButtonCustomization(ButtonCustomization().apply {
+                    setTextFontName(it.textFontName)
+                    setTextColor(it.textColor)
+                    setTextFontSize(it.textFontSize)
+                    setBackgroundColor(it.backgroundColor)
+                    setCornerRadius(it.cornerRadius)
+                }, UiCustomization.ButtonType.NEXT)
+            }
+
+            options.threeDSUIContinueButtonCustomization?.let {
+                uiCustomization.setButtonCustomization(ButtonCustomization().apply {
+                    setTextFontName(it.textFontName)
+                    setTextColor(it.textColor)
+                    setTextFontSize(it.textFontSize)
+                    setBackgroundColor(it.backgroundColor)
+                    setCornerRadius(it.cornerRadius)
+                }, UiCustomization.ButtonType.CONTINUE)
+            }
+
+            options.threeDSUICancelButtonCustomization?.let {
+                uiCustomization.setButtonCustomization(ButtonCustomization().apply {
+                    setTextFontName(it.textFontName)
+                    setTextColor(it.textColor)
+                    setTextFontSize(it.textFontSize)
+                    setBackgroundColor(it.backgroundColor)
+                    setCornerRadius(it.cornerRadius)
+                }, UiCustomization.ButtonType.CANCEL)
+            }
+
+            options.threeDSUIResendButtonCustomization?.let {
+                uiCustomization.setButtonCustomization(ButtonCustomization().apply {
+                    setTextFontName(it.textFontName)
+                    setTextColor(it.textColor)
+                    setTextFontSize(it.textFontSize)
+                    setBackgroundColor(it.backgroundColor)
+                    setCornerRadius(it.cornerRadius)
+                }, UiCustomization.ButtonType.RESEND)
+            }
+        }
+
+        uiCustomization
     } else {
         null
     }

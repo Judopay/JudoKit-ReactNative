@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator=\"iPhone 14\"",
     "start": "react-native start --reset-cache",
     "test": "jest",
     "clean": "rm -rf node_modules && rm -rf ./ios/build && rm -rf ./android/app/build",
@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.11",
+    "@react-native-community/clipboard": "^1.5.1",
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-navigation/native": "^6.0.16",
     "@react-navigation/stack": "^6.3.7",
-    "judo-react-native": "file:../",
+    "judokit-react-native": "file:../",
+    "lodash": "^4.17.21",
     "react": "18.0.0",
     "react-native": "0.69.7",
     "react-native-dialog": "^9.3.0",
@@ -25,7 +27,8 @@
     "react-native-reanimated": "^2.13.0",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.2",
-    "redux": "^4.2.0"
+    "react-native-snackbar": "^2.4.0",
+    "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -33,7 +36,9 @@
     "@react-native-community/eslint-config": "^2.0.0",
     "@tsconfig/react-native": "^2.0.3",
     "@types/jest": "^29.2.4",
+    "@types/lodash": "^4.14.189",
     "@types/react-native": "^0.69.7",
+    "@types/react-native-vector-icons": "^6.4.12",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
     "@typescript-eslint/parser": "^5.45.1",

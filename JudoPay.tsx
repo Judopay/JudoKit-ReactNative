@@ -13,7 +13,10 @@ export {
     JudoTransactionType,
     JudoTransactionMode,
     JudoPaymentMethod,
-    JudoCardNetwork
+    JudoCardNetwork,
+    ChallengeRequestIndicator,
+    JudoThreeDSButtonType,
+    ScaExemption
 } from './types/JudoTypes'
 
 export type {
@@ -25,7 +28,13 @@ export type {
     JudoTheme,
     JudoResponse,
     JudoConfiguration,
-    JudoAuthorization
+    JudoAuthorization,
+    NetworkTimeout,
+    JudoThreeDSButtonCustomization,
+    JudoThreeDSLabelCustomization,
+    JudoThreeDSTextBoxCustomization,
+    JudoThreeDSToolbarCustomization,
+    JudoThreeDSUIConfiguration
 } from './types/JudoTypes'
 
 export {
@@ -140,6 +149,18 @@ class JudoPay {
         return NativeModules.RNJudo.invokeTransaction(params)
     }
 
+    public async fetchTransactionDetails(
+        receiptId: string
+    ): Promise<JudoResponse> {
+        const params = {
+            authorization: this.generateAuthorizationParameters(),
+            sandboxed: this.isSandboxed,
+            receiptId
+        }
+
+        return NativeModules.RNJudo.fetchTransactionDetails(params)
+    }
+
     /**
      * A method for completing a payment/pre-auth transaction using a saved card token.
      *
@@ -156,8 +177,8 @@ class JudoPay {
         mode: JudoTransactionMode,
         configuration: JudoConfiguration,
         cardToken: string,
-        securityCode: string,
-        cardholderName: string,
+        securityCode: string | undefined | null,
+        cardholderName: string | undefined | null,
         cardScheme: string
     ): Promise<JudoResponse> {
         const params = {

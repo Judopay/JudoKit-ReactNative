@@ -23,6 +23,7 @@ export interface JudoConfiguration {
     emailAddress?: string
     threeDSTwoMaxTimeout?: number
     threeDSTwoMessageVersion?: string
+    isDelayedAuthorisation?: boolean
 }
 
 export enum ChallengeRequestIndicator {
@@ -85,6 +86,58 @@ export interface JudoAddress {
     state?: string
 }
 
+export interface JudoThreeDSToolbarCustomization {
+    backgroundColor?: string
+    headerText?: string
+    buttonText?: string
+    textFontName?: string
+    textColor?: string
+    textFontSize?: number
+}
+
+export interface JudoThreeDSLabelCustomization {
+    headingTextFontName?: string
+    headingTextColor?: string
+    headingTextFontSize?: number
+    textFontName?: string
+    textColor?: string
+    textFontSize?: number
+}
+
+export interface JudoThreeDSTextBoxCustomization {
+    borderWidth?: number
+    borderColor?: string
+    cornerRadius?: number
+    textFontName?: string
+    textColor?: string
+    textFontSize?: number
+}
+
+export enum JudoThreeDSButtonType {
+    SUBMIT = 'SUBMIT',
+    CONTINUE = 'CONTINUE',
+    NEXT = 'NEXT',
+    CANCEL = 'CANCEL',
+    RESEND = 'RESEND'
+}
+
+export interface JudoThreeDSButtonCustomization {
+    backgroundColor?: string
+    cornerRadius?: number
+    textFontName?: string
+    textColor?: string
+    textFontSize?: number
+}
+
+export interface JudoThreeDSUIConfiguration {
+    buttonCustomizations?: Partial<
+        Record<JudoThreeDSButtonType, JudoThreeDSButtonCustomization>
+    >
+    toolbarCustomization?: JudoThreeDSToolbarCustomization
+    labelCustomization?: JudoThreeDSLabelCustomization
+    textBoxCustomization?: JudoThreeDSTextBoxCustomization
+}
+
 export interface JudoUIConfiguration {
     isAVSEnabled: boolean
     shouldPaymentMethodsDisplayAmount: boolean
@@ -92,6 +145,7 @@ export interface JudoUIConfiguration {
     shouldPaymentMethodsVerifySecurityCode: boolean
     shouldAskForBillingInformation?: boolean
     theme?: JudoTheme
+    threeDSUIConfiguration?: JudoThreeDSUIConfiguration
 }
 
 export interface JudoTheme {
