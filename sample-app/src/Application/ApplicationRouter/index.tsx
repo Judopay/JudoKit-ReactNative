@@ -31,7 +31,7 @@ const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
 
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator initialRouteName={Screen.HOME} headerMode="float">
+      <Stack.Navigator initialRouteName={Screen.HOME}>
         <Stack.Screen
           name={Screen.HOME}
           component={HomeScreen}
