@@ -22,7 +22,7 @@ import {
 } from '../../../../Functions'
 
 const NoUiPaymentsScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.NO_UI_PAYMENTS>,
+  StackScreenProps<RootStackParamList, Screen.NO_UI_PAYMENTS>
 > = () => {
   const {
     colors: { background: backgroundColor },
@@ -58,11 +58,11 @@ const NoUiPaymentsScreen: FC<
         type,
         regeneratePaymentReferenceIfNeeded(configuration),
       )
-      .then((result) => {
+      .then(result => {
         setIsLoading(false)
         navigate(Screen.RESULT, { items: transformToListOfResultItems(result) })
       })
-      .catch((error) => {
+      .catch(error => {
         setIsLoading(false)
         onError(error)
       })

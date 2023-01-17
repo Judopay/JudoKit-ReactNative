@@ -16,7 +16,7 @@ import GetTransactionDetailsScreen from './Screens/GetTransactionDetailsScreen'
 const Stack = createStackNavigator()
 
 interface ApplicationRouterProps {
-  theme?: Theme;
+  theme?: Theme
 }
 
 const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {

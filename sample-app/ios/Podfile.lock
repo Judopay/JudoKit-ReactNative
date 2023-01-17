@@ -77,7 +77,7 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - Judo3DS2_iOS (1.1.3)
-  - JudoKit-iOS (3.1.10):
+  - JudoKit-iOS (3.1.11):
     - DeviceDNA (~> 2.0.0)
     - Judo3DS2_iOS (~> 1.1.3)
     - TrustKit
@@ -374,7 +374,7 @@ PODS:
   - RNGestureHandler (2.8.0):
     - React-Core
   - RNJudopay (4.0.0):
-    - JudoKit-iOS (= 3.1.10)
+    - JudoKit-iOS (= 3.1.11)
     - React
   - RNReanimated (2.13.0):
     - DoubleConversion
@@ -616,7 +616,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Judo3DS2_iOS: b2396a1f0aa3e8d428fdd887c8b6eae5d3aa4f79
-  JudoKit-iOS: c45f288b94eef55d779b4e61028b9bf04aa334b2
+  JudoKit-iOS: 850a11112da024ee77be5f7a1ca61ef28cbd97d3
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
@@ -650,7 +650,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCMaskedView: bc0170f389056201c82a55e242e5d90070e18e5a
   RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
-  RNJudopay: be0cbc4eaccfaa48927b1945cc842651f0f3226a
+  RNJudopay: 446581e876e8a4e651225188661ea8755253820d
   RNReanimated: f0d66bda3d074c43c72a18f4fd4f4c26687bc1fd
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSnackbar: be3333a21a453ccc272f41a8add5a71f7d44dfcd

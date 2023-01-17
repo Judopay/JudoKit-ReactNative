@@ -3,7 +3,7 @@ import { Text } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 
 export interface SectionFooterProps {
-  text?: string;
+  text?: string
 }
 
 const SectionFooter: FC<SectionFooterProps> = ({ text = '' }) => {

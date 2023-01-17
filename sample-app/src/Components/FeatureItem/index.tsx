@@ -4,9 +4,9 @@ import { TouchableHighlight } from 'react-native-gesture-handler'
 import { useTheme } from '@react-navigation/native'
 
 export interface FeatureItemProps {
-  title: string;
-  details: string;
-  onPress: () => void;
+  title: string
+  details: string
+  onPress: () => void
 }
 
 const FeatureItem: FC<FeatureItemProps> = ({ title, details, onPress }) => {

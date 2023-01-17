@@ -7,7 +7,7 @@ import { useTheme } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native'
 
 const SettingsThreeDSUIScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.THREE_DS_UI_SETTINGS>,
+  StackScreenProps<RootStackParamList, Screen.THREE_DS_UI_SETTINGS>
 > = () => {
   const {
     colors: { background: backgroundColor },

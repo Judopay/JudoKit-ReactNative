@@ -3,7 +3,7 @@ import { Text } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 
 export interface SectionHeaderProps {
-  text?: string;
+  text?: string
 }
 
 const SectionHeader: FC<SectionHeaderProps> = ({ text = '' }) => {

@@ -30,7 +30,7 @@ function removeAllListeners(eventName: string) {
 function notify<T = any>(eventName: string, ...params: T[]) {
   let listeners = listenersMap[eventName]
   if (!listeners) return false
-  listeners.forEach((fnc) => {
+  listeners.forEach(fnc => {
     fnc(...params)
   })
   return true

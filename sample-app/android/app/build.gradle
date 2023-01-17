@@ -78,8 +78,12 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-        entryFile   : "index.tsx",
-        enableHermes: false,  // clean and rebuild if changing
+        entryFile   : "index.js",
+        enableHermes: false,
+        bundleInRelease: true,
+        bundleAssetName: "index.android.bundle",
+        jsBundleDirRelease: "$buildDir/intermediates/assets/release",
+        resourcesDirRelease: "$buildDir/intermediates/res/merged/release",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -143,8 +147,8 @@ android {
         applicationId "com.judopay.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3481
-        versionName "4.0.0(1)"
+        versionCode 4004
+        versionName "4.0.0(4)"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
