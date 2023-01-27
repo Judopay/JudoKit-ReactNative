@@ -53,7 +53,7 @@ private enum class TransactionResult(val value: Int, val status: String? = null)
     ERROR(0, STATUS_ERROR),
     SUCCESS(1, STATUS_SUCCESS),
     DECLINED(2, STATUS_DECLINED),
-    UNKNOWN(Int.MAX_VALUE)
+    UNKNOWN(-1)
 }
 
 internal fun getTransactionConfiguration(options: ReadableMap): Judo {

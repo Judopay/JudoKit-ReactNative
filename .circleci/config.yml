@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node:
     docker:
-      - image: circleci/node
+      - image: cimg/node:19.4.0
   macos:
     macos:
       xcode: 12.3.0

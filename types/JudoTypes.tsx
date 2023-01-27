@@ -62,8 +62,10 @@ export enum JudoTransactionMode {
 }
 
 export enum JudoTransactionResult {
+    Error,
     Success,
-    Declined
+    Declined,
+    Unknown = -1
 }
 
 export interface JudoAmount {
