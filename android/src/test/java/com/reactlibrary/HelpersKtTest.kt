@@ -590,11 +590,11 @@ class HelpersKtTest {
         }
 
         @Test
-        @DisplayName("when value is undefined then Int.MAX_VALUE should be returned")
+        @DisplayName("when value is undefined then -1 should be returned")
         fun returnIntMaxOnGetMappedResultWhenValueUndefined() {
             val mappedResult = getMappedResult("undefined")
 
-            assertEquals(Int.MAX_VALUE, mappedResult)
+            assertEquals(-1, mappedResult)
         }
 
         @Test
