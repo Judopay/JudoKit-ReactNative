@@ -6,7 +6,7 @@ executors:
       - image: cimg/node:19.4.0
   macos:
     macos:
-      xcode: 12.3.0
+      xcode: 14.2
   android:
     docker:
       - image: circleci/android:api-30-node
