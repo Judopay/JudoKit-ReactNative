@@ -552,6 +552,7 @@ workflows:
   version: 2
   build:
     jobs:
+      - get_ruby_gems
       - get_dependencies_sdk_node:
           filters:
             tags:
