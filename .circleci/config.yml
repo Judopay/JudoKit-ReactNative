@@ -27,17 +27,6 @@ jobs:
           paths:
             - node_modules
             - yarn.lock
-  get_ruby_gems:
-    executor: macos
-    steps:
-      - checkout
-      - restore_cache:
-          key: judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
-      - run: bundle check || bundle install --path vendor/bundle --clean
-      - save_cache:
-          key: judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
   get_dependencies_sdk_ios:
     executor: macos
     steps:
@@ -51,6 +40,9 @@ jobs:
       - restore_cache:
           keys:
             - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
+      - run:
+          name: Ruby gems
+          command: bundle check || bundle install --path vendor/bundle --clean
       - run:
           name: Yarn Install
           command: yarn install
@@ -71,6 +63,10 @@ jobs:
           paths:
             - ios/Pods
             - ios/Podfile.lock
+      - save_cache:
+          key: judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
   get_dependencies_sdk_android:
     executor: android
     steps:
@@ -105,6 +101,13 @@ jobs:
 #      - restore_cache:
 #          keys:
 #            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
+      - run:
+          name: Ruby gems
+          working_directory: sample-app
+          command: bundle check || bundle install --path vendor/bundle --clean
       - run:
           name: Yarn Install
           working_directory: sample-app
@@ -123,6 +126,10 @@ jobs:
           paths:
             - sample-app/ios/Pods
             - sample-app/ios/Podfile.lock
+      - save_cache:
+          key: judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
+          paths:
+            - sample-app/vendor/bundle
   get_dependencies_sample_android:
     executor: android
     steps:
@@ -316,7 +323,7 @@ jobs:
             build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
               -workspace RNJudo.xcworkspace \
               -scheme RNJudo \
-              -destination 'platform=iOS Simulator,name=iPhone 11' \
+              -destination 'platform=iOS Simulator,name=iPhone 14' \
               -derivedDataPath DerivedData \
               -quiet \
               test
@@ -376,7 +383,7 @@ jobs:
   #           build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
   #             -workspace sample-app.xcworkspace \
   #             -scheme sample-app \
-  #             -destination 'platform=iOS Simulator,name=iPhone 11' \
+  #             -destination 'platform=iOS Simulator,name=iPhone 14' \
   #             -derivedDataPath DerivedData \
   #             test
   #     - run:
@@ -556,19 +563,14 @@ workflows:
   version: 2
   build:
     jobs:
-      - get_ruby_gems
       - get_dependencies_sdk_node:
           filters:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
-      - get_dependencies_sdk_ios:
-          requires:
-            - get_ruby_gems
+      - get_dependencies_sdk_ios
       - get_dependencies_sdk_android
-      - get_dependencies_sample_ios:
-          requires:
-            - get_ruby_gems
+      - get_dependencies_sample_ios
       - get_dependencies_sample_android
       - build_sdk_node:
           requires:
