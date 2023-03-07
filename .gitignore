@@ -56,3 +56,6 @@ Pods/
 *.tgz
 
 bundle.js
+
+# bundle
+/vendor
