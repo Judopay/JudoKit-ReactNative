@@ -32,10 +32,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          key: judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
       - run: bundle check || bundle install --path vendor/bundle --clean
       - save_cache:
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          key: judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
   get_dependencies_sdk_ios:
@@ -45,6 +45,9 @@ jobs:
       - restore_cache:
           keys:
             - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
       - restore_cache:
           keys:
             - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
