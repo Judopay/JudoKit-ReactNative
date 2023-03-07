@@ -27,6 +27,16 @@ jobs:
           paths:
             - node_modules
             - yarn.lock
+  get_ruby_gems:
+    executor: macos
+    steps:
+      - restore_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install --path vendor/bundle --clean
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
   get_dependencies_sdk_ios:
     executor: macos
     steps:
@@ -42,11 +52,11 @@ jobs:
           command: yarn install
       - run:
           name: Pod Repo Update
-          command: pod repo update
+          command: bundle exec pod repo update
       - run:
           name: Pod Install
           working_directory: ios
-          command: pod install
+          command: bundle exec pod install
       - save_cache:
           key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
           paths:
@@ -98,7 +108,7 @@ jobs:
       - run:
           name: Pod Install
           working_directory: sample-app/ios
-          command: rbenv install && pod install
+          command: bundle exec pod install
       - save_cache:
           key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
           paths:
@@ -547,9 +557,13 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
-      - get_dependencies_sdk_ios
+      - get_dependencies_sdk_ios:
+          requires:
+            - get_ruby_gems
       - get_dependencies_sdk_android
-      - get_dependencies_sample_ios
+      - get_dependencies_sample_ios:
+          requires:
+            - get_ruby_gems
       - get_dependencies_sample_android
       - build_sdk_node:
           requires:
