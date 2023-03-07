@@ -9,7 +9,7 @@ executors:
       xcode: 14.2
   android:
     docker:
-      - image: circleci/android:api-30-node
+      - image: cimg/android:2023.02.1-node
 
 jobs:
   get_dependencies_sdk_node:
