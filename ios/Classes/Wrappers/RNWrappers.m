@@ -86,15 +86,20 @@ static NSString *const kCardSchemeAMEX = @"amex";
 + (JPTransactionType)transactionTypeFromProperties:(NSDictionary *)properties {
     int type = [properties numberForKey:@"transactionType"].intValue;
 
-    NSArray<NSNumber *> *availableTypes = @[
-        @(JPTransactionTypePayment),
-        @(JPTransactionTypePreAuth),
-        @(JPTransactionTypeRegisterCard),
-        @(JPTransactionTypeCheckCard),
-        @(JPTransactionTypeSaveCard)
-    ];
-
-    return availableTypes[type].intValue;
+    switch (type) {
+        case 1:
+            return JPTransactionTypePayment;
+        case 2:
+            return JPTransactionTypePreAuth;
+        case 3:
+            return JPTransactionTypeRegisterCard;
+        case 4:
+            return JPTransactionTypeCheckCard;
+        case 5:
+            return JPTransactionTypeSaveCard;
+        default:
+            return JPTransactionTypeUnknown;
+    }
 }
 
 + (JPTransactionMode)transactionModeFromProperties:(NSDictionary *)properties {
@@ -745,35 +750,12 @@ static NSString *const kCardSchemeAMEX = @"amex";
 + (NSDictionary *)dictionaryFromResponse:(JPResponse *)response {
 
     NSMutableDictionary *mappedResponse = [NSMutableDictionary new];
-
-    // TODO: remove this ASAP when this https://github.com/Judopay/JudoKit-ReactNative/pull/138
-    // will go to master (mimics the android wrapper behaviour: https://github.com/Judopay/JudoKit-ReactNative/blob/master/android/src/main/java/com/reactlibrary/Helpers.kt#L57)
-    NSNumber *result = @0;
-    if (response.result == JPTransactionResultDeclined) {
-        result = @1;
-    }
-    
-    NSNumber *type = @0;
-
-    switch (response.type) {
-        case JPTransactionTypePreAuth:
-            type = @1;
-            break;
-        case JPTransactionTypeCheckCard:
-            type = @3;
-            break;
-        case JPTransactionTypeSaveCard:
-            type = @4;
-            break;
-        default:
-            break;
-    }
     
     [mappedResponse setValue:response.receiptId forKey:@"receiptId"];
     [mappedResponse setValue:response.paymentReference forKey:@"yourPaymentReference"];
-    [mappedResponse setValue:type forKey:@"type"];
+    [mappedResponse setValue:@(response.type) forKey:@"type"];
     [mappedResponse setValue:response.createdAt forKey:@"createdAt"];
-    [mappedResponse setValue:result forKey:@"result"];
+    [mappedResponse setValue:@(response.result) forKey:@"result"];
     [mappedResponse setValue:response.message forKey:@"message"];
     [mappedResponse setValue:response.judoId forKey:@"judoId"];
     [mappedResponse setValue:response.merchantName forKey:@"merchantName"];

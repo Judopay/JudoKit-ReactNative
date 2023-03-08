@@ -21,6 +21,41 @@ import com.judopay.judokit.android.model.googlepay.GooglePayBillingAddressParame
 import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
 import com.judopay.judokit.android.model.googlepay.GooglePayShippingAddressParameters
 
+// For consistency with:
+// https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L36
+private const val TRANSACTION_TYPE_PAYMENT = "payment"
+private const val TRANSACTION_TYPE_PRE_AUTH = "preauth"
+private const val TRANSACTION_TYPE_REGISTER = "register"
+private const val TRANSACTION_TYPE_REGISTER_CARD = "registercard"
+private const val TRANSACTION_TYPE_SAVE_CARD = "save"
+private const val TRANSACTION_TYPE_CHECK_CARD = "checkcard"
+
+// For consistency with:
+// https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Transaction/JPTransactionType.h#L30
+private enum class TransactionType(val value: Int, val typeAsStrings: List<String>? = null) {
+    PAYMENT(1, listOf(TRANSACTION_TYPE_PAYMENT)),
+    PRE_AUTH(2, listOf(TRANSACTION_TYPE_PRE_AUTH)),
+    REGISTER_CARD(3, listOf(TRANSACTION_TYPE_REGISTER, TRANSACTION_TYPE_REGISTER_CARD)),
+    CHECK_CARD(4, listOf(TRANSACTION_TYPE_CHECK_CARD)),
+    SAVE_CARD(5, listOf(TRANSACTION_TYPE_SAVE_CARD)),
+    UNKNOWN(-1)
+}
+
+// For consistency with:
+// https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L32
+private const val STATUS_DECLINED = "declined"
+private const val STATUS_SUCCESS = "success"
+private const val STATUS_ERROR = "error"
+
+// For consistency with:
+// https://github.com/Judopay/JudoKit-iOS/blob/abd34bbfe4784fb5f074ed30f93d6743ba295622/Source/Models/Transaction/JPTransactionResult.h#L27
+private enum class TransactionResult(val value: Int, val status: String? = null) {
+    ERROR(0, STATUS_ERROR),
+    SUCCESS(1, STATUS_SUCCESS),
+    DECLINED(2, STATUS_DECLINED),
+    UNKNOWN(-1)
+}
+
 internal fun getTransactionConfiguration(options: ReadableMap): Judo {
     val widgetType = getTransactionTypeWidget(options)
     return getJudoConfiguration(widgetType, options)
@@ -50,20 +85,19 @@ internal fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
 }
 
 internal fun getMappedType(type: String?): Int {
-    return when (type) {
-        "PreAuth" -> 1
-        "RegisterCard" -> 2
-        "CheckCard" -> 3
-        "Save" -> 4
-        else -> 0
-    }
+    val typeInLowercase = type?.lowercase()
+    val typeValue = TransactionType.values().firstOrNull { it.typeAsStrings?.contains(typeInLowercase) ?: false }
+
+    return typeValue?.value ?: TransactionType.UNKNOWN.value
 }
 
+// consistent with:
+// https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L125
 internal fun getMappedResult(result: String?): Int {
-    return when (result) {
-        "Declined" -> 1
-        else -> 0
-    }
+    val resultInLowercase = result?.lowercase()
+    val resultValue = TransactionResult.values().firstOrNull { it.status == resultInLowercase }
+
+    return resultValue?.value ?: TransactionResult.UNKNOWN.value
 }
 
 internal fun getMappedResult(result: JudoResult?): WritableMap {
@@ -219,11 +253,12 @@ internal fun getAuthorization(options: ReadableMap): Authorization {
 }
 
 internal fun getTransactionTypeWidget(options: ReadableMap) = when (options.getInt("transactionType")) {
-    1 -> PaymentWidgetType.PRE_AUTH
-    2 -> PaymentWidgetType.REGISTER_CARD
-    3 -> PaymentWidgetType.CHECK_CARD
-    4 -> PaymentWidgetType.CREATE_CARD_TOKEN
-    else -> PaymentWidgetType.CARD_PAYMENT
+    1 -> PaymentWidgetType.CARD_PAYMENT
+    2 -> PaymentWidgetType.PRE_AUTH
+    3 -> PaymentWidgetType.REGISTER_CARD
+    4 -> PaymentWidgetType.CHECK_CARD
+    5 -> PaymentWidgetType.CREATE_CARD_TOKEN
+    else -> throw IllegalArgumentException("Unknown transaction type")
 }
 
 internal fun getTransactionModeWidget(options: ReadableMap) = when (options.getInt("transactionMode")) {

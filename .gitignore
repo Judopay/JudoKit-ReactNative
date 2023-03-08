@@ -33,7 +33,6 @@ xcshareddata
 
 # Android/IntelliJ
 #
-build/
 .idea
 .gradle
 local.properties
@@ -57,3 +56,6 @@ Pods/
 *.tgz
 
 bundle.js
+
+# bundle
+/vendor

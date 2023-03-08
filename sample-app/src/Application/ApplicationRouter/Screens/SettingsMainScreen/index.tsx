@@ -7,7 +7,7 @@ import { useTheme } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native'
 
 const SettingsMainScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.SETTINGS>,
+  StackScreenProps<RootStackParamList, Screen.SETTINGS>
 > = () => {
   const {
     colors: { background: backgroundColor },

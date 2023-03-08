@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.nio.charset.StandardCharsets
 
 @DisplayName("Testing Helpers class")
@@ -93,6 +94,7 @@ class HelpersKtTest {
         every { uiConfigurationMock.getBoolean("shouldAskForBillingInformation") } returns true
         every { uiConfigurationMock.hasKey("shouldAskForBillingInformation") } returns true
         every { uiConfigurationMock.hasKey("threeDSUIConfiguration") } returns false
+        every { uiConfigurationMock.getMap("threeDSUIConfiguration") } returns null
 
         every { configurationMock.hasKey("uiConfiguration") } returns true
         every { configurationMock.getMap("uiConfiguration") } returns uiConfigurationMock
@@ -349,48 +351,49 @@ class HelpersKtTest {
     inner class UserConfigContainsTransactionTypeKey {
 
         @Test
-        @DisplayName("and value is 1 when invoking getWidgetType with the given configurations then PaymentWidgetType-PRE_AUTH should be returned")
+        @DisplayName("and value is 2 when invoking getWidgetType with the given configurations then PaymentWidgetType-PRE_AUTH should be returned")
         fun returnPreAuthOnGetWidgetTypeWhenValueIsOne() {
-            every { mapMock.getInt("transactionType") } returns 1
+            every { mapMock.getInt("transactionType") } returns 2
 
             val type = getTransactionTypeWidget(mapMock)
             assertEquals(type, PaymentWidgetType.PRE_AUTH)
         }
 
         @Test
-        @DisplayName("and value is 2 when invoking getWidgetType with the given configurations then PaymentWidgetType-REGISTER_CARD should be returned")
+        @DisplayName("and value is 3 when invoking getWidgetType with the given configurations then PaymentWidgetType-REGISTER_CARD should be returned")
         fun returnRegisterCardOnGetWidgetTypeWhenValueIsTwo() {
-            every { mapMock.getInt("transactionType") } returns 2
+            every { mapMock.getInt("transactionType") } returns 3
 
             val type = getTransactionTypeWidget(mapMock)
             assertEquals(type, PaymentWidgetType.REGISTER_CARD)
         }
 
         @Test
-        @DisplayName("and value is 3 when invoking getWidgetType with the given configurations then PaymentWidgetType-CHECK_CARD should be returned")
+        @DisplayName("and value is 4 when invoking getWidgetType with the given configurations then PaymentWidgetType-CHECK_CARD should be returned")
         fun returnCheckCardOnGetWidgetTypeWhenValueIsThree() {
-            every { mapMock.getInt("transactionType") } returns 3
+            every { mapMock.getInt("transactionType") } returns 4
 
             val type = getTransactionTypeWidget(mapMock)
             assertEquals(type, PaymentWidgetType.CHECK_CARD)
         }
 
         @Test
-        @DisplayName("and value is 4 when invoking getWidgetType with the given configurations then PaymentWidgetType-CREATE_CARD_TOKEN should be returned")
+        @DisplayName("and value is 5 when invoking getWidgetType with the given configurations then PaymentWidgetType-CREATE_CARD_TOKEN should be returned")
         fun returnCreateCardTokenOnGetWidgetTypeWhenValueIsFour() {
-            every { mapMock.getInt("transactionType") } returns 4
+            every { mapMock.getInt("transactionType") } returns 5
 
             val type = getTransactionTypeWidget(mapMock)
             assertEquals(type, PaymentWidgetType.CREATE_CARD_TOKEN)
         }
 
         @Test
-        @DisplayName("and with any unknown value when invoking getWidgetType with the given configurations then PaymentWidgetType-CARD_PAYMENT should be returned")
+        @DisplayName("and with any unknown value when invoking getWidgetType with the given configurations then IllegalArgumentException should be thrown")
         fun returnCardPaymentOnGetWidgetTypeWhenUnknownValue() {
             every { mapMock.getInt("transactionType") } returns 100
 
-            val type = getTransactionTypeWidget(mapMock)
-            assertEquals(type, PaymentWidgetType.CARD_PAYMENT)
+            assertThrows<IllegalArgumentException> {
+                getTransactionTypeWidget(mapMock)
+            }
         }
     }
 
@@ -518,43 +521,43 @@ class HelpersKtTest {
     inner class CallGetMappedType {
 
         @Test
-        @DisplayName("when value is PreAuth then 1 should be returned")
+        @DisplayName("when value is PreAuth then 2 should be returned")
         fun returnOneOnGetMappedTypeWhenValuePreAuth() {
             val mappedType = getMappedType("PreAuth")
-
-            assertEquals(1, mappedType)
-        }
-
-        @Test
-        @DisplayName("when value is RegisterCard then 2 should be returned")
-        fun returnTwoOnGetMappedTypeWhenValueRegisterCard() {
-            val mappedType = getMappedType("RegisterCard")
 
             assertEquals(2, mappedType)
         }
 
         @Test
-        @DisplayName("when value is CheckCard then 3 should be returned")
-        fun returnThreeOnGetMappedTypeWhenValueCheckCard() {
-            val mappedType = getMappedType("CheckCard")
+        @DisplayName("when value is RegisterCard then 3 should be returned")
+        fun returnTwoOnGetMappedTypeWhenValueRegisterCard() {
+            val mappedType = getMappedType("RegisterCard")
 
             assertEquals(3, mappedType)
         }
 
         @Test
-        @DisplayName("when value is Save then 4 should be returned")
-        fun returnFourOnGetMappedTypeWhenValueSave() {
-            val mappedType = getMappedType("Save")
+        @DisplayName("when value is CheckCard then 4 should be returned")
+        fun returnThreeOnGetMappedTypeWhenValueCheckCard() {
+            val mappedType = getMappedType("CheckCard")
 
             assertEquals(4, mappedType)
         }
 
         @Test
-        @DisplayName("when value is undefined then 0 should be returned")
+        @DisplayName("when value is Save then 5 should be returned")
+        fun returnFourOnGetMappedTypeWhenValueSave() {
+            val mappedType = getMappedType("Save")
+
+            assertEquals(5, mappedType)
+        }
+
+        @Test
+        @DisplayName("when value is undefined then -1 should be returned")
         fun returnZer0OnGetMappedTypeWhenValueUndefined() {
             val mappedType = getMappedType("undefined")
 
-            assertEquals(0, mappedType)
+            assertEquals(-1, mappedType)
         }
     }
 
@@ -563,19 +566,35 @@ class HelpersKtTest {
     inner class CallGetMappedResult {
 
         @Test
-        @DisplayName("when value is Declined then 1 should be returned")
-        fun returnOneOnGetMappedResultWhenValueDeclined() {
+        @DisplayName("when value is Declined then 2 should be returned")
+        fun returnTwoOnGetMappedResultWhenValueDeclined() {
             val mappedResult = getMappedResult("Declined")
+
+            assertEquals(2, mappedResult)
+        }
+
+        @Test
+        @DisplayName("when value is Success then 1 should be returned")
+        fun returnOneOnGetMappedResultWhenValueSuccess() {
+            val mappedResult = getMappedResult("Success")
 
             assertEquals(1, mappedResult)
         }
 
         @Test
-        @DisplayName("when value is undefined then 0 should be returned")
-        fun returnZeroOnGetMappedResultWhenValueUndefined() {
-            val mappedResult = getMappedResult("undefined")
+        @DisplayName("when value is Error then 0 should be returned")
+        fun returnOneOnGetMappedResultWhenValueError() {
+            val mappedResult = getMappedResult("Error")
 
             assertEquals(0, mappedResult)
+        }
+
+        @Test
+        @DisplayName("when value is undefined then -1 should be returned")
+        fun returnIntMaxOnGetMappedResultWhenValueUndefined() {
+            val mappedResult = getMappedResult("undefined")
+
+            assertEquals(-1, mappedResult)
         }
 
         @Test
@@ -583,7 +602,7 @@ class HelpersKtTest {
         fun mapShouldContainType(){
             val mappedResult = getMappedResult(JudoResult(type = "PreAuth"))
 
-            assertEquals(1, mappedResult.getInt("type"))
+            assertEquals(2, mappedResult.getInt("type"))
         }
 
         @Test

@@ -16,7 +16,7 @@ import {
 } from '../../../../Functions'
 
 const PayByBankAppScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.PAY_BY_BANK_APP>,
+  StackScreenProps<RootStackParamList, Screen.PAY_BY_BANK_APP>
 > = () => {
   const {
     colors: { background: backgroundColor, text },
@@ -42,7 +42,7 @@ const PayByBankAppScreen: FC<
 
     judo
       .invokePayByBankApp(regeneratePaymentReferenceIfNeeded(configuration))
-      .then((result) =>
+      .then(result =>
         navigate(Screen.RESULT, {
           items: transformToListOfResultItems(result),
         }),

@@ -120,7 +120,7 @@ test('check JudoAmount model fields', () => {
     expect(Object.keys(judoAmount).length).toBe(2)
 })
 
-test('check JudoTransactionType model fields', () => {
+test('check JudoConfiguration model fields', () => {
     const judoConfiguration: JudoConfiguration = {
         judoId: 'judoId',
         amount: judoAmount,
@@ -139,16 +139,18 @@ test('check JudoTransactionType model fields', () => {
 
 test('check JudoTransactionType model fields', () => {
     expect(Object.keys(JudoTransactionType)).toStrictEqual([
-        '0',
         '1',
         '2',
         '3',
         '4',
+        '5',
         'Payment',
         'PreAuth',
         'RegisterCard',
         'CheckCard',
-        'SaveCard'
+        'SaveCard',
+        'Unknown',
+        '-1'
     ])
 })
 

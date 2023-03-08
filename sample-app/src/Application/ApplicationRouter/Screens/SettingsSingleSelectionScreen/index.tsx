@@ -19,8 +19,8 @@ import {
 } from '../../../../Data/TypeDefinitions'
 
 const notifier = makeEventNotifier<{
-  item: SingleSelectionTableItem,
-  path: string,
+  item: SingleSelectionTableItem
+  path: string
 }>('OnSingleSelectionTableItemSelected')
 
 export function useSingleSelectionTableListener(
@@ -31,7 +31,7 @@ export function useSingleSelectionTableListener(
 }
 
 const SettingsSingleSelectionScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.SINGLE_SELECTION>,
+  StackScreenProps<RootStackParamList, Screen.SINGLE_SELECTION>
 > = ({ route: { params } }) => {
   const { sectionListData, selectedItemId, path } = params
   const {

@@ -27,7 +27,7 @@ import { FEATURES } from '../../../../Data/Constants'
 import { StackScreenProps } from '@react-navigation/stack'
 
 const HomeScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.HOME>,
+  StackScreenProps<RootStackParamList, Screen.HOME>
 > = () => {
   const { navigate } = useNavigation()
   const {
@@ -78,7 +78,7 @@ const HomeScreen: FC<
       }}
     >
       <SectionList
-        keyExtractor={(item) => item.type.toString()}
+        keyExtractor={item => item.type.toString()}
         renderSectionHeader={({ section: { header } }) => (
           <SectionHeader text={header} key="header-key" />
         )}

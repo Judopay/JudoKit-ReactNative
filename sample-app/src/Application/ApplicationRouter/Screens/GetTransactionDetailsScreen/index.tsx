@@ -17,7 +17,7 @@ import { useJudoConfiguration } from '../../../../CustomHooks/useJudoConfigurati
 import { onError, transformToListOfResultItems } from '../../../../Functions'
 
 const GetTransactionDetailsScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.GET_TRANSACTION_DETAILS>,
+  StackScreenProps<RootStackParamList, Screen.GET_TRANSACTION_DETAILS>
 > = () => {
   const {
     colors: { background: backgroundColor },
@@ -36,11 +36,11 @@ const GetTransactionDetailsScreen: FC<
 
     judo
       .fetchTransactionDetails(receiptId)
-      .then((result) => {
+      .then(result => {
         navigate(Screen.RESULT, { items: transformToListOfResultItems(result) })
         setIsLoading(false)
       })
-      .catch((error) => {
+      .catch(error => {
         onError(error)
         setIsLoading(false)
       })

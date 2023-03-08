@@ -1,5 +1,4 @@
-import 'react-native'
-
+import { NativeModules } from 'react-native'
 import configuration from './JudoTestDefaults'
 import JudoPay from '../JudoPay'
 import {
@@ -28,6 +27,21 @@ test('isBankingAppAvailable will always return false on an emulator', async () =
 
     const judoPay = new JudoPay(authorization)
     const response = await judoPay.isBankingAppAvailable()
+    expect(response).toBeFalsy()
+})
+
+test('isApplePayAvailableWithConfiguration will return false as mocked', async () => {
+    const authorization: JudoAuthorization = {
+        token: 'token',
+        secret: 'secret'
+    }
+
+    const judoPay = new JudoPay(authorization)
+
+    const response = await judoPay.isApplePayAvailableWithConfiguration(
+        configuration
+    )
+
     expect(response).toBeFalsy()
 })
 
@@ -184,6 +198,12 @@ test('performTokenTransaction will return mocked JudoResponse', async () => {
         'Cardholder Name',
         'card scheme'
     )
+    const callArgs =
+        NativeModules.RNJudo.performTokenTransaction.mock.calls[0][0]
+    expect(callArgs.cardToken).toEqual('sample-token')
+    expect(callArgs.securityCode).toEqual('security-code')
+    expect(callArgs.cardholderName).toEqual('Cardholder Name')
+    expect(callArgs.cardScheme).toEqual('card scheme')
 
     expect(data.amount).toEqual('1000.0')
     expect(data.appearsOnStatementAs).toEqual('nothing')
@@ -197,5 +217,5 @@ test('performTokenTransaction will return mocked JudoResponse', async () => {
     expect(data.netAmount).toEqual('1100.0')
     expect(data.currency).toEqual('USD')
 
-    expect.assertions(11)
+    expect.assertions(15)
 })

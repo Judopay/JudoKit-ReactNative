@@ -2,23 +2,16 @@ package com.judopay.wallet;
 
 import android.app.Application;
 
-import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.chuckerteam.chucker.api.ChuckerCollector;
 import com.chuckerteam.chucker.api.ChuckerInterceptor;
+import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.reactnativecommunity.clipboard.ClipboardPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
+import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.judopay.judokit.android.api.factory.JudoApiServiceFactory;
-import com.reactlibrary.JudoReactNativePackage;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.swmansion.rnscreens.RNScreensPackage;
-import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,16 +25,11 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected List<ReactPackage> getPackages() {
-            return Arrays.asList(
-                    new MainReactPackage(),
-                    new ClipboardPackage(),
-                    new AsyncStoragePackage(),
-                    new RNScreensPackage(),
-                    new SafeAreaContextPackage(),
-                    new RNGestureHandlerPackage(),
-                    new JudoReactNativePackage(),
-                    new SnackbarPackage()
-            );
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            List<ReactPackage> packages = new PackageList(this).getPackages();
+            // Packages that cannot be autolinked yet can be added manually here, for example:
+            // packages.add(new MyReactNativePackage());
+            return packages;
         }
 
         @Override
@@ -58,8 +46,10 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        // If you opted-in for the New Architecture, we enable the TurboModule system
+        ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
         SoLoader.init(this, /* native exopackage */ false);
-        ChuckerInterceptor interceptor =  new ChuckerInterceptor.Builder(this)
+        ChuckerInterceptor interceptor = new ChuckerInterceptor.Builder(this)
                 .collector(new ChuckerCollector(this))
                 .maxContentLength(250000L)
                 .alwaysReadResponseBody(false)

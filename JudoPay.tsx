@@ -181,15 +181,15 @@ class JudoPay {
         cardholderName: string | undefined | null,
         cardScheme: string
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionModeParameters(
-            mode,
-            configuration
-        )
-        params['cardToken'] = cardToken
-        params['securityCode'] = securityCode
-        params['cardholderName'] = cardholderName
-        params['cardScheme'] = cardScheme
-
+        const params = {
+            ...this.generateTransactionModeParameters(mode, configuration),
+            ...{
+                cardToken,
+                securityCode,
+                cardholderName,
+                cardScheme
+            }
+        }
         return NativeModules.RNJudo.performTokenTransaction(params)
     }
 
@@ -304,16 +304,6 @@ class JudoPay {
             sandboxed: this.isSandboxed,
             transactionMode: mode,
             configuration: configuration
-        }
-    }
-
-    private readonly generateTransactionDetailsParameters = (
-        receiptId: string
-    ): Record<string, any> => {
-        return {
-            authorization: this.generateAuthorizationParameters(),
-            sandboxed: this.isSandboxed,
-            receiptId: receiptId
         }
     }
 

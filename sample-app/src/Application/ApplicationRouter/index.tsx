@@ -16,7 +16,7 @@ import GetTransactionDetailsScreen from './Screens/GetTransactionDetailsScreen'
 const Stack = createStackNavigator()
 
 interface ApplicationRouterProps {
-  theme?: Theme;
+  theme?: Theme
 }
 
 const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
@@ -31,7 +31,7 @@ const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
 
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator initialRouteName={Screen.HOME} headerMode="float">
+      <Stack.Navigator initialRouteName={Screen.HOME}>
         <Stack.Screen
           name={Screen.HOME}
           component={HomeScreen}

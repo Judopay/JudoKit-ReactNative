@@ -25,7 +25,7 @@ import {
 } from '../../../../Functions'
 
 const TokenPaymentsScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.TOKEN_PAYMENTS>,
+  StackScreenProps<RootStackParamList, Screen.TOKEN_PAYMENTS>
 > = () => {
   const {
     colors: { background: backgroundColor },
@@ -55,7 +55,7 @@ const TokenPaymentsScreen: FC<
         JudoTransactionType.SaveCard,
         regeneratePaymentReferenceIfNeeded(configuration),
       )
-      .then((result) => {
+      .then(result => {
         setIsLoading(false)
         const { cardDetails = {} } = result
         const { cardToken = '', cardScheme = '' } = cardDetails
@@ -63,7 +63,7 @@ const TokenPaymentsScreen: FC<
         setToken(cardToken)
         setScheme(cardScheme)
       })
-      .catch((error) => {
+      .catch(error => {
         setIsLoading(false)
         onError(error)
       })
@@ -87,11 +87,11 @@ const TokenPaymentsScreen: FC<
         name,
         scheme,
       )
-      .then((result) => {
+      .then(result => {
         setIsLoading(false)
         navigate(Screen.RESULT, { items: transformToListOfResultItems(result) })
       })
-      .catch((error) => {
+      .catch(error => {
         setIsLoading(false)
         onError(error)
       })

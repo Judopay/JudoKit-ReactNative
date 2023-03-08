@@ -32,7 +32,7 @@ import * as _ from 'lodash'
 export interface SettingsTableProps {
   transformationFunction: (
     data: SettingsData,
-  ) => ReadonlyArray<SectionListData<SettingsItem>>;
+  ) => ReadonlyArray<SectionListData<SettingsItem>>
 }
 
 const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
@@ -120,7 +120,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
             title={title}
             key={path}
             value={Boolean(value)}
-            onValueChange={(value) => handleSettingsChange(path, value)}
+            onValueChange={value => handleSettingsChange(path, value)}
           />
         )
 
@@ -129,7 +129,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
           <TextSettingsItem
             value={`${value || ''}`}
             title={title}
-            onChange={(text) => handleSettingsChange(path, text)}
+            onChange={text => handleSettingsChange(path, text)}
           />
         )
 
@@ -162,7 +162,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
       style={{ flex: 1 }}
     >
       <SectionList
-        keyExtractor={(item) => item.path}
+        keyExtractor={item => item.path}
         ItemSeparatorComponent={() => (
           <Separator inset={20} key="separator-with-inset-key" />
         )}

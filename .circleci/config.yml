@@ -3,13 +3,13 @@ version: 2.1
 executors:
   node:
     docker:
-      - image: circleci/node
+      - image: cimg/node:19.4.0
   macos:
     macos:
-      xcode: 12.3.0
+      xcode: 14.2
   android:
     docker:
-      - image: circleci/android:api-29
+      - image: cimg/android:2023.02.1-node
 
 jobs:
   get_dependencies_sdk_node:
@@ -36,17 +36,23 @@ jobs:
             - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
       - restore_cache:
           keys:
+            - judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
+      - restore_cache:
+          keys:
             - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
+      - run:
+          name: Ruby gems
+          command: bundle check || bundle install --path vendor/bundle --clean
       - run:
           name: Yarn Install
           command: yarn install
       - run:
           name: Pod Repo Update
-          command: pod repo update
+          command: bundle exec pod repo update
       - run:
           name: Pod Install
           working_directory: ios
-          command: pod install
+          command: bundle exec pod install
       - save_cache:
           key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
           paths:
@@ -57,6 +63,10 @@ jobs:
           paths:
             - ios/Pods
             - ios/Podfile.lock
+      - save_cache:
+          key: judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
   get_dependencies_sdk_android:
     executor: android
     steps:
@@ -67,6 +77,9 @@ jobs:
       - run:
           name: Install Yarn
           command: |
+            # Fix "NO_PUBKEY B53DC80D13EDEF05" expired key issue for the
+            # packages.cloud.google.com/apt repo.
+            wget -O - -q https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
             curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
             echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
             sudo apt update && sudo apt install yarn
@@ -88,6 +101,13 @@ jobs:
 #      - restore_cache:
 #          keys:
 #            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+      - restore_cache:
+          keys:
+            - judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
+      - run:
+          name: Ruby gems
+          working_directory: sample-app
+          command: bundle check || bundle install --path vendor/bundle --clean
       - run:
           name: Yarn Install
           working_directory: sample-app
@@ -95,7 +115,7 @@ jobs:
       - run:
           name: Pod Install
           working_directory: sample-app/ios
-          command: pod install
+          command: bundle exec pod install
       - save_cache:
           key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
           paths:
@@ -106,6 +126,10 @@ jobs:
           paths:
             - sample-app/ios/Pods
             - sample-app/ios/Podfile.lock
+      - save_cache:
+          key: judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
+          paths:
+            - sample-app/vendor/bundle
   get_dependencies_sample_android:
     executor: android
     steps:
@@ -116,6 +140,9 @@ jobs:
       - run:
           name: Install Yarn
           command: |
+            # Fix "NO_PUBKEY B53DC80D13EDEF05" expired key issue for the
+            # packages.cloud.google.com/apt repo.
+            wget -O - -q https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
             curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
             echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
             sudo apt update && sudo apt install yarn
@@ -226,7 +253,7 @@ jobs:
       - run:
           name: Install Nodejs
           command: |
-            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+            curl -sL https://deb.nodesource.com/setup_19.x | sudo -E bash -
             sudo apt-get install -y nodejs
       - run:
           name: Prepare Google Services Json
@@ -296,7 +323,7 @@ jobs:
             build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
               -workspace RNJudo.xcworkspace \
               -scheme RNJudo \
-              -destination 'platform=iOS Simulator,name=iPhone 11' \
+              -destination 'platform=iOS Simulator,name=iPhone 14' \
               -derivedDataPath DerivedData \
               -quiet \
               test
@@ -356,7 +383,7 @@ jobs:
   #           build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
   #             -workspace sample-app.xcworkspace \
   #             -scheme sample-app \
-  #             -destination 'platform=iOS Simulator,name=iPhone 11' \
+  #             -destination 'platform=iOS Simulator,name=iPhone 14' \
   #             -derivedDataPath DerivedData \
   #             test
   #     - run:

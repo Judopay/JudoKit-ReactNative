@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 
 export interface SeparatorProps {
-  inset?: number;
+  inset?: number
 }
 
 const Separator: FC<SeparatorProps> = ({ inset = 0 }) => {
