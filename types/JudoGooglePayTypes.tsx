@@ -4,7 +4,7 @@ export enum JudoGooglePayEnvironment {
 }
 
 export enum JudoAddressFormat {
-    MINIMAL,
+    MIN,
     FULL
 }
 
@@ -18,12 +18,30 @@ export interface JudoShippingAddressParameters {
     isPhoneNumberRequired: boolean
 }
 
+export enum JudoGooglePayPriceStatus {
+    FINAL,
+    ESTIMATED,
+    NOT_CURRENTLY_KNOWN
+}
+
+export enum JudoCheckoutOption {
+    DEFAULT,
+    COMPLETE_IMMEDIATE_PURCHASE
+}
+
 export interface JudoGooglePayConfiguration {
-    countryCode: string
     environment: JudoGooglePayEnvironment
-    isEmailRequired: boolean
+    merchantName?: string
+    countryCode: string
+    transactionId?: string
+    totalPriceStatus: JudoGooglePayPriceStatus
+    totalPriceLabel?: string
+    checkoutOption?: JudoCheckoutOption
+    isEmailRequired?: boolean
     isBillingAddressRequired: boolean
     billingAddressParameters?: JudoBillingAddressParameters
     isShippingAddressRequired: boolean
     shippingAddressParameters?: JudoShippingAddressParameters
+    allowPrepaidCards?: boolean
+    allowCreditCards?: boolean
 }

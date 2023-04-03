@@ -16,10 +16,7 @@ import com.judopay.judokit.android.api.model.BasicAuthorization
 import com.judopay.judokit.android.api.model.PaymentSessionAuthorization
 import com.judopay.judokit.android.api.model.request.Address
 import com.judopay.judokit.android.model.*
-import com.judopay.judokit.android.model.googlepay.GooglePayAddressFormat
-import com.judopay.judokit.android.model.googlepay.GooglePayBillingAddressParameters
-import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
-import com.judopay.judokit.android.model.googlepay.GooglePayShippingAddressParameters
+import com.judopay.judokit.android.model.googlepay.*
 
 // For consistency with:
 // https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L36
@@ -517,19 +514,39 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
         0 -> GooglePayEnvironment.TEST
         else -> GooglePayEnvironment.PRODUCTION
     }
+    val totalPriceStatus = when (options.totalPriceStatus) {
+        0 -> GooglePayPriceStatus.FINAL
+        1 -> GooglePayPriceStatus.ESTIMATED
+        2 -> GooglePayPriceStatus.NOT_CURRENTLY_KNOWN
+        else -> null
+    }
+
+    val checkoutOption = when (options.checkoutOption) {
+        0 -> GooglePayCheckoutOption.DEFAULT
+        1 -> GooglePayCheckoutOption.COMPLETE_IMMEDIATE_PURCHASE
+        else -> null
+    }
 
     val billingParameters = getBillingParameters(options)
     val shippingParameters = getShippingParameters(options)
 
     return if (options.googlePayConfiguration != null) {
         GooglePayConfiguration.Builder()
-            .setTransactionCountryCode(options.countryCode)
             .setEnvironment(environment)
+            .setMerchantName(options.merchantName)
+            .setTransactionCountryCode(options.countryCode)
+            .setTransactionId(options.transactionId)
+            .setTotalPriceStatus(totalPriceStatus)
+            .setTotalPriceLabel(options.totalPriceLabel)
+            .setCheckoutOption(checkoutOption)
             .setIsEmailRequired(options.isEmailRequired)
             .setIsBillingAddressRequired(options.isBillingAddressRequired)
             .setBillingAddressParameters(billingParameters)
             .setIsShippingAddressRequired(options.isShippingAddressRequired)
             .setShippingAddressParameters(shippingParameters)
+            // TODO: add these once they are released in JudoKit-Android
+//            .setAllowPrepaidCards(options.allowPrepaidCards)
+//            .setAllowCreditCards(options.allowCreditCards)
             .build()
     } else {
         null

@@ -532,6 +532,21 @@ internal val ReadableMap.countryCode: String?
 internal val ReadableMap.environmentValue: Int?
     get() = googlePayConfiguration?.getInt("environment")
 
+internal val ReadableMap.merchantName: String?
+    get() = googlePayConfiguration?.getString("merchantName")
+
+internal val ReadableMap.transactionId: String?
+    get() = googlePayConfiguration?.getString("transactionId")
+
+internal val ReadableMap.totalPriceStatus: Int?
+    get() = googlePayConfiguration?.getInt("totalPriceStatus")
+
+internal val ReadableMap.totalPriceLabel: String?
+    get() = googlePayConfiguration?.getString("totalPriceLabel")
+
+internal val ReadableMap.checkoutOption: Int?
+    get() = googlePayConfiguration?.getInt("checkoutOption")
+
 internal val ReadableMap.isEmailRequired: Boolean?
     get() = googlePayConfiguration?.getBoolean("isEmailRequired")
 
@@ -573,6 +588,12 @@ internal val ReadableMap.allowedCountryCodeList: ReadableArray?
         }
         return null
     }
+
+internal val ReadableMap.allowPrepaidCards: Boolean?
+    get() = googlePayConfiguration?.getBoolean("allowPrepaidCards")
+
+internal val ReadableMap.allowCreditCards: Boolean?
+    get() = googlePayConfiguration?.getBoolean("allowCreditCards")
 
 internal val ReadableMap.pbbaConfiguration: ReadableMap?
     get() {

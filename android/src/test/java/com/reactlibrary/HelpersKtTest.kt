@@ -7,26 +7,17 @@ import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.judopay.judokit.android.api.model.response.CardToken
-import com.judopay.judokit.android.model.CardNetwork
-import com.judopay.judokit.android.model.Currency
-import com.judopay.judokit.android.model.JudoResult
-import com.judopay.judokit.android.model.PaymentMethod
-import com.judopay.judokit.android.model.PaymentWidgetType
+import com.judopay.judokit.android.model.*
 import com.judopay.judokit.android.model.googlepay.GooglePayAddressFormat
+import com.judopay.judokit.android.model.googlepay.GooglePayCheckoutOption
 import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
+import com.judopay.judokit.android.model.googlepay.GooglePayPriceStatus
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
-import junit.framework.TestCase.assertNull
-import junit.framework.TestCase.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import junit.framework.TestCase.*
+import org.junit.jupiter.api.*
 import java.nio.charset.StandardCharsets
 
 @DisplayName("Testing Helpers class")
@@ -129,6 +120,11 @@ class HelpersKtTest {
         every { googlePayConfigurationMock.getBoolean("isEmailRequired") } returns true
         every { googlePayConfigurationMock.getBoolean("isBillingAddressRequired") } returns true
         every { googlePayConfigurationMock.getBoolean("isShippingAddressRequired") } returns true
+        every { googlePayConfigurationMock.getString("merchantName") } returns "a merchant"
+        every { googlePayConfigurationMock.getString("transactionId") } returns "trans id 1"
+        every { googlePayConfigurationMock.getInt("totalPriceStatus") } returns 0
+        every { googlePayConfigurationMock.getString("totalPriceLabel") } returns "Total"
+        every { googlePayConfigurationMock.getInt("checkoutOption") } returns 0
 
         every { billingAddressParametersMock.getBoolean("isPhoneNumberRequired") } returns true
         every { billingAddressParametersMock.getInt("addressFormat") } returns 1
@@ -309,6 +305,11 @@ class HelpersKtTest {
             assertEquals(params.isBillingAddressRequired, true)
             assertEquals(params.isShippingAddressRequired, true)
             assertEquals(params.environment, GooglePayEnvironment.PRODUCTION)
+            assertEquals(params.merchantName, "a merchant")
+            assertEquals(params.transactionId, "trans id 1")
+            assertEquals(params.totalPriceStatus, GooglePayPriceStatus.FINAL)
+            assertEquals(params.totalPriceLabel, "Total")
+            assertEquals(params.checkoutOption, GooglePayCheckoutOption.DEFAULT)
         }
 
         @Test
@@ -599,7 +600,7 @@ class HelpersKtTest {
 
         @Test
         @DisplayName("when JudoResult's type field is set to PreAuth, then map.getInt('type') should return 1")
-        fun mapShouldContainType(){
+        fun mapShouldContainType() {
             val mappedResult = getMappedResult(JudoResult(type = "PreAuth"))
 
             assertEquals(2, mappedResult.getInt("type"))
@@ -607,7 +608,7 @@ class HelpersKtTest {
 
         @Test
         @DisplayName("when JudoResult's receiptId field is set to receipt, then map.getString('receiptId') should return receipt")
-        fun mapShouldContainReceipt(){
+        fun mapShouldContainReceipt() {
             val mappedResult = getMappedResult(JudoResult(receiptId = "receipt"))
 
             assertEquals("receipt", mappedResult.getString("receiptId"))
@@ -615,7 +616,7 @@ class HelpersKtTest {
 
         @Test
         @DisplayName("when JudoResult's cardDetails.category field is set to cardCategory, then map.getString('cardCategory') should return cardCategory")
-        fun mapShouldContainCardCategory(){
+        fun mapShouldContainCardCategory() {
             val mappedResult = getMappedResult(JudoResult(cardDetails = CardToken(category = "cardCategory")))
 
             assertEquals("cardCategory", mappedResult.getMap("cardDetails")?.getString("cardCategory"))
@@ -623,7 +624,7 @@ class HelpersKtTest {
 
         @Test
         @DisplayName("when JudoResult's cardDetails.country field is set to cardCountry, then map.getString('cardCountry') should return cardCountry")
-        fun mapShouldContainCardCountry(){
+        fun mapShouldContainCardCountry() {
             val mappedResult = getMappedResult(JudoResult(cardDetails = CardToken(country = "cardCountry")))
 
             assertEquals("cardCountry", mappedResult.getMap("cardDetails")?.getString("cardCountry"))
@@ -631,7 +632,7 @@ class HelpersKtTest {
 
         @Test
         @DisplayName("when JudoResult's cardDetails.funding field is set to cardFunding, then map.getString('cardFunding') should return cardFunding")
-        fun mapShouldContainCardFunding(){
+        fun mapShouldContainCardFunding() {
             val mappedResult = getMappedResult(JudoResult(cardDetails = CardToken(funding = "cardFunding")))
 
             assertEquals("cardFunding", mappedResult.getMap("cardDetails")?.getString("cardFunding"))
@@ -639,7 +640,7 @@ class HelpersKtTest {
 
         @Test
         @DisplayName("when JudoResult's cardDetails.scheme field is set to cardScheme, then map.getString('cardScheme') should return cardScheme")
-        fun mapShouldContainCardScheme(){
+        fun mapShouldContainCardScheme() {
             val mappedResult = getMappedResult(JudoResult(cardDetails = CardToken(scheme = "cardScheme")))
 
             assertEquals("cardScheme", mappedResult.getMap("cardDetails")?.getString("cardScheme"))

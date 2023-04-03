@@ -5,7 +5,9 @@ import {
     JudoGooglePayEnvironment,
     JudoBillingAddressParameters,
     JudoShippingAddressParameters,
-    JudoAddressFormat
+    JudoAddressFormat,
+    JudoGooglePayPriceStatus,
+    JudoCheckoutOption
 } from '../types/JudoGooglePayTypes'
 
 const billingAddressParams: JudoBillingAddressParameters = {
@@ -22,7 +24,7 @@ test('check JudoAddressFormat model fields', () => {
     expect(Object.keys(JudoAddressFormat)).toStrictEqual([
         '0',
         '1',
-        'MINIMAL',
+        'MIN',
         'FULL'
     ])
 })
@@ -46,14 +48,21 @@ test('check JudoShippingAddressParameters model fields', () => {
 
 test('check JudoGooglePayConfiguration model fields', () => {
     const judoResponse: JudoGooglePayConfiguration = {
-        countryCode: 'Code',
         environment: JudoGooglePayEnvironment.PRODUCTION,
+        merchantName: 'some merchant',
+        countryCode: 'Code',
+        transactionId: 'transaction 1',
+        totalPriceStatus: JudoGooglePayPriceStatus.FINAL,
+        totalPriceLabel: 'Total',
+        checkoutOption: JudoCheckoutOption.DEFAULT,
         isEmailRequired: false,
         isBillingAddressRequired: false,
         billingAddressParameters: billingAddressParams,
         isShippingAddressRequired: true,
-        shippingAddressParameters: shippingAddressParams
+        shippingAddressParameters: shippingAddressParams,
+        allowCreditCards: true,
+        allowPrepaidCards: true
     }
 
-    expect(Object.keys(judoResponse).length).toBe(7)
+    expect(Object.keys(judoResponse).length).toBe(14)
 })
