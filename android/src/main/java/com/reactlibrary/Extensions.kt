@@ -33,7 +33,12 @@ internal val ReadableMap.isSandboxed: Boolean?
     get() = getBoolean("sandboxed")
 
 internal val ReadableMap.cardToken: String?
-    get() = getString("cardToken")
+    get() {
+        if (hasKey("cardToken")) {
+            return getString("cardToken")
+        }
+        return null
+    }
 
 internal val ReadableMap.securityCode: String?
     get() {
@@ -60,7 +65,7 @@ internal val ReadableMap.cardType: CardNetwork
         }
 
         return when {
-            cardScheme.contains(CARD_SCHEME_VISA)  -> CardNetwork.VISA
+            cardScheme.contains(CARD_SCHEME_VISA) -> CardNetwork.VISA
             cardScheme.contains(CARD_SCHEME_MASTERCARD) -> CardNetwork.MASTERCARD
             cardScheme.contains(CARD_SCHEME_AMEX) -> CardNetwork.AMEX
             else -> CardNetwork.OTHER
@@ -101,10 +106,20 @@ internal val ReadableMap.paymentReference: String?
     get() = reference?.getString("paymentReference")
 
 internal val ReadableMap.isInitialRecurringPayment: Boolean?
-    get() = configuration?.getBoolean("isInitialRecurringPayment")
+    get() {
+        if (configuration.hasKey("isInitialRecurringPayment")) {
+            return configuration?.getBoolean("isInitialRecurringPayment")
+        }
+        return null
+    }
 
 internal val ReadableMap.isDelayedAuthorisation: Boolean?
-    get() = configuration?.getBoolean("isDelayedAuthorisation")
+    get() {
+        if (configuration.hasKey("isDelayedAuthorisation")) {
+            return configuration?.getBoolean("isDelayedAuthorisation")
+        }
+        return null
+    }
 
 internal val ReadableMap.networkTimeout: ReadableMap?
     get() {
@@ -123,13 +138,13 @@ internal val ReadableMap.cardAddress: ReadableMap?
     }
 
 internal val ReadableMap.cardAddressLine1: String?
-get() {
-    if (cardAddress.hasKey("line1")) {
-        return cardAddress?.getString("line1")
-    }
+    get() {
+        if (cardAddress.hasKey("line1")) {
+            return cardAddress?.getString("line1")
+        }
 
-    return null
-}
+        return null
+    }
 
 internal val ReadableMap.cardAddressLine2: String?
     get() {
