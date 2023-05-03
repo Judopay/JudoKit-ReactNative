@@ -218,6 +218,7 @@ export interface JudoCardDetails {
     cardCountry?: string
     cardFunding?: string
     cardScheme?: string
+    cardHolderName?: string
 }
 
 export interface JudoConsumer {
