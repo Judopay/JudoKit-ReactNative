@@ -153,6 +153,8 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
               andRejecter:(RCTPromiseRejectBlock)reject {
     @try {
         self.judoKit = [RNWrappers judoSessionFromProperties:properties];
+        JPSubProductInfo *subProductInfo = [JPSubProductInfo initWithSubProductType:JPSubProductTypeReactNative andVersion:RNJudoKitVersion];
+        [self.judoKit setSubProductInfo:subProductInfo];
         self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
 
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
