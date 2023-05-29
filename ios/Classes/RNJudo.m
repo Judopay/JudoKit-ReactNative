@@ -112,7 +112,7 @@ RCT_REMAP_METHOD(performTokenTransaction,
     
     JPCardTransactionDetails *details = [[JPCardTransactionDetails new] initWithConfiguration:configuration];
     details.cardToken = [RNWrappers cardTokenFromProperties:properties];
-    details.secureCode = [RNWrappers securityCodeFromProperties:properties];
+    details.securityCode = [RNWrappers securityCodeFromProperties:properties];
     details.cardholderName = [RNWrappers cardholderNameFromProperties:properties];
     details.cardType = [RNWrappers cardTypeFromProperties:properties];
     
@@ -153,8 +153,6 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
               andRejecter:(RCTPromiseRejectBlock)reject {
     @try {
         self.judoKit = [RNWrappers judoSessionFromProperties:properties];
-        JPSubProductInfo *subProductInfo = [JPSubProductInfo initWithSubProductType:JPSubProductTypeReactNative andVersion:RNJudoKitVersion];
-        [self.judoKit setSubProductInfo:subProductInfo];
         self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
 
         JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];

@@ -18,8 +18,6 @@ import com.judopay.judokit.android.api.model.request.Address
 import com.judopay.judokit.android.model.*
 import com.judopay.judokit.android.model.googlepay.*
 
-private const val JUDOKIT_RN_SDK_VERSION = "4.0.0"
-
 // For consistency with:
 // https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L36
 private const val TRANSACTION_TYPE_PAYMENT = "payment"
@@ -156,7 +154,7 @@ internal fun getJudoConfigurationForApiService(options: ReadableMap): Judo {
         .setAuthorization(authorization)
         .setAmount(amount)
         .setReference(reference)
-        .setSubProductInfo(SubProductInfo.ReactNative(JUDOKIT_RN_SDK_VERSION))
+        .setSubProductInfo(getSubProductInfo(options))
         .build()
 }
 
@@ -198,7 +196,7 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
         .setThreeDSTwoMessageVersion(options.threeDSTwoMessageVersion)
         .setPhoneCountryCode(options.phoneCountryCode)
         .setAddress(address)
-        .setSubProductInfo(SubProductInfo.ReactNative(JUDOKIT_RN_SDK_VERSION))
+        .setSubProductInfo(getSubProductInfo(options))
         .build()
 }
 
@@ -276,6 +274,11 @@ internal fun getAmount(options: ReadableMap): Amount {
         .setAmount(options.amountValue)
         .setCurrency(currency)
         .build()
+}
+
+internal fun getSubProductInfo(options: ReadableMap): SubProductInfo {
+    val version = options.packageVersion ?: ""
+    return SubProductInfo.ReactNative(version)
 }
 
 internal fun getReference(options: ReadableMap): Reference? {

@@ -25,7 +25,6 @@
 #import <React/RCTBridgeModule.h>
 
 static const NSErrorDomain _Nonnull RNJudoErrorDomain = @"com.judopay.react-native.error-domain";
-static NSString *__nonnull const RNJudoKitVersion = @"4.0.0";
 
 @interface RNJudo : NSObject <RCTBridgeModule>
 
