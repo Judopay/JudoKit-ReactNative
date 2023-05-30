@@ -81,7 +81,7 @@ internal val ReadableMap.cardType: CardNetwork
         }
 
         return when {
-            cardScheme.contains(CARD_SCHEME_VISA)  -> CardNetwork.VISA
+            cardScheme.contains(CARD_SCHEME_VISA) -> CardNetwork.VISA
             cardScheme.contains(CARD_SCHEME_MASTERCARD) -> CardNetwork.MASTERCARD
             cardScheme.contains(CARD_SCHEME_AMEX) -> CardNetwork.AMEX
             else -> CardNetwork.OTHER
@@ -125,7 +125,7 @@ internal val ReadableMap.isInitialRecurringPayment: Boolean?
     get() = configuration?.getOptionalBoolean("isInitialRecurringPayment")
 
 internal val ReadableMap.isDelayedAuthorisation: Boolean?
-    get() = configuration?.getBoolean("isDelayedAuthorisation")
+    get() = configuration?.getOptionalBoolean("isDelayedAuthorisation")
 
 internal val ReadableMap.networkTimeout: ReadableMap?
     get() = configuration?.getOptionalMap("networkTimeout")

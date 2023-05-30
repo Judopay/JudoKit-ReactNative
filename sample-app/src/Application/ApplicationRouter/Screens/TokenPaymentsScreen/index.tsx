@@ -58,10 +58,11 @@ const TokenPaymentsScreen: FC<
       .then(result => {
         setIsLoading(false)
         const { cardDetails = {} } = result
-        const { cardToken = '', cardScheme = '' } = cardDetails
+        const { cardToken = '', cardScheme = '', cardHolderName = '' } = cardDetails
 
         setToken(cardToken)
         setScheme(cardScheme)
+        setCardholderName(cardHolderName)
       })
       .catch(error => {
         setIsLoading(false)
