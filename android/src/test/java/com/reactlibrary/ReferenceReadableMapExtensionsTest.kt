@@ -26,12 +26,17 @@ class ReferenceReadableMapExtensionsTest {
     fun setUp() {
         every { referenceMock.getString("consumerReference") } returns consumerReference
         every { referenceMock.getString("paymentReference") } returns paymentReference
+        every { referenceMock.hasKey("consumerReference") } returns true
+        every { referenceMock.hasKey("paymentReference") } returns true
+
         every { referenceMock.getMap("metadata") } returns metadataMock
         every { referenceMock.hasKey("metadata") } returns true
 
         every { configMock.getMap("reference") } returns referenceMock
+        every { configMock.hasKey("reference") } returns true
 
         every { sut.getMap("configuration") } returns configMock
+        every { sut.hasKey("configuration") } returns true
     }
 
     @Nested

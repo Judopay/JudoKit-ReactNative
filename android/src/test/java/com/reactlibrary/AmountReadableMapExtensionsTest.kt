@@ -24,8 +24,14 @@ class AmountReadableMapExtensionsTest {
     fun setUp() {
         every { amountMock.getString("value") } returns amount
         every { amountMock.getString("currency") } returns currency
+        every { amountMock.hasKey("value") } returns true
+        every { amountMock.hasKey("currency") } returns true
+
         every { configMock.getMap("amount") } returns amountMock
+        every { configMock.hasKey("amount") } returns true
+
         every { sut.getMap("configuration") } returns configMock
+        every { sut.hasKey("configuration") } returns true
     }
 
     @Nested

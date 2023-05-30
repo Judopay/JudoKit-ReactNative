@@ -40,20 +40,32 @@ class GooglePayReadableMapExtensionsTest {
         every { googlePayConfigurationMock.getBoolean("isShippingAddressRequired") } returns isShippingAddressRequired
         every { googlePayConfigurationMock.getMap("billingAddressParameters") } returns billingAddressParametersMock
         every { googlePayConfigurationMock.getMap("shippingAddressParameters") } returns shippingAddressParametersMock
+
+        every { googlePayConfigurationMock.hasKey("countryCode") } returns true
+        every { googlePayConfigurationMock.hasKey("environment") } returns true
+        every { googlePayConfigurationMock.hasKey("isEmailRequired") } returns true
+        every { googlePayConfigurationMock.hasKey("isBillingAddressRequired") } returns true
+        every { googlePayConfigurationMock.hasKey("isShippingAddressRequired") } returns true
         every { googlePayConfigurationMock.hasKey("billingAddressParameters") } returns true
         every { googlePayConfigurationMock.hasKey("shippingAddressParameters") } returns true
 
         every { billingAddressParametersMock.getBoolean("isPhoneNumberRequired") } returns isPhoneNumberRequired
         every { billingAddressParametersMock.getInt("addressFormat") } returns addressFormat
 
+        every { billingAddressParametersMock.hasKey("isPhoneNumberRequired") } returns true
+        every { billingAddressParametersMock.hasKey("addressFormat") } returns true
+
         every { shippingAddressParametersMock.getBoolean("isPhoneNumberRequired") } returns isPhoneNumberRequired
         every { shippingAddressParametersMock.getArray("allowedCountryCodes") } returns allowedCountryCodesMock
+
+        every { shippingAddressParametersMock.hasKey("isPhoneNumberRequired") } returns true
         every { shippingAddressParametersMock.hasKey("allowedCountryCodes") } returns true
 
-        every { configMock.hasKey("googlePayConfiguration") } returns true
         every { configMock.getMap("googlePayConfiguration") } returns googlePayConfigurationMock
+        every { configMock.hasKey("googlePayConfiguration") } returns true
 
         every { sut.getMap("configuration") } returns configMock
+        every { sut.hasKey("configuration") } returns true
     }
 
     @Nested

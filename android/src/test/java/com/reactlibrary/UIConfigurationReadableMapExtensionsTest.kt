@@ -20,6 +20,7 @@ class UIConfigurationReadableMapExtensionsTest {
     @BeforeEach
     fun setUp() {
         every { sut.getMap("configuration") } returns configMock
+        every { sut.hasKey("configuration") } returns true
     }
 
     @Nested
@@ -35,6 +36,7 @@ class UIConfigurationReadableMapExtensionsTest {
         @Test
         @DisplayName("when invoking isAVSEnabled then the value of isAVSEnabled property should be returned")
         fun returnIsAVSEnabledOnIsAVSEnabledCall() {
+            every { uiConfigMock.hasKey("isAVSEnabled") } returns true
             every { uiConfigMock.getBoolean("isAVSEnabled") } returns true
             assertNotNull(sut.isAVSEnabled)
             assert(sut.isAVSEnabled!!)
@@ -43,6 +45,7 @@ class UIConfigurationReadableMapExtensionsTest {
         @Test
         @DisplayName("when invoking shouldPaymentMethodsDisplayAmount then the value of shouldDisplayAmount property should be returned")
         fun returnShouldDisplayAmountOnShouldPaymentMethodsDisplayAmount() {
+            every { uiConfigMock.hasKey("shouldPaymentMethodsDisplayAmount") } returns true
             every { uiConfigMock.getBoolean("shouldPaymentMethodsDisplayAmount") } returns true
             assertNotNull(sut.shouldPaymentMethodsDisplayAmount)
             assert(sut.shouldPaymentMethodsDisplayAmount!!)
@@ -60,12 +63,16 @@ class UIConfigurationReadableMapExtensionsTest {
         @Test
         @DisplayName("when invoking isAVSEnabled then null should be returned")
         fun returnNullOnIsAVSEnabledCall() {
+            every { configMock.hasKey("isAVSEnabled") } returns false
+
             assertNull(sut.isAVSEnabled)
         }
 
         @Test
         @DisplayName("when invoking shouldPaymentMethodsDisplayAmount then null should be returned")
         fun returnNullOnShouldPaymentMethodsDisplayAmountCall() {
+            every { configMock.hasKey("shouldPaymentMethodsDisplayAmount") } returns false
+
             assertNull(sut.shouldPaymentMethodsDisplayAmount)
         }
     }
