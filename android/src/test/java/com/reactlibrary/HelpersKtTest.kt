@@ -46,28 +46,41 @@ class HelpersKtTest {
         every { Base64.encodeToString("token:secret".toByteArray(StandardCharsets.UTF_8), Base64.NO_WRAP) } returns "credentials"
 
         every { mapMock.getInt("transactionMode") } returns 1
+        every { mapMock.hasKey("transactionMode") } returns true
 
         every { mapMock.getBoolean("sandboxed") } returns true
         every { configurationMock.getString("judoId") } returns "111111111"
+        every { mapMock.hasKey("sandboxed") } returns true
+        every { configurationMock.hasKey("judoId") } returns true
 
         every { mapMock.getMap("authorization") } returns authorizationMock
         every { authorizationMock.getString("token") } returns "token"
         every { authorizationMock.getString("secret") } returns "secret"
+        every { mapMock.hasKey("authorization") } returns true
+        every { authorizationMock.hasKey("token") } returns true
+        every { authorizationMock.hasKey("secret") } returns true
 
         // amount
         every { amountMock.getString("value") } returns "1.50"
         every { amountMock.getString("currency") } returns "GBP"
+        every { amountMock.hasKey("value") } returns true
+        every { amountMock.hasKey("currency") } returns true
 
         every { configurationMock.getMap("amount") } returns amountMock
+        every { configurationMock.hasKey("amount") } returns true
 
         // reference
         every { referenceMock.getString("consumerReference") } returns "consumerReference"
         every { referenceMock.getString("paymentReference") } returns "paymentReference"
+        every { referenceMock.hasKey("consumerReference") } returns true
+        every { referenceMock.hasKey("paymentReference") } returns true
+
         every { referenceMock.getMap("metadata") } returns metadataMock
         every { referenceMock.hasKey("metadata") } returns true
         every { metadataMock.toHashMap() } returns hashMapOf(Pair("key", "value"))
 
         every { configurationMock.getMap("reference") } returns referenceMock
+        every { configurationMock.hasKey("reference") } returns true
 
         // supportedCardNetworks
         every { configurationMock.hasKey("supportedCardNetworks") } returns true
@@ -82,13 +95,18 @@ class HelpersKtTest {
         every { uiConfigurationMock.getBoolean("shouldPaymentMethodsDisplayAmount") } returns true
         every { uiConfigurationMock.getBoolean("shouldPaymentButtonDisplayAmount") } returns true
         every { uiConfigurationMock.getBoolean("shouldPaymentMethodsVerifySecurityCode") } returns true
+        every { uiConfigurationMock.hasKey("isAVSEnabled") } returns true
+        every { uiConfigurationMock.hasKey("shouldPaymentMethodsDisplayAmount") } returns true
+        every { uiConfigurationMock.hasKey("shouldPaymentButtonDisplayAmount") } returns true
+        every { uiConfigurationMock.hasKey("shouldPaymentMethodsVerifySecurityCode") } returns true
+
         every { uiConfigurationMock.getBoolean("shouldAskForBillingInformation") } returns true
         every { uiConfigurationMock.hasKey("shouldAskForBillingInformation") } returns true
-        every { uiConfigurationMock.hasKey("threeDSUIConfiguration") } returns false
         every { uiConfigurationMock.getMap("threeDSUIConfiguration") } returns null
+        every { uiConfigurationMock.hasKey("threeDSUIConfiguration") } returns true
 
-        every { configurationMock.hasKey("uiConfiguration") } returns true
         every { configurationMock.getMap("uiConfiguration") } returns uiConfigurationMock
+        every { configurationMock.hasKey("uiConfiguration") } returns true
 
         // primaryAccountDetails
         every { primaryAccountDetailsMock.hasKey("name") } returns true
@@ -120,16 +138,35 @@ class HelpersKtTest {
         every { googlePayConfigurationMock.getBoolean("isEmailRequired") } returns true
         every { googlePayConfigurationMock.getBoolean("isBillingAddressRequired") } returns true
         every { googlePayConfigurationMock.getBoolean("isShippingAddressRequired") } returns true
+        every { googlePayConfigurationMock.getBoolean("allowPrepaidCards") } returns true
+        every { googlePayConfigurationMock.getBoolean("allowCreditCards") } returns true
         every { googlePayConfigurationMock.getString("merchantName") } returns "a merchant"
         every { googlePayConfigurationMock.getString("transactionId") } returns "trans id 1"
         every { googlePayConfigurationMock.getInt("totalPriceStatus") } returns 0
         every { googlePayConfigurationMock.getString("totalPriceLabel") } returns "Total"
         every { googlePayConfigurationMock.getInt("checkoutOption") } returns 0
+        every { googlePayConfigurationMock.hasKey("billingAddressParameters") } returns true
+        every { googlePayConfigurationMock.hasKey("shippingAddressParameters") } returns true
+        every { googlePayConfigurationMock.hasKey("environment") } returns true
+        every { googlePayConfigurationMock.hasKey("countryCode") } returns true
+        every { googlePayConfigurationMock.hasKey("isEmailRequired") } returns true
+        every { googlePayConfigurationMock.hasKey("isBillingAddressRequired") } returns true
+        every { googlePayConfigurationMock.hasKey("isShippingAddressRequired") } returns true
+        every { googlePayConfigurationMock.hasKey("merchantName") } returns true
+        every { googlePayConfigurationMock.hasKey("transactionId") } returns true
+        every { googlePayConfigurationMock.hasKey("totalPriceStatus") } returns true
+        every { googlePayConfigurationMock.hasKey("totalPriceLabel") } returns true
+        every { googlePayConfigurationMock.hasKey("checkoutOption") } returns true
+        every { googlePayConfigurationMock.hasKey("allowPrepaidCards") } returns true
+        every { googlePayConfigurationMock.hasKey("allowCreditCards") } returns true
 
         every { billingAddressParametersMock.getBoolean("isPhoneNumberRequired") } returns true
         every { billingAddressParametersMock.getInt("addressFormat") } returns 1
+        every { billingAddressParametersMock.hasKey("isPhoneNumberRequired") } returns true
+        every { billingAddressParametersMock.hasKey("addressFormat") } returns true
 
         every { shippingAddressParametersMock.getBoolean("isPhoneNumberRequired") } returns true
+        every { shippingAddressParametersMock.hasKey("isPhoneNumberRequired") } returns true
         every { shippingAddressParametersMock.hasKey("allowedCountryCodes") } returns true
         every { shippingAddressParametersMock.getArray("allowedCountryCodes") } returns allowedCountryCodesMock
         every { allowedCountryCodesMock.toArrayList() } returns arrayListOf("US")
@@ -140,11 +177,17 @@ class HelpersKtTest {
 
         every { pbbaConfigurationMock.getString("mobileNumber") } returns "123-123"
         every { pbbaConfigurationMock.getString("emailAddress") } returns "example@mail.com"
+        every { pbbaConfigurationMock.hasKey("mobileNumber") } returns true
+        every { pbbaConfigurationMock.hasKey("emailAddress") } returns true
+
         every { pbbaConfigurationMock.hasKey("deeplinkURL") } returns true
         every { pbbaConfigurationMock.getString("deeplinkURL") } returns "https://www.google.com"
+
         every { pbbaConfigurationMock.getString("deeplinkScheme") } returns "deep://link"
+        every { pbbaConfigurationMock.hasKey("deeplinkScheme") } returns true
 
         every { mapMock.getMap("configuration") } returns configurationMock
+        every { mapMock.hasKey("configuration") } returns true
     }
 
     @Nested

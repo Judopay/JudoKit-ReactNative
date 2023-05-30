@@ -18,12 +18,13 @@ class JudoReadableMapExtensionsTest {
     private val transactionMode = 1
     private val token = "token"
     private val secret = "secret"
+    private val paymentSession = "paymentSession"
     private val isSandboxed = true
     private val isInitialRecurringPayment = false
     private val judoId = "judoId"
     private val cardNetworkValue = 1
     private val paymentMethodValue = 1
-    private val authorization = mockk<ReadableMap>(relaxed = true)
+    private val authorizationMock = mockkClass(ReadableMap::class)
 
     @BeforeEach
     fun setUp() {
@@ -32,12 +33,27 @@ class JudoReadableMapExtensionsTest {
         every { configMock.getInt("paymentMethods") } returns paymentMethodValue
         every { configMock.getBoolean("isInitialRecurringPayment") } returns isInitialRecurringPayment
 
+        every { configMock.hasKey("judoId") } returns true
+        every { configMock.hasKey("supportedCardNetworks") } returns true
+        every { configMock.hasKey("paymentMethods") } returns true
+        every { configMock.hasKey("isInitialRecurringPayment") } returns true
+
+        every { authorizationMock.getString("token") } returns token
+        every { authorizationMock.getString("secret") } returns secret
+        every { authorizationMock.getString("paymentSession") } returns paymentSession
+        every { authorizationMock.hasKey("token") } returns true
+        every { authorizationMock.hasKey("secret") } returns true
+        every { authorizationMock.hasKey("paymentSession") } returns true
+
         every { sut.getMap("configuration") } returns configMock
         every { sut.getInt("transactionMode") } returns transactionMode
-        every { sut.getMap("authorization") } returns authorization
-        every { authorization.token } returns token
-        every { authorization.secret } returns secret
+        every { sut.getMap("authorization") } returns authorizationMock
         every { sut.getBoolean("sandboxed") } returns isSandboxed
+
+        every { sut.hasKey("configuration") } returns true
+        every { sut.hasKey("transactionMode") } returns true
+        every { sut.hasKey("authorization") } returns true
+        every { sut.hasKey("sandboxed") } returns true
     }
 
     @Test
@@ -49,13 +65,19 @@ class JudoReadableMapExtensionsTest {
     @Test
     @DisplayName("Given configuration object contains token when invoking token then the token string should be returned")
     fun returnTokenOnTokenCall() {
-        assertEquals(sut.authorization?.token, token)
+        assertEquals(sut.token, token)
     }
 
     @Test
     @DisplayName("Given configuration object contains secret when invoking secret then the secret string should be returned")
     fun returnSecretOnSecretCall() {
-        assertEquals(sut.authorization?.secret, secret)
+        assertEquals(sut.secret, secret)
+    }
+
+    @Test
+    @DisplayName("Given configuration object contains paymentSession when invoking paymentSession then the paymentSession string should be returned")
+    fun returnPaymentSessionOnPaymentSessionCall() {
+        assertEquals(sut.paymentSession, paymentSession)
     }
 
     @Test

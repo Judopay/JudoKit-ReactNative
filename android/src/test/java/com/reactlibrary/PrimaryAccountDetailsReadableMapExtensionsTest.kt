@@ -37,6 +37,7 @@ class PrimaryAccountDetailsReadableMapExtensionsTest {
         every { configMock.getMap("primaryAccountDetails") } returns primaryAccountDetailsMock
 
         every { sut.getMap("configuration") } returns configMock
+        every { sut.hasKey("configuration") } returns true
     }
 
     @Nested

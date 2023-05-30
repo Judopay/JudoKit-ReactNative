@@ -13,38 +13,40 @@ const val CARD_SCHEME_VISA = "visa"
 const val CARD_SCHEME_MASTERCARD = "mastercard"
 const val CARD_SCHEME_AMEX = "amex"
 
-internal fun ReadableMap?.getOptionalString(key: String): String? = if (this != null && hasKey(key)) {
-    getString(key)
+internal fun ReadableMap?.hasKey(key: String): Boolean = this?.hasKey(key) ?: false
+
+internal fun ReadableMap?.getOptionalString(key: String): String? = if (hasKey(key)) {
+    this?.getString(key)
 } else {
     null
 }
 
-internal fun ReadableMap?.getOptionalBoolean(key: String): Boolean? = if (this != null && hasKey(key)) {
-    getBoolean(key)
+internal fun ReadableMap?.getOptionalBoolean(key: String): Boolean? = if (hasKey(key)) {
+    this?.getBoolean(key)
 } else {
     null
 }
 
-internal fun ReadableMap?.getOptionalInt(key: String): Int? = if (this != null && hasKey(key)) {
-    getInt(key)
+internal fun ReadableMap?.getOptionalInt(key: String): Int? = if (hasKey(key)) {
+    this?.getInt(key)
 } else {
     null
 }
 
-internal fun ReadableMap?.getOptionalDouble(key: String): Double? = if (this != null && hasKey(key)) {
-    getDouble(key)
+internal fun ReadableMap?.getOptionalDouble(key: String): Double? = if (hasKey(key)) {
+    this?.getDouble(key)
 } else {
     null
 }
 
-internal fun ReadableMap?.getOptionalMap(key: String): ReadableMap? = if (this != null && hasKey(key)) {
-    getMap(key)
+internal fun ReadableMap?.getOptionalMap(key: String): ReadableMap? = if (hasKey(key)) {
+    this?.getMap(key)
 } else {
     null
 }
 
-internal fun ReadableMap?.getOptionalArray(key: String): ReadableArray? = if (this != null && hasKey(key)) {
-    getArray(key)
+internal fun ReadableMap?.getOptionalArray(key: String): ReadableArray? = if (hasKey(key)) {
+    this?.getArray(key)
 } else {
     null
 }
