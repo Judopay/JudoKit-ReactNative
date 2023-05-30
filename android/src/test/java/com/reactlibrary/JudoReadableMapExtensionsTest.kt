@@ -106,6 +106,8 @@ class JudoReadableMapExtensionsTest {
     @Test
     @DisplayName("Given configuration object contains isInitialRecurringPayment when invoking isInitialRecurringPayment then the isInitialRecurringPayment boolean should be returned")
     fun returnIsInitialRecurringPaymentOnIsInitialRecurringPaymentCall() {
+        every { configMock.hasKey("isInitialRecurringPayment") } returns true
+
         assertEquals(sut.isInitialRecurringPayment, isInitialRecurringPayment)
     }
 }
