@@ -13,43 +13,62 @@ const val CARD_SCHEME_VISA = "visa"
 const val CARD_SCHEME_MASTERCARD = "mastercard"
 const val CARD_SCHEME_AMEX = "amex"
 
-internal fun ReadableMap?.hasKey(key: String): Boolean {
-    if (this != null) {
-        return this.hasKey(key)
-    }
-    return false
+internal fun ReadableMap?.getOptionalString(key: String): String? = if (this != null && hasKey(key)) {
+    getString(key)
+} else {
+    null
+}
+
+internal fun ReadableMap?.getOptionalBoolean(key: String): Boolean? = if (this != null && hasKey(key)) {
+    getBoolean(key)
+} else {
+    null
+}
+
+internal fun ReadableMap?.getOptionalInt(key: String): Int? = if (this != null && hasKey(key)) {
+    getInt(key)
+} else {
+    null
+}
+
+internal fun ReadableMap?.getOptionalDouble(key: String): Double? = if (this != null && hasKey(key)) {
+    getDouble(key)
+} else {
+    null
+}
+
+internal fun ReadableMap?.getOptionalMap(key: String): ReadableMap? = if (this != null && hasKey(key)) {
+    getMap(key)
+} else {
+    null
+}
+
+internal fun ReadableMap?.getOptionalArray(key: String): ReadableArray? = if (this != null && hasKey(key)) {
+    getArray(key)
+} else {
+    null
 }
 
 internal val ReadableMap.configuration: ReadableMap?
-    get() = getMap("configuration")
+    get() = getOptionalMap("configuration")
 
 internal val ReadableMap.transactionMode: Int?
-    get() = getInt("transactionMode")
+    get() = getOptionalInt("transactionMode")
 
 internal val ReadableMap.authorization: ReadableMap?
-    get() = getMap("authorization")
+    get() = getOptionalMap("authorization")
 
 internal val ReadableMap.isSandboxed: Boolean?
-    get() = getBoolean("sandboxed")
+    get() = getOptionalBoolean("sandboxed")
 
 internal val ReadableMap.cardToken: String?
-    get() = getString("cardToken")
+    get() = getOptionalString("cardToken")
 
 internal val ReadableMap.securityCode: String?
-    get() {
-        if (hasKey("securityCode")) {
-            return getString("securityCode")
-        }
-        return null
-    }
+    get() = getOptionalString("securityCode")
 
 internal val ReadableMap.cardholderName: String?
-    get() {
-        if (hasKey("cardholderName")) {
-            return getString("cardholderName")
-        }
-        return null
-    }
+    get() = getOptionalString("cardholderName")
 
 internal val ReadableMap.cardType: CardNetwork
     get() {
@@ -68,558 +87,280 @@ internal val ReadableMap.cardType: CardNetwork
     }
 
 internal val ReadableMap.judoId: String?
-    get() = configuration?.getString("judoId")
+    get() = configuration?.getOptionalString("judoId")
 
 internal val ReadableMap.receiptId: String?
-    get() = getString("receiptId")
+    get() = getOptionalString("receiptId")
 
 internal val ReadableMap.token: String?
-    get() = authorization?.getString("token")
+    get() = authorization?.getOptionalString("token")
 
 internal val ReadableMap.secret: String?
-    get() = authorization?.getString("secret")
+    get() = authorization?.getOptionalString("secret")
 
 internal val ReadableMap.paymentSession: String?
-    get() = authorization?.getString("paymentSession")
+    get() = authorization?.getOptionalString("paymentSession")
 
 internal val ReadableMap.amount: ReadableMap?
-    get() = configuration?.getMap("amount")
+    get() = configuration?.getOptionalMap("amount")
 
 internal val ReadableMap.amountValue: String?
-    get() = amount?.getString("value")
+    get() = amount?.getOptionalString("value")
 
 internal val ReadableMap.currencyValue: String?
-    get() = amount?.getString("currency")
+    get() = amount?.getOptionalString("currency")
 
 internal val ReadableMap.reference: ReadableMap?
-    get() = configuration?.getMap("reference")
+    get() = configuration?.getOptionalMap("reference")
 
 internal val ReadableMap.consumerReference: String?
-    get() = reference?.getString("consumerReference")
+    get() = reference?.getOptionalString("consumerReference")
 
 internal val ReadableMap.paymentReference: String?
-    get() = reference?.getString("paymentReference")
+    get() = reference?.getOptionalString("paymentReference")
 
 internal val ReadableMap.isInitialRecurringPayment: Boolean?
-    get() = configuration?.getBoolean("isInitialRecurringPayment")
+    get() = configuration?.getOptionalBoolean("isInitialRecurringPayment")
 
 internal val ReadableMap.isDelayedAuthorisation: Boolean?
     get() = configuration?.getBoolean("isDelayedAuthorisation")
 
 internal val ReadableMap.networkTimeout: ReadableMap?
-    get() {
-        if (configuration.hasKey("networkTimeout")) {
-            return configuration?.getMap("networkTimeout")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalMap("networkTimeout")
 
 internal val ReadableMap.cardAddress: ReadableMap?
-    get() {
-        if (configuration.hasKey("cardAddress")) {
-            return configuration?.getMap("cardAddress")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalMap("cardAddress")
 
 internal val ReadableMap.cardAddressLine1: String?
-get() {
-    if (cardAddress.hasKey("line1")) {
-        return cardAddress?.getString("line1")
-    }
-
-    return null
-}
+    get() = cardAddress?.getOptionalString("line1")
 
 internal val ReadableMap.cardAddressLine2: String?
-    get() {
-        if (cardAddress.hasKey("line2")) {
-            return cardAddress?.getString("line2")
-        }
-
-        return null
-    }
+    get() = cardAddress?.getOptionalString("line2")
 
 internal val ReadableMap.cardAddressLine3: String?
-    get() {
-        if (cardAddress.hasKey("line3")) {
-            return cardAddress?.getString("line3")
-        }
-
-        return null
-    }
+    get() = cardAddress?.getOptionalString("line3")
 
 internal val ReadableMap.cardAddressPostCode: String?
-    get() {
-        if (cardAddress.hasKey("postCode")) {
-            return cardAddress?.getString("postCode")
-        }
-
-        return null
-    }
+    get() = cardAddress?.getOptionalString("postCode")
 
 internal val ReadableMap.cardAddressTown: String?
-    get() {
-        if (cardAddress.hasKey("town")) {
-            return cardAddress?.getString("town")
-        }
-
-        return null
-    }
+    get() = cardAddress?.getOptionalString("town")
 
 internal val ReadableMap.cardAddressCountryCode: Int?
-    get() {
-        if (cardAddress.hasKey("countryCode")) {
-            return cardAddress?.getInt("countryCode")
-        }
-
-        return null
-    }
+    get() = cardAddress?.getOptionalInt("countryCode")
 
 internal val ReadableMap.cardAddressState: String?
-    get() {
-        if (cardAddress.hasKey("state")) {
-            return cardAddress?.getString("state")
-        }
-
-        return null
-    }
+    get() = cardAddress?.getOptionalString("state")
 
 internal val ReadableMap.networkConnectTimeout: Long?
-    get() = networkTimeout?.getDouble("connectTimeout")?.toLong()
+    get() = networkTimeout?.getOptionalDouble("connectTimeout")?.toLong()
 
 internal val ReadableMap.networkReadTimeout: Long?
-    get() = networkTimeout?.getDouble("readTimeout")?.toLong()
+    get() = networkTimeout?.getOptionalDouble("readTimeout")?.toLong()
 
 internal val ReadableMap.networkWriteTimeout: Long?
-    get() = networkTimeout?.getDouble("writeTimeout")?.toLong()
+    get() = networkTimeout?.getOptionalDouble("writeTimeout")?.toLong()
 
 internal val ReadableMap.challengeRequestIndicator: String?
-    get() {
-        if (configuration.hasKey("challengeRequestIndicator")) {
-            return configuration?.getString("challengeRequestIndicator")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalString("challengeRequestIndicator")
 
 internal val ReadableMap.scaExemption: String?
-    get() {
-        if (configuration.hasKey("scaExemption")) {
-            return configuration?.getString("scaExemption")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalString("scaExemption")
 
 internal val ReadableMap.mobileNumber: String?
-    get() {
-        if (configuration.hasKey("mobileNumber")) {
-            return configuration?.getString("mobileNumber")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalString("mobileNumber")
 
 internal val ReadableMap.phoneCountryCode: String?
-    get() {
-        if (configuration.hasKey("phoneCountryCode")) {
-            return configuration?.getString("phoneCountryCode")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalString("phoneCountryCode")
 
 internal val ReadableMap.emailAddress: String?
-    get() {
-        if (configuration.hasKey("emailAddress")) {
-            return configuration?.getString("emailAddress")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalString("emailAddress")
 
 internal val ReadableMap.threeDSTwoMaxTimeout: Int?
-    get() {
-        if (configuration.hasKey("threeDSTwoMaxTimeout")) {
-            return configuration?.getInt("threeDSTwoMaxTimeout")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalInt("threeDSTwoMaxTimeout")
 
 internal val ReadableMap.threeDSTwoMessageVersion: String?
-    get() {
-        if (configuration.hasKey("threeDSTwoMessageVersion")) {
-            return configuration?.getString("threeDSTwoMessageVersion")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalString("threeDSTwoMessageVersion")
 
 internal val ReadableMap.metadata: ReadableMap?
-    get() {
-        if (reference.hasKey("metadata")) {
-            return reference?.getMap("metadata")
-        }
-        return null
-    }
+    get() = reference?.getOptionalMap("metadata")
 
 internal val ReadableMap.cardNetworkValue: Int?
-    get() {
-        if (configuration.hasKey("supportedCardNetworks")) {
-            return configuration?.getInt("supportedCardNetworks")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalInt("supportedCardNetworks")
 
 internal val ReadableMap.paymentMethodValue: Int?
-    get() {
-        if (configuration.hasKey("paymentMethods")) {
-            return configuration?.getInt("paymentMethods")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalInt("paymentMethods")
 
 internal val ReadableMap.uiConfiguration: ReadableMap?
-    get() {
-        if (configuration.hasKey("uiConfiguration")) {
-            return configuration?.getMap("uiConfiguration")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalMap("uiConfiguration")
 
 internal val ReadableMap.threeDSUIConfiguration: ReadableMap?
-    get() {
-        if (uiConfiguration.hasKey("threeDSUIConfiguration")) {
-            return uiConfiguration?.getMap("threeDSUIConfiguration")
-        }
-        return null
-    }
+    get() = uiConfiguration?.getOptionalMap("threeDSUIConfiguration")
 
 internal val ReadableMap.threeDSUITextBoxCustomization: ReadableMap?
-    get() {
-        if (threeDSUIConfiguration.hasKey("textBoxCustomization")) {
-            return threeDSUIConfiguration?.getMap("textBoxCustomization")
-        }
-        return null
-    }
+    get() = threeDSUIConfiguration?.getOptionalMap("textBoxCustomization")
 
 internal val ReadableMap.threeDSUIButtonCustomizations: ReadableMap?
-    get() {
-        if (threeDSUIConfiguration.hasKey("buttonCustomizations")) {
-            return threeDSUIConfiguration?.getMap("buttonCustomizations")
-        }
-        return null
-    }
+    get() = threeDSUIConfiguration?.getOptionalMap("buttonCustomizations")
 
 internal val ReadableMap.threeDSUISubmitButtonCustomization: ReadableMap?
-    get() {
-        if (threeDSUIButtonCustomizations.hasKey("SUBMIT")) {
-            return threeDSUIButtonCustomizations?.getMap("SUBMIT")
-        }
-        return null
-    }
+    get() = threeDSUIButtonCustomizations?.getOptionalMap("SUBMIT")
 
 internal val ReadableMap.threeDSUIContinueButtonCustomization: ReadableMap?
-    get() {
-        if (threeDSUIButtonCustomizations.hasKey("CONTINUE")) {
-            return threeDSUIButtonCustomizations?.getMap("CONTINUE")
-        }
-        return null
-    }
+    get() = threeDSUIButtonCustomizations?.getOptionalMap("CONTINUE")
 
 internal val ReadableMap.threeDSUINextButtonCustomization: ReadableMap?
-    get() {
-        if (threeDSUIButtonCustomizations.hasKey("NEXT")) {
-            return threeDSUIButtonCustomizations?.getMap("NEXT")
-        }
-        return null
-    }
+    get() = threeDSUIButtonCustomizations?.getOptionalMap("NEXT")
 
 internal val ReadableMap.threeDSUICancelButtonCustomization: ReadableMap?
-    get() {
-        if (threeDSUIButtonCustomizations.hasKey("CANCEL")) {
-            return threeDSUIButtonCustomizations?.getMap("CANCEL")
-        }
-        return null
-    }
+    get() = threeDSUIButtonCustomizations?.getOptionalMap("CANCEL")
 
 internal val ReadableMap.threeDSUIResendButtonCustomization: ReadableMap?
-    get() {
-        if (threeDSUIButtonCustomizations.hasKey("RESEND")) {
-            return threeDSUIButtonCustomizations?.getMap("RESEND")
-        }
-        return null
-    }
+    get() = threeDSUIButtonCustomizations?.getOptionalMap("RESEND")
 
 internal val ReadableMap.threeDSUIToolbarCustomization: ReadableMap?
-    get() {
-        if (threeDSUIConfiguration.hasKey("toolbarCustomization")) {
-            return threeDSUIConfiguration?.getMap("toolbarCustomization")
-        }
-        return null
-    }
+    get() = threeDSUIConfiguration?.getOptionalMap("toolbarCustomization")
 
 internal val ReadableMap.threeDSUILabelCustomization: ReadableMap?
-    get() {
-        if (threeDSUIConfiguration.hasKey("labelCustomization")) {
-            return threeDSUIConfiguration?.getMap("labelCustomization")
-        }
-        return null
-    }
+    get() = threeDSUIConfiguration?.getOptionalMap("labelCustomization")
 
 internal val ReadableMap.textFontName: String?
-    get() {
-        if (hasKey("textFontName")) {
-            return getString("textFontName")
-        }
-        return null
-    }
+    get() = getOptionalString("textFontName")
 
 internal val ReadableMap.textColor: String?
-    get() {
-        if (hasKey("textColor")) {
-            return getString("textColor")
-        }
-        return null
-    }
+    get() = getOptionalString("textColor")
 
 internal val ReadableMap.backgroundColor: String?
-    get() {
-        if (hasKey("backgroundColor")) {
-            return getString("backgroundColor")
-        }
-        return null
-    }
+    get() = getOptionalString("backgroundColor")
 
 internal val ReadableMap.headerText: String?
-    get() {
-        if (hasKey("headerText")) {
-            return getString("headerText")
-        }
-        return null
-    }
+    get() = getOptionalString("headerText")
 
 internal val ReadableMap.buttonText: String?
-    get() {
-        if (hasKey("buttonText")) {
-            return getString("buttonText")
-        }
-        return null
-    }
+    get() = getOptionalString("buttonText")
 
 internal val ReadableMap.headingTextFontName: String?
-    get() {
-        if (hasKey("headingTextFontName")) {
-            return getString("headingTextFontName")
-        }
-        return null
-    }
+    get() = getOptionalString("headingTextFontName")
 
 internal val ReadableMap.headingTextColor: String?
-    get() {
-        if (hasKey("headingTextColor")) {
-            return getString("headingTextColor")
-        }
-        return null
-    }
+    get() = getOptionalString("headingTextColor")
 
 internal val ReadableMap.borderColor: String?
-    get() {
-        if (hasKey("borderColor")) {
-            return getString("borderColor")
-        }
-        return null
-    }
+    get() = getOptionalString("borderColor")
 
 internal val ReadableMap.textFontSize: Int?
-    get() {
-        if (hasKey("textFontSize")) {
-            return getInt("textFontSize")
-        }
-        return null
-    }
+    get() = getOptionalInt("textFontSize")
 
 internal val ReadableMap.cornerRadius: Int?
-    get() {
-        if (hasKey("cornerRadius")) {
-            return getInt("cornerRadius")
-        }
-        return null
-    }
+    get() = getOptionalInt("cornerRadius")
 
 internal val ReadableMap.headingTextFontSize: Int?
-    get() {
-        if (hasKey("headingTextFontSize")) {
-            return getInt("headingTextFontSize")
-        }
-        return null
-    }
+    get() = getOptionalInt("headingTextFontSize")
 
 internal val ReadableMap.borderWidth: Int?
-    get() {
-        if (hasKey("borderWidth")) {
-            return getInt("borderWidth")
-        }
-        return null
-    }
+    get() = getOptionalInt("borderWidth")
 
 internal val ReadableMap.isAVSEnabled: Boolean?
-    get() = uiConfiguration?.getBoolean("isAVSEnabled")
+    get() = uiConfiguration?.getOptionalBoolean("isAVSEnabled")
 
 internal val ReadableMap.shouldPaymentMethodsDisplayAmount: Boolean?
-    get() = uiConfiguration?.getBoolean("shouldPaymentMethodsDisplayAmount")
+    get() = uiConfiguration?.getOptionalBoolean("shouldPaymentMethodsDisplayAmount")
 
 internal val ReadableMap.shouldPaymentButtonDisplayAmount: Boolean?
-    get() = uiConfiguration?.getBoolean("shouldPaymentButtonDisplayAmount")
+    get() = uiConfiguration?.getOptionalBoolean("shouldPaymentButtonDisplayAmount")
 
 internal val ReadableMap.shouldPaymentMethodsVerifySecurityCode: Boolean?
-    get() = uiConfiguration?.getBoolean("shouldPaymentMethodsVerifySecurityCode")
+    get() = uiConfiguration?.getOptionalBoolean("shouldPaymentMethodsVerifySecurityCode")
 
 internal val ReadableMap.shouldAskForBillingInformation: Boolean
-    get() {
-        if (uiConfiguration.hasKey("shouldAskForBillingInformation")) {
-            return uiConfiguration?.getBoolean("shouldAskForBillingInformation") ?: true
-        }
-        return true
-    }
+    get() = uiConfiguration?.getOptionalBoolean("shouldAskForBillingInformation") ?: true
 
 internal val ReadableMap.primaryAccountDetails: ReadableMap?
-    get() {
-        if (configuration.hasKey("primaryAccountDetails")) {
-            return configuration?.getMap("primaryAccountDetails")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalMap("primaryAccountDetails")
 
 internal val ReadableMap.name: String?
-    get() {
-        if (primaryAccountDetails.hasKey("name")) {
-            return primaryAccountDetails?.getString("name")
-        }
-        return null
-    }
+    get() = primaryAccountDetails?.getOptionalString("name")
 
 internal val ReadableMap.accountNumber: String?
-    get() {
-        if (primaryAccountDetails.hasKey("accountNumber")) {
-            return primaryAccountDetails?.getString("accountNumber")
-        }
-        return null
-    }
+    get() = primaryAccountDetails?.getOptionalString("accountNumber")
 
 internal val ReadableMap.dateOfBirth: String?
-    get() {
-        if (primaryAccountDetails.hasKey("dateOfBirth")) {
-            return primaryAccountDetails?.getString("dateOfBirth")
-        }
-        return null
-    }
+    get() = primaryAccountDetails?.getOptionalString("dateOfBirth")
 
 internal val ReadableMap.postCode: String?
-    get() {
-        if (primaryAccountDetails.hasKey("postCode")) {
-            return primaryAccountDetails?.getString("postCode")
-        }
-        return null
-    }
+    get() = primaryAccountDetails?.getOptionalString("postCode")
 
 internal val ReadableMap.googlePayConfiguration: ReadableMap?
-    get() {
-        if (configuration.hasKey("googlePayConfiguration")) {
-            return configuration?.getMap("googlePayConfiguration")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalMap("googlePayConfiguration")
 
 internal val ReadableMap.countryCode: String?
-    get() = googlePayConfiguration?.getString("countryCode")
+    get() = googlePayConfiguration?.getOptionalString("countryCode")
 
 internal val ReadableMap.environmentValue: Int?
-    get() = googlePayConfiguration?.getInt("environment")
+    get() = googlePayConfiguration?.getOptionalInt("environment")
 
 internal val ReadableMap.merchantName: String?
-    get() = googlePayConfiguration?.getString("merchantName")
+    get() = googlePayConfiguration?.getOptionalString("merchantName")
 
 internal val ReadableMap.transactionId: String?
-    get() = googlePayConfiguration?.getString("transactionId")
+    get() = googlePayConfiguration?.getOptionalString("transactionId")
 
 internal val ReadableMap.totalPriceStatus: Int?
-    get() = googlePayConfiguration?.getInt("totalPriceStatus")
+    get() = googlePayConfiguration?.getOptionalInt("totalPriceStatus")
 
 internal val ReadableMap.totalPriceLabel: String?
-    get() = googlePayConfiguration?.getString("totalPriceLabel")
+    get() = googlePayConfiguration?.getOptionalString("totalPriceLabel")
 
 internal val ReadableMap.checkoutOption: Int?
-    get() = googlePayConfiguration?.getInt("checkoutOption")
+    get() = googlePayConfiguration?.getOptionalInt("checkoutOption")
 
 internal val ReadableMap.isEmailRequired: Boolean?
-    get() = googlePayConfiguration?.getBoolean("isEmailRequired")
+    get() = googlePayConfiguration?.getOptionalBoolean("isEmailRequired")
 
 internal val ReadableMap.isBillingAddressRequired: Boolean?
-    get() = googlePayConfiguration?.getBoolean("isBillingAddressRequired")
+    get() = googlePayConfiguration?.getOptionalBoolean("isBillingAddressRequired")
 
 internal val ReadableMap.isShippingAddressRequired: Boolean?
-    get() = googlePayConfiguration?.getBoolean("isShippingAddressRequired")
+    get() = googlePayConfiguration?.getOptionalBoolean("isShippingAddressRequired")
 
 internal val ReadableMap.billingAddressParameters: ReadableMap?
-    get() {
-        if (googlePayConfiguration.hasKey("billingAddressParameters")) {
-            return googlePayConfiguration?.getMap("billingAddressParameters")
-        }
-        return null
-    }
+    get() = googlePayConfiguration?.getOptionalMap("billingAddressParameters")
 
 internal val ReadableMap.shippingAddressParameters: ReadableMap?
-    get() {
-        if (googlePayConfiguration.hasKey("shippingAddressParameters")) {
-            return googlePayConfiguration?.getMap("shippingAddressParameters")
-        }
-        return null
-    }
+    get() = googlePayConfiguration?.getOptionalMap("shippingAddressParameters")
 
 internal val ReadableMap.isBillingPhoneNumberRequired: Boolean?
-    get() = billingAddressParameters?.getBoolean("isPhoneNumberRequired")
+    get() = billingAddressParameters?.getOptionalBoolean("isPhoneNumberRequired")
 
 internal val ReadableMap.addressFormat: Int?
-    get() = billingAddressParameters?.getInt("addressFormat")
+    get() = billingAddressParameters?.getOptionalInt("addressFormat")
 
 internal val ReadableMap.isShippingPhoneNumberRequired: Boolean?
-    get() = shippingAddressParameters?.getBoolean("isPhoneNumberRequired")
+    get() = shippingAddressParameters?.getOptionalBoolean("isPhoneNumberRequired")
 
 internal val ReadableMap.allowedCountryCodeList: ReadableArray?
-    get() {
-        if (shippingAddressParameters.hasKey("allowedCountryCodes")) {
-            return shippingAddressParameters?.getArray("allowedCountryCodes")
-        }
-        return null
-    }
+    get() = shippingAddressParameters?.getOptionalArray("allowedCountryCodes")
 
 internal val ReadableMap.allowPrepaidCards: Boolean?
-    get() = googlePayConfiguration?.getBoolean("allowPrepaidCards")
+    get() = googlePayConfiguration?.getOptionalBoolean("allowPrepaidCards")
 
 internal val ReadableMap.allowCreditCards: Boolean?
-    get() = googlePayConfiguration?.getBoolean("allowCreditCards")
+    get() = googlePayConfiguration?.getOptionalBoolean("allowCreditCards")
 
 internal val ReadableMap.pbbaConfiguration: ReadableMap?
-    get() {
-        if (configuration.hasKey("pbbaConfiguration")) {
-            return configuration?.getMap("pbbaConfiguration")
-        }
-        return null
-    }
+    get() = configuration?.getOptionalMap("pbbaConfiguration")
 
 internal val ReadableMap.pbbaMobileNumber: String?
-    get() = pbbaConfiguration?.getString("mobileNumber")
+    get() = pbbaConfiguration?.getOptionalString("mobileNumber")
 
 internal val ReadableMap.pbbaEmailAddress: String?
-    get() = pbbaConfiguration?.getString("emailAddress")
+    get() = pbbaConfiguration?.getOptionalString("emailAddress")
 
 internal val ReadableMap.deeplinkScheme: String?
-    get() = pbbaConfiguration?.getString("deeplinkScheme")
+    get() = pbbaConfiguration?.getOptionalString("deeplinkScheme")
 
 internal val ReadableMap.deeplinkURL: String?
-    get() {
-        return if (pbbaConfiguration.hasKey("deeplinkURL")) {
-            pbbaConfiguration?.getString("deeplinkURL")
-        } else {
-            null
-        }
-    }
+    get() = pbbaConfiguration?.getOptionalString("deeplinkURL")
 
 fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
     Intent(packageContext, JudoActivity::class.java)

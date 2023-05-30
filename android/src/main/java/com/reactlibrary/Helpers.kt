@@ -544,9 +544,8 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
             .setBillingAddressParameters(billingParameters)
             .setIsShippingAddressRequired(options.isShippingAddressRequired)
             .setShippingAddressParameters(shippingParameters)
-            // TODO: add these once they are released in JudoKit-Android
-//            .setAllowPrepaidCards(options.allowPrepaidCards)
-//            .setAllowCreditCards(options.allowCreditCards)
+            .setAllowPrepaidCards(options.allowPrepaidCards)
+            .setAllowCreditCards(options.allowCreditCards)
             .build()
     } else {
         null
