@@ -64,12 +64,7 @@ internal val ReadableMap.isSandboxed: Boolean?
     get() = getOptionalBoolean("sandboxed")
 
 internal val ReadableMap.packageVersion: String?
-    get() {
-        if (hasKey("packageVersion")) {
-            return getString("packageVersion")
-        }
-        return null
-    }
+    get() = getOptionalString("packageVersion")
 
 internal val ReadableMap.cardToken: String?
     get() = getOptionalString("cardToken")
