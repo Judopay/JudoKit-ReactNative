@@ -1,5 +1,6 @@
 import { NativeModules } from 'react-native'
 import JudoPBBAButton from './components/JudoPBBAButton'
+import { version as packageVersion } from './package.json'
 
 import {
     JudoConfiguration,
@@ -142,10 +143,10 @@ class JudoPay {
         type: JudoTransactionType,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionTypeParameters(
-            type,
-            configuration
-        )
+        const params = {
+            ...this.generateTransactionTypeParameters(type, configuration),
+            packageVersion
+        }
         return NativeModules.RNJudo.invokeTransaction(params)
     }
 
@@ -155,7 +156,8 @@ class JudoPay {
         const params = {
             authorization: this.generateAuthorizationParameters(),
             sandboxed: this.isSandboxed,
-            receiptId
+            receiptId,
+            packageVersion
         }
 
         return NativeModules.RNJudo.fetchTransactionDetails(params)
@@ -188,7 +190,8 @@ class JudoPay {
                 securityCode,
                 cardholderName,
                 cardScheme
-            }
+            },
+            packageVersion
         }
         return NativeModules.RNJudo.performTokenTransaction(params)
     }
@@ -207,10 +210,10 @@ class JudoPay {
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionModeParameters(
-            mode,
-            configuration
-        )
+        const params = {
+            ...this.generateTransactionModeParameters(mode, configuration),
+            packageVersion
+        }
         return NativeModules.RNJudo.invokeApplePay(params)
     }
 
@@ -228,10 +231,10 @@ class JudoPay {
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionModeParameters(
-            mode,
-            configuration
-        )
+        const params = {
+            ...this.generateTransactionModeParameters(mode, configuration),
+            packageVersion
+        }
         return NativeModules.RNJudo.invokeGooglePay(params)
     }
 
@@ -245,7 +248,10 @@ class JudoPay {
     public async invokePayByBankApp(
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateJudoParameters(configuration)
+        const params = {
+            ...this.generateJudoParameters(configuration),
+            packageVersion
+        }
         return NativeModules.RNJudo.invokePayByBankApp(params)
     }
 
@@ -262,10 +268,10 @@ class JudoPay {
         mode: JudoTransactionMode,
         configuration: JudoConfiguration
     ): Promise<JudoResponse> {
-        const params = this.generateTransactionModeParameters(
-            mode,
-            configuration
-        )
+        const params = {
+            ...this.generateTransactionModeParameters(mode, configuration),
+            packageVersion
+        }
         return NativeModules.RNJudo.invokePaymentMethodScreen(params)
     }
 

@@ -44,6 +44,8 @@ static NSString *const kCardSchemeAMEX = @"amex";
     id<JPAuthorization> authorization = [RNWrappers authorizationFromProperties:properties];
     JudoKit *judoKit = [[JudoKit alloc] initWithAuthorization:authorization];
     judoKit.isSandboxed = [RNWrappers isSandboxedFromProperties:properties];
+    judoKit.subProductInfo = [RNWrappers subProductInfoFromProperties:properties];
+
     return judoKit;
 }
 
@@ -71,6 +73,11 @@ static NSString *const kCardSchemeAMEX = @"amex";
 + (BOOL)isSandboxedFromProperties:(NSDictionary *)properties {
     NSNumber *isSandboxed = [properties boolForKey:@"sandboxed"];
     return isSandboxed.boolValue;
+}
+
++ (JPSubProductInfo *)subProductInfoFromProperties:(NSDictionary *)properties {
+    NSString *version = [properties optionalStringForKey:@"packageVersion"];;
+    return [[JPSubProductInfo alloc] initWithSubProductType:JPSubProductTypeReactNative andVersion:version];
 }
 
 + (JPCardTransactionService *)cardTransactionServiceFromProperties:(NSDictionary *)properties {

@@ -112,7 +112,7 @@ RCT_REMAP_METHOD(performTokenTransaction,
     
     JPCardTransactionDetails *details = [[JPCardTransactionDetails new] initWithConfiguration:configuration];
     details.cardToken = [RNWrappers cardTokenFromProperties:properties];
-    details.secureCode = [RNWrappers securityCodeFromProperties:properties];
+    details.securityCode = [RNWrappers securityCodeFromProperties:properties];
     details.cardholderName = [RNWrappers cardholderNameFromProperties:properties];
     details.cardType = [RNWrappers cardTypeFromProperties:properties];
     

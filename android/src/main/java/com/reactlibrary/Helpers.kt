@@ -154,6 +154,7 @@ internal fun getJudoConfigurationForApiService(options: ReadableMap): Judo {
         .setAuthorization(authorization)
         .setAmount(amount)
         .setReference(reference)
+        .setSubProductInfo(getSubProductInfo(options))
         .build()
 }
 
@@ -195,6 +196,7 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
         .setThreeDSTwoMessageVersion(options.threeDSTwoMessageVersion)
         .setPhoneCountryCode(options.phoneCountryCode)
         .setAddress(address)
+        .setSubProductInfo(getSubProductInfo(options))
         .build()
 }
 
@@ -272,6 +274,11 @@ internal fun getAmount(options: ReadableMap): Amount {
         .setAmount(options.amountValue)
         .setCurrency(currency)
         .build()
+}
+
+internal fun getSubProductInfo(options: ReadableMap): SubProductInfo {
+    val version = options.packageVersion ?: ""
+    return SubProductInfo.ReactNative(version)
 }
 
 internal fun getReference(options: ReadableMap): Reference? {
