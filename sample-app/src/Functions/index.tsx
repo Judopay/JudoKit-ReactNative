@@ -204,6 +204,10 @@ export const regeneratePaymentReferenceIfNeeded = (
 ): JudoConfiguration => {
   const { reference } = configuration
   const { paymentReference, consumerReference } = reference
+  const metadata = {
+    'example-key-1': 'example-string-value',
+    'example-key-2': '10',
+  }
 
   return {
     ...configuration,
@@ -216,6 +220,7 @@ export const regeneratePaymentReferenceIfNeeded = (
         consumerReference?.length === 0
           ? 'my-unique-consumer-ref'
           : consumerReference,
+      metadata,
     },
   }
 }

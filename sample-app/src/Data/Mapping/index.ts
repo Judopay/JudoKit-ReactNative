@@ -25,6 +25,7 @@ import {
   JudoThreeDSUIConfiguration,
   ScaExemption,
 } from 'judokit-react-native'
+import {JudoCheckoutOption, JudoGooglePayPriceStatus} from "judokit-react-native/types/JudoGooglePayTypes";
 
 export const judoAuthorizationFromSettingsData = ({
   authorization: {
@@ -579,12 +580,20 @@ export const judoConfigurationFromSettingsData = ({
   // googlePay
   const {
     isProductionEnvironmentOn,
+    merchantName,
     countryCode,
     isBillingAddressPhoneNumberOn,
     billingAddressFields,
     isShippingAddressPhoneNumberOn,
     isShippingAddressOn,
     isEmailAddressOn,
+    shippingAddressAllowedCountries,
+    allowPrepaidCards,
+    allowCreditCards,
+    transactionId,
+    totalPriceStatus,
+    totalPriceLabel,
+    checkoutOption,
   } = googlePay
 
   let billingParameters: JudoBillingAddressParameters | undefined
@@ -593,27 +602,60 @@ export const judoConfigurationFromSettingsData = ({
     billingParameters = {
       addressFormat:
         billingAddressFields === 'MIN'
-          ? JudoAddressFormat.MINIMAL
+          ? JudoAddressFormat.MIN
           : JudoAddressFormat.FULL,
       isPhoneNumberRequired: isBillingAddressPhoneNumberOn,
     }
   }
 
+  const allowedCountryCodes = shippingAddressAllowedCountries
+    .split(',')
+    .map(code => code.trim())
+
   const shippingParameters: JudoShippingAddressParameters = {
-    allowedCountryCodes: ['GB', 'US'],
+    allowedCountryCodes,
     isPhoneNumberRequired: isShippingAddressPhoneNumberOn,
+  }
+
+  const environment = isProductionEnvironmentOn
+    ? JudoGooglePayEnvironment.PRODUCTION
+    : JudoGooglePayEnvironment.TEST
+
+  let checkoutOptionValue: JudoCheckoutOption | undefined
+
+  if (checkoutOption === 'DEFAULT') {
+    checkoutOptionValue = JudoCheckoutOption.DEFAULT
+  }
+
+  if (checkoutOption === 'COMPLETE_IMMEDIATE_PURCHASE') {
+    checkoutOptionValue = JudoCheckoutOption.COMPLETE_IMMEDIATE_PURCHASE
+  }
+
+  let totalPriceStatusValue = JudoGooglePayPriceStatus.FINAL
+
+  if (totalPriceStatus === 'ESTIMATED') {
+    totalPriceStatusValue = JudoGooglePayPriceStatus.ESTIMATED
+  }
+
+  if (totalPriceStatus === 'NOT_CURRENTLY_KNOWN') {
+    totalPriceStatusValue = JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN
   }
 
   const googlePayConfiguration: JudoGooglePayConfiguration = {
     countryCode,
-    environment: isProductionEnvironmentOn
-      ? JudoGooglePayEnvironment.PRODUCTION
-      : JudoGooglePayEnvironment.TEST,
+    environment,
     isEmailRequired: isEmailAddressOn,
     billingAddressParameters: billingParameters,
     shippingAddressParameters: shippingParameters,
     isBillingAddressRequired: true,
     isShippingAddressRequired: isShippingAddressOn,
+    merchantName: merchantName.length === 0 ? undefined : merchantName,
+    allowCreditCards,
+    allowPrepaidCards,
+    transactionId: transactionId.length === 0 ? undefined : transactionId,
+    totalPriceStatus: totalPriceStatusValue,
+    totalPriceLabel: totalPriceLabel.length === 0 ? undefined : totalPriceLabel,
+    checkoutOption: checkoutOptionValue,
   }
 
   configuration = {
