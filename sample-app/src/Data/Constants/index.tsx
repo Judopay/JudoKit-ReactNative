@@ -94,12 +94,20 @@ export const DEFAULT_SETTINGS_DATA: SettingsData = {
   },
   googlePay: {
     isProductionEnvironmentOn: false,
+    merchantName: '',
     countryCode: 'GB',
     billingAddressFields: 'NONE',
     isBillingAddressPhoneNumberOn: false,
     isShippingAddressOn: false,
+    shippingAddressAllowedCountries: 'GB, US',
     isShippingAddressPhoneNumberOn: false,
     isEmailAddressOn: false,
+    allowPrepaidCards: true,
+    allowCreditCards: true,
+    transactionId: '',
+    totalPriceStatus: 'FINAL',
+    totalPriceLabel: '',
+    checkoutOption: 'DEFAULT',
   },
   threeDSTwo: {
     isBillingInformationScreenEnabled: false,
@@ -414,6 +422,32 @@ export const GOOGLE_PAY_BILLING_ADDRESS_FIELD_OPTIONS = [
     id: 'FULL',
     title:
       'FULL: Name, street address, locality, region, country code, and postal code.',
+  },
+]
+
+export const GOOGLE_PAY_PRICE_STATUS_OPTIONS = [
+  {
+    id: 'FINAL',
+    title: 'Final',
+  },
+  {
+    id: 'ESTIMATED',
+    title: 'Estimated',
+  },
+  {
+    id: 'NOT_CURRENTLY_KNOWN',
+    title: 'Not currently known',
+  },
+]
+
+export const GOOGLE_PAY_CHECKOUT_OPTION_OPTIONS = [
+  {
+    id: 'DEFAULT',
+    title: 'Default',
+  },
+  {
+    id: 'COMPLETE_IMMEDIATE_PURCHASE',
+    title: 'Complete immediate purchase',
   },
 ]
 

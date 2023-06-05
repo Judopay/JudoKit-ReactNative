@@ -92,12 +92,20 @@ export interface SettingsData {
   }
   googlePay: {
     isProductionEnvironmentOn: boolean
+    merchantName: string
     countryCode: string
     billingAddressFields: string
     isBillingAddressPhoneNumberOn: boolean
     isShippingAddressOn: boolean
+    shippingAddressAllowedCountries: string
     isShippingAddressPhoneNumberOn: boolean
     isEmailAddressOn: boolean
+    allowPrepaidCards: boolean
+    allowCreditCards: boolean
+    transactionId: string
+    totalPriceStatus: string
+    totalPriceLabel: string
+    checkoutOption: string
   }
   threeDSTwo: {
     isBillingInformationScreenEnabled: boolean
