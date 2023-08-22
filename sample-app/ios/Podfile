@@ -44,6 +44,20 @@ target 'sample-app' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  # Include below if facing issues with "No permission handler detected." when running on iOS
+  # See https://stackoverflow.com/a/74901546/3328696 for more details
+  pre_install do |installer|
+    Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+  
+    installer.pod_targets.each do |pod|
+      if pod.name.eql?('RNPermissions') || pod.name.start_with?('Permission-')
+        def pod.build_type;
+          Pod::BuildType.static_library
+        end
+      end
+    end
+  end
+
   target 'sample-appTests' do
     inherit! :complete
     requires_app_host = true
