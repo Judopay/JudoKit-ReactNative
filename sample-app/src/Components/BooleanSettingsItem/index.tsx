@@ -41,7 +41,11 @@ const BooleanSettingsItem: FC<BooleanSettingsItemProps> = ({
       >
         {title}
       </Text>
-      <Switch value={value} onValueChange={onValueChange} />
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        testID={`${title} switch`}
+      />
     </View>
   )
 }

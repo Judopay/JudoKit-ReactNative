@@ -54,6 +54,7 @@ const TextSettingsItem: FC<TextSettingsItemProps> = ({
         clearButtonMode="always"
         value={value}
         onChangeText={onChange}
+        testID={`${title} input`}
       />
     </View>
   )

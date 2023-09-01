@@ -78,6 +78,7 @@ const HomeScreen: FC<
       }}
     >
       <SectionList
+        testID="home-screen-section-list"
         keyExtractor={item => item.type.toString()}
         renderSectionHeader={({ section: { header } }) => (
           <SectionHeader text={header} key="header-key" />

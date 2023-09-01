@@ -7,6 +7,7 @@ export interface TextInputProps {
   placeholder?: string
   value?: string
   onChangeText?: (newValue: string) => void
+  testID?: string
 
   padding?: number
   marginTop?: number
@@ -21,6 +22,7 @@ const TextInput: FC<TextInputProps> = ({
   padding = 12,
   marginTop = 24,
   marginBottom = 0,
+  testID,
 }) => {
   const {
     colors: { border, card, text },
@@ -49,6 +51,7 @@ const TextInput: FC<TextInputProps> = ({
       clearButtonMode="always"
       value={value}
       onChangeText={onChangeText}
+      testID={testID}
     />
   )
 }

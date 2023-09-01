@@ -109,7 +109,7 @@ const TokenPaymentsScreen: FC<
         behavior={IS_IOS ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
-        <ScrollView>
+        <ScrollView testID="token-scroll-view">
           <View
             style={{
               flex: 1,
@@ -145,6 +145,7 @@ const TokenPaymentsScreen: FC<
               placeholder="Card security code"
               value={cardSecurityCode}
               onChangeText={sedCardSecurityCode}
+              testID="card-token-security-code"
             />
 
             <TextInput
@@ -191,12 +192,14 @@ const TokenPaymentsScreen: FC<
             />
 
             <Button
+              testID="pay-with-token-button"
               isLoading={isLoading}
               disabled={isLoading || !isValid}
               title="Pay with token"
               onPress={() => invokeTokenPayment(JudoTransactionMode.Payment)}
             />
             <Button
+              testID="preauth-with-token-button"
               isLoading={isLoading}
               disabled={isLoading || !isValid}
               title="PreAuth with token"
