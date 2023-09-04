@@ -74,8 +74,6 @@ repositories {
     mavenCentral()
     google()
 
-    maven { url 'https://vocalinkzapp.jfrog.io/artifactory/merchant-library-maven/' }
-
     def found = false
     def defaultDir = null
     def androidSourcesName = 'React Native sources'
