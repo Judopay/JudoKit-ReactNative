@@ -87,6 +87,13 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4102
         versionName "4.1.0(2)"
+        testBuildType System.getProperty('testBuildType', 'debug')
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    buildTypes {
+        release {
+            proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
+        }
     }
 }
 
@@ -96,6 +103,9 @@ dependencies {
 
     implementation "com.github.chuckerteam.chucker:library:3.5.2"
     implementation 'com.judopay:judokit-android:4.1.0'
+
+    androidTestImplementation('com.wix:detox:+')
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

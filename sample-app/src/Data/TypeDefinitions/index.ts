@@ -12,6 +12,7 @@ export interface SettingsData {
     token: string
     secret?: string
     paymentSession?: string
+    testID?: string
   }
   reference: {
     consumerReference: string
@@ -188,6 +189,7 @@ export enum SettingsItemDataType {
 export interface SettingsItemOption {
   id: string
   title: string
+  testID?: string
 }
 
 export interface SettingsItem {
@@ -196,6 +198,7 @@ export interface SettingsItem {
   title: string
   value: string | boolean | number
   options?: Array<SettingsItemOption>
+  testID?: string
 }
 
 export enum Screen {

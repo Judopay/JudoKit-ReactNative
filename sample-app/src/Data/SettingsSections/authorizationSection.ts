@@ -48,6 +48,7 @@ const authorizationSection = (
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Using token and secret',
         value: isUsingTokenAndSecret,
+        testID: 'using-token-and-secret-toggle',
       },
       ...(isUsingTokenAndSecret
         ? [
@@ -56,12 +57,14 @@ const authorizationSection = (
               dataType: SettingsItemDataType.TEXT,
               title: 'Token',
               value: _.get(data, tokenPath),
+              testID: 'token-input-field',
             },
             {
               path: secretPath,
               dataType: SettingsItemDataType.TEXT,
               title: 'Secret',
               value: _.get(data, secretPath),
+              testID: 'secret-input-field',
             },
           ]
         : []),

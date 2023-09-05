@@ -17,10 +17,10 @@ export enum TestData {
 
 export enum Selectors {
   SETTINGS_BUTTON = 'settings-button',
-  JUDO_ID_INPUT = 'Judo ID input',
-  AUTH_TOGGLE = 'Using token and secret switch',
-  TOKEN_INPUT = 'Token input',
-  SECRET_INPUT = 'Secret input',
+  JUDO_ID_INPUT = 'judo-id-input',
+  AUTH_TOGGLE = 'using-token-and-secret-toggle',
+  TOKEN_INPUT = 'token-input-field',
+  SECRET_INPUT = 'secret-input-field',
   BACK_BUTTON = 'back-button',
   CARD_NUMBER_INPUT = 'Card Number Field',
   CARDHOLDER_NAME_INPUT = 'Cardholder Name Field',

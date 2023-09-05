@@ -11,9 +11,13 @@ export async function fillPaymentDetailsSheet(
       TestData.FAILED_CARD_NUMBER,
     )
   } else {
-    await element(by.id(Selectors.CARD_NUMBER_INPUT)).replaceText(
-      TestData.CARD_NUMBER,
-    )
+    if (device.getPlatform() === 'ios') {
+      await element(by.id(Selectors.CARD_NUMBER_INPUT)).replaceText(
+        TestData.CARD_NUMBER,
+      )
+    } else if (device.getPlatform() === 'android') {
+      await element(by.text('Card number')).replaceText(TestData.CARD_NUMBER)
+    }
   }
   await element(by.id(Selectors.EXPIRY_DATE_INPUT)).typeText(
     TestData.EXPIRY_DATE,
@@ -28,9 +32,15 @@ export async function fillPaymentDetailsSheet(
     )
   }
   if (!frictionless) {
-    await element(by.id(Selectors.CARDHOLDER_NAME_INPUT)).typeText(
-      TestData.CARDHOLDER_NAME,
-    )
+    if (device.getPlatform() === 'ios') {
+      await element(by.id(Selectors.CARDHOLDER_NAME_INPUT)).typeText(
+        TestData.CARDHOLDER_NAME,
+      )
+    } else if (device.getPlatform() === 'android') {
+      await element(by.text('Cardholder Name')).replaceText(
+        TestData.CARDHOLDER_NAME,
+      )
+    }
     await element(
       by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button'])),
     ).tap()
@@ -68,4 +78,12 @@ export async function setNoPreferenceCRI() {
   await element(by.text(Selectors.CHALLENGE_REQUEST_SETTINGS)).tap()
   await element(by.text(Selectors.NO_PREFERENCE)).tap()
   await element(by.id(Selectors.BACK_BUTTON)).tap()
+}
+
+export async function clickSettingsButton() {
+  if (device.getPlatform() === 'ios') {
+    await element(by.id(Selectors.SETTINGS_BUTTON)).tap()
+  } else if (device.getPlatform() === 'android') {
+    await element(by.id(Selectors.SETTINGS_BUTTON)).longPress()
+  }
 }

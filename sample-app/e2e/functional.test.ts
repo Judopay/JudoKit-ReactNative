@@ -6,17 +6,18 @@ import {
   complete3DS2,
   addCardPaymentMethod,
   setNoPreferenceCRI,
+  clickSettingsButton,
 } from './helpers'
 
 describe('E2E Functional Tests', () => {
   beforeAll(async () => {
     await device.launchApp()
-    await element(by.id(Selectors.SETTINGS_BUTTON)).tap()
+    await clickSettingsButton()
     await element(by.id(Selectors.JUDO_ID_INPUT)).replaceText(TestData.JUDO_ID)
-    await element(by.id(Selectors.AUTH_TOGGLE)).tap()
+    await element(by.id(Selectors.AUTH_TOGGLE)).longPress()
     await element(by.id(Selectors.TOKEN_INPUT)).replaceText(TestData.TOKEN)
     await element(by.id(Selectors.SECRET_INPUT)).replaceText(TestData.SECRET)
-    await element(by.id(Selectors.BACK_BUTTON)).tap()
+    await element(by.id(Selectors.BACK_BUTTON)).longPress()
   })
 
   afterEach(async () => {

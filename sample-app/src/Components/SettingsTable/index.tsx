@@ -111,7 +111,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
     renderItemInfo: SectionListRenderItemInfo<SettingsItem>,
   ): React.ReactElement | null => {
     const { item } = renderItemInfo
-    const { dataType, title, path, value } = item
+    const { dataType, title, path, value, testID } = item
 
     switch (dataType) {
       case SettingsItemDataType.BOOLEAN:
@@ -121,6 +121,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
             key={path}
             value={Boolean(value)}
             onValueChange={value => handleSettingsChange(path, value)}
+            testID={testID}
           />
         )
 
@@ -130,6 +131,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
             value={`${value || ''}`}
             title={title}
             onChange={text => handleSettingsChange(path, text)}
+            testID={testID}
           />
         )
 
