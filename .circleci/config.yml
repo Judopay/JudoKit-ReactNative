@@ -558,6 +558,27 @@ jobs:
           environment:
             ENVIRONMENT: << parameters.environment >>
           command: /resources/scripts/report-status-to-jira.sh
+  run_e2e_ios:
+    executor: macos
+    working_directory: ~/project/sample-app
+    steps:
+      - run:
+          name: Install Detox dependencies
+          command: |
+            brew tap wix/brew
+            brew install applesimutils
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+            export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            nvm install $NODE_VERSION
+            nvm use $NODE_VERSION
+            nvm alias default $NODE_VERSION
+            npm install react-native-cli --global
+            npm install detox-cli --global
+      - run: 
+          name: Run Detox tests
+          command: |
+            detox build --configuration ios.sim.debug
+            detox test --configuration ios.sim.debug --cleanup     
 
 workflows:
   version: 2
@@ -651,3 +672,12 @@ workflows:
             tags:
                 only:
                   - /^v[0-9]+(\.[0-9]+)*$/
+  e2e: 
+    jobs:
+      - run_e2e_ios:
+          requires:
+            - get_dependencies_sample_ios
+          filters:
+            branches:
+              only:
+                - qa-63-detox-setup-ui-e2e-tests
