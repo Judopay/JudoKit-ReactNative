@@ -85,8 +85,8 @@ android {
         applicationId "com.judopay.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4111
-        versionName "4.1.1(1)"
+        versionCode 4121
+        versionName "4.1.2(1)"
     }
 }
 
@@ -95,7 +95,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     implementation "com.github.chuckerteam.chucker:library:3.5.2"
-    implementation 'com.judopay:judokit-android:4.1.1'
+    implementation 'com.judopay:judokit-android:4.1.2'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
