@@ -592,7 +592,7 @@ jobs:
           command: |
             yarn start &
             detox build --configuration ios.sim.debug
-            detox test --configuration ios.sim.debug --cleanup     
+            detox test --configuration ios.sim.debug --cleanup --headless  
 
 workflows:
   version: 2
