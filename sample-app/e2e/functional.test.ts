@@ -9,14 +9,18 @@ import {
   clickSettingsButton,
 } from './helpers'
 
+const judoId = process.env.JUDO_ID || ''
+const token = process.env.API_TEST_TOKEN || ''
+const secret = process.env.API_TEST_SECRET || ''
+
 describe('E2E Functional Tests', () => {
   beforeAll(async () => {
     await device.launchApp()
     await clickSettingsButton()
-    await element(by.id(Selectors.JUDO_ID_INPUT)).replaceText(TestData.JUDO_ID)
+    await element(by.id(Selectors.JUDO_ID_INPUT)).replaceText(judoId)
     await element(by.id(Selectors.AUTH_TOGGLE)).longPress()
-    await element(by.id(Selectors.TOKEN_INPUT)).replaceText(TestData.TOKEN)
-    await element(by.id(Selectors.SECRET_INPUT)).replaceText(TestData.SECRET)
+    await element(by.id(Selectors.TOKEN_INPUT)).replaceText(token)
+    await element(by.id(Selectors.SECRET_INPUT)).replaceText(secret)
     await element(by.id(Selectors.BACK_BUTTON)).longPress()
   })
 
