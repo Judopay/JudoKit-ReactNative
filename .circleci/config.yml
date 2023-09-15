@@ -582,6 +582,10 @@ jobs:
           command: |
             yarn global add react-native-cli
             yarn global add detox-cli
+      - run:
+          name: Rebuild Detox framework cache
+          working_directory: sample-app
+          command: detox clean-framework-cache && detox build-framework-cache
       - run: 
           name: Run Detox tests
           working_directory: sample-app

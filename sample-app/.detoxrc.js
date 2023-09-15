@@ -13,12 +13,12 @@ module.exports = {
     'ios.debug': {
       type: 'ios.app',
       binaryPath: 'ios/build/Build/Products/Debug-iphonesimulator/JudoKit-RN.app',
-      build: 'xcodebuild -workspace ios/sample-app.xcworkspace -scheme sample-app -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build'
+      build: 'xcodebuild -workspace ios/sample-app.xcworkspace -scheme sample-app -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet'
     },
     'ios.release': {
       type: 'ios.app',
       binaryPath: 'ios/build/Build/Products/Release-iphonesimulator/JudoKit-RN.app',
-      build: 'xcodebuild -workspace ios/sample-app.xcworkspace -scheme sample-app -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build'
+      build: 'xcodebuild -workspace ios/sample-app.xcworkspace -scheme sample-app -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet'
     },
     'android.debug': {
       type: 'android.apk',
