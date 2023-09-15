@@ -562,6 +562,9 @@ jobs:
     executor: macos
     working_directory: ~/project/sample-app
     steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Install Homebrew dependencies
           command: |
@@ -570,13 +573,14 @@ jobs:
       - run:
           name: Install Detox dependencies
           command: |
+            pwd
             yarn global add react-native-cli
             yarn global add detox-cli
             yarn install
+            yarn start
       - run: 
           name: Run Detox tests
           command: |
-            yarn start &
             detox build --configuration ios.sim.debug
             detox test --configuration ios.sim.debug --cleanup     
 
