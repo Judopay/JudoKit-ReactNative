@@ -576,7 +576,7 @@ jobs:
       - run: 
           name: Run Detox tests
           command: |
-            node node_modules/react-native/local-cli/cli.js start &
+            yarn start &
             detox build --configuration ios.sim.debug
             detox test --configuration ios.sim.debug --cleanup     
 
