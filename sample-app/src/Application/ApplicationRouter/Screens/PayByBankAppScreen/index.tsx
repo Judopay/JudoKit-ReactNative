@@ -1,12 +1,9 @@
 import React, { FC, useEffect, useState } from 'react'
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import {Button, SafeAreaView, Text, View} from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions'
 import { useNavigation, useTheme } from '@react-navigation/native'
-import { IS_IOS } from '../../../../Data/Constants'
 import JudoPay, {
-  JudoPBBAButton,
-  JudoTransactionMode,
 } from 'judokit-react-native'
 import { useJudoConfiguration } from '../../../../CustomHooks/useJudoConfiguration'
 import {
@@ -51,15 +48,7 @@ const PayByBankAppScreen: FC<
   }
 
   const renderPbBAButton = () => (
-    <TouchableOpacity
-      onPress={onPbBAButtonPress}
-      style={{
-        height: 50,
-        width: IS_IOS ? 310 : 200, //TODO: why?!!
-      }}
-    >
-      <JudoPBBAButton style={{ flex: 1 }} />
-    </TouchableOpacity>
+    <Button title="Tap me!" onPress={onPbBAButtonPress} />
   )
 
   const renderPbBAAppNotAvailableMessage = () => (
