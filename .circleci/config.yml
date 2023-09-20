@@ -592,7 +592,9 @@ jobs:
           command: |
             yarn start &
             detox build --configuration ios.sim.debug
-            detox test --configuration ios.sim.debug --cleanup --headless  
+            detox test --configuration ios.sim.debug --record-videos failing --take-screenshots failing
+      - store_artifacts:
+          path: .artifacts/
 
 workflows:
   version: 2
