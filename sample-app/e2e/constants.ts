@@ -1,7 +1,4 @@
 export enum TestData {
-  JUDO_ID = '',
-  TOKEN = '',
-  SECRET = '',
   CARD_NUMBER = '4976 3500 0000 6891',
   FAILED_CARD_NUMBER = '4111 1111 1111 1111',
   CARDHOLDER_NAME = 'Test User',
