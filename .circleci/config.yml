@@ -590,6 +590,7 @@ jobs:
           name: Run Detox tests
           working_directory: sample-app
           command: |
+            rm -rf node_modules/judokit-react-native
             yarn start &
             detox build --configuration ios.sim.debug
             detox test --configuration ios.sim.debug --record-videos failing --take-screenshots failing
