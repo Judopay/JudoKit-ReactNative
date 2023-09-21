@@ -593,8 +593,9 @@ jobs:
             yarn start &
             detox build --configuration ios.sim.debug
             detox test --configuration ios.sim.debug --record-videos failing --take-screenshots failing
+            ls -l artifacts
       - store_artifacts:
-          path: sample-app/.artifacts/
+          path: sample-app/artifacts
 
 workflows:
   version: 2
