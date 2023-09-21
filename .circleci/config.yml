@@ -101,9 +101,9 @@ jobs:
 #      - restore_cache:
 #          keys:
 #            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
+      # - restore_cache:
+      #     keys:
+      #       - judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
       - run:
           name: Ruby gems
           working_directory: sample-app
