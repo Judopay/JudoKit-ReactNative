@@ -44,6 +44,10 @@ target 'sample-app' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
+
   # Include below if facing issues with "No permission handler detected." when running on iOS
   # See https://stackoverflow.com/a/74901546/3328696 for more details
   pre_install do |installer|
