@@ -12,6 +12,11 @@ import { Screen, SingleSelectionTableParams } from '../../Data/TypeDefinitions'
 import PayByBankAppScreen from './Screens/PayByBankAppScreen'
 import TokenPaymentsScreen from './Screens/TokenPaymentsScreen'
 import GetTransactionDetailsScreen from './Screens/GetTransactionDetailsScreen'
+import {LogBox} from 'react-native'
+
+LogBox.ignoreLogs([
+  'Sending `onAnimatedValueUpdate` with no listeners registered.',
+])
 
 const Stack = createStackNavigator()
 

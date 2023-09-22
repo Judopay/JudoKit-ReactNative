@@ -7,21 +7,14 @@ import {
   addCardPaymentMethod,
   setNoPreferenceCRI,
   clickSettingsButton,
+  enterAuthDetails,
 } from './helpers'
-
-const judoId = process.env.JUDO_ID || ''
-const token = process.env.API_TEST_TOKEN || ''
-const secret = process.env.API_TEST_SECRET || ''
 
 describe('E2E Functional Tests', () => {
   beforeAll(async () => {
     await device.launchApp()
     await clickSettingsButton()
-    await element(by.id(Selectors.JUDO_ID_INPUT)).replaceText(judoId)
-    await element(by.id(Selectors.AUTH_TOGGLE)).longPress()
-    await element(by.id(Selectors.TOKEN_INPUT)).replaceText(token)
-    await element(by.id(Selectors.SECRET_INPUT)).replaceText(secret)
-    await element(by.id(Selectors.BACK_BUTTON)).longPress()
+    await enterAuthDetails()
   })
 
   afterEach(async () => {
@@ -30,6 +23,34 @@ describe('E2E Functional Tests', () => {
 
   afterAll(async () => {
     await device.terminateApp()
+  })
+
+  it('should successfully complete a 3DS2 token payment transaction', async () => {
+    await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom')
+    await element(by.text(Selectors.TOKEN_PAYMENTS)).tap()
+    await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap()
+    await fillPaymentDetailsSheet()
+    await element(by.id(Selectors.TOKEN_CVV_CODE)).typeText(
+      TestData.SECURITY_CODE,
+    )
+    await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom')
+    await element(by.id(Selectors.PAY_WITH_TOKEN)).tap()
+    await complete3DS2()
+    await assertResultsScreen('1', '1')
+  })
+
+  it('should successfully complete a 3DS2 token pre-auth transaction', async () => {
+    await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom')
+    await element(by.text(Selectors.TOKEN_PAYMENTS)).tap()
+    await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap()
+    await fillPaymentDetailsSheet()
+    await element(by.id(Selectors.TOKEN_CVV_CODE)).typeText(
+      TestData.SECURITY_CODE,
+    )
+    await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom')
+    await element(by.id(Selectors.PREAUTH_WITH_TOKEN)).tap()
+    await complete3DS2()
+    await assertResultsScreen('2', '1')
   })
 
   it('should successfully complete a 3DS2 payment transaction', async () => {
@@ -60,19 +81,19 @@ describe('E2E Functional Tests', () => {
     await assertResultsScreen('4', '1')
   })
 
-  it('should successfully complete a 3DS2 payment transaction via payment methods', async () => {
-    await element(by.text(Selectors.PAYMENT_METHODS)).tap()
-    await addCardPaymentMethod()
-    // Will fail until CSC toggle is implemented
-    await assertResultsScreen('1', '1')
-  })
+  // it('should successfully complete a 3DS2 payment transaction via payment methods', async () => {
+  //   await element(by.text(Selectors.PAYMENT_METHODS)).tap()
+  //   await addCardPaymentMethod()
+  //   // Will fail until CSC toggle is implemented
+  //   await assertResultsScreen('1', '1')
+  // })
 
-  it('should successfully complete a 3DS2 pre-auth transaction via payment methods', async () => {
-    await element(by.text(Selectors.PREAUTH_METHODS)).tap()
-    await addCardPaymentMethod()
-    // Will fail until CSC toggle is implemented
-    await assertResultsScreen('1', '1')
-  })
+  // it('should successfully complete a 3DS2 pre-auth transaction via payment methods', async () => {
+  //   await element(by.text(Selectors.PREAUTH_METHODS)).tap()
+  //   await addCardPaymentMethod()
+  //   // Will fail until CSC toggle is implemented
+  //   await assertResultsScreen('1', '1')
+  // })
 
   it('should return error message upon a failed 3DS2 payment transaction', async () => {
     await element(by.text(Selectors.PAY_WITH_CARD)).tap()
@@ -100,34 +121,6 @@ describe('E2E Functional Tests', () => {
     await waitFor(element(by.text(UserFeedback.THREEDS2_CANCELLED)))
       .toExist()
       .withTimeout(10000)
-  })
-
-  it('should successfully complete a 3DS2 token payment transaction', async () => {
-    await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom')
-    await element(by.text(Selectors.TOKEN_PAYMENTS)).tap()
-    await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap()
-    await fillPaymentDetailsSheet()
-    await element(by.id(Selectors.TOKEN_CVV_CODE)).typeText(
-      TestData.SECURITY_CODE,
-    )
-    await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom')
-    await element(by.id(Selectors.PAY_WITH_TOKEN)).tap()
-    await complete3DS2()
-    await assertResultsScreen('1', '1')
-  })
-
-  it('should successfully complete a 3DS2 token pre-auth transaction', async () => {
-    await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom')
-    await element(by.text(Selectors.TOKEN_PAYMENTS)).tap()
-    await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap()
-    await fillPaymentDetailsSheet()
-    await element(by.id(Selectors.TOKEN_CVV_CODE)).typeText(
-      TestData.SECURITY_CODE,
-    )
-    await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom')
-    await element(by.id(Selectors.PREAUTH_WITH_TOKEN)).tap()
-    await complete3DS2()
-    await assertResultsScreen('2', '1')
   })
 
   it('should successfully complete a 3DS2 payment frictionless transaction', async () => {

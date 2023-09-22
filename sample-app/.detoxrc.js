@@ -18,7 +18,7 @@ module.exports = {
     'ios.release': {
       type: 'ios.app',
       binaryPath: 'ios/build/Build/Products/Release-iphonesimulator/JudoKit-RN.app',
-      build: 'xcodebuild -workspace ios/sample-app.xcworkspace -scheme sample-app -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet'
+      build: 'xcodebuild -workspace ios/sample-app.xcworkspace -scheme sample-app -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet'
     },
     'android.debug': {
       type: 'android.apk',

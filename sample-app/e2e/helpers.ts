@@ -1,6 +1,10 @@
 import {element, expect} from 'detox'
 import {Selectors, TestData} from './constants'
 
+const judoId = process.env.JUDO_ID || ''
+const token = process.env.API_TEST_TOKEN || ''
+const secret = process.env.API_TEST_SECRET || ''
+
 export async function fillPaymentDetailsSheet(
   failed: boolean = false,
   declined: boolean = false,
@@ -77,7 +81,7 @@ export async function setNoPreferenceCRI() {
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap()
   await element(by.text(Selectors.CHALLENGE_REQUEST_SETTINGS)).tap()
   await element(by.text(Selectors.NO_PREFERENCE)).tap()
-  await element(by.id(Selectors.BACK_BUTTON)).tap()
+  await enterAuthDetails()
 }
 
 export async function clickSettingsButton() {
@@ -86,4 +90,12 @@ export async function clickSettingsButton() {
   } else if (device.getPlatform() === 'android') {
     await element(by.id(Selectors.SETTINGS_BUTTON)).longPress()
   }
+}
+
+export async function enterAuthDetails() {
+  await element(by.id(Selectors.JUDO_ID_INPUT)).replaceText(judoId)
+  await element(by.id(Selectors.AUTH_TOGGLE)).longPress()
+  await element(by.id(Selectors.TOKEN_INPUT)).replaceText(token)
+  await element(by.id(Selectors.SECRET_INPUT)).replaceText(secret)
+  await element(by.id(Selectors.BACK_BUTTON)).longPress()
 }
