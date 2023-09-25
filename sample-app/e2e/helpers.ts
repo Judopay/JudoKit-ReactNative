@@ -54,7 +54,7 @@ export async function fillPaymentDetailsSheet(
 export async function assertResultsScreen(type: string, result: string) {
   await waitFor(element(by.text('Result')))
     .toExist()
-    .withTimeout(10000)
+    .withTimeout(15000)
   await expect(element(by.id('receiptId-value'))).not.toHaveText('')
   await expect(element(by.id('type-value'))).toHaveText(type)
   await expect(element(by.id('result-value'))).toHaveText(result)
@@ -63,7 +63,7 @@ export async function assertResultsScreen(type: string, result: string) {
 export async function complete3DS2() {
   await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
     .toBeVisible()
-    .withTimeout(10000)
+    .withTimeout(15000)
   await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
 }
 

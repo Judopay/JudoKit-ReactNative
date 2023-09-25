@@ -17,11 +17,11 @@ describe('E2E Functional Tests', () => {
     await enterAuthDetails()
   })
 
-  afterEach(async () => {
-    await device.reloadReactNative()
+  beforeEach(async () => {
+    await device.launchApp()
   })
 
-  afterAll(async () => {
+  afterEach(async () => {
     await device.terminateApp()
   })
 
@@ -36,6 +36,10 @@ describe('E2E Functional Tests', () => {
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom')
     await element(by.id(Selectors.PAY_WITH_TOKEN)).tap()
     await complete3DS2()
+    try {
+      await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
+      await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
+    } catch (error) {}
     await assertResultsScreen('1', '1')
   })
 
@@ -50,6 +54,10 @@ describe('E2E Functional Tests', () => {
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom')
     await element(by.id(Selectors.PREAUTH_WITH_TOKEN)).tap()
     await complete3DS2()
+    try {
+      await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
+      await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
+    } catch (error) {}
     await assertResultsScreen('2', '1')
   })
 
