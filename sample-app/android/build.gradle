@@ -23,8 +23,6 @@ buildscript {
 
 allprojects {
     repositories {
-        // JudoKit-Android / PbBA library repository
-        maven { url 'https://vocalinkzapp.jfrog.io/artifactory/merchant-library-maven/' }
         maven { url("$rootDir/../node_modules/detox/Detox-android") }
     }
     

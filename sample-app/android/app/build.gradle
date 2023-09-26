@@ -85,10 +85,10 @@ android {
         applicationId "com.judopay.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4102
-        versionName "4.1.0(2)"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        versionCode 4121
+        versionName "4.1.2(1)"
     }
     buildTypes {
         release {
@@ -102,7 +102,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     implementation "com.github.chuckerteam.chucker:library:3.5.2"
-    implementation 'com.judopay:judokit-android:4.1.0'
+    implementation 'com.judopay:judokit-android:4.1.2'
 
     androidTestImplementation('com.wix:detox:+')
     implementation 'androidx.appcompat:appcompat:1.1.0'
