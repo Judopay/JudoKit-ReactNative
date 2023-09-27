@@ -104,3 +104,7 @@ export async function enterAuthDetails() {
   await element(by.id(Selectors.SECRET_INPUT)).replaceText(secret)
   await element(by.id(Selectors.BACK_BUTTON)).longPress()
 }
+
+export async function dissmissKeyboardOnTokenScreen() {
+  await element(by.id(Selectors.HELPER_TEXT)).tap()
+}

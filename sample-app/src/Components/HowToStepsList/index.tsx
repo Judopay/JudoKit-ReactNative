@@ -19,7 +19,7 @@ const HowToStepsList: FC<HowToStepsListProps> = ({
         justifyContent: 'space-between',
         alignItems: 'center',
       }}
-    >
+      testID="help-steps-list">
       <Text
         style={{
           width: '100%',

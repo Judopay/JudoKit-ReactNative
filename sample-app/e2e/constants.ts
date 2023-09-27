@@ -44,6 +44,7 @@ export enum Selectors {
   PREAUTH_WITH_TOKEN = 'preauth-with-token-button',
   CHALLENGE_REQUEST_SETTINGS = 'Challenge request indicator',
   NO_PREFERENCE = 'No preference',
+  HELPER_TEXT = 'help-steps-list',
 }
 
 export enum UserFeedback {

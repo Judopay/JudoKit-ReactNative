@@ -8,6 +8,7 @@ import {
   setNoPreferenceCRI,
   clickSettingsButton,
   enterAuthDetails,
+  dissmissKeyboardOnTokenScreen,
 } from './helpers'
 
 describe('E2E Functional Tests', () => {
@@ -33,6 +34,7 @@ describe('E2E Functional Tests', () => {
     await element(by.id(Selectors.TOKEN_CVV_CODE)).typeText(
       TestData.SECURITY_CODE,
     )
+    await dissmissKeyboardOnTokenScreen()
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom')
     await element(by.id(Selectors.PAY_WITH_TOKEN)).tap()
     await complete3DS2()
@@ -51,6 +53,7 @@ describe('E2E Functional Tests', () => {
     await element(by.id(Selectors.TOKEN_CVV_CODE)).typeText(
       TestData.SECURITY_CODE,
     )
+    await dissmissKeyboardOnTokenScreen()
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom')
     await element(by.id(Selectors.PREAUTH_WITH_TOKEN)).tap()
     await complete3DS2()
