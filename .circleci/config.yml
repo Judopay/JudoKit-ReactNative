@@ -106,7 +106,9 @@ jobs:
       - run:
           name: Pod Install
           working_directory: sample-app/ios
-          command: pod install --repo-update
+          command: |
+            rm -rf Podfile.lock
+            pod install --repo-update
       - save_cache:
           key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
           paths:
