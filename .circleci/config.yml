@@ -95,15 +95,6 @@ jobs:
     executor: macos
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
-      # - restore_cache:
-      #     keys:
-      #       - judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
       - run:
           name: Ruby gems
           working_directory: sample-app
@@ -115,9 +106,7 @@ jobs:
       - run:
           name: Pod Install
           working_directory: sample-app/ios
-          command: |
-            rm -rf Podfile.lock
-            pod install --repo-update
+          command: pod install --repo-update
       - save_cache:
           key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
           paths:
@@ -595,7 +584,7 @@ jobs:
             rm -rf node_modules/judokit-react-native/sample-app
             yarn start &
             detox build --configuration ios.sim.debug
-            detox test --configuration ios.sim.debug --record-videos failing --take-screenshots failing
+            detox test --configuration ios.sim.debug --record-videos failing
       - store_artifacts:
           path: sample-app/artifacts
 
