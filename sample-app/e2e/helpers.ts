@@ -5,6 +5,11 @@ const judoId = process.env.JUDO_ID || ''
 const token = process.env.API_TEST_TOKEN || ''
 const secret = process.env.API_TEST_SECRET || ''
 
+export interface Props {
+  type: string
+  result: string
+}
+
 export async function fillPaymentDetailsSheet(
   failed: boolean = false,
   declined: boolean = false,
@@ -51,13 +56,13 @@ export async function fillPaymentDetailsSheet(
   }
 }
 
-export async function assertResultsScreen(type: string, result: string) {
+export async function assertResultsScreen(props: Props) {
   await waitFor(element(by.text('Result')))
     .toExist()
     .withTimeout(15000)
   await expect(element(by.id('receiptId-value'))).not.toHaveText('')
-  await expect(element(by.id('type-value'))).toHaveText(type)
-  await expect(element(by.id('result-value'))).toHaveText(result)
+  await expect(element(by.id('type-value'))).toHaveText(props.type)
+  await expect(element(by.id('result-value'))).toHaveText(props.result)
 }
 
 export async function complete3DS2() {

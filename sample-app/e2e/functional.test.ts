@@ -40,7 +40,7 @@ describe('E2E Functional Tests', () => {
       await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
       await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
     } catch (error) {}
-    await assertResultsScreen('1', '1')
+    await assertResultsScreen({type: '1', result: '1'})
   })
 
   it('should successfully complete a 3DS2 token pre-auth transaction', async () => {
@@ -58,35 +58,35 @@ describe('E2E Functional Tests', () => {
       await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
       await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress()
     } catch (error) {}
-    await assertResultsScreen('2', '1')
+    await assertResultsScreen({type: '2', result: '1'})
   })
 
   it('should successfully complete a 3DS2 payment transaction', async () => {
     await element(by.text(Selectors.PAY_WITH_CARD)).tap()
     await fillPaymentDetailsSheet()
     await complete3DS2()
-    await assertResultsScreen('1', '1')
+    await assertResultsScreen({type: '1', result: '1'})
   })
 
   it('should successfully complete a 3DS2 pre-auth transaction', async () => {
     await element(by.text(Selectors.PAY_WITH_PREAUTH)).tap()
     await fillPaymentDetailsSheet()
     await complete3DS2()
-    await assertResultsScreen('2', '1')
+    await assertResultsScreen({type: '2', result: '1'})
   })
 
   it('should successfully complete a 3DS2 register card transaction', async () => {
     await element(by.text(Selectors.REGISTER_CARD)).tap()
     await fillPaymentDetailsSheet()
     await complete3DS2()
-    await assertResultsScreen('3', '1')
+    await assertResultsScreen({type: '3', result: '1'})
   })
 
   it('should successfully complete a 3DS2 check card transaction', async () => {
     await element(by.text(Selectors.CHECK_CARD)).tap()
     await fillPaymentDetailsSheet()
     await complete3DS2()
-    await assertResultsScreen('4', '1')
+    await assertResultsScreen({type: '4', result: '1'})
   })
 
   // it('should successfully complete a 3DS2 payment transaction via payment methods', async () => {
@@ -107,7 +107,7 @@ describe('E2E Functional Tests', () => {
     await element(by.text(Selectors.PAY_WITH_CARD)).tap()
     await fillPaymentDetailsSheet(true, false)
     await complete3DS2()
-    await assertResultsScreen('1', '0')
+    await assertResultsScreen({type: '1', result: '1'})
     await expect(element(by.text('The gateway reported an error'))).toExist()
   })
 
@@ -115,7 +115,7 @@ describe('E2E Functional Tests', () => {
     await element(by.text(Selectors.PAY_WITH_CARD)).tap()
     await fillPaymentDetailsSheet(false, true)
     await complete3DS2()
-    await assertResultsScreen('1', '2')
+    await assertResultsScreen({type: '1', result: '2'})
     await expect(element(by.text('3D secure authorisation declined'))).toExist()
   })
 
@@ -141,7 +141,7 @@ describe('E2E Functional Tests', () => {
     await element(
       by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button'])),
     ).tap()
-    await assertResultsScreen('1', '1')
+    await assertResultsScreen({type: '1', result: '1'})
   })
 
   it('should successfully complete a 3DS2 payment frictionless no method transaction', async () => {
@@ -154,7 +154,7 @@ describe('E2E Functional Tests', () => {
     await element(
       by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button'])),
     ).tap()
-    await assertResultsScreen('1', '1')
+    await assertResultsScreen({type: '1', result: '1'})
   })
 
   it('should return error upon a 3DS2 payment frictionless auth failed transaction', async () => {
