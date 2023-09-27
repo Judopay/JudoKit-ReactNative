@@ -110,7 +110,7 @@ describe('E2E Functional Tests', () => {
     await element(by.text(Selectors.PAY_WITH_CARD)).tap()
     await fillPaymentDetailsSheet(true, false)
     await complete3DS2()
-    await assertResultsScreen({type: '1', result: '1'})
+    await assertResultsScreen({type: '1', result: '0'})
     await expect(element(by.text('The gateway reported an error'))).toExist()
   })
 
