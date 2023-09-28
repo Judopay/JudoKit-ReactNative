@@ -773,4 +773,4 @@ workflows:
           filters:
             branches:
               only:
-                - qa-63-detox-setup-ui-e2e-tests
+                - master
