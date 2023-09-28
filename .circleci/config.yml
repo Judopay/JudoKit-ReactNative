@@ -669,6 +669,8 @@ jobs:
             detox test --configuration ios.sim.debug --record-videos failing
       - store_artifacts:
           path: sample-app/artifacts
+      - notify_slack_error
+      - notify_slack_pass
 
 workflows:
   version: 2
@@ -772,5 +774,3 @@ workflows:
             branches:
               only:
                 - qa-63-detox-setup-ui-e2e-tests
-      - notify_slack_error
-      - notify_slack_pass
