@@ -25,7 +25,9 @@ export async function fillPaymentDetailsSheet(
         TestData.CARD_NUMBER,
       )
     } else if (device.getPlatform() === 'android') {
-      await element(by.text('Card number')).replaceText(TestData.CARD_NUMBER)
+      await element(by.label('cardHolderNameEntryField')).replaceText(
+        TestData.CARDHOLDER_NAME,
+      )
     }
   }
   await element(by.id(Selectors.EXPIRY_DATE_INPUT)).typeText(
@@ -46,7 +48,7 @@ export async function fillPaymentDetailsSheet(
         TestData.CARDHOLDER_NAME,
       )
     } else if (device.getPlatform() === 'android') {
-      await element(by.text('Cardholder Name')).replaceText(
+      await element(by.label('cardHolderNameEntryField')).replaceText(
         TestData.CARDHOLDER_NAME,
       )
     }
@@ -93,7 +95,7 @@ export async function clickSettingsButton() {
   if (device.getPlatform() === 'ios') {
     await element(by.id(Selectors.SETTINGS_BUTTON)).tap()
   } else if (device.getPlatform() === 'android') {
-    await element(by.id(Selectors.SETTINGS_BUTTON)).longPress()
+    await element(by.id(Selectors.SETTINGS_BUTTON)).tap()
   }
 }
 

@@ -37,7 +37,7 @@ detox test --configuration ios.sim.debug
 ```
 for iOS or 
 ```
-detox test --configuration android.sim.debug
+detox test --configuration android.emu.debug
 ```
 for Android.
 
