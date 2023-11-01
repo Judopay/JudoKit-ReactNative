@@ -167,7 +167,6 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
     val uiConfiguration = getUIConfiguration(options)
     val primaryAccountDetails = getPrimaryAccountDetails(options)
     val googlePayConfiguration = getGooglePayConfiguration(options)
-    val pbbaConfiguration = getPBBAConfiguration(options)
     val timeouts = getNetworkTimeout(options)
     val challengeRequestIndicator = getChallengeRequestIndicator(options)
     val scaExemption = getScaExemption(options)
@@ -184,7 +183,6 @@ internal fun getJudoConfiguration(type: PaymentWidgetType, options: ReadableMap)
         .setUiConfiguration(uiConfiguration)
         .setPrimaryAccountDetails(primaryAccountDetails)
         .setGooglePayConfiguration(googlePayConfiguration)
-        .setPBBAConfiguration(pbbaConfiguration)
         .setInitialRecurringPayment(options.isInitialRecurringPayment)
         .setDelayedAuthorisation(options.isDelayedAuthorisation)
         .setNetworkTimeout(timeouts)
@@ -584,23 +582,4 @@ internal fun getShippingParameters(options: ReadableMap): GooglePayShippingAddre
         allowedCountryCodes,
         options.isShippingPhoneNumberRequired
     )
-}
-
-internal fun getPBBAConfiguration(options: ReadableMap): PBBAConfiguration? {
-    return if (options.pbbaConfiguration != null) {
-        val deeplinkUri = if (options.deeplinkURL.isNullOrBlank()) {
-            null
-        } else {
-            Uri.parse(options.deeplinkURL)
-        }
-
-        PBBAConfiguration.Builder()
-            .setMobileNumber(options.pbbaMobileNumber)
-            .setEmailAddress(options.pbbaEmailAddress)
-            .setDeepLinkURL(deeplinkUri)
-            .setDeepLinkScheme(options.deeplinkScheme)
-            .build()
-    } else {
-        null
-    }
 }

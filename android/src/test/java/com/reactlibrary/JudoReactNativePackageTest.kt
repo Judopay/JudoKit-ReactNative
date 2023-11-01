@@ -38,14 +38,5 @@ class JudoReactNativePackageTest {
             assertEquals(modules.size, 1)
             assertSame(modules.first()::class.java, JudoReactNativeModule::class.java)
         }
-
-        @Test
-        @DisplayName("when invoking createViewManagers on it then an array containing only one instance of JudoReactNativePBBAManager should be returned")
-        fun returnOneInstanceOfJudoReactNativePBBAManagerWhenInvokingCreateViewManagers() {
-            val managers = sut.createViewManagers(reactContextMock)
-
-            assertEquals(managers.size, 1)
-            assertSame(managers.first()::class.java, JudoReactNativePBBAManager::class.java)
-        }
     }
 }

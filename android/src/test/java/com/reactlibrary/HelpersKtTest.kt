@@ -34,7 +34,6 @@ class HelpersKtTest {
     private val billingAddressParametersMock = mockkClass(ReadableMap::class)
     private val shippingAddressParametersMock = mockkClass(ReadableMap::class)
     private val googlePayConfigurationMock = mockkClass(ReadableMap::class)
-    private val pbbaConfigurationMock = mockkClass(ReadableMap::class)
     private val allowedCountryCodesMock = mockkClass(ReadableArray::class)
 
     @BeforeEach
@@ -170,21 +169,6 @@ class HelpersKtTest {
         every { shippingAddressParametersMock.hasKey("allowedCountryCodes") } returns true
         every { shippingAddressParametersMock.getArray("allowedCountryCodes") } returns allowedCountryCodesMock
         every { allowedCountryCodesMock.toArrayList() } returns arrayListOf("US")
-
-        // pbbaConfiguration
-        every { configurationMock.hasKey("pbbaConfiguration") } returns true
-        every { configurationMock.getMap("pbbaConfiguration") } returns pbbaConfigurationMock
-
-        every { pbbaConfigurationMock.getString("mobileNumber") } returns "123-123"
-        every { pbbaConfigurationMock.getString("emailAddress") } returns "example@mail.com"
-        every { pbbaConfigurationMock.hasKey("mobileNumber") } returns true
-        every { pbbaConfigurationMock.hasKey("emailAddress") } returns true
-
-        every { pbbaConfigurationMock.hasKey("deeplinkURL") } returns true
-        every { pbbaConfigurationMock.getString("deeplinkURL") } returns "https://www.google.com"
-
-        every { pbbaConfigurationMock.getString("deeplinkScheme") } returns "deep://link"
-        every { pbbaConfigurationMock.hasKey("deeplinkScheme") } returns true
 
         every { mapMock.getMap("configuration") } returns configurationMock
         every { mapMock.hasKey("configuration") } returns true
@@ -361,30 +345,6 @@ class HelpersKtTest {
             every { configurationMock.hasKey("googlePayConfiguration") } returns false
 
             val params = getGooglePayConfiguration(mapMock)
-
-            assertNull(params)
-        }
-
-        @Test
-        @DisplayName("when invoking getPBBAConfiguration with the given configurations then a valid PBBAConfiguration object should be returned")
-        fun returnValidPBBAConfigurationOnGetPBBAConfiguration() {
-            val deeplinkUrl = mockk<Uri>(relaxed = true)
-            every { Uri.parse("https://www.google.com") } returns deeplinkUrl
-
-            val params = getPBBAConfiguration(mapMock)!!
-
-            assertEquals("123-123", params.mobileNumber)
-            assertEquals("example@mail.com", params.emailAddress)
-            assertEquals(deeplinkUrl, params.deepLinkURL)
-            assertEquals("deep://link", params.deepLinkScheme)
-        }
-
-        @Test
-        @DisplayName("and it contains no pbbaConfiguration key when invoking getPBBAConfiguration with the given configurations then null should be returned")
-        fun returnNullOnGetPBBAConfigurationWhenNoPbbaConfigurationKeyPresent() {
-            every { configurationMock.hasKey("pbbaConfiguration") } returns false
-
-            val params = getPBBAConfiguration(mapMock)
 
             assertNull(params)
         }

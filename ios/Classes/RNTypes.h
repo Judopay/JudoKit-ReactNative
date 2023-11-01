@@ -28,8 +28,7 @@ typedef NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
     IOSPaymentMethodCard = 1 << 0,
     IOSPaymentMethodApplePay = 1 << 1,
     IOSPaymentMethodIDEAL = 1 << 3,
-    IOSPaymentMethodPBBA = 1 << 4,
-    IOSPaymentMethodAll = 1 << 5,
+    IOSPaymentMethodAll = 1 << 4,
 };
 
 typedef NS_OPTIONS(NSUInteger, IOSCardNetwork) {
@@ -72,4 +71,3 @@ typedef NS_ENUM(NSUInteger, IOSShippingType) {
     IOSShippingTypeStorePickup,
     IOSShippingTypeServicePickup,
 };
-

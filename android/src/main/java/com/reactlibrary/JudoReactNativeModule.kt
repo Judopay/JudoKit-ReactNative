@@ -15,8 +15,6 @@ import com.judopay.judokit.android.api.model.response.toJudoResult
 import com.judopay.judokit.android.model.*
 import com.judopay.judokit.android.service.CardTransactionManager
 import com.judopay.judokit.android.service.CardTransactionManagerResultListener
-import com.judopay.judokit.android.ui.common.BR_PBBA_RESULT
-import com.judopay.judokit.android.ui.common.PBBA_RESULT
 import com.judopay.judokit.android.ui.common.isBankingAppAvailable
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,29 +31,11 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
     internal var transactionPromise: Promise? = null
     private var isSubscribedToCardTransactionResults = false
 
-    /**
-     * A broadcast receiver to catch Pay by Bank app /order/bank/sale response event.
-     */
-    private val payByBankAppReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            val pbbaSaleResult = intent.getParcelableExtra<JudoResult>(PBBA_RESULT)
-            payByBankSalePromise.resolve(getMappedResult(pbbaSaleResult))
-        }
-    }
-
     init {
         context.addActivityEventListener(listener)
-        LocalBroadcastManager.getInstance(context).registerReceiver(payByBankAppReceiver, IntentFilter(BR_PBBA_RESULT))
     }
 
     override fun getName() = "RNJudo"
-
-    /**
-     * Promise to make a callback from the first /order/bank/sale response of PbBa request.
-     * Initialised in [invokePayByBankApp] or [invokePaymentMethodScreen].
-     * Resolved in [payByBankAppReceiver].
-     */
-    private lateinit var payByBankSalePromise: Promise
 
     @ReactMethod
     fun invokeTransaction(options: ReadableMap, promise: Promise) {
@@ -78,21 +58,9 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
     }
 
     @ReactMethod
-    fun invokePayByBankApp(options: ReadableMap, promise: Promise) {
-        try {
-            val judo = getJudoConfiguration(PaymentWidgetType.PAY_BY_BANK_APP, options)
-            payByBankSalePromise = promise
-            startJudoActivity(judo, promise)
-        } catch (error: Exception) {
-            promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
-        }
-    }
-
-    @ReactMethod
     fun invokePaymentMethodScreen(options: ReadableMap, promise: Promise) {
         try {
             val judo = getPaymentMethodsConfiguration(options)
-            payByBankSalePromise = promise
             startJudoActivity(judo, promise)
         } catch (error: Exception) {
             promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)

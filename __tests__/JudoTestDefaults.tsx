@@ -62,14 +62,7 @@ const configuration: JudoConfiguration = {
     uiConfiguration: uiConfiguration,
     paymentMethods: paymentMethods,
     supportedCardNetworks: supportedCardNetworks,
-    primaryAccountDetails: primaryAccountDetails,
-    pbbaConfiguration: {
-        mobileNumber: '123-123',
-        emailAddress: 'example@mail.com',
-        appearsOnStatement: 'JudoPay',
-        deeplinkScheme: 'judo://pay',
-        deeplinkURL: 'https://judopay.com'
-    }
+    primaryAccountDetails: primaryAccountDetails
 }
 
 export default configuration

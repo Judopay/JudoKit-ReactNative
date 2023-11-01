@@ -24,7 +24,6 @@
 
 #import "RNWrappers.h"
 #import "RNApplePayWrappers.h"
-#import "RNPBBAWrappers.h"
 #import "RNTypes.h"
 #import "NSDictionary+JudoConvert.h"
 #import "UIColor+RNAdditions.h"
@@ -62,7 +61,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
     NSString *token = [authorizationDict stringForKey:@"token"];
     NSString *secret = [authorizationDict optionalStringForKey:@"secret"];
     NSString *paymentSession = [authorizationDict optionalStringForKey:@"paymentSession"];
-    
+
     if (secret) {
         return [JPBasicAuthorization authorizationWithToken:token andSecret:secret];
     }
@@ -165,9 +164,8 @@ static NSString *const kCardSchemeAMEX = @"amex";
     configuration.cardAddress = [RNWrappers cardAddressFromConfiguration:configurationDict];
     configuration.paymentMethods = [RNWrappers paymentMethodsFromConfiguration:configurationDict];
     configuration.applePayConfiguration = [RNApplePayWrappers applePayConfigurationFromConfiguration:configurationDict];
-    configuration.pbbaConfiguration = [RNPBBAWrappers pbbaConfigurationFromConfiguration:configurationDict];
     configuration.networkTimeout = [RNWrappers networkTimeoutFromProperties:configurationDict];
-        
+
     NSString *scaExemption = [configurationDict optionalStringForKey:@"scaExemption"];
     NSString *challengeRequestIndicator = [configurationDict optionalStringForKey:@"challengeRequestIndicator"];
     NSString *mobileNumber = [configurationDict optionalStringForKey:@"mobileNumber"];
@@ -187,7 +185,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
     if (challengeRequestIndicator) {
         configuration.challengeRequestIndicator = challengeRequestIndicator;
     }
-    
+
     if (threeDSTwoMessageVersion) {
         configuration.threeDSTwoMessageVersion = threeDSTwoMessageVersion;
     }
@@ -195,7 +193,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
     if (threeDSTwoMaxTimeout) {
         configuration.threeDSTwoMaxTimeout = threeDSTwoMaxTimeout.intValue;
     }
-    
+
     return configuration;
 }
 
@@ -266,19 +264,19 @@ static NSString *const kCardSchemeAMEX = @"amex";
 
 + (JPCardNetworkType)cardTypeFromProperties:(NSDictionary *)properties {
     NSString *cardScheme = [properties optionalStringForKey:@"cardScheme"].lowercaseString;
-    
+
     if ([cardScheme containsString:kCardSchemeVISA]) {
         return JPCardNetworkTypeVisa;
     }
-    
+
     if ([cardScheme containsString:kCardSchemeMasterCard]) {
         return JPCardNetworkTypeMasterCard;
     }
-    
+
     if ([cardScheme containsString:kCardSchemeAMEX]) {
         return JPCardNetworkTypeAMEX;
     }
-    
+
     return JPCardNetworkTypeUnknown;
 }
 
@@ -309,11 +307,11 @@ static NSString *const kCardSchemeAMEX = @"amex";
     NSNumber *bitmask = [configuration optionalNumberForKey:@"paymentMethods"];
 
     if (!bitmask) {
-        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal, JPPaymentMethod.pbba];
+        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal];
     }
 
     if (BitmaskContains(bitmask.intValue, IOSPaymentMethodAll)) {
-        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal, JPPaymentMethod.pbba];
+        return @[JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal];
     }
 
     NSMutableArray<JPPaymentMethod *> *paymentMethods = [NSMutableArray new];
@@ -330,10 +328,6 @@ static NSString *const kCardSchemeAMEX = @"amex";
         [paymentMethods addObject:JPPaymentMethod.iDeal];
     }
 
-    if (BitmaskContains(bitmask.intValue, IOSPaymentMethodPBBA)) {
-        [paymentMethods addObject:JPPaymentMethod.pbba];
-    }
-
     return paymentMethods;
 }
 
@@ -343,7 +337,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
     if (!addressDictionary) {
         return nil;
     }
-    
+
     return [[JPAddress alloc] initWithAddress1:[addressDictionary optionalStringForKey:@"line1"]
                                       address2:[addressDictionary optionalStringForKey:@"line2"]
                                       address3:[addressDictionary optionalStringForKey:@"line3"]
@@ -368,7 +362,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
     NSNumber *isPayButtonAmountVisible = [dictionary optionalBoolForKey:@"shouldPaymentButtonDisplayAmount"];
     NSNumber *isSecureCodeCheckEnabled = [dictionary optionalBoolForKey:@"shouldPaymentMethodsVerifySecurityCode"];
     NSNumber *shouldAskForBillingInformation = [dictionary optionalBoolForKey:@"shouldAskForBillingInformation"];
-    
+
     if (isAVSEnabled) {
         uiConfiguration.isAVSEnabled = isAVSEnabled.boolValue;
     }
@@ -384,11 +378,11 @@ static NSString *const kCardSchemeAMEX = @"amex";
     if (isSecureCodeCheckEnabled) {
         uiConfiguration.shouldPaymentMethodsVerifySecurityCode = isSecureCodeCheckEnabled.boolValue;
     }
-    
+
     if (shouldAskForBillingInformation) {
         uiConfiguration.shouldAskForBillingInformation = shouldAskForBillingInformation.boolValue;
     }
-    
+
     uiConfiguration.theme = [self themeFromUIConfiguration:dictionary];
     uiConfiguration.threeDSUICustomization = [self threeDSUICustomization:dictionary];
 
@@ -757,7 +751,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
 + (NSDictionary *)dictionaryFromResponse:(JPResponse *)response {
 
     NSMutableDictionary *mappedResponse = [NSMutableDictionary new];
-    
+
     [mappedResponse setValue:response.receiptId forKey:@"receiptId"];
     [mappedResponse setValue:response.paymentReference forKey:@"yourPaymentReference"];
     [mappedResponse setValue:@(response.type) forKey:@"type"];

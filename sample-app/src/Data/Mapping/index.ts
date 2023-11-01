@@ -61,11 +61,7 @@ export const judoConfigurationFromSettingsData = ({
   applePay,
   googlePay,
 }: SettingsData): JudoConfiguration => {
-  let configuration = {
-    pbbaConfiguration: {
-      deeplinkScheme: 'judo://pay',
-    },
-  } as JudoConfiguration
+  let configuration = {} as JudoConfiguration
 
   // apiConfiguration
   const { judoId } = apiConfiguration

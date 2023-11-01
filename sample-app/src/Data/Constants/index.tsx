@@ -510,11 +510,6 @@ const FEATURES_DATA: ReadonlyArray<DemoFeature> = [
     details: 'with default Server-to-Server payment methods',
   },
   {
-    type: DemoFeatureType.PAY_BY_BANK_APP,
-    title: 'Pay By Bank',
-    details: 'by using your existing Bank app',
-  },
-  {
     type: DemoFeatureType.TOKEN_PAYMENTS,
     title: 'Token Payments',
     details: 'Token Payments (no UI)',
