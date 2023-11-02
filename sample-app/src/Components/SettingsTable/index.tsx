@@ -38,7 +38,7 @@ export interface SettingsTableProps {
 const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
   const { navigate, goBack, canGoBack } = useNavigation()
   const { setItem, getItem } = useAsyncStorage(STORAGE_SETTINGS_KEY)
-  const [settings, setSettings] = useState<SettingsData>(DEFAULT_SETTINGS_DATA)
+  const [settings, setSettings] = useState<SettingsData>()
   const [settingsSections, setSettingsSections] = useState(
     transformationFunction(settings),
   )
@@ -47,6 +47,8 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
     const storedSettings = await getItem()
     if (storedSettings) {
       setSettings(JSON.parse(storedSettings))
+    } else {
+      setSettings(DEFAULT_SETTINGS_DATA)
     }
   }
 
@@ -54,8 +56,10 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
     setItem(JSON.stringify(objectToWrite)).catch(console.error)
   }
 
-  const handleSettingsChange = (path: string, value: boolean | string) => {
-    let updatedValue = { ..._.set(settings, path, value) }
+  const handleSettingsChange = async (path: string, value: boolean | string) => {
+    const currentSettings = settings ?? JSON.parse(await getItem());
+
+    let updatedValue = { ..._.set(currentSettings, path, value) }
 
     if (path === 'authorization.isUsingPaymentSession' && value) {
       updatedValue = {
@@ -77,9 +81,11 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
   }, [])
 
   useEffect(() => {
-    const sections = transformationFunction(settings)
-    setSettingsSections(sections)
-    writeSettingsToStorage(settings)
+    if (settings) {
+     const sections = transformationFunction(settings)
+     setSettingsSections(sections)
+     writeSettingsToStorage(settings)
+    }
   }, [settings])
 
   useSingleSelectionTableListener(({ item, path }) => {

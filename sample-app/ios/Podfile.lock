@@ -1,6 +1,6 @@
 PODS:
   - boost (1.76.0)
-  - CocoaDebug (1.7.2)
+  - CocoaDebug (1.7.5)
   - DeviceDNA (2.0.0):
     - OpenSSL-Universal (~> 1.1.180)
   - DoubleConversion (1.1.6)
@@ -17,10 +17,10 @@ PODS:
   - hermes-engine (0.71.3):
     - hermes-engine/Pre-built (= 0.71.3)
   - hermes-engine/Pre-built (0.71.3)
-  - Judo3DS2_iOS (1.1.3)
-  - JudoKit-iOS (3.2.2):
+  - Judo3DS2_iOS (1.1.4)
+  - JudoKit-iOS (3.2.5):
     - DeviceDNA (~> 2.0.0)
-    - Judo3DS2_iOS (~> 1.1.3)
+    - Judo3DS2_iOS (~> 1.1.4)
     - TrustKit
     - ZappMerchantLib
   - libevent (2.1.12)
@@ -374,8 +374,8 @@ PODS:
     - React-Core
   - RNGestureHandler (2.9.0):
     - React-Core
-  - RNJudopay (4.1.0):
-    - JudoKit-iOS (= 3.2.2)
+  - RNJudopay (4.1.3):
+    - JudoKit-iOS (= 3.2.5)
     - React
   - RNPermissions (3.8.0):
     - React-Core
@@ -413,13 +413,13 @@ PODS:
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
-  - TrustKit (3.0.2)
+  - TrustKit (3.0.3)
   - Yoga (1.14.0)
   - ZappMerchantLib (3.1.0)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
-  - CocoaDebug (= 1.7.2)
+  - CocoaDebug (= 1.7.5)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -573,7 +573,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
-  CocoaDebug: 61cf93ada6ce8f3407507dc01f9b874d91ac1d5c
+  CocoaDebug: fab63960955ae3ea6d50d599e9db1f17e364fe80
   DeviceDNA: 9ff289d1fb983937754b324fa0adade2081210c4
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 60195509584153283780abdac5569feffb8f08cc
@@ -581,8 +581,8 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 38bfe887e456b33b697187570a08de33969f5db7
-  Judo3DS2_iOS: b2396a1f0aa3e8d428fdd887c8b6eae5d3aa4f79
-  JudoKit-iOS: dae62cbb666f709383fc381e5e4f7dce08ce30f9
+  Judo3DS2_iOS: 5cca966ec8425a315d6a96ff64f0b760dd991f32
+  JudoKit-iOS: 9edaf60f52e74eae289a6b992f6af176a0f00702
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: 6e1ae0555546e604dbc632a2b9a24a9c46c41ef6
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -623,7 +623,7 @@ SPEC CHECKSUMS:
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSnackbar: be3333a21a453ccc272f41a8add5a71f7d44dfcd
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
-  TrustKit: 55804401e9a95db0bbfff9a08373bfd91953071f
+  TrustKit: 7858ea59d0e226b1457b2e9cc8b95d77ab21d471
   Yoga: 5ed1699acbba8863755998a4245daa200ff3817b
   ZappMerchantLib: b14bc5814840426d351190309250347ca9b0983d
 
