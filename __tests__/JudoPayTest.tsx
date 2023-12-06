@@ -19,17 +19,6 @@ test('JudoPay after init has isSandboxed = true', () => {
     expect(judoPay.isSandboxed).toBe(true)
 })
 
-test('isBankingAppAvailable will always return false on an emulator', async () => {
-    const authorization: JudoAuthorization = {
-        token: 'token',
-        paymentSession: 'paymentSession'
-    }
-
-    const judoPay = new JudoPay(authorization)
-    const response = await judoPay.isBankingAppAvailable()
-    expect(response).toBeFalsy()
-})
-
 test('isApplePayAvailableWithConfiguration will return false as mocked', async () => {
     const authorization: JudoAuthorization = {
         token: 'token',

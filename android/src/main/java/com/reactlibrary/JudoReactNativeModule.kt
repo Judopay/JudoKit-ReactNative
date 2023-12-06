@@ -15,7 +15,6 @@ import com.judopay.judokit.android.api.model.response.toJudoResult
 import com.judopay.judokit.android.model.*
 import com.judopay.judokit.android.service.CardTransactionManager
 import com.judopay.judokit.android.service.CardTransactionManagerResultListener
-import com.judopay.judokit.android.ui.common.isBankingAppAvailable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -205,15 +204,6 @@ class JudoReactNativeModule internal constructor(val context: ReactApplicationCo
                 }
                 it.reject(JUDO_PROMISE_REJECTION_CODE, message)
             }
-        }
-    }
-
-    @ReactMethod
-    fun isBankingAppAvailable(promise: Promise) {
-        try {
-            promise.resolve(isBankingAppAvailable(context))
-        } catch (exception: Exception) {
-            promise.reject(JUDO_PROMISE_REJECTION_CODE, exception.localizedMessage, exception)
         }
     }
 
