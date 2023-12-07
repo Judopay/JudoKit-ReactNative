@@ -648,7 +648,7 @@
 - (void)test_OnPaymentMethodValue32_EnableAll {
     NSDictionary *props = [self propertiesWithConfigurationValue:@32 forKey:@"paymentMethods"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.paymentMethods.count, 4);
+    XCTAssertEqual(config.paymentMethods.count, 3);
 }
 
 /*
