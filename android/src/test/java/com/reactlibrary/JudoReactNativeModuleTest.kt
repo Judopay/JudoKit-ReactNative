@@ -137,16 +137,6 @@ class JudoReactNativeModuleTest {
             }
         }
 
-        @Test
-        @DisplayName("when invoking invokePayByBankApp on this instance then startActivityForResult should be called on currentActivity instance")
-        fun startActivityForResultShouldBeCalledWhenInvokingInvokePayByBankApp() {
-            sut.invokePayByBankApp(mapMock, promiseMock)
-
-            verify {
-                currentActivityMock.startActivityForResult(any(), JUDO_PAYMENT_WIDGET_REQUEST_CODE)
-            }
-        }
-
         @Nested
         @DisplayName("when invoking invokePaymentMethodScreen on this instance")
         inner class InvokingInvokePaymentMethodScreen {

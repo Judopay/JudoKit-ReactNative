@@ -35,8 +35,7 @@ export const DEFAULT_SETTINGS_DATA: SettingsData = {
     isCardOn: true,
     isiDealOn: true,
     isApplePayOn: false,
-    isGooglePayOn: false,
-    isPayByBankAppOn: false,
+    isGooglePayOn: false
   },
   supportedCardNetworks: {
     isVisaOn: true,

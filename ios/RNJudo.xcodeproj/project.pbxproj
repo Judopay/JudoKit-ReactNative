@@ -111,11 +111,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		30F208BF24A28C8E008AA964 /* Views */ = {
-			isa = PBXGroup;
-			path = Views;
-			sourceTree = "<group>";
-		};
 		44674005246433F50012DB4C /* RNJudoTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,7 +129,6 @@
 		44ACBFB12499157E00524BEF /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				30F208BF24A28C8E008AA964 /* Views */,
 				44B29072244E491A009DF232 /* Extensions */,
 				44B29077244E491B009DF232 /* Wrappers */,
 				82FF801E2448A9EE002A72CF /* RNTypes.h */,

@@ -34,7 +34,6 @@ export interface SettingsData {
     isiDealOn: boolean
     isApplePayOn: boolean
     isGooglePayOn: boolean
-    isPayByBankAppOn: boolean
   }
   supportedCardNetworks: {
     isVisaOn: boolean
@@ -204,7 +203,6 @@ export enum Screen {
   THREE_DS_UI_SETTINGS = 'SettingsThreeDSUI',
   SINGLE_SELECTION = 'SettingsSingleSelection',
   RESULT = 'Result',
-  PAY_BY_BANK_APP = 'PayByBankApp',
   TOKEN_PAYMENTS = 'TokenPayments',
   NO_UI_PAYMENTS = 'NoUiPayments',
   GET_TRANSACTION_DETAILS = 'GetTransactionDetails',
@@ -230,7 +228,6 @@ export type RootStackParamList = {
   GetTransactionDetails: undefined
   Home: undefined
   NoUiPayments: undefined
-  PayByBankApp: undefined
   Result: ResultParams
   SettingsMain: undefined
   SettingsSingleSelection: SingleSelectionTableParams

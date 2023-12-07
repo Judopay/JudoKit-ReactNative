@@ -183,7 +183,6 @@ export enum JudoPaymentMethod {
     ApplePay = 1 << 1,
     GooglePay = 1 << 2,
     iDEAL = 1 << 3,
-    PayByBankApp = 1 << 4,
     All = 1 << 5
 }
 

@@ -641,7 +641,7 @@
 /*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [paymentMethods] value is set to 32
+* WHEN:  the [paymentMethods] value is set to 32 (1 << 5)
 *
 * THEN:  All payment method should be enabled
 */

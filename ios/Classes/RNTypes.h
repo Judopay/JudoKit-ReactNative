@@ -28,7 +28,7 @@ typedef NS_OPTIONS(NSUInteger, IOSPaymentMethod) {
     IOSPaymentMethodCard = 1 << 0,
     IOSPaymentMethodApplePay = 1 << 1,
     IOSPaymentMethodIDEAL = 1 << 3,
-    IOSPaymentMethodAll = 1 << 4,
+    IOSPaymentMethodAll = 1 << 5,
 };
 
 typedef NS_OPTIONS(NSUInteger, IOSCardNetwork) {

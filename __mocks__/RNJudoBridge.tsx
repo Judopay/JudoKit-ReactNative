@@ -24,7 +24,6 @@ NativeModules.RNJudo = {
     invokeApplePay: jest.fn(() => Promise.resolve(mockResponse)),
     invokeGooglePay: jest.fn(() => Promise.resolve(mockResponse)),
     invokePaymentMethodScreen: jest.fn(() => Promise.resolve(mockResponse)),
-    invokePayByBankApp: jest.fn(() => Promise.resolve(mockResponse)),
     performTokenTransaction: jest.fn(() => Promise.resolve(mockResponse)),
     isApplePayAvailableWithConfiguration: jest.fn(() => Promise.resolve(false))
 }
