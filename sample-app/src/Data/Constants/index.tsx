@@ -35,8 +35,7 @@ export const DEFAULT_SETTINGS_DATA: SettingsData = {
     isCardOn: true,
     isiDealOn: true,
     isApplePayOn: false,
-    isGooglePayOn: false,
-    isPayByBankAppOn: false,
+    isGooglePayOn: false
   },
   supportedCardNetworks: {
     isVisaOn: true,
@@ -508,11 +507,6 @@ const FEATURES_DATA: ReadonlyArray<DemoFeature> = [
     type: DemoFeatureType.SERVER_TO_SERVER,
     title: 'Server-to-Server payment methods',
     details: 'with default Server-to-Server payment methods',
-  },
-  {
-    type: DemoFeatureType.PAY_BY_BANK_APP,
-    title: 'Pay By Bank',
-    details: 'by using your existing Bank app',
   },
   {
     type: DemoFeatureType.TOKEN_PAYMENTS,

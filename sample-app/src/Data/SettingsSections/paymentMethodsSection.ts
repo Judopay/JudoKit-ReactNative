@@ -14,7 +14,6 @@ const paymentMethodsSection = (
   const isApplePayOnPath = 'paymentMethods.isApplePayOn'
   const isGooglePayOnPath = 'paymentMethods.isGooglePayOn'
   const isiDealOnPath = 'paymentMethods.isiDealOn'
-  const isPayByBankAppOnPath = 'paymentMethods.isPayByBankAppOn'
 
   return {
     header: 'PAYMENT METHODS',
@@ -38,12 +37,6 @@ const paymentMethodsSection = (
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'iDeal',
         value: _.get(data, isiDealOnPath),
-      },
-      {
-        path: isPayByBankAppOnPath,
-        dataType: SettingsItemDataType.BOOLEAN,
-        title: 'PbBA',
-        value: _.get(data, isPayByBankAppOnPath),
       },
     ],
   }

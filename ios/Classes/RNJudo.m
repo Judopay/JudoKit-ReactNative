@@ -34,7 +34,6 @@ static NSString *kJudoPromiseRejectionCode = @"JUDO_ERROR";
 typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
     JudoSDKInvocationTypeTransaction,
     JudoSDKInvocationTypeApplePay,
-    JudoSDKInvocationTypePBBA,
     JudoSDKInvocationTypePaymentMethods
 };
 
@@ -54,13 +53,6 @@ RCT_EXPORT_MODULE();
 //----------------------------------------------
 // MARK: - SDK Methods
 //----------------------------------------------
-
-RCT_REMAP_METHOD(isBankingAppAvailable,
-                 isBankingAppAvailableWithResolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
-    NSNumber *boolValue = [NSNumber numberWithBool:[JudoKit isBankingAppAvailable]];
-    resolve(boolValue);
-}
 
 RCT_REMAP_METHOD(isApplePayAvailableWithConfiguration,
                  properties:(NSDictionary *)properties
@@ -85,13 +77,6 @@ RCT_REMAP_METHOD(invokeApplePay,
     [self invokeSDKWithType:JudoSDKInvocationTypeApplePay withProperties:properties resolver:resolve andRejecter:reject];
 }
 
-RCT_REMAP_METHOD(invokePayByBankApp,
-                 properties:(NSDictionary *)properties
-                 invokePayByBankAppWithResolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
-    [self invokeSDKWithType:JudoSDKInvocationTypePBBA withProperties:properties resolver:resolve andRejecter:reject];
-}
-
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  properties:(NSDictionary *)properties
                  invokePaymentMethodScreenWithResolver:(RCTPromiseResolveBlock)resolve
@@ -109,13 +94,13 @@ RCT_REMAP_METHOD(performTokenTransaction,
 
     JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
     JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-    
+
     JPCardTransactionDetails *details = [[JPCardTransactionDetails new] initWithConfiguration:configuration];
     details.cardToken = [RNWrappers cardTokenFromProperties:properties];
     details.securityCode = [RNWrappers securityCodeFromProperties:properties];
     details.cardholderName = [RNWrappers cardholderNameFromProperties:properties];
     details.cardType = [RNWrappers cardTypeFromProperties:properties];
-    
+
     if (transactionMode == JPTransactionModePreAuth) {
         [self.transactionService invokePreAuthTokenPaymentWithDetails:details andCompletion:self.completionBlock];
         return;
@@ -170,11 +155,6 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
                 break;
             }
 
-            case JudoSDKInvocationTypePBBA: {
-                [self.judoKit invokePBBAWithConfiguration:configuration completion:self.completionBlock];
-                break;
-            }
-
             case JudoSDKInvocationTypePaymentMethods: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
                 [self.judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:self.completionBlock];
@@ -202,14 +182,14 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
                 reject(kJudoPromiseRejectionCode, @"Transaction cancelled",  error);
                 return;
             }
-            
+
             NSString *description = error.userInfo[NSLocalizedDescriptionKey];
             NSString *message = @"Transaction failed";
-            
+
             if (description && description.length > 0) {
                 message = description;
             }
-            
+
             // TODO: RCTJSErrorFromCodeMessageAndNSError expects an NSError instane in userInfo[NSUnderlyingErrorKey]
             // which in case of a 3DS SDK error is a NSString ('JP3DSSDKRuntimeException') - so it crashes
             // ! this should be fixed in JudoKit-iOS, and the folowing workaround removed ASAP
@@ -218,8 +198,8 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
             NSError *myError = [[NSError alloc] initWithDomain:error.domain
                                                           code:error.code
                                                       userInfo:[NSDictionary dictionaryWithDictionary:userInfo]];
-            
-            
+
+
             reject(kJudoPromiseRejectionCode, message, myError);
         } else {
             NSDictionary *mappedResponse = [RNWrappers dictionaryFromResponse:response];

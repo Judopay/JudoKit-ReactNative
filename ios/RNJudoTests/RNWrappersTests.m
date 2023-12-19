@@ -545,7 +545,7 @@
 /*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [shouldPaymentMethodsVerifySecurityCode] property of the [uiConfiguration] dictionary is 
+* WHEN:  the [shouldPaymentMethodsVerifySecurityCode] property of the [uiConfiguration] dictionary is
 *        not an integer
 *
 * THEN:  an 'invalid secure code check setting type' exception should be thrown
@@ -639,29 +639,16 @@
 }
 
 /*
- * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
- *
- * WHEN:  the [paymentMethods] value is set to 16
- *
- * THEN:  Pay By Bank App payment method should be enabled
- */
-- (void)test_OnPaymentMethodValue32_EnablePBBA {
-    NSDictionary *props = [self propertiesWithConfigurationValue:@16 forKey:@"paymentMethods"];
-    JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.paymentMethods.firstObject.type, JPPaymentMethodTypePbba);
-}
-
-/*
 * GIVEN: a configuration NSDictionary is passed to the wrapper with a valid [configuration] property
 *
-* WHEN:  the [paymentMethods] value is set to 32
+* WHEN:  the [paymentMethods] value is set to 32 (1 << 5)
 *
 * THEN:  All payment method should be enabled
 */
 - (void)test_OnPaymentMethodValue32_EnableAll {
     NSDictionary *props = [self propertiesWithConfigurationValue:@32 forKey:@"paymentMethods"];
     JPConfiguration *config = [RNWrappers configurationFromProperties:props];
-    XCTAssertEqual(config.paymentMethods.count, 4);
+    XCTAssertEqual(config.paymentMethods.count, 3);
 }
 
 /*
@@ -906,41 +893,41 @@
 
 - (NSMutableDictionary *)propertiesWithAuthorizationValue:(id)value
                                                    forKey:(NSString *)key {
-    
+
     NSMutableDictionary *mockProps = RNMocks.properties;
     NSMutableDictionary *mockAuthorization = RNMocks.authorization;
-    
+
     mockAuthorization[key] = value;
     mockProps[@"authorization"] = mockAuthorization;
-    
+
     return mockProps;
 }
 
 - (NSMutableDictionary *)propertiesWithConfigurationValue:(id)value
                                                    forKey:(NSString *)key {
-    
+
     NSMutableDictionary *mockProps = RNMocks.properties;
     NSMutableDictionary *mockConfig = RNMocks.configuration;
-    
+
     mockConfig[key] = value;
     mockProps[@"configuration"] = mockConfig;
-    
+
     return mockProps;
 }
 
 - (NSMutableDictionary *)propertiesWithConfigurationValue:(id)value
                                                    forKey:(NSString *)key
                                          orDictionaryName:(NSString *)name{
-    
+
     NSMutableDictionary *mockProps = RNMocks.properties;
     NSMutableDictionary *mockConfig = RNMocks.configuration;
-    
+
     NSMutableDictionary *item = [mockConfig[name] mutableCopy];
     item[key] = value;
-    
+
     mockConfig[name] = item;
     mockProps[@"configuration"] = mockConfig;
-    
+
     return mockProps;
 }
 

@@ -9,7 +9,6 @@ import SettingsThreeDSUIScreen from './Screens/SettingsThreeDSUIScreen'
 import BackButton from '../../Components/BackButton'
 import SettingsSingleSelectionScreen from './Screens/SettingsSingleSelectionScreen'
 import { Screen, SingleSelectionTableParams } from '../../Data/TypeDefinitions'
-import PayByBankAppScreen from './Screens/PayByBankAppScreen'
 import TokenPaymentsScreen from './Screens/TokenPaymentsScreen'
 import GetTransactionDetailsScreen from './Screens/GetTransactionDetailsScreen'
 
@@ -51,11 +50,6 @@ const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
           name={Screen.RESULT}
           component={ResultScreen}
           options={options('Result')}
-        />
-        <Stack.Screen
-          name={Screen.PAY_BY_BANK_APP}
-          component={PayByBankAppScreen}
-          options={options('PayByBank app')}
         />
         <Stack.Screen
           name={Screen.TOKEN_PAYMENTS}

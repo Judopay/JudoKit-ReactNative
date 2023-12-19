@@ -61,11 +61,7 @@ export const judoConfigurationFromSettingsData = ({
   applePay,
   googlePay,
 }: SettingsData): JudoConfiguration => {
-  let configuration = {
-    pbbaConfiguration: {
-      deeplinkScheme: 'judo://pay',
-    },
-  } as JudoConfiguration
+  let configuration = {} as JudoConfiguration
 
   // apiConfiguration
   const { judoId } = apiConfiguration
@@ -198,7 +194,7 @@ export const judoConfigurationFromSettingsData = ({
   }
 
   // paymentMethods
-  const { isCardOn, isApplePayOn, isGooglePayOn, isPayByBankAppOn, isiDealOn } =
+  const { isCardOn, isApplePayOn, isGooglePayOn, isiDealOn } =
     paymentMethods
   let methods = 0
 
@@ -212,10 +208,6 @@ export const judoConfigurationFromSettingsData = ({
 
   if (isGooglePayOn) {
     methods |= JudoPaymentMethod.GooglePay
-  }
-
-  if (isPayByBankAppOn) {
-    methods |= JudoPaymentMethod.PayByBankApp
   }
 
   if (isiDealOn) {

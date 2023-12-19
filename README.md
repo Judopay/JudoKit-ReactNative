@@ -9,7 +9,6 @@ JudoPay's React Native module and sample app. This module is a wrapper around th
 - Apple Pay;
 - Google Pay;
 - iDEAL;
-- Pay By Bank App;
 - 3DS;
 - Server-to-server transactions;
 - Payment Method Selection screen;

@@ -46,9 +46,4 @@
  */
 + (NSMutableDictionary *)applePayConfiguration;
 
-/**
- * A reference to the mocked PBBA configuration defined in the MockConfiguration.json file
- */
-+ (NSMutableDictionary *)pbbaConfiguration;
-
 @end

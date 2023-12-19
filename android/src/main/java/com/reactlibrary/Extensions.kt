@@ -352,21 +352,6 @@ internal val ReadableMap.allowPrepaidCards: Boolean?
 internal val ReadableMap.allowCreditCards: Boolean?
     get() = googlePayConfiguration?.getOptionalBoolean("allowCreditCards")
 
-internal val ReadableMap.pbbaConfiguration: ReadableMap?
-    get() = configuration?.getOptionalMap("pbbaConfiguration")
-
-internal val ReadableMap.pbbaMobileNumber: String?
-    get() = pbbaConfiguration?.getOptionalString("mobileNumber")
-
-internal val ReadableMap.pbbaEmailAddress: String?
-    get() = pbbaConfiguration?.getOptionalString("emailAddress")
-
-internal val ReadableMap.deeplinkScheme: String?
-    get() = pbbaConfiguration?.getOptionalString("deeplinkScheme")
-
-internal val ReadableMap.deeplinkURL: String?
-    get() = pbbaConfiguration?.getOptionalString("deeplinkURL")
-
 fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
     Intent(packageContext, JudoActivity::class.java)
         .also { it.putExtra(JUDO_OPTIONS, this) }

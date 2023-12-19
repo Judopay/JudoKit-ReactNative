@@ -48,8 +48,4 @@
     return [RNMocks.configuration[@"applePayConfiguration"] mutableCopy];
 }
 
-+ (NSMutableDictionary *)pbbaConfiguration {
-    return [RNMocks.configuration[@"pbbaConfiguration"] mutableCopy];
-}
-
 @end

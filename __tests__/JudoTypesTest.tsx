@@ -204,7 +204,6 @@ test('check JudoPaymentMethod enum keys/values', () => {
         'ApplePay',
         'GooglePay',
         'iDEAL',
-        'PayByBankApp',
         'All'
     ])
 })

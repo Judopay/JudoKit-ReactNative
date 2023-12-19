@@ -1,5 +1,4 @@
 import { NativeModules } from 'react-native'
-import JudoPBBAButton from './components/JudoPBBAButton'
 import { version as packageVersion } from './package.json'
 
 import {
@@ -63,10 +62,6 @@ export type {
     JudoShippingAddressParameters
 } from './types/JudoGooglePayTypes'
 
-export type { JudoPBBAConfiguration } from './types/JudoPBBATypes'
-
-export { JudoPBBAButton }
-
 class JudoPay {
     //------------------------------------------------------------------
     // Private properties
@@ -102,19 +97,6 @@ class JudoPay {
     //------------------------------------------------------------------
     // SDK Features
     //------------------------------------------------------------------
-
-    /**
-     * A method used to verify if any Pay By Bank App supported banking apps are installed
-     * on the device.
-     *
-     * This can be useful for conditionally rendering the PBBA button only if the bank app
-     * is available (PBBA won't work otherwise).
-     *
-     * @returns an asynchronous boolean value that indicates if any PBBA apps are installed.
-     */
-    public isBankingAppAvailable(): Promise<boolean> {
-        return NativeModules.RNJudo.isBankingAppAvailable()
-    }
 
     /**
      * A method used to verify if ApplePay is supported for given configuration object
@@ -239,25 +221,8 @@ class JudoPay {
     }
 
     /**
-     * A method for invoking Pay By Bank App transactions.
-     *
-     * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
-     *
-     * @returns an asynchronous JudoResponse object, containing the transaction results.
-     */
-    public async invokePayByBankApp(
-        configuration: JudoConfiguration
-    ): Promise<JudoResponse> {
-        const params = {
-            ...this.generateJudoParameters(configuration),
-            packageVersion
-        }
-        return NativeModules.RNJudo.invokePayByBankApp(params)
-    }
-
-    /**
      * A method for invoking the Judo wallet, allowing users to pay with their preferred payment method.
-     * (Cards, Apple Pay/Google Pay, iDEAL, Pay By Bank App)
+     * (Cards, Apple Pay/Google Pay, iDEAL)
      *
      * @param mode - a JudoTransactionMode value that defines if the transaction is either a payment or pre-auth.
      * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.

@@ -1,6 +1,5 @@
 import { JudoApplePayConfiguration } from './JudoApplePayTypes'
 import { JudoGooglePayConfiguration } from './JudoGooglePayTypes'
-import { JudoPBBAConfiguration } from './JudoPBBATypes'
 
 export interface JudoConfiguration {
     judoId: string
@@ -13,7 +12,6 @@ export interface JudoConfiguration {
     primaryAccountDetails?: JudoAccountDetails
     applePayConfiguration?: JudoApplePayConfiguration
     googlePayConfiguration?: JudoGooglePayConfiguration
-    pbbaConfiguration?: JudoPBBAConfiguration
     isInitialRecurringPayment?: boolean
     networkTimeout?: NetworkTimeout
     challengeRequestIndicator?: ChallengeRequestIndicator
@@ -185,7 +183,6 @@ export enum JudoPaymentMethod {
     ApplePay = 1 << 1,
     GooglePay = 1 << 2,
     iDEAL = 1 << 3,
-    PayByBankApp = 1 << 4,
     All = 1 << 5
 }
 
