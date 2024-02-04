@@ -1,82 +1,178 @@
 {
-    "name": "judokit-react-native",
-    "title": "Judopay React Native Module",
-    "version": "4.1.4",
-    "description": "A React Native module for the Judopay native SDKs to take payments on iOS and Android.",
-    "main": "JudoPay.tsx",
-    "scripts": {
-        "test": "jest --coverage",
-        "lint": "tsc && eslint '*/**/*.{js,ts,tsx}' --quiet",
-        "format": "prettier --write \"**/*.+(tsx|ts)\""
+  "name": "judokit-react-native",
+  "version": "4.2.0",
+  "description": "A React Native module for the Judopay native SDKs to process payments on iOS and Android.",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "ios",
+    "cpp",
+    "*.podspec",
+    "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
+  ],
+  "scripts": {
+    "example": "yarn workspace judokit-react-native-example",
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "format": "prettier --write \"**/*.{js,ts,tsx}\" && eslint --fix \"**/*.{js,ts,tsx}\"",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
+    "prepare": "bob build",
+    "release": "release-it"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "payments",
+    "judopay",
+    "judo-kit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Judopay/JudoKit-ReactNative.git"
+  },
+  "author": "Judopay <developersupport@judopayments.com> (https://www.judopay.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Judopay/JudoKit-ReactNative/issues"
+  },
+  "homepage": "https://github.com/Judopay/JudoKit-ReactNative#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^17.0.2",
+    "@evilmartians/lefthook": "^1.5.0",
+    "@react-native/eslint-config": "^0.73.2",
+    "@release-it/conventional-changelog": "^5.0.0",
+    "@types/jest": "^28.1.2",
+    "@types/react": "~17.0.21",
+    "@types/react-native": "0.70.0",
+    "commitlint": "^17.0.2",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.1",
+    "prettier": "^2.0.5",
+    "react": "18.2.0",
+    "react-native": "0.73.2",
+    "react-native-builder-bob": "^0.20.0",
+    "release-it": "^15.0.0",
+    "typescript": "^5.0.2"
+  },
+  "resolutions": {
+    "@types/react": "17.0.21"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "workspaces": [
+    "example"
+  ],
+  "packageManager": "yarn@3.6.1",
+  "engines": {
+    "node": ">= 18.0.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules",
+      "<rootDir>/lib/"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
     },
-    "files": [
-        "JudoPay.tsx",
-        "types/",
-        "components/",
-        "android/src/main/AndroidManifest.xml",
-        "android/src/main/java/",
-        "android/build.gradle",
-        "android/gradle.properties",
-        "ios/",
-        "RNJudopay.podspec",
-        "README.md"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/judopay/judokit-reactnative"
+    "npm": {
+      "publish": true
     },
-    "keywords": [
-        "react-native",
-        "judo",
-        "judopay",
-        "judokit",
-        "payment",
-        "gateway"
-    ],
-    "author": {
-        "name": "JudoPay",
-        "email": "developersupport@judopayments.com",
-        "url": "https://www.judopay.com"
+    "github": {
+      "release": true
     },
-    "license": "MIT",
-    "licenseFilename": "LICENSE",
-    "readmeFilename": "README.md",
-    "peerDependencies": {
-        "react": "*",
-        "react-native": "*"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.12.9",
-        "@babel/runtime": "^7.12.5",
-        "@react-native-community/eslint-config": "^2.0.0",
-        "@tsconfig/react-native": "^2.0.2",
-        "@types/jest": "^29.2.3",
-        "@types/react-native": "^0.69.7",
-        "@types/react-test-renderer": "^18.0.0",
-        "@typescript-eslint/eslint-plugin": "^5.29.0",
-        "@typescript-eslint/parser": "^5.29.0",
-        "babel-jest": "^29.3.1",
-        "eslint": "^7.32.0",
-        "jest": "^29.3.1",
-        "metro-react-native-babel-preset": "^0.70.3",
-        "prettier": "^2.7.1",
-        "react": "18.2.0",
-        "react-native": "0.72.7",
-        "react-test-renderer": "18.2.0",
-        "typescript": "^4.4.4"
-    },
-    "jest": {
-        "preset": "react-native",
-        "moduleFileExtensions": [
-            "ts",
-            "tsx",
-            "js"
-        ],
-        "modulePathIgnorePatterns": [
-            "__tests__/JudoTestDefaults"
-        ],
-        "setupFiles": [
-            "<rootDir>/__mocks__/RNJudoBridge.tsx"
-        ]
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular"
+      }
     }
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@react-native",
+      "prettier"
+    ],
+    "rules": {
+      "no-bitwise": [
+        "error",
+        {
+          "allow": [
+            "<<",
+            "|=",
+            "|"
+          ]
+        }
+      ],
+      "react-native/no-inline-styles": "off",
+      "prettier/prettier": [
+        "error",
+        {
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "tabWidth": 2,
+          "trailingComma": "es5",
+          "useTabs": false
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  }
 }

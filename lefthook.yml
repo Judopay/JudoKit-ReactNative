@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.{js,ts,jsx,tsx}"
+      run: npx eslint {staged_files}
+    types:
+      glob: "*.{js,ts, jsx, tsx}"
+      run: npx tsc --noEmit
+    clang-format:
+      glob: "*.{m,h,mm}"
+      run: bundle exec scripts/clang_format.rb
+    ktlint:
+      glob: "*.kt"
+      run: bundle exec scripts/ktlint_format.rb
+commit-msg:
+  parallel: true
+  commands:
+    commitlint:
+      run: npx commitlint --edit
