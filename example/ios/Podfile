@@ -39,8 +39,6 @@ target 'JudoKitReactNativeExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'CocoaDebug'
-
   target 'JudoKitReactNativeExampleTests' do
     inherit! :complete
     # Pods for testing
