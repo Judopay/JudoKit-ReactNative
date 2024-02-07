@@ -67,7 +67,7 @@ lane :format do
 end
 
 desc "Build SDK"
-lane :build do
+lane :build do | options |
   yarn command: "clean"
   yarn command: "prepare"
 

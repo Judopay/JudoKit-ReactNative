@@ -1,544 +1,159 @@
 version: 2.1
 
 executors:
-  node:
-    docker:
-      - image: cimg/node:19.4.0
   macos:
     macos:
-      xcode: 14.2
-  android:
-    docker:
-      - image: cimg/android:2023.02.1-node
+      xcode: 15.2.0
+
+orbs:
+  ruby: circleci/ruby@2.1.0
+
+commands:
+  yarn_install:
+    description: Install dependencies using Yarn. This command correctly configures the cache for any number of package.json and yarn.lock files.
+
+    parameters:
+      cache_folder:
+        description: The path to the yarn cache folder.  Defaults to /tmp/yarn
+        type: string
+        default: "/tmp/yarn"
+
+    steps:
+      - run:
+          name: Create cache checksum file
+          command: |
+            mkdir -p ~/.tmp/checksumfiles
+            find . -type f -name 'package.json' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/package.json
+            find . -type f -name 'yarn.lock' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/yarn.lock
+      - restore_cache:
+          keys:
+            - yarn-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/package.json" }}-{{ checksum "~/.tmp/checksumfiles/yarn.lock" }}-{{ .Environment.CACHE_VERSION }}
+      - run:
+          name: Yarn Install
+          command: "export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install --immutable"
+      - save_cache:
+          paths:
+            - <<parameters.cache_folder>>
+          key: yarn-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/package.json" }}-{{ checksum "~/.tmp/checksumfiles/yarn.lock" }}-{{ .Environment.CACHE_VERSION }}
+  pod_install:
+    description: Install CocoaPods dependencies for an iOS project. This command correctly configures the cache for the Pods directory and Podfile.lock.
+    parameters:
+      pod_install_directory:
+        type: string
+        default: "example/ios"
+        description: The location of the "ios" directory
+    steps:
+      - restore_cache:
+          keys:
+            - '{{ .Environment.CACHE_VERSION }}-cache-pods-{{ checksum "<<parameters.pod_install_directory>>/Podfile.lock" }}'
+            - '{{ .Environment.CACHE_VERSION }}-cache-pods'
+      - run:
+          name: Install CocoaPods
+          command: |
+            cd <<parameters.pod_install_directory>> && pod install && cd -
+      - save_cache:
+          paths:
+            - <<parameters.pod_install_directory>>/Pods
+          key: '{{ .Environment.CACHE_VERSION }}-cache-pods-{{ checksum "<<parameters.pod_install_directory>>/Podfile.lock" }}'
+  brew_install_linters:
+    description: Install native code linters using Homebrew (ktlint, clang-format), and cache the Homebrew cache.
+    steps:
+      - restore_cache:
+            key: brew-cache-linters-{{ arch }}-{{ .Environment.CACHE_VERSION }}
+      - run:
+          name: Installing native code linters
+          command: HOMEBREW_NO_AUTO_UPDATE=1 brew install ktlint clang-format
+      - save_cache:
+          paths:
+            - ~/Library/Caches/Homebrew
+          key: brew-cache-linters-{{ arch }}-{{ .Environment.CACHE_VERSION }}
+  android_sdk_install:
+    description: Install Android SDK
+    steps:
+      - restore_cache:
+          key: brew-cache-android-commandlinetools-{{ arch }}-{{ .Environment.CACHE_VERSION }}
+      - run:
+          name: Installing Android SDK
+          command: |
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask android-commandlinetools
+      - run:
+          name: Configuring Environment Variables
+          command: |
+            echo 'export PATH="$PATH:/usr/local/opt/node@18/bin:~/.yarn/bin:~/project/node_modules/.bin:~/project/example/node_modules/.bin"' >> $BASH_ENV
+            echo 'export ANDROID_HOME="/usr/local/share/android-commandlinetools"' >> $BASH_ENV
+            echo 'export ANDROID_SDK_ROOT="/usr/local/share/android-commandlinetools"' >> $BASH_ENV
+            echo 'export PATH="$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH"' >> $BASH_ENV
+            echo 'export QEMU_AUDIO_DRV=none' >> $BASH_ENV
+            echo 'export JAVA_HOME=$(/usr/libexec/java_home)' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Accepting Android Licenses
+          command: yes | sdkmanager --licenses || true
+      - save_cache:
+          paths:
+            - ~/Library/Caches/Homebrew
+          key: brew-cache-android-commandlinetools-{{ arch }}-{{ .Environment.CACHE_VERSION }}
 
 jobs:
-  get_dependencies_sdk_node:
-    executor: node
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
-      - run:
-          name: Yarn Install
-          command: yarn install
-      - save_cache:
-          key: judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-            - yarn.lock
-  get_dependencies_sdk_ios:
+  checkout_project:
     executor: macos
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
-      - run:
-          name: Ruby gems
-          command: bundle check || bundle install --path vendor/bundle --clean
-      - run:
-          name: Yarn Install
-          command: yarn install
-      - run:
-          name: Pod Repo Update
-          command: bundle exec pod repo update
-      - run:
-          name: Pod Install
-          working_directory: ios
-          command: bundle exec pod install
-      - save_cache:
-          key: judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-          paths:
-            - node_modules
-            - yarn.lock
-      - save_cache:
-          key: judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
-          paths:
-            - ios/Pods
-            - ios/Podfile.lock
-      - save_cache:
-          key: judokit-reactnative-sdk-ruby-gems-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-  get_dependencies_sdk_android:
-    executor: android
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
-      - run:
-          name: Install Yarn
-          command: |
-            # Fix "NO_PUBKEY B53DC80D13EDEF05" expired key issue for the
-            # packages.cloud.google.com/apt repo.
-            wget -O - -q https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-            sudo apt update && sudo apt install yarn
-      - run:
-          name: Yarn Install
-          command: yarn install
-      - save_cache:
-          key: judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-            - yarn.lock
-  get_dependencies_sample_ios:
-    executor: macos
-    steps:
-      - checkout
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
-#      - restore_cache:
-#          keys:
-#            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
-      - run:
-          name: Ruby gems
-          working_directory: sample-app
-          command: bundle check || bundle install --path vendor/bundle --clean
-      - run:
-          name: Yarn Install
-          working_directory: sample-app
-          command: yarn install
-      - run:
-          name: Pod Install
-          working_directory: sample-app/ios
-          command: bundle exec pod install
-      - save_cache:
-          key: judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
-          paths:
-            - sample-app/node_modules
-            - sample-app/yarn.lock
-      - save_cache:
-          key: judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
-          paths:
-            - sample-app/ios/Pods
-            - sample-app/ios/Podfile.lock
-      - save_cache:
-          key: judokit-reactnative-sample-ios-ruby-gems-{{ checksum "sample-app/Gemfile.lock" }}
-          paths:
-            - sample-app/vendor/bundle
-  get_dependencies_sample_android:
-    executor: android
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
-      - run:
-          name: Install Yarn
-          command: |
-            # Fix "NO_PUBKEY B53DC80D13EDEF05" expired key issue for the
-            # packages.cloud.google.com/apt repo.
-            wget -O - -q https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-            sudo apt update && sudo apt install yarn
-      - run:
-          name: Yarn Install
-          working_directory: sample-app
-          command: yarn install
-      - save_cache:
-          key: judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
-          paths:
-            - sample-app/node_modules
-            - sample-app/yarn.lock
-  build_sdk_node:
-    executor: node
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
-      - run:
-          name: Yarn Bundle
-          command: export SET NODE_OPTIONS=--openssl-legacy-provider && yarn react-native bundle --entry-file JudoPay.tsx --bundle-output bundle.js
+      - ruby/install-deps
+      - yarn_install
+      - pod_install
       - persist_to_workspace:
-            root: .
-            paths:
-              - bundle.js
-  build_sdk_ios:
-    executor: macos
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
-      - run:
-          name: XCode Build
-          working_directory: ios
-          command: |
-            xcodebuild clean build \
-              -workspace RNJudo.xcworkspace \
-              -scheme RNJudo \
-              -configuration Debug \
-              -sdk iphoneos \
-              -derivedDataPath DerivedData \
-              -quiet
-      - persist_to_workspace:
-            root: .
-            paths:
-              - ios/DerivedData
-  build_sdk_android:
-    executor: android
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
-      - run:
-          name: Gradle Build
-          working_directory: android
-          command: |
-            ./gradlew clean assemble --no-daemon
-      - persist_to_workspace:
+          paths: .
           root: .
-          paths:
-            - android/build
-  build_sample_ios:
+  lint_sdk:
     executor: macos
     steps:
-      - checkout
       - attach_workspace:
-          at: ~/project
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-ios-yarn-{{ checksum "sample-app/package.json" }}
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
+          at: .
+      - brew_install_linters
       - run:
-          name: Build iOS Sample
-          working_directory: sample-app/ios
-          command: |
-            xcodebuild clean archive \
-              -workspace sample-app.xcworkspace \
-              -scheme sample-app \
-              -archivePath DerivedData/sampleapp.xcarchive \
-              -quiet
-            xcodebuild -exportArchive \
-              -archivePath DerivedData/sampleapp.xcarchive \
-              -exportPath DerivedData/sampleapp.ipa \
-              -exportOptionsPlist sample-app/Info.plist \
-              -quiet
-      - persist_to_workspace:
-          root: .
-          paths:
-            - sample-app/ios/DerivedData
-  build_sample_android:
-    executor: android
-    resource_class: medium+
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
-      - run:
-          name: Install Nodejs
-          command: |
-            curl -sL https://deb.nodesource.com/setup_19.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-      - run:
-          name: Prepare Google Services Json
-          command: echo "$REACTNATIVE_ANDROID_GOOGLE_SERVICES_JSON" | base64 -d > sample-app/android/google-services.json
-      - run:
-          name: Prepare Signing Key
-          working_directory: sample-app/android
-          command: |
-            echo "$ANDROID_SIGNING_PRIVATE_KEY" | base64 -d > signing.key
-            echo "$ANDROID_SIGNING_CERTIFICATE" | base64 -d > signing.crt
-            openssl pkcs12 -export -inkey signing.key -in signing.crt -out signing.p12 -passout "pass:$ANDROID_KEYSTORE_PASSWORD"
-            keytool -importkeystore -srckeystore signing.p12 -srcstoretype pkcs12 -srcstorepass "$ANDROID_KEYSTORE_PASSWORD" -destkeystore signing.jks -deststoretype JKS -storepass "$ANDROID_KEYSTORE_PASSWORD" -noprompt 2>/dev/null
-            echo "storeFile=${PWD}/signing.jks" > keystore.properties
-            echo "storePassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
-            echo "keyAlias=1" >> keystore.properties
-            echo "keyPassword=${ANDROID_KEYSTORE_PASSWORD}" >> keystore.properties
-      - run:
-          name: Build Sample App APK
-          working_directory: sample-app/android
-          command: |
-            ./gradlew assembleRelease --no-daemon
-      - persist_to_workspace:
-          root: .
-          paths:
-            - sample-app/android/app
-  unit_test_sdk_node:
-    executor: node
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-node-yarn-{{ checksum "package.json" }}
-      - run:
-          name: Yarn Test
-          command: |
-            yarn lint || true
-            yarn test
-      - persist_to_workspace:
-            root: .
-            paths:
-              - coverage
-  unit_test_sdk_ios:
+          name: Running SDK linters (Typescript type check, ESLint, Kotlin, ObjC)
+          command: bundle exec fastlane lint
+  build_sdk:
     executor: macos
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-ios-yarn-{{ checksum "package.json" }}-v1
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-ios-cocoapods-{{ checksum "ios/Podfile" }}
       - attach_workspace:
-          at: ~/project
+          at: .
+      - android_sdk_install
       - run:
-          name: Install Sonar Build Wrapper
-          command: |
-            curl -o /var/tmp/build-wrapper-macosx-x86.zip https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip
-            unzip /var/tmp/build-wrapper-macosx-x86.zip -d /var/tmp
-            sudo mkdir -p /opt/build-wrapper-macosx/bin
-            sudo mv /var/tmp/build-wrapper-macosx-x86/* /opt/build-wrapper-macosx/bin/
-            rm -rf /var/tmp/build-wrapper-macosx-x86
-            ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
+          name: Build SDK
+          command: bundle exec fastlane build build_for_distribution:false
+  unit_test_sdk:
+    executor: macos
+    steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Run Unit Tests
-          working_directory: ios
-          command: |
-            build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
-              -workspace RNJudo.xcworkspace \
-              -scheme RNJudo \
-              -destination 'platform=iOS Simulator,name=iPhone 14' \
-              -derivedDataPath DerivedData \
-              -quiet \
-              test
-      - run:
-          name: Covert XCode Coverage Reports to SonarQube Format
-          working_directory: ios
-          command: |
-            curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
-            chmod +x xccov-to-sonarqube-generic.sh
-            ./xccov-to-sonarqube-generic.sh DerivedData/Logs/Test/*.xcresult/ > build-wrapper-output/sonarqube-generic-coverage.xml
-            rm xccov-to-sonarqube-generic.sh
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ios/DerivedData
-            - ios/build-wrapper-output
-  unit_test_sdk_android:
-    executor: android
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - judokit-reactnative-sdk-android-yarn-{{ checksum "package.json" }}
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Run Unit Tests
-          working_directory: android
-          command: |
-            ./gradlew test generateCodeAnalysisReport --no-daemon
-      - persist_to_workspace:
-          root: .
-          paths:
-            - android/build
-  # unit_test_sample_ios:
-  #   executor: macos
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - judokit-reactnative-sample-ios-cocoapods-{{ checksum "sample-app/ios/Podfile" }}
-  #     - attach_workspace:
-  #         at: ~/project
-  #     - run:
-  #         name: Install Sonar Build Wrapper
-  #         command: |
-  #           curl -o /var/tmp/build-wrapper-macosx-x86.zip https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip
-  #           unzip /var/tmp/build-wrapper-macosx-x86.zip -d /var/tmp
-  #           sudo mkdir -p /opt/build-wrapper-macosx/bin
-  #           sudo mv /var/tmp/build-wrapper-macosx-x86/* /opt/build-wrapper-macosx/bin/
-  #           rm -rf /var/tmp/build-wrapper-macosx-x86
-  #           ln -s /opt/build-wrapper-macosx/bin/build-wrapper-macosx-x86 /usr/local/bin/build-wrapper-macosx-x86
-  #     - run:
-  #         name: Run Unit Tests
-  #         working_directory: sample-app/ios
-  #         command: |
-  #           build-wrapper-macosx-x86 --out-dir build-wrapper-output xcodebuild \
-  #             -workspace sample-app.xcworkspace \
-  #             -scheme sample-app \
-  #             -destination 'platform=iOS Simulator,name=iPhone 14' \
-  #             -derivedDataPath DerivedData \
-  #             test
-  #     - run:
-  #         name: Covert XCode Coverage Reports to SonarQube Format
-  #         working_directory: sample-app/ios
-  #         command: |
-  #           curl -o xccov-to-sonarqube-generic.sh https://raw.githubusercontent.com/SonarSource/sonar-scanning-examples/master/swift-coverage/swift-coverage-example/xccov-to-sonarqube-generic.sh
-  #           chmod +x xccov-to-sonarqube-generic.sh
-  #           ./xccov-to-sonarqube-generic.sh DerivedData/Logs/Test/*.xcresult/ > build-wrapper-output/sonarqube-generic-coverage.xml
-  #           rm xccov-to-sonarqube-generic.sh
-  #     - persist_to_workspace:
-  #         root: .
-  #         paths:
-  #           - sample-app/ios/DerivedData
-  #           - sample-app/ios/build-wrapper-output
-  # unit_test_sample_android:
-  #   executor: android
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - judokit-reactnative-sample-android-yarn-{{ checksum "sample-app/package.json" }}
-  #     - attach_workspace:
-  #         at: ~/project
-  #     - run:
-  #         name: Install Nodejs
-  #         command: |
-  #           curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-  #           sudo apt-get install -y nodejs
-  #     - run:
-  #         name: Run Unit Tests
-  #         working_directory: sample-app/android
-  #         command: ./gradlew test
-  release_sample_ios:
+          command: bundle exec fastlane test
+  release_sample_apps:
     executor: macos
     steps:
-      - checkout
       - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install Firebase CLI
-          command: curl -sL https://firebase.tools | bash
+          at: .
       - run:
           name: Store Google Service Account
           command: |
             echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+      - android_sdk_install
       - run:
-          name: Create Release Notes
-          command: echo "$(git log -1 --pretty=format:"%b")" > ./notes.txt
-      - run:
-          name: Distribute Sample App
+          name: Distribute Sample Apps
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json
-            firebase appdistribution:distribute \
-              sample-app/ios/DerivedData/sampleapp.ipa \
-              --app "$REACTNATIVE_IOS_FIREBASE_APP_ID" \
-              --groups "default-testers" \
-              --release-notes-file ./notes.txt
-  release_sample_android:
-    executor: android
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install Firebase CLI
-          command: curl -sL https://firebase.tools | bash
-      - run:
-          name: Store Google Service Account
-          command: |
-            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-      - run:
-          name: Create Release Notes
-          command: echo "$(git log -1 --pretty=format:"%b")" > ./notes.txt
-      - run:
-          name: Distribute Sample App
-          command: |
-            export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json
-            firebase appdistribution:distribute \
-              sample-app/android/app/build/outputs/apk/release/app-release.apk \
-              --app "$REACTNATIVE_ANDROID_FIREBASE_APP_ID" \
-              --groups "default-testers" \
-              --release-notes-file ./notes.txt
-  sonar_scan:
-    executor: macos
-    working_directory: ~/project
-    steps:
-      - checkout
-      # Below step required because attaching a workspace uses absolute paths which
-      # must match the executor which persisted it
-      # - run:
-      #     name: Create Workspace Directories
-      #     command: mkdir -p /Users/distiller/project
-      - attach_workspace:
-          at: ~/project
-      # - run:
-      #     name: Fix paths in coverage reports
-      #     command: |
-      #       find ./ios -type f -exec sed -i 's/\/Users\/distiller/\/root/g' {} \;
-      #       find ./android -type f -exec sed -i 's/\/'
-      - run:
-          name: Install Sonar Scanner
-          command: |
-            export SONARSCANNER_VERSION=4.3.0.2102
-            curl -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARSCANNER_VERSION}-macosx.zip
-            sudo unzip -q sonarscanner.zip -d /opt
-            rm sonarscanner.zip
-            ln -s /opt/sonar-scanner-${SONARSCANNER_VERSION}-macosx/bin/sonar-scanner /usr/local/bin/sonar-scanner
-      - run:
-          name: Run Sonar Scan
-          command: |
-            export REPO_OWNER=Judopay
-            export REPO_NAME=$(basename `git config --get remote.origin.url` .git)
-            export LCOV_REPORTS=$(find . -name lcov.info | tr '\n' ',')
-            export JACOCO_REPORTS=$(find `pwd -P` -name jacocoTestReport.xml -o -name jacocoTestReportRelease.xml -o -name jacocoTestReportDebug.xml  | tr '\n' ',')
-            export JAVA_TEST_CLASSES_DIR=$(find `pwd -P` -wholename "*/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes" -o -wholename "*/testReleaseUnitTest/classes")
-            export GENERIC_COVERAGE_REPORTS=$(find `pwd -P` -name sonarqube-generic-coverage.xml)
-            export OBJC_BUILD_WRAPPER_OUTPUT_DIR=$(dirname $(find `pwd -P` -name build-wrapper-dump.json))
-            export BRANCH_NAME=$(git branch | grep \* | cut -d ' ' -f2)
-            PARAMS=(-Dsonar.host.url=https://sonarcloud.io)
-            PARAMS+=(-Dsonar.login=$SONARCLOUD_TOKEN)
-            PARAMS+=(-Dsonar.organization=judopay)
-            PARAMS+=(-Dsonar.projectKey=${REPO_OWNER}_${REPO_NAME})
-            PARAMS+=(-Dsonar.projectName=${REPO_NAME})
-            PARAMS+=(-Dsonar.sources=.)
-            PARAMS+=(-Dsonar.typescript.lcov.reportPaths=$LCOV_REPORTS)
-            PARAMS+=(-Dsonar.coverage.jacoco.xmlReportPaths=$JACOCO_REPORTS)
-            PARAMS+=(-Dsonar.java.test.binaries=$JAVA_TEST_CLASSES_DIR)
-            PARAMS+=(-Dsonar.coverageReportPaths=${GENERIC_COVERAGE_REPORTS})
-            PARAMS+=(-Dsonar.cfamily.build-wrapper-output=${OBJC_BUILD_WRAPPER_OUTPUT_DIR})
-            PARAMS+=(-Dsonar.cfamily.cache.enabled=false)
-            PARAMS+=(-Dproject.settings=.sonarscan)
-            if [ "$BRANCH_NAME" == "master" ]; then
-              echo "On master branch. Running default scan."
-            elif ! [ -z "$CIRCLE_PR_NUMBER" ]; then
-              echo "Pull request $CIRCLE_PR_NUMBER found. Running a pull request scan."
-              PARAMS+=(-Dsonar.pullrequest.github.repository=${REPO_OWNER}/${REPO_NAME})
-              PARAMS+=(-Dsonar.pullrequest.base=master)
-              PARAMS+=(-Dsonar.pullrequest.key=$CIRCLE_PR_NUMBER)
-              PARAMS+=(-Dsonar.pullrequest.branch=$BRANCH_NAME)
-              PARAMS+=(-Dsonar.pullrequest.provider=GitHub)
-            else
-              echo "Couldnt find pull request. Running short-lived branch scan."
-              PARAMS+=(-Dsonar.branch.name=$BRANCH_NAME)
-              PARAMS+=(-Dsonar.branch.target=master)
-            fi
-            sonar-scanner "${PARAMS[@]}"
+            bundle exec fastlane distribute_sample_apps
+
   release_sdk:
-    executor: node
+    executor: macos
     steps:
-      - checkout
       - attach_workspace:
           at: ~/project
       - run:
-          name: Release SDK
+          name: Publish SDK to NPM
           command: |
             echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
             yarn publish
@@ -561,80 +176,41 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  pull_request_checks:
     jobs:
-      - get_dependencies_sdk_node:
+      - checkout_project:
           filters:
-            tags:
-              only:
-                - /^v[0-9]+(\.[0-9]+)*$/
-      - get_dependencies_sdk_ios
-      - get_dependencies_sdk_android
-      - get_dependencies_sample_ios
-      - get_dependencies_sample_android
-      - build_sdk_node:
+            branches:
+              ignore:
+                - master
+      - lint_sdk:
           requires:
-            - get_dependencies_sdk_node
-          filters:
-            tags:
-              only:
-                - /^v[0-9]+(\.[0-9]+)*$/
-      - build_sdk_ios:
+            - checkout_project
+      - build_sdk:
           requires:
-            - get_dependencies_sdk_ios
-      - build_sdk_android:
+            - lint_sdk
+      - unit_test_sdk:
           requires:
-            - get_dependencies_sdk_android
-      - build_sample_ios:
-          requires:
-            - get_dependencies_sample_ios
-            - build_sdk_ios
-      - build_sample_android:
-          context: shared-secrets
-          requires:
-            - get_dependencies_sample_android
-            - build_sdk_android
-      - unit_test_sdk_node:
-          requires:
-            - build_sdk_node
-      - unit_test_sdk_ios:
-          requires:
-            - build_sdk_ios
-      - unit_test_sdk_android:
-          requires:
-            - build_sdk_android
-      - sonar_scan:
-          context: shared-secrets
-          requires:
-            - unit_test_sdk_node
-            - unit_test_sdk_ios
-            - unit_test_sdk_android
-      - release_sample_ios:
-          context: shared-secrets
-          requires:
-           - build_sample_ios
+            - build_sdk
+  distribute_sample_apps:
+    jobs:
+      - checkout_project:
           filters:
             branches:
               only:
                 - master
-      - release_sample_android:
+      - release_sample_apps:
           context: shared-secrets
           requires:
-            - build_sample_android
-          filters:
-            branches:
-              only:
-                - master
+            - checkout_project
       - report_to_jira:
           context: shared-secrets
           environment: staging
           requires:
-            - release_sample_ios
-            - release_sample_android
-      - release_sdk:
-          context: shared-secrets
-          requires:
-            - build_sdk_node
+            - release_sample_apps
+  publish_sdk:
+    jobs:
+      - checkout_project:
           filters:
             branches:
               ignore:
@@ -642,12 +218,12 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
+      - release_sdk:
+          context: shared-secrets
+          requires:
+            - checkout_project
       - report_to_jira:
           context: shared-secrets
           environment: prod
           requires:
             - release_sdk
-          filters:
-            tags:
-                only:
-                  - /^v[0-9]+(\.[0-9]+)*$/
