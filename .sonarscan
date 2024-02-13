@@ -1,2 +1,0 @@
-sonar.exclusions=__tests__/**/*,android/src/test/**/*,ios/RNJudoTests/**/*,node_modules/**/*,sample-app/**/*
-sonar.tests=__tests__,android/src/test,ios/RNJudoTests

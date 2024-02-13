@@ -1,233 +1,96 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'de.mannodermaus.android-junit5'
-apply plugin: 'jacoco'
+buildscript {
+  // Buildscript is evaluated before everything else so we can't use getExtOrDefault
+  def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["JudoKitReactNative_kotlinVersion"]
 
-def DEFAULT_COMPILE_SDK_VERSION = 33
-def DEFAULT_MIN_SDK_VERSION = 21
-def DEFAULT_TARGET_SDK_VERSION = 33
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:7.2.1"
+    // noinspection DifferentKotlinGradleVersion
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
 
 def isNewArchitectureEnabled() {
-    return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
 
 if (isNewArchitectureEnabled()) {
-    apply plugin: 'com.facebook.react'
+  apply plugin: "com.facebook.react"
 }
 
-def getExtOrIntegerDefault(name, fallback) {
-    return rootProject.ext.has(name) ? rootProject.ext.get(name) : (fallback).toInteger()
+def getExtOrDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["JudoKitReactNative_" + name]
 }
 
-buildscript {
-    ext.kotlin_version = '1.7.20'
-    ext.junit5_version = '5.9.1'
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["JudoKitReactNative_" + name]).toInteger()
+}
 
-    repositories {
-        maven { url 'https://plugins.gradle.org/m2/' }
-        google()
-        mavenCentral()
-    }
+def supportsNamespace() {
+  def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+  def major = parsed[0].toInteger()
+  def minor = parsed[1].toInteger()
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'de.mannodermaus.gradle.plugins:android-junit5:1.8.2.1'
-    }
+  // Namespace support was added in 7.3.0
+  return (major == 7 && minor >= 3) || major >= 8
 }
 
 android {
-    compileSdkVersion getExtOrIntegerDefault('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
+  if (supportsNamespace()) {
+    namespace "com.judopay.judokit.reactnative"
 
-    defaultConfig {
-        minSdkVersion getExtOrIntegerDefault('minSdkVersion', DEFAULT_MIN_SDK_VERSION)
-        targetSdkVersion getExtOrIntegerDefault('targetSdkVersion', DEFAULT_TARGET_SDK_VERSION)
-        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+    sourceSets {
+      main {
+        manifest.srcFile "src/main/AndroidManifestNew.xml"
+      }
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-        debug {
-            testCoverageEnabled true
-        }
-    }
+  }
 
-    lintOptions {
-        disable 'GradleCompatible'
-    }
+  compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
 
-    testOptions {
-        animationsDisabled = true
-        unitTests.returnDefaultValues = true
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-                jacoco.excludes = ['jdk.internal.*']
-            }
-        }
+  defaultConfig {
+    minSdkVersion getExtOrIntegerDefault("minSdkVersion")
+    targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
     }
+  }
+
+  lintOptions {
+    disable "GradleCompatible"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
-    google()
-
-    def found = false
-    def defaultDir = null
-    def androidSourcesName = 'React Native sources'
-
-    if (rootProject.ext.has('reactNativeAndroidRoot')) {
-        defaultDir = rootProject.ext.get('reactNativeAndroidRoot')
-    } else {
-        defaultDir = new File(
-                projectDir,
-                '/../../../node_modules/react-native/android'
-        )
-    }
-
-    if (defaultDir.exists()) {
-        maven {
-            url defaultDir.toString()
-            name androidSourcesName
-        }
-
-        logger.info(":${project.name}:reactNativeAndroidRoot ${defaultDir.canonicalPath}")
-        found = true
-    } else {
-        def parentDir = rootProject.projectDir
-
-        1.upto(5, {
-            if (found) return true
-            parentDir = parentDir.parentFile
-
-            def androidSourcesDir = new File(
-                    parentDir,
-                    'node_modules/react-native'
-            )
-
-            def androidPrebuiltBinaryDir = new File(
-                    parentDir,
-                    'node_modules/react-native/android'
-            )
-
-            if (androidPrebuiltBinaryDir.exists()) {
-                maven {
-                    url androidPrebuiltBinaryDir.toString()
-                    name androidSourcesName
-                }
-
-                logger.info(":${project.name}:reactNativeAndroidRoot ${androidPrebuiltBinaryDir.canonicalPath}")
-                found = true
-            } else if (androidSourcesDir.exists()) {
-                maven {
-                    url androidSourcesDir.toString()
-                    name androidSourcesName
-                }
-
-                logger.info(":${project.name}:reactNativeAndroidRoot ${androidSourcesDir.canonicalPath}")
-                found = true
-            }
-        })
-    }
-
-    if (!found) {
-        throw new GradleException(
-                "${project.name}: unable to locate React Native android sources. " +
-                        "Ensure you have you installed React Native as a dependency in your project and try again."
-        )
-    }
+  mavenCentral()
+  google()
 }
+
+def kotlin_version = getExtOrDefault("kotlinVersion")
+def judokit_android_version = getExtOrDefault("judoKitAndroidVersion")
 
 dependencies {
-    //noinspection GradleDynamicVersion
-    implementation 'com.facebook.react:react-native:+'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'androidx.appcompat:appcompat-resources:1.5.1'
-    implementation 'com.google.android.gms:play-services-wallet:19.1.0'
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
-
-    implementation 'com.judopay:judokit-android:4.1.5'
-
-    //JUnit 5
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5_version"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5_version"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit5_version"
-    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junit5_version"
-
-    testImplementation 'androidx.test:core:1.5.0'
-    testImplementation 'io.mockk:mockk:1.13.3'
-    testImplementation 'android.arch.core:core-testing:1.1.1'
+  // For < 0.71, this will be from the local maven repo
+  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+  //noinspection GradleDynamicVersion
+  implementation "com.facebook.react:react-native:+"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "com.judopay:judokit-android:$judokit_android_version"
 }
 
-if (isNewArchitectureEnabled()) {
-    react {
-        jsRootDir = file("../src/")
-        libraryName = "JudoKit-ReactNative"
-        codegenJavaPackageName = "com.reactlibrary"
-    }
-}
-
-task generateCodeAnalysisReport {
-    group 'Reporting'
-    description 'Start reporting code analysis tasks (Jacoco)'
-    dependsOn ":jacocoTestReport"
-}
-
-task jacocoTestReport(type: JacocoReport, group: 'verification', description: 'Generate Jacoco Reports for all android variants')
-
-project.afterEvaluate {
-    def variants = android.hasProperty('libraryVariants') ? android.libraryVariants : android.applicationVariants
-    variants.forEach {
-        tasks.jacocoTestReport.dependsOn(addJacocoTask(it))
-    }
-}
-
-def addJacocoTask(variant) {
-    def variantName = variant.name.capitalize()
-    logger.info("Adding jacoco task for variant $variantName")
-
-    // see https://docs.gradle.org/current/dsl/org.gradle.testing.jacoco.tasks.JacocoReport.html
-    def taskName = "jacocoTestReport${variantName}"
-    def foundTask = project.tasks.findByName(taskName)
-    def jacocoTask = foundTask ? foundTask : project.tasks.create(taskName, JacocoReport)
-
-    jacocoTask.dependsOn("test${variantName}UnitTest")
-    jacocoTask.group = 'verification'
-    jacocoTask.description = "Generate Jacoco Report for variant $variantName"
-
-    jacocoTask.reports {
-        csv.enabled false
-        html.enabled true
-        xml.enabled true
-    }
-
-    def excludedFiles = [
-            '**/R.class',
-            '**/R$*.class',
-            '**/BuildConfig.*',
-            '**/Manifest*.*',
-            '**/*test*.*',
-            'android/**/*.*'
-    ]
-
-    def sourceDirectories = files(variant.sourceSets.java.srcDirs.flatten())
-    def classDirectories = fileTree(dir: variant.javaCompileProvider.get().destinationDir, excludes: excludedFiles)
-
-    if (project.plugins.hasPlugin("kotlin-android")) {
-        sourceDirectories.from(files(variant.sourceSets.kotlin.srcDirs.flatten()))
-        def kotlinTask = tasks.getByName("compile${variantName}Kotlin")
-        if (kotlinTask) {
-            classDirectories += fileTree(dir: kotlinTask.destinationDirectory, excludes: excludedFiles)
-        }
-    }
-
-    jacocoTask.sourceDirectories.from = sourceDirectories
-    jacocoTask.classDirectories.from = classDirectories
-    jacocoTask.executionData.from = files("${buildDir}/jacoco/test${variantName}UnitTest.exec")
-    jacocoTask
-}

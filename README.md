@@ -1,135 +1,123 @@
-# JudoPay React Native module
+# JudoKit-ReactNative
 
-JudoPay's React Native module and sample app. This module is a wrapper around the JudoKit-iOS library on iOS and the JudoKit-Android library on Android.
+[![npm version](https://badge.fury.io/js/judokit-react-native.svg)](https://www.npmjs.com/package/judokit-react-native)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![React Native](https://img.shields.io/badge/React%20Native-%3E%3D0.70-blue.svg)](https://facebook.github.io/react-native/)
+[![install size](https://packagephobia.com/badge?p=judokit-react-native)](https://packagephobia.com/result?p=judokit-react-native)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Judopay/JudoKit-ReactNative/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Judopay/JudoKit-ReactNative/tree/master)
 
-## Features
+[![NPM](https://nodei.co/npm/judokit-react-native.png?downloads=true&mini=true)](https://nodei.co/npm/judokit-react-native/)
 
-- Card transactions *(Payment, PreAuth, Save Card, Register Card, Check Card)*;
-- Token payments/pre-auths;
-- Apple Pay;
-- Google Pay;
-- iDEAL;
-- 3DS;
-- Server-to-server transactions;
-- Payment Method Selection screen;
+A React Native module for the Judopay native [JudoKit-iOS](https://github.com/Judopay/JudoKit-iOS) and [JudoKit-Android](https://github.com/Judopay/JudoKit-Android) to process payments on iOS and Android.
 
-## Getting started
+## Installation
 
--   `yarn add judokit-react-native`
-
-    or if you use npm: `npm install judokit-react-native --save`
-
-### iOS
-
--   Make sure that the minimum deployment target is set to `11.0` or higher in your `ios/Podfile` :
-
-    `platform :ios, '11.0'`
-
--   Install Cocopods
-
-    `cd ios && pod install`
-
-### Android
-
--   Make sure that `minSdkVersion` is set to 19 or higher in your `android/build.gradle`:
-
-    ```
-    buildscript {
-        ext {
-            buildToolsVersion = "29.0.3"
-            minSdkVersion = 19
-            compileSdkVersion = 29
-            targetSdkVersion = 29
-        }
-        ...
-    }
-    ```
-
--   Make sure that you use Android Gradle plugin version 4.0.1+ in your `android/build.gradle`:
-
-    ```
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
-    }
-    ```
-
--   Add the Judopay maven repository to `allprojects / repositories` in your `android/build.gradle`:
-
-    ```
-    allprojects {
-        repositories {
-            mavenLocal()
-
-            mavenCentral()
-            google()
-            maven {
-                // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-                url("$rootDir/../node_modules/react-native/android")
-            }
-            maven {
-                // Android JSC is installed from npm
-                url("$rootDir/../node_modules/jsc-android/dist")
-            }
-        }
-    }
-
-    ```
-
-## Update an existing project
-
-`yarn upgrade judokit-react-native`
-
-### iOS
-
--   Update Cocoapods
-
-    `cd ios && pod update JudoKit-iOS`
-
-### Android
-
-- Rebuild your project
+```sh
+yarn add judokit-react-native
+```
 
 ## Usage
-
-For a detailed description of all features, visit [our documentation](https://docs.judopay.com/) or try out the sample app attached to the package.
-
 ```ts
+import JudoPay, {JudoTransactionType} from 'judokit-react-native';
 
-import Judo, {
-  JudoAuthorization,
-  JudoTransactionType,
-} from 'judokit-react-native'
+const judoKit = new JudoPay({
+  token: 'your-judo-token',
+  paymentSession: 'your-payment-session',
+});
 
-// 1. Create a Judo session by providing an authorization object (basic or session)
-const auth: JudoAuthorization = {token: 'YOUR-TOKEN', secret: 'YOUR_SECRET'}
-const judo = new Judo(auth)
+judoKit
+  .invokeTransaction(JudoTransactionType.Payment, {
+    judoId: '123456',
+    amount: {
+      value: '1.5',
+      currency: 'GBP',
+    },
+    reference: {
+      paymentReference: 'your-payment-reference',
+      consumerReference: 'your-consumer-reference',
+    },
+  })
+  .then(
+    response => {
+      console.log(response);
+    },
+    error => {
+      console.error(error);
+    },
+  );
 
-// 2. Set the Judo session to sandbox mode for testing
-judo.isSandboxed = true
-
-// 3. Create a Judo configuration to setup your payment flow
-const amount: JudoAmount = {
-    value: '0.01',
-    currency: 'GBP',
-}
-
-const reference: JudoReference = {
-    consumerReference: 'MY-CONSUMER-REFERENCE',
-    paymentReference: 'MY-PAYMENT-REFERENCE'
-}
-
-const configuration: JudoConfiguration = {
-    judoId: 'MY-JUDO-ID',
-    amount: amount,
-    reference: reference
-}
-
-// 4. Invoke a payment transaction and handle the result
-judo.invokeTransaction(JudoTransactionType.Payment, configuration)
-    .then((response) => {
-        // Handle response
-    })
-    .catch((error) => {
-       // Handle error
-    });
 ```
+## Example
+Below is a simple example to showcase the basic usage of the library.
+```tsx
+import JudoPay, {
+  JudoAmount,
+  JudoAuthorization,
+  JudoConfiguration,
+  JudoReference,
+  JudoTransactionType,
+} from 'judokit-react-native';
+import React from 'react';
+import {Button, StyleSheet, View} from 'react-native';
+
+const authorization: JudoAuthorization = {
+  token: 'your-judo-token',
+  paymentSession: 'your-payment-session',
+};
+
+const judoKit = new JudoPay(authorization);
+
+function App(): React.JSX.Element {
+  const invokeJudoKit = () => {
+    const amount: JudoAmount = {value: '1.5', currency: 'GBP'};
+    const reference: JudoReference = {
+      paymentReference: 'your-payment-reference',
+      consumerReference: 'your-consumer-reference',
+    };
+
+    const configuration: JudoConfiguration = {
+      amount,
+      judoId: '123456',
+      reference,
+    };
+
+    judoKit.invokeTransaction(JudoTransactionType.Payment, configuration).then(
+      response => {
+        console.log(response);
+      },
+      error => {
+        console.error(error);
+      },
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Button title="Invoke JudoKit" onPress={invokeJudoKit} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+export default App;
+
+```
+
+## Contributing
+If you want to contribute to this project, follow instructions from [CONTRIBUTING](https://github.com/Judopay/JudoKit-ReactNative/blob/master/CONTRIBUTING.md) file.
+
+## See also
+
+- [JudoKit-ReactNative documentation](https://docs.judopay.com/Content/Mobile/React_Native.htm)
+- [Judopay Transaction API documentation](https://docs.judopay.com/api-reference/index.html)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Judopay/JudoKit-ReactNative/blob/master/LICENSE) file for details.

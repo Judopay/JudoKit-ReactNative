@@ -1,7 +1,28 @@
 {
-    "extends": "@tsconfig/react-native/tsconfig.json" /* Recommended React Native TSConfig base */,
-    "compilerOptions": {
-        "skipLibCheck": true /* Skip type checking all .d.ts files. */
+  "compilerOptions": {
+    "rootDir": ".",
+    "paths": {
+      "judokit-react-native": ["./src/index"]
     },
-    "exclude": ["node_modules", "sample-app"]
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "lib": ["esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext"
+    //    "verbatimModuleSyntax": true // TODO: figure out how to use this and what will be the impact for JS users
+  }
 }
