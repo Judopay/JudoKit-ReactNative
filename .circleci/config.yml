@@ -131,7 +131,7 @@ jobs:
       - run:
           name: Run Unit Tests
           command: bundle exec fastlane test
-  release_sample_apps:
+  publish_example_apps:
     executor: macos
     steps:
       - attach_workspace:
@@ -146,17 +146,17 @@ jobs:
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json
             bundle exec fastlane distribute_sample_apps
-
   release_sdk:
     executor: macos
     steps:
       - attach_workspace:
-          at: ~/project
+          at: .
+      - android_sdk_install
       - run:
           name: Publish SDK to NPM
           command: |
             echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
-            yarn publish
+            bundle exec fastlane release
   report_to_jira:
     docker:
       - image: europe-docker.pkg.dev/opnf-management/docker/deployer:latest
@@ -192,14 +192,14 @@ workflows:
       - unit_test_sdk:
           requires:
             - build_sdk
-  distribute_sample_apps:
+  distribute_example_apps:
     jobs:
       - checkout_project:
           filters:
             branches:
               only:
                 - master
-      - release_sample_apps:
+      - publish_example_apps:
           context: shared-secrets
           requires:
             - checkout_project
@@ -207,7 +207,7 @@ workflows:
           context: shared-secrets
           environment: staging
           requires:
-            - release_sample_apps
+            - publish_example_apps
   publish_sdk:
     jobs:
       - checkout_project:

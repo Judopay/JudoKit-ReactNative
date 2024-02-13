@@ -470,7 +470,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = JudoKitReactNativeExample/JudoKitReactNativeExample.entitlements;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 95V535S6TQ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = JudoKitReactNativeExample/Info.plist;
@@ -500,7 +500,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = JudoKitReactNativeExample/JudoKitReactNativeExample.entitlements;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 95V535S6TQ;
 				INFOPLIST_FILE = JudoKitReactNativeExample/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "[RN]JudoKit";

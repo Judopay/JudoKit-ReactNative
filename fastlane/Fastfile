@@ -83,6 +83,7 @@ end
 
 desc "Release SDK"
 lane :release do | options |
+  build
   yarn command: "release"
 end
 
@@ -120,6 +121,7 @@ platform :ios do
       cocoapods(podfile: './example/ios/Podfile')
 
       if build_for_distribution
+        app_store_connect_api_key
         sync_code_signing sync_code_signing_options
       end
 
