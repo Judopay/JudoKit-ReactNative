@@ -86,7 +86,7 @@ android {
     applicationId "com.judopay.wallet"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 4133
+    versionCode 4134
     versionName "1.0"
   }
   signingConfigs {
