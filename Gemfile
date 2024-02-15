@@ -6,7 +6,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 # You may use http://rbenv.org/ or https://rvm.io/ to install and use this version
 ruby ">= 2.6.10"
 
-gem 'cocoapods', '= 1.15.0'
+gem 'cocoapods', '= 1.15.2'
 gem 'fastlane', '= 2.219'
 gem 'activesupport', '>= 6.1.7.3', '< 7.1.0'
 gem "colorize", "~> 1.1"
