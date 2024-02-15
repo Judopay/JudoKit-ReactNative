@@ -1149,6 +1149,7 @@ PODS:
     - React-Core
   - SocketRocket (0.6.1)
   - TrustKit (3.0.3)
+  - Wormholy (1.7.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1233,6 +1234,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSnackbar (from `../node_modules/react-native-snackbar`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - Wormholy
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1255,6 +1257,7 @@ SPEC REPOS:
     - RavelinEncrypt
     - SocketRocket
     - TrustKit
+    - Wormholy
 
 EXTERNAL SOURCES:
   boost:
@@ -1448,8 +1451,9 @@ SPEC CHECKSUMS:
   RNVectorIcons: 210f910e834e3485af40693ad4615c1ec22fc02b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   TrustKit: 7858ea59d0e226b1457b2e9cc8b95d77ab21d471
+  Wormholy: ab1c8c2f02f58587a0941deb0088555ffbf039a1
   Yoga: 13c8ef87792450193e117976337b8527b49e8c03
 
-PODFILE CHECKSUM: 62a8e313bbdce765b1358063b04ea5eeaca639d6
+PODFILE CHECKSUM: ed39cea8af5b817349527014c4453bc3853275f3
 
-COCOAPODS: 1.15.0
+COCOAPODS: 1.15.2
