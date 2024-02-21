@@ -54,22 +54,20 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
     const storedSettings = await getItem();
     if (storedSettings) {
       setSettings(JSON.parse(storedSettings));
-    } else {
-      setSettings(DEFAULT_SETTINGS_DATA);
     }
   };
 
-  const writeSettingsToStorage = (objectToWrite: SettingsData) => {
-    setItem(JSON.stringify(objectToWrite)).catch(console.error);
+  const writeSettingsToStorage = async (objectToWrite: SettingsData) => {
+    try {
+      const settingsString = JSON.stringify(objectToWrite);
+      await setItem(settingsString);
+    } catch (e) {
+      console.error('Failed to write settings to storage:', e);
+    }
   };
 
-  const handleSettingsChange = async (
-    path: string,
-    value: boolean | string
-  ) => {
-    const currentSettings = settings ?? JSON.parse((await getItem()) ?? '{}');
-
-    let updatedValue = { ..._.set(currentSettings, path, value) };
+  const handleSettingsChange = (path: string, value: boolean | string) => {
+    let updatedValue = { ..._.set(settings, path, value) };
 
     if (path === 'authorization.isUsingPaymentSession' && value) {
       updatedValue = {
@@ -93,9 +91,8 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
 
   useEffect(() => {
     if (settings) {
-      const sections = transformationFunction(settings);
-      setSettingsSections(sections);
-      writeSettingsToStorage(settings);
+      writeSettingsToStorage(settings).catch(console.error);
+      setSettingsSections(transformationFunction(settings));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);

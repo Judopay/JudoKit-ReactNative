@@ -14,6 +14,7 @@ import {
 import _ from 'lodash';
 import { ResultItem } from '../Application/ApplicationRouter/Screens/ResultScreen';
 import Snackbar from 'react-native-snackbar';
+import { DefaultTheme } from '@react-navigation/native';
 
 interface PromiseForFeature {
   featureType: DemoFeatureType;
@@ -184,18 +185,38 @@ export function parseJSON<T>(value: string | null): T | undefined {
   }
 }
 
+export const onErrorSnackbar = (error: Error) => {
+  const { message } = error;
+  Snackbar.show({
+    text: message,
+    duration: Snackbar.LENGTH_SHORT,
+    backgroundColor: DefaultTheme.colors.notification,
+  });
+};
+
+export const onSuccessSnackbar = (message: string) => {
+  Snackbar.show({
+    text: message,
+    duration: Snackbar.LENGTH_SHORT,
+    backgroundColor: DefaultTheme.colors.primary,
+  });
+};
+
+export const onErrorAlert = (error: Error) => {
+  const { message } = error;
+  alert({ message });
+};
+
 export const onError = (error: Error) => {
   const { message } = error;
+
   if (message.includes('cancel')) {
-    Snackbar.show({
-      text: message,
-      duration: Snackbar.LENGTH_SHORT,
-      backgroundColor: '#e95454',
-    });
+    // TODO: fix this
+    onErrorSnackbar(error);
     return;
   }
 
-  alert({ message });
+  onErrorAlert(error);
 };
 
 export const regeneratePaymentReferenceIfNeeded = (
