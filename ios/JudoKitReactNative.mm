@@ -33,14 +33,14 @@ static NSString *kJudoPromiseRejectionCode = @"JUDO_ERROR";
 typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
     JudoSDKInvocationTypeTransaction,
     JudoSDKInvocationTypeApplePay,
-    JudoSDKInvocationTypePaymentMethods
+    JudoSDKInvocationTypePaymentMethods,
+    JudoSDKInvocationTypeTokenTransaction
 };
 
 @interface JudoKitReactNative ()
 
 @property (nonatomic, strong) JudoKit *judoKit;
 @property (nonatomic, strong) JPApiService *apiService;
-@property (nonatomic, strong) JPCardTransactionService *transactionService;
 @property (nonatomic, strong) JPCompletionBlock completionBlock;
 
 @end
@@ -65,46 +65,40 @@ RCT_REMAP_METHOD(invokeTransaction,
                  properties : (NSDictionary *)properties
                      invokePaymentWithResolver : (RCTPromiseResolveBlock)resolve
                          rejecter : (RCTPromiseRejectBlock)reject) {
-    [self invokeSDKWithType:JudoSDKInvocationTypeTransaction withProperties:properties resolver:resolve andRejecter:reject];
+    [self invokeSDKWithType:JudoSDKInvocationTypeTransaction
+             withProperties:properties
+                   resolver:resolve
+                andRejecter:reject];
 }
 
 RCT_REMAP_METHOD(invokeApplePay,
                  properties : (NSDictionary *)properties
                      invokeApplePayWithResolver : (RCTPromiseResolveBlock)resolve
                          rejecter : (RCTPromiseRejectBlock)reject) {
-    [self invokeSDKWithType:JudoSDKInvocationTypeApplePay withProperties:properties resolver:resolve andRejecter:reject];
+    [self invokeSDKWithType:JudoSDKInvocationTypeApplePay
+             withProperties:properties
+                   resolver:resolve
+                andRejecter:reject];
 }
 
 RCT_REMAP_METHOD(invokePaymentMethodScreen,
                  properties : (NSDictionary *)properties
                      invokePaymentMethodScreenWithResolver : (RCTPromiseResolveBlock)resolve
                          rejecter : (RCTPromiseRejectBlock)reject) {
-    [self invokeSDKWithType:JudoSDKInvocationTypePaymentMethods withProperties:properties resolver:resolve andRejecter:reject];
+    [self invokeSDKWithType:JudoSDKInvocationTypePaymentMethods
+             withProperties:properties
+                   resolver:resolve
+                andRejecter:reject];
 }
 
 RCT_REMAP_METHOD(performTokenTransaction,
                  properties : (NSDictionary *)properties
                      performTokenTransactionWithResolver : (RCTPromiseResolveBlock)resolve
                          rejecter : (RCTPromiseRejectBlock)reject) {
-
-    self.transactionService = [RNWrappers cardTransactionServiceFromProperties:properties];
-    self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
-
-    JPTransactionMode transactionMode = [RNWrappers transactionModeFromProperties:properties];
-    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
-
-    JPCardTransactionDetails *details = [[JPCardTransactionDetails new] initWithConfiguration:configuration];
-    details.cardToken = [RNWrappers cardTokenFromProperties:properties];
-    details.securityCode = [RNWrappers securityCodeFromProperties:properties];
-    details.cardholderName = [RNWrappers cardholderNameFromProperties:properties];
-    details.cardType = [RNWrappers cardTypeFromProperties:properties];
-
-    if (transactionMode == JPTransactionModePreAuth) {
-        [self.transactionService invokePreAuthTokenPaymentWithDetails:details andCompletion:self.completionBlock];
-        return;
-    }
-
-    [self.transactionService invokeTokenPaymentWithDetails:details andCompletion:self.completionBlock];
+    [self invokeSDKWithType:JudoSDKInvocationTypeTokenTransaction
+             withProperties:properties
+                   resolver:resolve
+                andRejecter:reject];
 }
 
 RCT_REMAP_METHOD(fetchTransactionDetails,
@@ -143,19 +137,37 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
         switch (invocationType) {
             case JudoSDKInvocationTypeTransaction: {
                 JPTransactionType type = [RNWrappers transactionTypeFromProperties:properties];
-                [self.judoKit invokeTransactionWithType:type configuration:configuration completion:self.completionBlock];
+                [self.judoKit invokeTransactionWithType:type
+                                          configuration:configuration
+                                             completion:self.completionBlock];
                 break;
             }
 
             case JudoSDKInvocationTypeApplePay: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-                [self.judoKit invokeApplePayWithMode:mode configuration:configuration completion:self.completionBlock];
+                [self.judoKit invokeApplePayWithMode:mode
+                                       configuration:configuration
+                                          completion:self.completionBlock];
                 break;
             }
 
             case JudoSDKInvocationTypePaymentMethods: {
                 JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
-                [self.judoKit invokePaymentMethodScreenWithMode:mode configuration:configuration completion:self.completionBlock];
+                [self.judoKit invokePaymentMethodScreenWithMode:mode
+                                                  configuration:configuration
+                                                     completion:self.completionBlock];
+                break;
+            }
+
+            case JudoSDKInvocationTypeTokenTransaction: {
+                JPCardTransactionDetails *details = [self transactionDetailsFromProperties:properties];
+                JPTransactionMode mode = [RNWrappers transactionModeFromProperties:properties];
+                JPTransactionType type = mode == JPTransactionModePayment ? JPTransactionTypePayment : JPTransactionTypePreAuth;
+
+                [self.judoKit invokeTokenTransactionWithType:type
+                                               configuration:configuration
+                                                     details:details
+                                                  completion:self.completionBlock];
                 break;
             }
 
@@ -170,6 +182,19 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
                                                 userInfo:exception.userInfo];
         reject(kJudoPromiseRejectionCode, exception.reason, error);
     }
+}
+
+- (JPCardTransactionDetails *)transactionDetailsFromProperties:(NSDictionary *)properties {
+    JPConfiguration *configuration = [RNWrappers configurationFromProperties:properties];
+
+    JPCardTransactionDetails *details = [[JPCardTransactionDetails new] initWithConfiguration:configuration];
+
+    details.cardToken = [RNWrappers cardTokenFromProperties:properties];
+    details.securityCode = [RNWrappers securityCodeFromProperties:properties];
+    details.cardholderName = [RNWrappers cardholderNameFromProperties:properties];
+    details.cardType = [RNWrappers cardTypeFromProperties:properties];
+
+    return details;
 }
 
 - (JPCompletionBlock)completionBlockWithResolve:(RCTPromiseResolveBlock)resolve
