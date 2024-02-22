@@ -55,8 +55,59 @@ const Application = () => {
       .catch(console.error);
   };
 
+  const requestiOSCameraAndLocationPermissionsIfNeeded = () => {
+    const title = 'Permissions needed';
+    const message =
+      'Camera and location permissions needed for the scan card and device details.';
+    const buttonNegative = 'Cancel';
+    const buttonPositive = 'OK';
+
+    check(PERMISSIONS.IOS.CAMERA)
+      .then((result) => {
+        if (result === RESULTS.DENIED) {
+          request(PERMISSIONS.IOS.CAMERA, {
+            buttonNegative,
+            buttonPositive,
+            title,
+            message,
+          })
+            .then((status) => {
+              if (status === RESULTS.BLOCKED || status === RESULTS.LIMITED) {
+                Alert.alert(title, message, [
+                  { text: buttonPositive, onPress: () => openSettings() },
+                ]);
+              }
+            })
+            .catch(console.error);
+        }
+      })
+      .catch(console.error);
+
+    check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+      .then((result) => {
+        if (result === RESULTS.DENIED) {
+          request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, {
+            buttonNegative,
+            buttonPositive,
+            title,
+            message,
+          })
+            .then((status) => {
+              if (status === RESULTS.BLOCKED || status === RESULTS.LIMITED) {
+                Alert.alert(title, message, [
+                  { text: buttonPositive, onPress: () => openSettings() },
+                ]);
+              }
+            })
+            .catch(console.error);
+        }
+      })
+      .catch(console.error);
+  };
+
   useEffect(() => {
     if (IS_IOS) {
+      requestiOSCameraAndLocationPermissionsIfNeeded();
       return;
     }
 

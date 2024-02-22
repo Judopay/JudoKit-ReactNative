@@ -1,12 +1,37 @@
 # Resolve react_native_pods.rb with node to allow for hoisting
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
-    {paths: [process.argv[1]]},
-  )', __dir__]).strip
+# require Pod::Executable.execute_command('node', ['-p',
+#   'require.resolve(
+#     "react-native/scripts/react_native_pods.rb",
+#     {paths: [process.argv[1]]},
+#   )', __dir__]).strip
+
+# react-native-permissions block start
+
+def node_require(script)
+  # Resolve script with node to allow for hoisting
+  require Pod::Executable.execute_command('node', ['-p',
+    "require.resolve(
+     '#{script}',
+      {paths: [process.argv[1]]},
+    )", __dir__]).strip
+end
+
+node_require('react-native/scripts/react_native_pods.rb')
+node_require('react-native-permissions/scripts/setup.rb')
+
+# react-native-permissions block end
 
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
+
+# react-native-permissions block start
+
+setup_permissions([
+  'Camera',
+  'LocationWhenInUse',
+])
+
+# react-native-permissions block end
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
@@ -40,7 +65,7 @@ target 'JudoKitReactNativeExample' do
   )
 
   pod 'Wormholy'
-  
+
   target 'JudoKitReactNativeExampleTests' do
     inherit! :complete
     # Pods for testing
