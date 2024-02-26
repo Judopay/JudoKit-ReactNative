@@ -15,6 +15,9 @@
     "cpp",
     "*.podspec",
     "!ios/build",
+    "!vendor/**/*",
+    "!fastlane/**/*",
+    "!scripts/**/*",
     "!android/build",
     "!android/gradle",
     "!android/gradlew",
@@ -32,8 +35,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "format": "prettier --write \"**/*.{js,ts,tsx}\" && eslint --fix \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build",
-    "release": "release-it"
+    "prepare": "bob build"
   },
   "keywords": [
     "react-native",
@@ -60,7 +62,6 @@
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.5.0",
     "@react-native/eslint-config": "^0.73.2",
-    "@release-it/conventional-changelog": "^5.0.0",
     "@types/jest": "^28.1.2",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
@@ -74,7 +75,6 @@
     "react": "18.2.0",
     "react-native": "0.73.2",
     "react-native-builder-bob": "^0.20.0",
-    "release-it": "^15.0.0",
     "typescript": "^5.0.2"
   },
   "resolutions": {
@@ -84,10 +84,8 @@
     "react": "*",
     "react-native": "*"
   },
-  "workspaces": [
-    "example"
-  ],
-  "packageManager": "yarn@3.6.1",
+  "workspaces": ["example"],
+  "packageManager": "yarn@4.1.0",
   "engines": {
     "node": ">= 18.0.0"
   },
@@ -99,42 +97,16 @@
     ]
   },
   "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": "angular"
-      }
-    }
+    "extends": ["@commitlint/config-conventional"]
   },
   "eslintConfig": {
     "root": true,
-    "extends": [
-      "@react-native",
-      "prettier"
-    ],
+    "extends": ["@react-native", "prettier"],
     "rules": {
       "no-bitwise": [
         "error",
         {
-          "allow": [
-            "<<",
-            "|=",
-            "|"
-          ]
+          "allow": ["<<", "|=", "|"]
         }
       ],
       "react-native/no-inline-styles": "off",
@@ -150,10 +122,7 @@
       ]
     }
   },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ],
+  "eslintIgnore": ["node_modules/", "lib/"],
   "prettier": {
     "quoteProps": "consistent",
     "singleQuote": true,
