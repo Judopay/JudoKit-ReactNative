@@ -221,6 +221,13 @@ workflows:
           context: shared-secrets
           requires:
             - checkout_project
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
       - report_to_jira:
           context: shared-secrets
           environment: prod
