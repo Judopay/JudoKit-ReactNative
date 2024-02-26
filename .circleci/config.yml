@@ -154,7 +154,6 @@ jobs:
       - run:
           name: Publish SDK to NPM
           command: |
-            echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
             bundle exec fastlane release
   report_to_jira:
     docker:
@@ -233,3 +232,10 @@ workflows:
           environment: prod
           requires:
             - release_sdk
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
