@@ -83,8 +83,9 @@ end
 
 desc "Release SDK"
 lane :release do | options |
-  build
-  yarn command: "release"
+  yarn command: "clean"
+  yarn command: "prepare"
+  yarn command: "npm publish"
 end
 
 desc "Distribute Sample Apps"

@@ -16,7 +16,7 @@ commands:
       cache_folder:
         description: The path to the yarn cache folder.  Defaults to /tmp/yarn
         type: string
-        default: "/tmp/yarn"
+        default: '/tmp/yarn'
 
     steps:
       - run:
@@ -30,7 +30,7 @@ commands:
             - yarn-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/package.json" }}-{{ checksum "~/.tmp/checksumfiles/yarn.lock" }}-{{ .Environment.CACHE_VERSION }}
       - run:
           name: Yarn Install
-          command: "export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install --immutable"
+          command: 'export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install --immutable'
       - save_cache:
           paths:
             - <<parameters.cache_folder>>
@@ -40,7 +40,7 @@ commands:
     parameters:
       pod_install_directory:
         type: string
-        default: "example/ios"
+        default: 'example/ios'
         description: The location of the "ios" directory
     steps:
       - restore_cache:
@@ -59,7 +59,7 @@ commands:
     description: Install native code linters using Homebrew (ktlint, clang-format), and cache the Homebrew cache.
     steps:
       - restore_cache:
-            key: brew-cache-linters-{{ arch }}-{{ .Environment.CACHE_VERSION }}
+          key: brew-cache-linters-{{ arch }}-{{ .Environment.CACHE_VERSION }}
       - run:
           name: Installing native code linters
           command: HOMEBREW_NO_AUTO_UPDATE=1 brew install ktlint clang-format
@@ -151,11 +151,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - android_sdk_install
       - run:
           name: Publish SDK to NPM
           command: |
-            echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
             bundle exec fastlane release
   report_to_jira:
     docker:
@@ -222,8 +220,22 @@ workflows:
           context: shared-secrets
           requires:
             - checkout_project
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
       - report_to_jira:
           context: shared-secrets
           environment: prod
           requires:
             - release_sdk
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /^v[0-9]+(\.[0-9]+)*$/
