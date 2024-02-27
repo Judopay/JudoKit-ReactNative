@@ -15,6 +15,7 @@ const SettingsButton: FC = () => {
 
   return (
     <Icon.Button
+      testID="settings-button"
       name="settings-outline"
       size={28}
       color={primary}

@@ -110,6 +110,7 @@ const ResultScreen: FC<StackScreenProps<RootStackParamList, Screen.RESULT>> = ({
                   color: '#6e6e6e',
                   marginTop: 2,
                 }}
+                testID={`${title}-value`}
               >
                 {value}
               </Text>
