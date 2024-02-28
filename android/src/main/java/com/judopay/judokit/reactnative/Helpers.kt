@@ -15,6 +15,7 @@ import com.judopay.judokit.android.api.model.Authorization
 import com.judopay.judokit.android.api.model.BasicAuthorization
 import com.judopay.judokit.android.api.model.PaymentSessionAuthorization
 import com.judopay.judokit.android.api.model.request.Address
+import com.judopay.judokit.android.api.model.response.CardToken
 import com.judopay.judokit.android.model.Amount
 import com.judopay.judokit.android.model.CardNetwork
 import com.judopay.judokit.android.model.ChallengeRequestIndicator
@@ -36,6 +37,8 @@ import com.judopay.judokit.android.model.googlepay.GooglePayCheckoutOption
 import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
 import com.judopay.judokit.android.model.googlepay.GooglePayPriceStatus
 import com.judopay.judokit.android.model.googlepay.GooglePayShippingAddressParameters
+import com.judopay.judokit.android.model.isTokenPayment
+import com.judopay.judokit.android.model.typeId
 
 // For consistency with:
 // https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L36
@@ -78,7 +81,7 @@ internal fun getTransactionConfiguration(options: ReadableMap): Judo {
 }
 
 internal fun getTokenTransactionConfiguration(options: ReadableMap): Judo {
-  val widgetType = getTransactionModeWidget(options)
+  val widgetType = getTokenTransactionModeWidgetType(options)
   return getJudoConfiguration(widgetType, options)
 }
 
@@ -224,6 +227,23 @@ internal fun getJudoConfiguration(
       .setAddress(address)
       .setSubProductInfo(getSubProductInfo(options))
 
+  if (type.isTokenPayment) {
+    val cardHolderName = options.cardholderName?.ifBlank { null }
+    val securityCode = options.securityCode?.ifBlank { null }
+    val cardType = options.cardType
+    val cardToken = options.cardToken
+
+    val token =
+      CardToken(
+        token = cardToken,
+        type = cardType.typeId,
+        cardHolderName = cardHolderName,
+      )
+
+    builder.setCardToken(token)
+    builder.setCardSecurityCode(securityCode)
+  }
+
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
     builder.setRecommendationConfiguration(getRecommendationConfiguration(options))
   }
@@ -305,10 +325,10 @@ internal fun getTransactionTypeWidget(options: ReadableMap) =
     else -> throw IllegalArgumentException("Unknown transaction type")
   }
 
-internal fun getTransactionModeWidget(options: ReadableMap) =
+internal fun getTokenTransactionModeWidgetType(options: ReadableMap) =
   when (options.getInt("transactionMode")) {
-    1 -> PaymentWidgetType.PRE_AUTH
-    else -> PaymentWidgetType.CARD_PAYMENT
+    1 -> PaymentWidgetType.TOKEN_PRE_AUTH
+    else -> PaymentWidgetType.TOKEN_PAYMENT
   }
 
 internal fun getAmount(options: ReadableMap): Amount {
