@@ -45,6 +45,7 @@ export {
   JudoGooglePayPriceStatus,
   JudoCheckoutOption,
   JudoGooglePayConfiguration,
+  JudoRecommendationConfiguration,
 } from './types';
 
 export default JudoPay;
