@@ -22,7 +22,6 @@ class JudoKitReactNativeModule internal constructor(private val reactContext: Re
     override fun getName() = MODULE_NAME
 
     private val listener = JudoActivityEventListener()
-    private var transactionPromise: Promise? = null
 
     init {
       reactContext.addActivityEventListener(listener)
