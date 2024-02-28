@@ -454,20 +454,25 @@ internal fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
 }
 
 internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
-  return if (options.uiConfiguration != null) {
-    UiConfiguration.Builder()
-      .setAvsEnabled(options.isAVSEnabled)
-      .setShouldPaymentMethodsDisplayAmount(options.shouldPaymentMethodsDisplayAmount)
-      .setShouldPaymentButtonDisplayAmount(options.shouldPaymentButtonDisplayAmount)
-      .setShouldPaymentMethodsVerifySecurityCode(options.shouldPaymentMethodsVerifySecurityCode)
-      .setShouldAskForBillingInformation(options.shouldAskForBillingInformation)
-      .setThreeDSUiCustomization(getThreeDSUiCustomization(options))
-      .setShouldAskForCSC(options.shouldAskForCSC)
-      .setShouldAskForCardholderName(options.shouldAskForCardholderName)
-      .build()
-  } else {
-    null
+  if (options.uiConfiguration == null) {
+    return null
   }
+
+  val builder =
+    UiConfiguration.Builder()
+      .setShouldAskForBillingInformation(options.shouldAskForBillingInformation)
+      .setShouldAskForCardholderName(options.shouldAskForCardholderName)
+      .setShouldAskForCSC(options.shouldAskForCSC)
+      .setThreeDSUiCustomization(getThreeDSUiCustomization(options))
+
+  builder.apply {
+    options.isAVSEnabled?.let { setAvsEnabled(it) }
+    options.shouldPaymentMethodsDisplayAmount?.let { setShouldPaymentMethodsDisplayAmount(it) }
+    options.shouldPaymentButtonDisplayAmount?.let { setShouldPaymentButtonDisplayAmount(it) }
+    options.shouldPaymentMethodsVerifySecurityCode?.let { setShouldPaymentMethodsVerifySecurityCode(it) }
+  }
+
+  return builder.build()
 }
 
 internal fun getThreeDSUiCustomization(options: ReadableMap): UiCustomization? {
