@@ -10,67 +10,30 @@ export interface Props {
   result: string;
 }
 
-export async function fillPaymentDetailsSheet(
-  failed: boolean = false,
-  declined: boolean = false,
-  frictionless: boolean = false
-) {
-  if (failed) {
-    await element(by.id(Selectors.CARD_NUMBER_INPUT)).replaceText(
-      TestData.FAILED_CARD_NUMBER
-    );
-  } else {
-    if (device.getPlatform() === 'ios') {
-      await element(by.id(Selectors.CARD_NUMBER_INPUT)).typeText(
-        TestData.CARD_NUMBER
-      );
-    } else if (device.getPlatform() === 'android') {
-      await element(by.id('cardNumberInputField')).replaceText(
-        TestData.CARD_NUMBER
-      );
-    }
-  }
+export interface CardDetails {
+  number: string;
+  name: string;
+  expiry: string;
+  code: string;
+}
+
+export async function fillPaymentDetailsSheet(props: CardDetails) {
   if (device.getPlatform() === 'ios') {
-    await element(by.id(Selectors.EXPIRY_DATE_INPUT)).typeText(
-      TestData.EXPIRY_DATE
-    );
+    await element(by.id(Selectors.CARD_NUMBER_INPUT)).typeText(props.number);
+    await element(by.id(Selectors.CARDHOLDER_NAME_INPUT)).typeText(props.name);
+    await element(by.id(Selectors.EXPIRY_DATE_INPUT)).typeText(props.expiry);
+    await element(by.id(Selectors.SECURITY_CODE_INPUT)).typeText(props.code);
+    await element(
+      by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button']))
+    ).tap();
   } else if (device.getPlatform() === 'android') {
-    await element(by.id('expiryDateField')).replaceText(TestData.EXPIRY_DATE);
+    await element(by.id(Selectors.ANDROID_CARD)).replaceText(props.number);
+    await element(by.id(Selectors.ANDROID_NAME)).replaceText(props.name);
+    await element(by.id(Selectors.ANDROID_EXPIRY)).replaceText(props.expiry);
+    await element(by.id(Selectors.ANDROID_CODE)).typeText(props.code);
+    await element(by.text('Pay Now')).tap();
   }
-  if (declined) {
-    await element(by.id(Selectors.SECURITY_CODE_INPUT)).typeText(
-      TestData.DECLINED_CODE
-    );
-  } else {
-    if (device.getPlatform() === 'ios') {
-      await element(by.id(Selectors.SECURITY_CODE_INPUT)).typeText(
-        TestData.SECURITY_CODE
-      );
-    } else if (device.getPlatform() === 'android') {
-      await element(by.id('securityCodeField')).typeText(
-        TestData.SECURITY_CODE
-      );
-    }
-  }
-  if (!frictionless) {
-    if (device.getPlatform() === 'ios') {
-      await element(by.id(Selectors.CARDHOLDER_NAME_INPUT)).typeText(
-        TestData.CARDHOLDER_NAME
-      );
-    } else if (device.getPlatform() === 'android') {
-      await element(by.id('cardHolderNameField')).replaceText(
-        TestData.CARDHOLDER_NAME
-      );
-    }
-    if (device.getPlatform() === 'ios') {
-      await element(
-        by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button']))
-      ).tap();
-    } else if (device.getPlatform() === 'android') {
-      await element(by.text('Pay Now')).tap();
-    }
-    await device.enableSynchronization();
-  }
+  await device.enableSynchronization();
 }
 
 export async function assertResultsScreen(props: Props) {
@@ -91,19 +54,49 @@ export async function complete3DS2() {
   await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
 }
 
-export async function addCardPaymentMethod() {
-  await element(by.text(Selectors.ADD_CARD_BUTTON)).tap();
-  await fillPaymentDetailsSheet();
+export async function isCardAddedToPaymentMethods(): Promise<boolean> {
+  try {
+    await expect(element(by.label(Selectors.EXISTING_CARD))).toBeVisible();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+export async function addCardPaymentMethodAndPay() {
+  if (await isCardAddedToPaymentMethods()) {
+    await element(by.label(Selectors.EXISTING_CARD)).swipe('left');
+    await element(by.text('Delete')).tap();
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+  }
+  await element(by.text(Selectors.ADD_CARD_BUTTON)).atIndex(1).tap();
+  await fillPaymentDetailsSheet({
+    number: TestData.CARD_NUMBER,
+    name: TestData.CARDHOLDER_NAME,
+    expiry: TestData.EXPIRY_DATE,
+    code: TestData.SECURITY_CODE,
+  });
   await waitFor(element(by.label(Selectors.EXISTING_CARD)))
     .toBeVisible()
     .withTimeout(3000);
+  await element(by.text('PAY NOW')).tap();
+  await fillCardholderNameSheet();
+  await fillSecurityCodeSheet();
+  await tapPayNowButton();
+  await complete3DS2();
 }
 
 export async function setNoPreferenceCRI() {
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
   await element(by.text(Selectors.CHALLENGE_REQUEST_SETTINGS)).tap();
   await element(by.text(Selectors.NO_PREFERENCE)).tap();
-  await enterAuthDetails();
+  let tokenField = await element(by.id(Selectors.TOKEN_INPUT)).getAttributes();
+  if ('value' in tokenField) {
+    if (tokenField.value === '') {
+      enterAuthDetails();
+    }
+  }
+  await element(by.id(Selectors.BACK_BUTTON)).longPress();
 }
 
 export async function clickSettingsButton() {
@@ -129,7 +122,15 @@ export async function dissmissKeyboardOnTokenScreen() {
 export async function toggleAskForCSCSetting() {
   await clickSettingsButton();
   await element(by.id('settings-list')).scrollTo('bottom');
-  await element(by.id(Selectors.ASK_FOR_CSC)).tap();
+  let askForCSCToggle = await element(
+    by.id(Selectors.ASK_FOR_CSC)
+  ).getAttributes();
+  if ('value' in askForCSCToggle) {
+    if (askForCSCToggle.value === '0') {
+      await element(by.id(Selectors.ASK_FOR_CSC)).tap();
+      await element(by.id(Selectors.ASK_FOR_NAME)).tap();
+    }
+  }
   await element(by.id(Selectors.BACK_BUTTON)).longPress();
 }
 
@@ -137,4 +138,20 @@ export async function fillSecurityCodeSheet() {
   await element(by.id(Selectors.SECURITY_CODE_INPUT)).typeText(
     TestData.SECURITY_CODE
   );
+}
+
+export async function fillCardholderNameSheet() {
+  await element(by.id(Selectors.CARDHOLDER_NAME_INPUT)).typeText(
+    TestData.CARDHOLDER_NAME
+  );
+}
+
+export async function tapPayNowButton() {
+  if (device.getPlatform() === 'ios') {
+    await element(
+      by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button']))
+    ).tap();
+  } else if (device.getPlatform() === 'android') {
+    await element(by.text('Pay Now')).tap();
+  }
 }

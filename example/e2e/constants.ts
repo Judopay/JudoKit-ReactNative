@@ -47,6 +47,10 @@ export enum Selectors {
   HELPER_TEXT = 'help-steps-list',
   ASK_FOR_CSC = 'should-ask-for-csc',
   ASK_FOR_NAME = 'should-ask-for-cardholder-name',
+  ANDROID_CARD = 'cardNumberInputField',
+  ANDROID_NAME = 'cardHolderNameField',
+  ANDROID_EXPIRY = 'expiryDateField',
+  ANDROID_CODE = 'securityCodeField',
 }
 
 export enum UserFeedback {
