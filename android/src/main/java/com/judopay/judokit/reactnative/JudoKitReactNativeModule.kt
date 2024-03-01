@@ -114,10 +114,12 @@ class JudoKitReactNativeModule internal constructor(private val reactContext: Re
                     promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
                   }
                 }
+
                 is JudoApiCallResult.Failure -> {
                   val message = result.error?.message ?: REQUEST_FAILED_MESSAGE
                   promise.reject(JUDO_PROMISE_REJECTION_CODE, message)
                 }
+
                 else -> {
                   promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
                 }
