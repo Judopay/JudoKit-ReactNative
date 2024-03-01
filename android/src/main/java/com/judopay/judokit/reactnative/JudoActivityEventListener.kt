@@ -35,6 +35,7 @@ class JudoActivityEventListener : BaseActivityEventListener() {
           val error = data.getParcelableExtra<JudoError>(JUDO_ERROR)
           transactionPromise?.reject(JUDO_PROMISE_REJECTION_CODE, error?.message)
         }
+
         PAYMENT_SUCCESS -> {
           val result = data.getParcelableExtra<JudoResult>(JUDO_RESULT)
           transactionPromise?.resolve(getMappedResult(result))

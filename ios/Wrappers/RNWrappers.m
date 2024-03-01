@@ -388,7 +388,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
     }
 
     if (shouldAskForCSC) {
-        uiConfiguration.shouldAskForCSC = shouldAskForCardholderName.boolValue;
+        uiConfiguration.shouldAskForCSC = shouldAskForCSC.boolValue;
     }
 
     if (shouldAskForCardholderName) {

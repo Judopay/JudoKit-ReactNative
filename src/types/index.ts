@@ -25,6 +25,7 @@ export {
   JudoConsumer,
   JudoResponse,
   JudoAuthorization,
+  JudoRecommendationConfiguration,
 } from './judo-configuration';
 
 export {
