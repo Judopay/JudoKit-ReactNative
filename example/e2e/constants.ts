@@ -25,6 +25,7 @@ export enum Selectors {
   SECURITY_CODE_INPUT = 'Security Code Field',
   THREEDS2_COMPLETE_BUTTON = 'COMPLETE',
   THREEDS2_SCREEN_HEADER = 'SECURE CHECKOUT',
+  THREEDS2_TITLE_ANDROID = 'Payment verification',
   PAY_NOW_BUTTON = 'Submit Button',
   PAY_WITH_CARD = 'Pay with card',
   PAY_WITH_PREAUTH = 'Pre-auth with card',

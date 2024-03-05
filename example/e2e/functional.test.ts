@@ -9,7 +9,6 @@ import {
   complete3DS2,
   fillPaymentDetailsSheet,
   setNoPreferenceCRI,
-  fillCardholderNameSheet,
   fillSecurityCodeSheet,
   tapPayNowButton,
 } from './helpers';
@@ -38,6 +37,9 @@ describe('E2E Functional Tests', () => {
     await toggleAskForCSCSetting();
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -46,8 +48,11 @@ describe('E2E Functional Tests', () => {
       code: TestData.SECURITY_CODE,
     });
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
+    if (device.getPlatform() === 'android') {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await device.disableSynchronization();
+    }
     await element(by.id(Selectors.PAY_WITH_TOKEN)).tap();
-    await fillCardholderNameSheet();
     await fillSecurityCodeSheet();
     await tapPayNowButton();
     await complete3DS2();
@@ -58,6 +63,9 @@ describe('E2E Functional Tests', () => {
     await toggleAskForCSCSetting();
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -66,8 +74,11 @@ describe('E2E Functional Tests', () => {
       code: TestData.SECURITY_CODE,
     });
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
+    if (device.getPlatform() === 'android') {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await device.disableSynchronization();
+    }
     await element(by.id(Selectors.PREAUTH_WITH_TOKEN)).tap();
-    await fillCardholderNameSheet();
     await fillSecurityCodeSheet();
     await tapPayNowButton();
     await complete3DS2();
@@ -82,6 +93,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await complete3DS2();
     await assertResultsScreen({ type: '1', result: '1' });
   });
@@ -94,6 +108,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await complete3DS2();
     await assertResultsScreen({ type: '2', result: '1' });
   });
@@ -106,6 +123,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await complete3DS2();
     await assertResultsScreen({ type: '3', result: '1' });
   });
@@ -118,12 +138,18 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await complete3DS2();
     await assertResultsScreen({ type: '4', result: '1' });
   });
 
   it('should successfully complete a 3DS2 payment transaction via payment methods', async () => {
     await toggleAskForCSCSetting();
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAYMENT_METHODS)).tap();
     await addCardPaymentMethodAndPay();
     await assertResultsScreen({ type: '1', result: '1' });
@@ -144,6 +170,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await complete3DS2();
     await assertResultsScreen({ type: '1', result: '0' });
     await expect(
@@ -159,6 +188,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.DECLINED_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await complete3DS2();
     await assertResultsScreen({ type: '1', result: '2' });
     await expect(
@@ -176,9 +208,16 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
-    await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
-      .toBeVisible()
-      .withTimeout(10000);
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+      await waitFor(element(by.text(Selectors.THREEDS2_TITLE_ANDROID)))
+        .toBeVisible()
+        .withTimeout(15000);
+    } else {
+      await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
+        .toBeVisible()
+        .withTimeout(10000);
+    }
     await element(by.text('Cancel')).tap();
     await waitFor(element(by.text(UserFeedback.THREEDS2_CANCELLED)))
       .toExist()
@@ -194,6 +233,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await assertResultsScreen({ type: '1', result: '1' });
   });
 
@@ -206,6 +248,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await assertResultsScreen({ type: '1', result: '1' });
   });
 
@@ -218,6 +263,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await waitFor(element(by.text(UserFeedback.THREEDS2_CANCELLED)))
       .toExist()
       .withTimeout(10000);

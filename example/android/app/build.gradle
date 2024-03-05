@@ -88,6 +88,8 @@ android {
     targetSdkVersion rootProject.ext.targetSdkVersion
     versionCode 4138
     versionName "1.0"
+    testBuildType System.getProperty('testBuildType', 'debug')
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
   }
   signingConfigs {
     debug {
@@ -128,6 +130,10 @@ dependencies {
   } else {
     implementation jscFlavor
   }
+
+  // This is for Detox test framework
+  androidTestImplementation('com.wix:detox:+')
+  implementation 'androidx.appcompat:appcompat:1.1.0'
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

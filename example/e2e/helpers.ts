@@ -31,9 +31,9 @@ export async function fillPaymentDetailsSheet(props: CardDetails) {
     await element(by.id(Selectors.ANDROID_NAME)).replaceText(props.name);
     await element(by.id(Selectors.ANDROID_EXPIRY)).replaceText(props.expiry);
     await element(by.id(Selectors.ANDROID_CODE)).typeText(props.code);
-    await element(by.text('Pay Now')).tap();
+    await element(by.id('cardEntrySubmitButton')).tap();
+    await device.enableSynchronization();
   }
-  await device.enableSynchronization();
 }
 
 export async function assertResultsScreen(props: Props) {
@@ -46,19 +46,34 @@ export async function assertResultsScreen(props: Props) {
 }
 
 export async function complete3DS2() {
-  await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
-    .toBeVisible()
-    .withTimeout(15000);
-  await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+  if (device.getPlatform() === 'android') {
+    await waitFor(element(by.text(Selectors.THREEDS2_TITLE_ANDROID)))
+      .toBeVisible()
+      .withTimeout(15000);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+    try {
+      await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+    } catch (exception) {
+      console.info(
+        'Exception caught - unable to tap on complete button during 3DS2'
+      );
+    }
+  } else {
+    await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
+      .toBeVisible()
+      .withTimeout(15000);
+    await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+  }
 }
 
 export async function isCardAddedToPaymentMethods(): Promise<boolean> {
   try {
     await expect(element(by.label(Selectors.EXISTING_CARD))).toBeVisible();
     return true;
-  } catch (e) {
+  } catch (exception) {
     return false;
   }
 }
@@ -69,34 +84,50 @@ export async function addCardPaymentMethodAndPay() {
     await element(by.text('Delete')).tap();
     await new Promise((resolve) => setTimeout(resolve, 3000));
   }
-  await element(by.text(Selectors.ADD_CARD_BUTTON)).atIndex(1).tap();
+  if (device.getPlatform() === 'android') {
+    await element(by.text(Selectors.ADD_CARD_BUTTON)).tap();
+  } else {
+    await element(by.text(Selectors.ADD_CARD_BUTTON)).atIndex(1).tap();
+  }
   await fillPaymentDetailsSheet({
     number: TestData.CARD_NUMBER,
     name: TestData.CARDHOLDER_NAME,
     expiry: TestData.EXPIRY_DATE,
     code: TestData.SECURITY_CODE,
   });
+  if (device.getPlatform() === 'android') {
+    await device.enableSynchronization();
+  }
   await waitFor(element(by.label(Selectors.EXISTING_CARD)))
     .toBeVisible()
     .withTimeout(3000);
-  await element(by.text('PAY NOW')).tap();
-  await fillCardholderNameSheet();
+  if (device.getPlatform() === 'android') {
+    await element(by.text('Pay Now')).tap();
+  } else {
+    await element(by.text('PAY NOW')).tap();
+  }
   await fillSecurityCodeSheet();
   await tapPayNowButton();
   await complete3DS2();
 }
 
 export async function setNoPreferenceCRI() {
+  if (device.getPlatform() === 'android') {
+    await device.enableSynchronization();
+  }
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
   await element(by.text(Selectors.CHALLENGE_REQUEST_SETTINGS)).tap();
   await element(by.text(Selectors.NO_PREFERENCE)).tap();
-  let tokenField = await element(by.id(Selectors.TOKEN_INPUT)).getAttributes();
-  if ('value' in tokenField) {
-    if (tokenField.value === '') {
-      enterAuthDetails();
+  let tokenToggle = await element(by.id(Selectors.AUTH_TOGGLE)).getAttributes();
+  if ('value' in tokenToggle) {
+    if (tokenToggle.value === '0') {
+      await enterAuthDetails();
     }
   }
-  await element(by.id(Selectors.BACK_BUTTON)).longPress();
+  if (device.getPlatform() === 'android') {
+    await element(by.id(Selectors.BACK_BUTTON)).longPress();
+    await device.disableSynchronization();
+  }
 }
 
 export async function clickSettingsButton() {
@@ -112,7 +143,12 @@ export async function enterAuthDetails() {
   await element(by.id(Selectors.AUTH_TOGGLE)).longPress();
   await element(by.id(Selectors.TOKEN_INPUT)).replaceText(token);
   await element(by.id(Selectors.SECRET_INPUT)).replaceText(secret);
-  await element(by.id(Selectors.BACK_BUTTON)).longPress();
+  let backButton = await element(by.id(Selectors.BACK_BUTTON)).getAttributes();
+  if ('visible' in backButton) {
+    if (backButton.visible === true) {
+      await element(by.id(Selectors.BACK_BUTTON)).longPress();
+    }
+  }
 }
 
 export async function dissmissKeyboardOnTokenScreen() {
@@ -120,24 +156,38 @@ export async function dissmissKeyboardOnTokenScreen() {
 }
 
 export async function toggleAskForCSCSetting() {
+  if (device.getPlatform() === 'android') {
+    await device.enableSynchronization();
+  }
   await clickSettingsButton();
   await element(by.id('settings-list')).scrollTo('bottom');
-  let askForCSCToggle = await element(
-    by.id(Selectors.ASK_FOR_CSC)
-  ).getAttributes();
-  if ('value' in askForCSCToggle) {
-    if (askForCSCToggle.value === '0') {
-      await element(by.id(Selectors.ASK_FOR_CSC)).tap();
-      await element(by.id(Selectors.ASK_FOR_NAME)).tap();
+  if (device.getPlatform() === 'android') {
+    await element(by.id(Selectors.ASK_FOR_CSC)).tap();
+  } else if (device.getPlatform() === 'ios') {
+    let askForCSCToggle = await element(
+      by.id(Selectors.ASK_FOR_CSC)
+    ).getAttributes();
+    if ('value' in askForCSCToggle) {
+      if (askForCSCToggle.value === '0') {
+        await element(by.id(Selectors.ASK_FOR_CSC)).tap();
+      }
     }
   }
   await element(by.id(Selectors.BACK_BUTTON)).longPress();
 }
 
 export async function fillSecurityCodeSheet() {
-  await element(by.id(Selectors.SECURITY_CODE_INPUT)).typeText(
-    TestData.SECURITY_CODE
-  );
+  if (device.getPlatform() === 'android') {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await element(by.id(Selectors.ANDROID_CODE)).typeText(
+      TestData.SECURITY_CODE
+    );
+    await device.disableSynchronization();
+  } else if (device.getPlatform() === 'ios') {
+    await element(by.id(Selectors.SECURITY_CODE_INPUT)).typeText(
+      TestData.SECURITY_CODE
+    );
+  }
 }
 
 export async function fillCardholderNameSheet() {
