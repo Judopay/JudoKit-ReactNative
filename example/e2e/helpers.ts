@@ -50,10 +50,12 @@ export async function complete3DS2() {
     await waitFor(element(by.text(Selectors.THREEDS2_TITLE_ANDROID)))
       .toBeVisible()
       .withTimeout(15000);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     try {
-      await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+      for (let i = 0; i < 3; i++) {
+        await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
     } catch (exception) {
       console.info(
         'Exception caught - unable to tap on complete button during 3DS2'
@@ -96,13 +98,9 @@ export async function addCardPaymentMethodAndPay() {
     code: TestData.SECURITY_CODE,
   });
   if (device.getPlatform() === 'android') {
-    await device.enableSynchronization();
-  }
-  await waitFor(element(by.label(Selectors.EXISTING_CARD)))
-    .toBeVisible()
-    .withTimeout(3000);
-  if (device.getPlatform() === 'android') {
-    await element(by.text('Pay Now')).tap();
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await device.disableSynchronization();
+    await element(by.id('paymentMethodsPayNowButton')).tap();
   } else {
     await element(by.text('PAY NOW')).tap();
   }
@@ -118,14 +116,25 @@ export async function setNoPreferenceCRI() {
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
   await element(by.text(Selectors.CHALLENGE_REQUEST_SETTINGS)).tap();
   await element(by.text(Selectors.NO_PREFERENCE)).tap();
-  let tokenToggle = await element(by.id(Selectors.AUTH_TOGGLE)).getAttributes();
-  if ('value' in tokenToggle) {
-    if (tokenToggle.value === '0') {
+  if (device.getPlatform() === 'android') {
+    try {
+      await expect(element(by.id(Selectors.AUTH_TOGGLE))).toHaveToggleValue(
+        true
+      );
+    } catch (exception) {
       await enterAuthDetails();
+    }
+  } else {
+    let tokenToggle = await element(
+      by.id(Selectors.AUTH_TOGGLE)
+    ).getAttributes();
+    if ('value' in tokenToggle) {
+      if (tokenToggle.value === '0') {
+        await enterAuthDetails();
+      }
     }
   }
   if (device.getPlatform() === 'android') {
-    await element(by.id(Selectors.BACK_BUTTON)).longPress();
     await device.disableSynchronization();
   }
 }
@@ -162,7 +171,13 @@ export async function toggleAskForCSCSetting() {
   await clickSettingsButton();
   await element(by.id('settings-list')).scrollTo('bottom');
   if (device.getPlatform() === 'android') {
-    await element(by.id(Selectors.ASK_FOR_CSC)).tap();
+    try {
+      await expect(element(by.id(Selectors.ASK_FOR_CSC))).toHaveToggleValue(
+        true
+      );
+    } catch (exception) {
+      await element(by.id(Selectors.ASK_FOR_CSC)).tap();
+    }
   } else if (device.getPlatform() === 'ios') {
     let askForCSCToggle = await element(
       by.id(Selectors.ASK_FOR_CSC)

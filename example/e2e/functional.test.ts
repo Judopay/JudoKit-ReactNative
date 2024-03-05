@@ -157,6 +157,9 @@ describe('E2E Functional Tests', () => {
 
   it('should successfully complete a 3DS2 pre-auth transaction via payment methods', async () => {
     await toggleAskForCSCSetting();
+    if (device.getPlatform() === 'android') {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PREAUTH_METHODS)).tap();
     await addCardPaymentMethodAndPay();
     await assertResultsScreen({ type: '2', result: '1' });
