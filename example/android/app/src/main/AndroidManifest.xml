@@ -12,6 +12,7 @@
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning"
     android:networkSecurityConfig="@xml/network_security_config">
+    <!-- The above is for Detox test framework -->
     <activity
       android:name=".MainActivity"
       android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"

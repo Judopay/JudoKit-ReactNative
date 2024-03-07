@@ -28,6 +28,7 @@ allprojects {
         maven {
           url 'https://maven.ravelin.com/public/repositories/core-android/'
           }
+      // This is for Detox test framework
       maven { url("$rootDir/../node_modules/detox/Detox-android") }
     }
 }
