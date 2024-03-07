@@ -31,7 +31,7 @@ export async function fillPaymentDetailsSheet(props: CardDetails) {
     await element(by.id(Selectors.ANDROID_NAME)).replaceText(props.name);
     await element(by.id(Selectors.ANDROID_EXPIRY)).replaceText(props.expiry);
     await element(by.id(Selectors.ANDROID_CODE)).typeText(props.code);
-    await element(by.id('cardEntrySubmitButton')).tap();
+    await element(by.id(Selectors.ANDROID_PAY_NOW)).tap();
     await device.enableSynchronization();
   }
 }
@@ -56,11 +56,7 @@ export async function complete3DS2() {
         await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
-    } catch (exception) {
-      console.info(
-        'Exception caught - unable to tap on complete button during 3DS2'
-      );
-    }
+    } catch (exception) {}
   } else {
     await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
       .toBeVisible()
@@ -100,7 +96,7 @@ export async function addCardPaymentMethodAndPay() {
   if (device.getPlatform() === 'android') {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     await device.disableSynchronization();
-    await element(by.id('paymentMethodsPayNowButton')).tap();
+    await element(by.id(Selectors.ANDROID_METHODS_PAY_NOW)).tap();
   } else {
     await element(by.text('PAY NOW')).tap();
   }

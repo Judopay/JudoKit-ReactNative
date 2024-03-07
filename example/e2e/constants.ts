@@ -52,6 +52,8 @@ export enum Selectors {
   ANDROID_NAME = 'cardHolderNameField',
   ANDROID_EXPIRY = 'expiryDateField',
   ANDROID_CODE = 'securityCodeField',
+  ANDROID_METHODS_PAY_NOW = 'paymentMethodsPayNowButton',
+  ANDROID_PAY_NOW = 'cardEntrySubmitButton',
 }
 
 export enum UserFeedback {
