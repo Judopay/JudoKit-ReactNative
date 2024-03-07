@@ -54,6 +54,15 @@ export enum Selectors {
   ANDROID_CODE = 'securityCodeField',
   ANDROID_METHODS_PAY_NOW = 'paymentMethodsPayNowButton',
   ANDROID_PAY_NOW = 'cardEntrySubmitButton',
+  RESULT_HEADER = 'Result',
+  RESULT_RECEIPT_ID = 'receiptId-value',
+  RESULT_TYPE = 'type-value',
+  RESULT_VALUE = 'result-value',
+  DELETE_CARD = 'Delete',
+  IOS_PAY_NOW = 'PAY NOW',
+  SETTINGS_LISTVIEW = 'settings-list',
+  ANDROID_PAY_NOW_LABEL = 'Pay Now',
+  CANCEL_3DS2 = 'Cancel',
 }
 
 export enum UserFeedback {
