@@ -16,6 +16,7 @@ const BackButton: FC = () => {
 
   return (
     <Icon.Button
+      testID="back-button"
       name="chevron-back"
       size={28}
       color={primary}

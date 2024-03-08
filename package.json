@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "example": "yarn workspace judokit-react-native-example",
-    "test": "jest",
+    "test": "jest src",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "format": "prettier --write \"**/*.{js,ts,tsx}\" && eslint --fix \"**/*.{js,ts,tsx}\"",
@@ -84,10 +84,8 @@
     "react": "*",
     "react-native": "*"
   },
-  "workspaces": [
-    "example"
-  ],
-  "packageManager": "yarn@4.1.0",
+  "workspaces": ["example"],
+  "packageManager": "yarn@4.1.1",
   "engines": {
     "node": ">= 18.0.0"
   },
@@ -99,25 +97,16 @@
     ]
   },
   "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
+    "extends": ["@commitlint/config-conventional"]
   },
   "eslintConfig": {
     "root": true,
-    "extends": [
-      "@react-native",
-      "prettier"
-    ],
+    "extends": ["@react-native", "prettier"],
     "rules": {
       "no-bitwise": [
         "error",
         {
-          "allow": [
-            "<<",
-            "|=",
-            "|"
-          ]
+          "allow": ["<<", "|=", "|"]
         }
       ],
       "react-native/no-inline-styles": "off",
@@ -133,10 +122,7 @@
       ]
     }
   },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ],
+  "eslintIgnore": ["node_modules/", "lib/"],
   "prettier": {
     "quoteProps": "consistent",
     "singleQuote": true,

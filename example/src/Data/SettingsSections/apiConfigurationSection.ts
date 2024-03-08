@@ -26,6 +26,7 @@ const apiConfigurationSection = (
         dataType: SettingsItemDataType.TEXT,
         title: 'Judo ID',
         value: _.get(data, judoIdPath),
+        testID: 'judo-id-input',
       },
     ],
   };

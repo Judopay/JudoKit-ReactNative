@@ -6,12 +6,14 @@ export interface BooleanSettingsItemProps {
   title: string;
   value: boolean;
   onValueChange?: (value: boolean) => void;
+  testID?: string;
 }
 
 const BooleanSettingsItem: FC<BooleanSettingsItemProps> = ({
   title,
   value,
   onValueChange,
+  testID,
 }) => {
   const {
     colors: { card, text },
@@ -41,7 +43,7 @@ const BooleanSettingsItem: FC<BooleanSettingsItemProps> = ({
       >
         {title}
       </Text>
-      <Switch value={value} onValueChange={onValueChange} />
+      <Switch value={value} onValueChange={onValueChange} testID={testID} />
     </View>
   );
 };

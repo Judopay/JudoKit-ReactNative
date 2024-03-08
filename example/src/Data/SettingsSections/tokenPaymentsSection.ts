@@ -21,12 +21,14 @@ const tokenPaymentsSection = (
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Should ask for CSC',
         value: _.get(data, shouldAskForCSCPath),
+        testID: 'should-ask-for-csc',
       },
       {
         path: shouldAskForCardholderNamePath,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Should ask for cardholder name',
         value: _.get(data, shouldAskForCardholderNamePath),
+        testID: 'should-ask-for-cardholder-name',
       },
     ],
   };

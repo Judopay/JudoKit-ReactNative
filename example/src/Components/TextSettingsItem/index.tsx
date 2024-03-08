@@ -7,12 +7,14 @@ export interface TextSettingsItemProps {
   title: string;
   value?: string;
   onChange: (value: string) => void;
+  testID?: string;
 }
 
 const TextSettingsItem: FC<TextSettingsItemProps> = ({
   title,
   value,
   onChange,
+  testID,
 }) => {
   const {
     colors: { card, text },
@@ -54,6 +56,7 @@ const TextSettingsItem: FC<TextSettingsItemProps> = ({
         clearButtonMode="always"
         value={value}
         onChangeText={onChange}
+        testID={testID}
       />
     </View>
   );

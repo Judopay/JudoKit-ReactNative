@@ -11,6 +11,7 @@ export interface ButtonProps {
   fontSize?: number;
   marginTop?: number;
   marginBottom?: number;
+  testID?: string;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -22,6 +23,7 @@ const Button: FC<ButtonProps> = ({
   fontSize = 16,
   marginBottom = 24,
   marginTop = 0,
+  testID,
 }) => {
   const {
     colors: { card, text, border },
@@ -29,6 +31,7 @@ const Button: FC<ButtonProps> = ({
 
   return (
     <TouchableOpacity
+      testID={testID}
       disabled={isLoading || disabled}
       onPress={onPress}
       style={{
