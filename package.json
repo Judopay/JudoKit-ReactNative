@@ -17,7 +17,7 @@
     "!ios/build",
     "!vendor/**/*",
     "!fastlane/**/*",
-    "!scripts/**/*",
+    "scripts/**/*.js",
     "!android/build",
     "!android/gradle",
     "!android/gradlew",
