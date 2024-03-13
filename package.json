@@ -1,6 +1,6 @@
 {
   "name": "judokit-react-native",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "description": "A React Native module for the Judopay native SDKs to process payments on iOS and Android.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -17,7 +17,7 @@
     "!ios/build",
     "!vendor/**/*",
     "!fastlane/**/*",
-    "!scripts/**/*",
+    "scripts/**/*.js",
     "!android/build",
     "!android/gradle",
     "!android/gradlew",
@@ -35,7 +35,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "format": "prettier --write \"**/*.{js,ts,tsx}\" && eslint --fix \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build"
+    "prepare": "bob build && node scripts/rewrite-package-json-module-path.js"
   },
   "keywords": [
     "react-native",
@@ -74,7 +74,7 @@
     "prettier": "^2.0.5",
     "react": "18.2.0",
     "react-native": "0.73.2",
-    "react-native-builder-bob": "^0.20.0",
+    "react-native-builder-bob": "^0.23.2",
     "typescript": "^5.0.2"
   },
   "resolutions": {
