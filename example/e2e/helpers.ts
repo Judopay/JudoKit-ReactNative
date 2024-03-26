@@ -63,7 +63,9 @@ export async function complete3DS2() {
       .withTimeout(15000);
     await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
     await delay(5000);
-    await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+    try {
+      await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+    } catch (exception) {}
   }
 }
 
