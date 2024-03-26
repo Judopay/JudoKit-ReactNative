@@ -261,8 +261,8 @@ jobs:
           name: Install Detox dependencies
           working_directory: example
           command: |
-            yarn global add react-native-cli
-            yarn global add detox-cli
+            yarn dlx react-native-cli
+            yarn dlx detox-cli
       - run:
           name: Rebuild Detox framework cache
           working_directory: example
@@ -288,6 +288,7 @@ workflows:
             branches:
               ignore:
                 - master
+                - CT-2889-ui-tests-ci-setup
       - lint_sdk:
           requires:
             - checkout_project
