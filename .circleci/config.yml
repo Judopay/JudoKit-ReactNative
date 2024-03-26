@@ -278,6 +278,38 @@ jobs:
           path: example/artifacts
       - notify_slack_error
       - notify_slack_pass
+  run_e2e_android:
+    executor: macos
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install Homebrew dependencies
+          working_directory: example
+          command: |
+            brew tap wix/brew
+            brew install applesimutils
+      - run:
+          name: Install Detox dependencies
+          working_directory: example
+          command: |
+            npm install detox-cli --global
+            npm install react-native-cli --global
+      - run:
+          name: Rebuild Detox framework cache
+          working_directory: example
+          command: detox clean-framework-cache && detox build-framework-cache
+      - run: 
+          name: Run Detox tests
+          working_directory: example
+          command: |
+            yarn start &
+            detox build --configuration android.emu.debug
+            detox test --configuration android.emu.debug --record-videos failing
+      - store_artifacts:
+          path: example/artifacts
+      - notify_slack_error
+      - notify_slack_pass
 
 workflows:
   version: 2
@@ -351,6 +383,13 @@ workflows:
     jobs:
       - checkout_project
       - run_e2e_ios:
+          requires:
+            - checkout_project
+          filters:
+            branches:
+              only:
+                - master
+      - run_e2e_android:
           requires:
             - checkout_project
           filters:
