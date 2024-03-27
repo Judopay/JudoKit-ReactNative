@@ -4,6 +4,7 @@ executors:
   macos:
     macos:
       xcode: 15.2.0
+    resource_class: "macos.m1.medium.gen1"
 
 orbs:
   ruby: circleci/ruby@2.1.0
@@ -284,8 +285,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
-      - rn/setup_macos_executor:
-          android: false
       - android_sdk_install
       - run:
           name: Install Homebrew dependencies
