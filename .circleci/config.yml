@@ -284,7 +284,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
-      - rn/setup_macos_executor
+      - rn/setup_macos_executor:
+          android: false
       - android_sdk_install
       - run:
           name: Install Homebrew dependencies
