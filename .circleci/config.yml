@@ -284,6 +284,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
+      - rn/setup_macos_executor
       - android_sdk_install
       - run:
           name: Install Homebrew dependencies
@@ -301,8 +302,7 @@ jobs:
           name: Rebuild Detox framework cache
           working_directory: example
           command: detox clean-framework-cache && detox build-framework-cache
-      - rn/android_emulator_start:
-          device_name: "Pixel_3a_API_30_x86"
+      - rn/android_emulator_start
       - run: 
           name: Run Detox tests
           working_directory: example
