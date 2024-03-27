@@ -302,7 +302,7 @@ jobs:
           working_directory: example
           command: detox clean-framework-cache && detox build-framework-cache
       - rn/android_emulator_start:
-          device_name: "Pixel_6a_API_34"
+          device_name: "Pixel_3a_API_30_x86"
       - run: 
           name: Run Detox tests
           working_directory: example
