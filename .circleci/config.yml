@@ -283,6 +283,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
+      - android_sdk_install
       - run:
           name: Install Homebrew dependencies
           working_directory: example
@@ -382,7 +383,6 @@ workflows:
   e2e: 
     jobs:
       - checkout_project
-      - build_sdk
       - run_e2e_ios:
           requires:
             - checkout_project
@@ -393,7 +393,6 @@ workflows:
       - run_e2e_android:
           requires:
             - checkout_project
-            - build_sdk
           filters:
             branches:
               only:
