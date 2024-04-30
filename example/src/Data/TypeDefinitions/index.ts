@@ -210,6 +210,7 @@ export interface SettingsData {
     url: string;
     rsaPublicKey: string;
     timeout: string;
+    haltTransactionInCaseOfAnyError: boolean;
   };
 }
 

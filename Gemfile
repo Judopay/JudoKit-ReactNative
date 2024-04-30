@@ -7,7 +7,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 ruby ">= 2.6.10"
 
 gem 'cocoapods', '= 1.15.2'
-gem 'fastlane', '= 2.219'
+gem 'fastlane', '= 2.220.0'
 gem 'activesupport', '>= 6.1.7.3', '< 7.1.0'
 gem "colorize", "~> 1.1"
 

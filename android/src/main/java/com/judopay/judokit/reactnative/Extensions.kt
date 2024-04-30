@@ -305,6 +305,9 @@ internal val ReadableMap.recommendationRSAPublicKey: String?
 internal val ReadableMap.recommendationTimeout: Int?
   get() = recommendationConfiguration?.getOptionalInt("timeout")
 
+internal val ReadableMap.haltTransactionInCaseOfAnyError: Boolean
+  get() = recommendationConfiguration?.getOptionalBoolean("haltTransactionInCaseOfAnyError") ?: false
+
 internal val ReadableMap.primaryAccountDetails: ReadableMap?
   get() = configuration?.getOptionalMap("primaryAccountDetails")
 

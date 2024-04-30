@@ -257,6 +257,7 @@ internal fun getRecommendationConfiguration(options: ReadableMap): Recommendatio
       .setUrl(options.recommendationURL)
       .setRsaPublicKey(options.recommendationRSAPublicKey)
       .setTimeout(options.recommendationTimeout)
+      .setShouldHaltTransactionInCaseOfAnyError(options.haltTransactionInCaseOfAnyError)
       .build()
   } else {
     null

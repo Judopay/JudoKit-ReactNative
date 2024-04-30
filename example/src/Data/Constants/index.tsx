@@ -211,6 +211,7 @@ export const DEFAULT_SETTINGS_DATA: SettingsData = {
     url: '',
     rsaPublicKey: '',
     timeout: '',
+    haltTransactionInCaseOfAnyError: false,
   },
 };
 

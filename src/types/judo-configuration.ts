@@ -29,6 +29,7 @@ export interface JudoRecommendationConfiguration {
   url: string;
   rsaPublicKey: string;
   timeout?: number;
+  haltTransactionInCaseOfAnyError?: boolean;
 }
 
 export enum ChallengeRequestIndicator {

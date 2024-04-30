@@ -13,6 +13,8 @@ const recommendationFeatureSection = (
   const urlPath = 'recommendation.url';
   const rsaPublicKeyPath = 'recommendation.rsaPublicKey';
   const timeoutPath = 'recommendation.timeout';
+  const haltTransactionInCaseOfAnyErrorKeyPath =
+    'recommendation.haltTransactionInCaseOfAnyError';
 
   const isRecommendationFeatureOn = _.get(data, isRecommendationFeatureOnPath);
 
@@ -44,6 +46,12 @@ const recommendationFeatureSection = (
               dataType: SettingsItemDataType.TEXT,
               title: 'Request timeout',
               value: _.get(data, timeoutPath),
+            },
+            {
+              path: haltTransactionInCaseOfAnyErrorKeyPath,
+              dataType: SettingsItemDataType.BOOLEAN,
+              title: 'Halt transaction in case of any error',
+              value: _.get(data, haltTransactionInCaseOfAnyErrorKeyPath),
             },
           ]
         : []),

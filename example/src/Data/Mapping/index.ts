@@ -443,13 +443,20 @@ export const judoConfigurationFromSettingsData = ({
 
   const { shouldAskForCSC, shouldAskForCardholderName } = tokenPayments || {};
 
-  const { isOn = false, url, timeout, rsaPublicKey } = recommendation || {};
+  const {
+    isOn = false,
+    url,
+    timeout,
+    rsaPublicKey,
+    haltTransactionInCaseOfAnyError,
+  } = recommendation || {};
 
   const recommendationConfiguration = isOn
     ? {
         url,
         rsaPublicKey,
         timeout: timeout.length > 0 ? Number(timeout) : undefined,
+        haltTransactionInCaseOfAnyError,
       }
     : undefined;
 
