@@ -50,7 +50,7 @@ commands:
       - run:
           name: Install CocoaPods
           command: |
-            cd <<parameters.pod_install_directory>> && pod install && cd -
+            cd <<parameters.pod_install_directory>> && bundle exec pod install && cd -
       - save_cache:
           paths:
             - <<parameters.pod_install_directory>>/Pods
