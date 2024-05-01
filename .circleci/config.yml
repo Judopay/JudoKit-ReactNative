@@ -3,10 +3,7 @@ version: 2.1
 executors:
   macos:
     macos:
-      xcode: 15.2.0
-
-orbs:
-  ruby: circleci/ruby@2.1.0
+      xcode: 15.3.0
 
 commands:
   yarn_install:
@@ -46,11 +43,10 @@ commands:
       - restore_cache:
           keys:
             - '{{ .Environment.CACHE_VERSION }}-cache-pods-{{ checksum "<<parameters.pod_install_directory>>/Podfile.lock" }}'
-            - '{{ .Environment.CACHE_VERSION }}-cache-pods'
       - run:
           name: Install CocoaPods
-          command: |
-            cd <<parameters.pod_install_directory>> && pod install && cd -
+          command: bundle exec pod install
+          working_directory: <<parameters.pod_install_directory>>
       - save_cache:
           paths:
             - <<parameters.pod_install_directory>>/Pods
@@ -94,12 +90,28 @@ commands:
             - ~/Library/Caches/Homebrew
           key: brew-cache-android-commandlinetools-{{ arch }}-{{ .Environment.CACHE_VERSION }}
 
+  bundle_install:
+    description: Install Ruby dependencies using Bundler. This command correctly configures the cache for the Gemfile and Gemfile.lock.
+    steps:
+      - restore_cache:
+          keys:
+            - bundle-cache-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ .Environment.CACHE_VERSION }}
+      - run:
+          name: Install Ruby dependencies with Bundler
+          command: |
+            bundle config set --local clean 'true'
+            bundle config set --local path 'vendor/bundle'
+            bundle check || bundle install
+      - save_cache:
+          paths:
+            - vendor/bundle
+          key: bundle-cache-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ .Environment.CACHE_VERSION }}
 jobs:
   checkout_project:
     executor: macos
     steps:
       - checkout
-      - ruby/install-deps
+      - bundle_install
       - yarn_install
       - pod_install
       - persist_to_workspace:

@@ -412,8 +412,12 @@ static NSString *const kCardSchemeAMEX = @"amex";
     NSURL *URL = [NSURL URLWithString:URLString];
     NSString *RSAPublicKey = [dictionary stringForKey:@"rsaPublicKey"];
     NSNumber *timeout = [dictionary optionalNumberForKey:@"timeout"];
+    NSNumber *haltTransactionInCaseOfAnyError = [dictionary optionalBoolForKey:@"haltTransactionInCaseOfAnyError"];
 
-    return [JPRecommendationConfiguration configurationWithURL:URL RSAPublicKey:RSAPublicKey andTimeout:timeout];
+    return [JPRecommendationConfiguration configurationWithURL:URL
+                                                  RSAPublicKey:RSAPublicKey
+                                                       timeout:timeout
+                            andHaltTransactionInCaseOfAnyError:haltTransactionInCaseOfAnyError.boolValue];
 }
 
 + (JP3DSUICustomization *)threeDSUICustomization:(NSDictionary *)uiCustomization {
