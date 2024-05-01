@@ -117,11 +117,10 @@ android {
 dependencies {
   // The version of react-native is set by the React Native Gradle Plugin
   implementation("com.facebook.react:react-android")
-  implementation("com.facebook.react:flipper-integration")
 
   // The following is for `JudoApiServiceFactory.externalInterceptors` in `MainApplication.java`
   implementation "com.github.chuckerteam.chucker:library:3.5.2"
-  implementation "com.judopay:judokit-android:4.3.0"
+  implementation "com.judopay:judokit-android:4.3.1"
 
   // This is for Ravelin recommendation feature
   implementation 'com.ravelin.sdk:ravelin-encrypt:3.1.0'

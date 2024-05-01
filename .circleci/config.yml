@@ -3,7 +3,7 @@ version: 2.1
 executors:
   macos:
     macos:
-      xcode: 15.2.0
+      xcode: 15.3.0
 
 orbs:
   ruby: circleci/ruby@2.1.0
