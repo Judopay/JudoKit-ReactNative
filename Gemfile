@@ -14,5 +14,8 @@ gem 'activesupport', '>= 6.1.7.5', '< 7.1.0'
 gem 'fastlane', '= 2.220.0'
 gem 'colorize', '~> 1.1'
 
+# temporary workaround: https://github.com/fastlane/fastlane/issues/21794#issuecomment-2102563823
+gem 'rb-readline'
+
 plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
 eval_gemfile(plugins_path) if File.exist?(plugins_path)
