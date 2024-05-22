@@ -12,6 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		449FF17F2BFE1EB200A66616 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 449FF17E2BFE1EB200A66616 /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -39,6 +40,7 @@
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-JudoKitReactNativeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JudoKitReactNativeExample.debug.xcconfig"; path = "Target Support Files/Pods-JudoKitReactNativeExample/Pods-JudoKitReactNativeExample.debug.xcconfig"; sourceTree = "<group>"; };
 		4468D2112B67CEA90059D7C0 /* JudoKitReactNativeExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = JudoKitReactNativeExample.entitlements; path = JudoKitReactNativeExample/JudoKitReactNativeExample.entitlements; sourceTree = "<group>"; };
+		449FF17E2BFE1EB200A66616 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = JudoKitReactNativeExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-JudoKitReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JudoKitReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-JudoKitReactNativeExample/Pods-JudoKitReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-JudoKitReactNativeExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JudoKitReactNativeExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +96,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				449FF17E2BFE1EB200A66616 /* PrivacyInfo.xcprivacy */,
 			);
 			name = JudoKitReactNativeExample;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				449FF17F2BFE1EB200A66616 /* PrivacyInfo.xcprivacy in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
