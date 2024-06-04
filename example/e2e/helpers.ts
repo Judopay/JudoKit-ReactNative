@@ -63,7 +63,9 @@ export async function complete3DS2() {
       .withTimeout(15000);
     await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
     await delay(5000);
-    await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+    try {
+      await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
+    } catch (exception) {}
   }
 }
 
@@ -77,7 +79,9 @@ export async function isCardAddedToPaymentMethods(): Promise<boolean> {
 }
 
 export async function addCardPaymentMethodAndPay() {
+  let cardAdded = false;
   if (await isCardAddedToPaymentMethods()) {
+    cardAdded = true;
     await element(by.label(Selectors.EXISTING_CARD)).swipe('left');
     await element(by.text(Selectors.DELETE_CARD)).tap();
     await delay(3000);
@@ -85,7 +89,12 @@ export async function addCardPaymentMethodAndPay() {
   if (await isAndroid()) {
     await element(by.text(Selectors.ADD_CARD_BUTTON)).tap();
   } else {
-    await element(by.text(Selectors.ADD_CARD_BUTTON)).atIndex(1).tap();
+    await delay(1500);
+    if (cardAdded) {
+      await element(by.text(Selectors.ADD_CARD_BUTTON)).atIndex(1).tap();
+    } else {
+      await element(by.text(Selectors.ADD_CARD_BUTTON)).tap();
+    }
   }
   await fillPaymentDetailsSheet({
     number: TestData.CARD_NUMBER,

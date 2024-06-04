@@ -7,7 +7,11 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "build:android": "cd android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
-    "build:ios": "cd ios && xcodebuild -workspace JudoKitReactNativeExample.xcworkspace -scheme JudoKitReactNativeExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
+    "build:ios": "cd ios && xcodebuild -workspace JudoKitReactNativeExample.xcworkspace -scheme JudoKitReactNativeExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
+    "detox:build:android": "detox build --configuration android.emu.debug",
+    "detox:build:ios": "detox clean-framework-cache && detox build-framework-cache && detox build --configuration ios.sim.debug",
+    "detox:test:android": "detox test --configuration android.emu.debug --record-videos failing --record-logs all",
+    "detox:test:ios": "detox clean-framework-cache && detox build-framework-cache && detox test --configuration ios.sim.debug --record-videos failing"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.21.0",

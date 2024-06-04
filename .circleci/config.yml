@@ -4,8 +4,87 @@ executors:
   macos:
     macos:
       xcode: 15.3.0
+    resource_class: 'macos.m1.medium.gen1'
+
+orbs:
+  slack: circleci/slack@4.13.1
+  android: circleci/android@2.5.0
 
 commands:
+  notify_slack_error:
+    steps:
+      - slack/notify:
+          event: fail
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "CircleCI has just ran the :aapl: React Native E2E tests, but they failed. Review the failures here: \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project:*\n$CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n$CIRCLE_BRANCH"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:* \n <https://github.com/Judopay/JudoKit-ReactNative/commit/${CIRCLE_SHA1} | ${CIRCLE_SHA1:0:7}>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author:*\n$CIRCLE_USERNAME"
+                    }
+                  ]
+                }
+              ]
+            }
+  notify_slack_pass:
+    steps:
+      - slack/notify:
+          event: pass
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "CircleCI has just *successfully* ran the :aapl: React Native E2E tests! \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project:*\n$CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n$CIRCLE_BRANCH"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:* \n <https://github.com/Judopay/JudoKit-ReactNative/commit/${CIRCLE_SHA1} | ${CIRCLE_SHA1:0:7}>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author:*\n$CIRCLE_USERNAME"
+                    }
+                  ]
+                }
+              ]
+            }
   yarn_install:
     description: Install dependencies using Yarn. This command correctly configures the cache for any number of package.json and yarn.lock files.
 
@@ -45,51 +124,52 @@ commands:
             - '{{ .Environment.CACHE_VERSION }}-cache-pods-{{ checksum "<<parameters.pod_install_directory>>/Podfile.lock" }}'
       - run:
           name: Install CocoaPods
+          environment:
+            COCOAPODS_DISABLE_STATS: true
           command: bundle exec pod install
           working_directory: <<parameters.pod_install_directory>>
       - save_cache:
           paths:
             - <<parameters.pod_install_directory>>/Pods
           key: '{{ .Environment.CACHE_VERSION }}-cache-pods-{{ checksum "<<parameters.pod_install_directory>>/Podfile.lock" }}'
-  brew_install_linters:
-    description: Install native code linters using Homebrew (ktlint, clang-format), and cache the Homebrew cache.
+  brew_install:
+    description: Install packages using Homebrew, and cache the Homebrew cache.
+    parameters:
+      tools:
+        type: string
+        default: 'ktlint clang-format'
     steps:
       - restore_cache:
-          key: brew-cache-linters-{{ arch }}-{{ .Environment.CACHE_VERSION }}
+          key: brew-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}
       - run:
-          name: Installing native code linters
-          command: HOMEBREW_NO_AUTO_UPDATE=1 brew install ktlint clang-format
+          environment:
+            HOMEBREW_NO_AUTO_UPDATE: 1
+          name: Installing requested packages
+          command: brew install << parameters.tools >>
       - save_cache:
           paths:
             - ~/Library/Caches/Homebrew
-          key: brew-cache-linters-{{ arch }}-{{ .Environment.CACHE_VERSION }}
+          key: brew-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}
   android_sdk_install:
     description: Install Android SDK
     steps:
-      - restore_cache:
-          key: brew-cache-android-commandlinetools-{{ arch }}-{{ .Environment.CACHE_VERSION }}
-      - run:
-          name: Installing Android SDK
-          command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask android-commandlinetools
+      - brew_install:
+          tools: 'android-commandlinetools'
       - run:
           name: Configuring Environment Variables
           command: |
             echo 'export PATH="$PATH:/usr/local/opt/node@18/bin:~/.yarn/bin:~/project/node_modules/.bin:~/project/example/node_modules/.bin"' >> $BASH_ENV
-            echo 'export ANDROID_HOME="/usr/local/share/android-commandlinetools"' >> $BASH_ENV
-            echo 'export ANDROID_SDK_ROOT="/usr/local/share/android-commandlinetools"' >> $BASH_ENV
+            echo 'export ANDROID_HOME="/opt/homebrew/share/android-commandlinetools"' >> $BASH_ENV
+            echo 'export ANDROID_SDK_ROOT="/opt/homebrew/share/android-commandlinetools"' >> $BASH_ENV
             echo 'export PATH="$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH"' >> $BASH_ENV
-            echo 'export QEMU_AUDIO_DRV=none' >> $BASH_ENV
             echo 'export JAVA_HOME=$(/usr/libexec/java_home)' >> $BASH_ENV
             source $BASH_ENV
       - run:
           name: Accepting Android Licenses
           command: yes | sdkmanager --licenses || true
-      - save_cache:
-          paths:
-            - ~/Library/Caches/Homebrew
-          key: brew-cache-android-commandlinetools-{{ arch }}-{{ .Environment.CACHE_VERSION }}
-
+      - run:
+          name: Updating all installed SDK components
+          command: sdkmanager --update
   bundle_install:
     description: Install Ruby dependencies using Bundler. This command correctly configures the cache for the Gemfile and Gemfile.lock.
     steps:
@@ -106,6 +186,37 @@ commands:
           paths:
             - vendor/bundle
           key: bundle-cache-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ .Environment.CACHE_VERSION }}
+  setup_avd_screen_size:
+    description: Set up the Android Virtual Device screen size
+    parameters:
+      avd_name:
+        description: The name of the Android Virtual Device
+        type: string
+        default: 'Pixel_3a_API_34_x86_64'
+      width:
+        description: The width of the screen in pixels
+        type: string
+        default: '1440'
+      height:
+        description: The height of the screen in pixels
+        type: string
+        default: '2560'
+      density:
+        description: The screen density in DPI
+        type: string
+        default: '480'
+      size:
+        description: The screen size type
+        type: string
+        default: 'normal'
+    steps:
+      - run:
+          name: Set up AVD screen size
+          command: |
+            echo "hw.lcd.density=<< parameters.density >>" >> ~/.android/avd/<< parameters.avd_name >>.avd/config.ini
+            echo "hw.lcd.height=<< parameters.height >>" >> ~/.android/avd/<< parameters.avd_name >>.avd/config.ini
+            echo "hw.lcd.width=<< parameters.width >>" >> ~/.android/avd/<< parameters.avd_name >>.avd/config.ini
+            echo "hw.screen.size=<< parameters.size >>" >> ~/.android/avd/<< parameters.avd_name >>.avd/config.ini
 jobs:
   checkout_project:
     executor: macos
@@ -122,7 +233,8 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - brew_install_linters
+      - brew_install:
+          tools: 'ktlint clang-format'
       - run:
           name: Running SDK linters (Typescript type check, ESLint, Kotlin, ObjC)
           command: bundle exec fastlane lint
@@ -134,7 +246,8 @@ jobs:
       - android_sdk_install
       - run:
           name: Build SDK
-          command: bundle exec fastlane build build_for_distribution:false
+          command: |
+            bundle exec fastlane build build_for_distribution:false
   unit_test_sdk:
     executor: macos
     steps:
@@ -183,9 +296,63 @@ jobs:
           environment:
             ENVIRONMENT: << parameters.environment >>
           command: /resources/scripts/report-status-to-jira.sh
+  run_e2e_ios:
+    executor: macos
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Add Wix repository to Homebrew so that we can install applesimutils
+          command: |
+            brew tap wix/brew
+      - brew_install:
+          tools: 'applesimutils'
+      - run:
+          name: Run Detox tests
+          working_directory: example
+          command: |
+            yarn start &
+            yarn detox:build:ios
+            yarn detox:test:ios
+      - store_artifacts:
+          path: example/artifacts
+      - notify_slack_error
+      - notify_slack_pass
+  run_e2e_android:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: 2024.04.1
+    steps:
+      - checkout
+      - yarn_install
+      - android/accept-licenses
+      - android/create-avd:
+          avd-name: Pixel_3a_API_34_x86_64
+          system-image: system-images;android-34;google_apis;x86_64
+          install: true
+      - setup_avd_screen_size:
+          avd_name: Pixel_3a_API_34_x86_64
+      - android/start-emulator:
+          avd-name: Pixel_3a_API_34_x86_64
+          no-window: true
+          restore-gradle-cache-prefix: v1a
+          post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
+      - run:
+          name: Run the tests
+          working_directory: example
+          command: |
+            yarn start &
+            yarn detox:build:android
+            yarn detox:test:android
+      - android/save-gradle-cache:
+          cache-prefix: v1a
+      - store_artifacts:
+          path: example/artifacts
+      - notify_slack_error
+      - notify_slack_pass
 
 workflows:
-  version: 2
   pull_request_checks:
     jobs:
       - checkout_project:
@@ -251,3 +418,18 @@ workflows:
             tags:
               only:
                 - /^v[0-9]+(\.[0-9]+)*$/
+  e2e:
+    jobs:
+      - checkout_project:
+        filters:
+          branches:
+            only:
+              - master
+      - run_e2e_ios:
+          requires:
+            - checkout_project
+      - run_e2e_android:
+        filters:
+          branches:
+            only:
+              - master
