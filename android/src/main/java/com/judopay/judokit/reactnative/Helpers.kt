@@ -51,7 +51,10 @@ private const val TRANSACTION_TYPE_CHECK_CARD = "checkcard"
 
 // For consistency with:
 // https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Transaction/JPTransactionType.h#L30
-private enum class TransactionType(val value: Int, val typeAsStrings: List<String>? = null) {
+private enum class TransactionType(
+  val value: Int,
+  val typeAsStrings: List<String>? = null,
+) {
   PAYMENT(1, listOf(TRANSACTION_TYPE_PAYMENT)),
   PRE_AUTH(2, listOf(TRANSACTION_TYPE_PRE_AUTH)),
   REGISTER_CARD(3, listOf(TRANSACTION_TYPE_REGISTER, TRANSACTION_TYPE_REGISTER_CARD)),
@@ -68,7 +71,10 @@ private const val STATUS_ERROR = "error"
 
 // For consistency with:
 // https://github.com/Judopay/JudoKit-iOS/blob/abd34bbfe4784fb5f074ed30f93d6743ba295622/Source/Models/Transaction/JPTransactionResult.h#L27
-private enum class TransactionResult(val value: Int, val status: String? = null) {
+private enum class TransactionResult(
+  val value: Int,
+  val status: String? = null,
+) {
   ERROR(0, STATUS_ERROR),
   SUCCESS(1, STATUS_SUCCESS),
   DECLINED(2, STATUS_DECLINED),
@@ -165,17 +171,20 @@ internal fun getJudoConfigurationForApiService(options: ReadableMap): Judo {
   val authorization = getAuthorization(options)
 
   val amount =
-    Amount.Builder()
+    Amount
+      .Builder()
       .setAmount("0.00")
       .setCurrency(Currency.GBP)
       .build()
 
   val reference =
-    Reference.Builder()
+    Reference
+      .Builder()
       .setConsumerReference("reference")
       .build()
 
-  return Judo.Builder(PaymentWidgetType.CARD_PAYMENT)
+  return Judo
+    .Builder(PaymentWidgetType.CARD_PAYMENT)
     .setIsSandboxed(options.isSandboxed)
     .setJudoId("000000")
     .setAuthorization(authorization)
@@ -203,7 +212,8 @@ internal fun getJudoConfiguration(
   val address = getAddress(options)
 
   val builder =
-    Judo.Builder(type)
+    Judo
+      .Builder(type)
       .setAuthorization(authorization)
       .setIsSandboxed(options.isSandboxed)
       .setJudoId(options.judoId)
@@ -216,6 +226,7 @@ internal fun getJudoConfiguration(
       .setGooglePayConfiguration(googlePayConfiguration)
       .setInitialRecurringPayment(options.isInitialRecurringPayment)
       .setDelayedAuthorisation(options.isDelayedAuthorisation)
+      .setAllowIncrement(options.isAllowIncrement)
       .setNetworkTimeout(timeouts)
       .setChallengeRequestIndicator(challengeRequestIndicator)
       .setScaExemption(scaExemption)
@@ -251,9 +262,10 @@ internal fun getJudoConfiguration(
   return builder.build()
 }
 
-internal fun getRecommendationConfiguration(options: ReadableMap): RecommendationConfiguration? {
-  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && options.recommendationConfiguration != null) {
-    RecommendationConfiguration.Builder()
+internal fun getRecommendationConfiguration(options: ReadableMap): RecommendationConfiguration? =
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && options.recommendationConfiguration != null) {
+    RecommendationConfiguration
+      .Builder()
       .setUrl(options.recommendationURL)
       .setRsaPublicKey(options.recommendationRSAPublicKey)
       .setTimeout(options.recommendationTimeout)
@@ -262,11 +274,11 @@ internal fun getRecommendationConfiguration(options: ReadableMap): Recommendatio
   } else {
     null
   }
-}
 
 internal fun getAddress(options: ReadableMap): Address? {
   if (options.cardAddress != null) {
-    return Address.Builder()
+    return Address
+      .Builder()
       .setLine1(options.cardAddressLine1)
       .setLine2(options.cardAddressLine2)
       .setLine3(options.cardAddressLine3)
@@ -282,7 +294,8 @@ internal fun getAddress(options: ReadableMap): Address? {
 internal fun getNetworkTimeout(options: ReadableMap): NetworkTimeout? {
   val networkTimeout = options.networkTimeout
   if (networkTimeout != null) {
-    return NetworkTimeout.Builder()
+    return NetworkTimeout
+      .Builder()
       .setConnectTimeout(options.networkConnectTimeout)
       .setReadTimeout(options.networkReadTimeout)
       .setWriteTimeout(options.networkWriteTimeout)
@@ -300,14 +313,16 @@ internal fun getAuthorization(options: ReadableMap): Authorization {
   val token = options.token
 
   options.secret?.let { secret ->
-    return BasicAuthorization.Builder()
+    return BasicAuthorization
+      .Builder()
       .setApiToken(token)
       .setApiSecret(secret)
       .build()
   }
 
   options.paymentSession?.let { paymentSession ->
-    return PaymentSessionAuthorization.Builder()
+    return PaymentSessionAuthorization
+      .Builder()
       .setApiToken(token)
       .setPaymentSession(paymentSession)
       .build()
@@ -338,7 +353,8 @@ internal fun getAmount(options: ReadableMap): Amount {
       null -> Currency.GBP
       else -> Currency.valueOf(currencyValue)
     }
-  return Amount.Builder()
+  return Amount
+    .Builder()
     .setAmount(options.amountValue)
     .setCurrency(currency)
     .build()
@@ -351,7 +367,8 @@ internal fun getSubProductInfo(options: ReadableMap): SubProductInfo {
 
 internal fun getReference(options: ReadableMap): Reference? {
   var builder =
-    Reference.Builder()
+    Reference
+      .Builder()
       .setConsumerReference(options.consumerReference)
       .setPaymentReference(options.paymentReference)
 
@@ -460,7 +477,8 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
   }
 
   val builder =
-    UiConfiguration.Builder()
+    UiConfiguration
+      .Builder()
       .setShouldAskForBillingInformation(options.shouldAskForBillingInformation)
       .setShouldAskForCardholderName(options.shouldAskForCardholderName)
       .setShouldAskForCSC(options.shouldAskForCSC)
@@ -476,8 +494,8 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
   return builder.build()
 }
 
-internal fun getThreeDSUiCustomization(options: ReadableMap): UiCustomization? {
-  return if (options.threeDSUIConfiguration != null) {
+internal fun getThreeDSUiCustomization(options: ReadableMap): UiCustomization? =
+  if (options.threeDSUIConfiguration != null) {
     val uiCustomization = UiCustomization()
 
     options.threeDSUIToolbarCustomization?.let {
@@ -590,11 +608,11 @@ internal fun getThreeDSUiCustomization(options: ReadableMap): UiCustomization? {
   } else {
     null
   }
-}
 
-internal fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetails? {
-  return if (options.primaryAccountDetails != null) {
-    PrimaryAccountDetails.Builder()
+internal fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetails? =
+  if (options.primaryAccountDetails != null) {
+    PrimaryAccountDetails
+      .Builder()
       .setName(options.name)
       .setAccountNumber(options.accountNumber)
       .setDateOfBirth(options.dateOfBirth)
@@ -603,7 +621,6 @@ internal fun getPrimaryAccountDetails(options: ReadableMap): PrimaryAccountDetai
   } else {
     null
   }
-}
 
 internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfiguration? {
   val environment =
@@ -630,7 +647,8 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
   val shippingParameters = getShippingParameters(options)
 
   return if (options.googlePayConfiguration != null) {
-    GooglePayConfiguration.Builder()
+    GooglePayConfiguration
+      .Builder()
       .setEnvironment(environment)
       .setMerchantName(options.merchantName)
       .setTransactionCountryCode(options.countryCode)

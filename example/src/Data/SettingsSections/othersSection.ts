@@ -16,6 +16,7 @@ const othersSection = (data: SettingsData): SectionListData<SettingsItem> => {
   const isSecurityCodeOnPath = 'others.isSecurityCodeOn';
   const isInitialRecurringPaymentOnPath = 'others.isInitialRecurringPaymentOn';
   const isDelayedAuthorisationOnPath = 'others.isDelayedAuthorisationOn';
+  const isAllowIncrementOnPath = 'others.isAllowIncrementOn';
 
   return {
     header: 'OTHERS',
@@ -55,6 +56,12 @@ const othersSection = (data: SettingsData): SectionListData<SettingsItem> => {
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Delayed authorisation',
         value: _.get(data, isDelayedAuthorisationOnPath),
+      },
+      {
+        path: isAllowIncrementOnPath,
+        dataType: SettingsItemDataType.BOOLEAN,
+        title: 'Allow increment',
+        value: _.get(data, isAllowIncrementOnPath),
       },
     ],
   };

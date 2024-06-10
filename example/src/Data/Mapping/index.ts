@@ -235,6 +235,7 @@ export const judoConfigurationFromSettingsData = ({
     isInitialRecurringPaymentOn,
     isDelayedAuthorisationOn,
     isSecurityCodeOn,
+    isAllowIncrementOn,
   } = others;
 
   const {
@@ -464,6 +465,7 @@ export const judoConfigurationFromSettingsData = ({
     ...configuration,
     isInitialRecurringPayment: isInitialRecurringPaymentOn,
     isDelayedAuthorisation: isDelayedAuthorisationOn,
+    isAllowIncrement: isAllowIncrementOn,
     challengeRequestIndicator: myChallengeRequestIndicator,
     scaExemption: myScaExemption,
     threeDSTwoMessageVersion: messageVersion,

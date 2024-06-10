@@ -22,6 +22,7 @@ export interface JudoConfiguration {
   threeDSTwoMaxTimeout?: number;
   threeDSTwoMessageVersion?: string;
   isDelayedAuthorisation?: boolean;
+  isAllowIncrement?: boolean;
   recommendationConfiguration?: JudoRecommendationConfiguration;
 }
 
