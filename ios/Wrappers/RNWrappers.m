@@ -143,6 +143,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
     NSString *judoId = [configurationDict stringForKey:@"judoId"];
     NSNumber *isInitialRecurringPayment = [configurationDict optionalBoolForKey:@"isInitialRecurringPayment"];
     NSNumber *isDelayedAuthorisation = [configurationDict optionalBoolForKey:@"isDelayedAuthorisation"];
+    NSNumber *isAllowIncrement = [configurationDict optionalBoolForKey:@"isAllowIncrement"];
 
     JPAmount *amount = [RNWrappers amountFromConfiguration:configurationDict];
     JPReference *reference = [RNWrappers referenceFromConfiguration:configurationDict];
@@ -157,6 +158,10 @@ static NSString *const kCardSchemeAMEX = @"amex";
 
     if (isDelayedAuthorisation) {
         configuration.isDelayedAuthorisation = isDelayedAuthorisation.boolValue;
+    }
+
+    if (isAllowIncrement) {
+        configuration.isAllowIncrement = isAllowIncrement.boolValue;
     }
 
     configuration.uiConfiguration = [RNWrappers uiConfigurationFromConfiguration:configurationDict];

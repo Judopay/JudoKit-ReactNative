@@ -25,6 +25,7 @@ export interface SettingsData {
     isSecurityCodeOn: boolean;
     isInitialRecurringPaymentOn: boolean;
     isDelayedAuthorisationOn: boolean;
+    isAllowIncrementOn: boolean;
   };
   amount: {
     currency: string;

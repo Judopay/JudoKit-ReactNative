@@ -137,6 +137,9 @@ internal val ReadableMap.isInitialRecurringPayment: Boolean?
 internal val ReadableMap.isDelayedAuthorisation: Boolean?
   get() = configuration?.getOptionalBoolean("isDelayedAuthorisation")
 
+internal val ReadableMap.isAllowIncrement: Boolean?
+  get() = configuration?.getOptionalBoolean("isAllowIncrement")
+
 internal val ReadableMap.networkTimeout: ReadableMap?
   get() = configuration?.getOptionalMap("networkTimeout")
 

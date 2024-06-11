@@ -26,6 +26,7 @@ export const DEFAULT_SETTINGS_DATA: SettingsData = {
     isSecurityCodeOn: true,
     isInitialRecurringPaymentOn: false,
     isDelayedAuthorisationOn: false,
+    isAllowIncrementOn: false,
   },
   amount: {
     currency: 'GBP',
