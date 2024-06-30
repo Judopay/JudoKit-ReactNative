@@ -159,7 +159,6 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
   map.putMap("cardDetails", cardDetailsMap)
 
   val consumerMap = Arguments.createMap()
-  consumerMap.putString("consumerToken", result?.consumer?.consumerToken)
   consumerMap.putString("consumerReference", result?.consumer?.yourConsumerReference)
 
   map.putMap("consumer", consumerMap)
