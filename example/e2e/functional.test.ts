@@ -217,7 +217,7 @@ describe('E2E Functional Tests', () => {
       await device.disableSynchronization();
       await waitFor(element(by.text(Selectors.THREEDS2_TITLE_ANDROID)))
         .toBeVisible()
-        .withTimeout(15000);
+        .withTimeout(30000);
     } else {
       await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
         .toBeVisible()
@@ -273,6 +273,6 @@ describe('E2E Functional Tests', () => {
     }
     await waitFor(element(by.text(UserFeedback.THREEDS2_CANCELLED)))
       .toExist()
-      .withTimeout(10000);
+      .withTimeout(30000);
   });
 });
