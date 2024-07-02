@@ -339,6 +339,10 @@ jobs:
           restore-gradle-cache-prefix: v1a
           post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
       - run:
+          name: Disable gesture navigation
+          command: |
+            adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
+      - run:
           name: Run the tests
           working_directory: example
           command: |
