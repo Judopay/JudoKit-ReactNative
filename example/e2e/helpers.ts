@@ -103,7 +103,7 @@ export async function addCardPaymentMethodAndPay() {
     code: TestData.SECURITY_CODE,
   });
   if (await isAndroid()) {
-    await delay(2000);
+    await delay(5000);
     await device.disableSynchronization();
     await element(by.id(Selectors.ANDROID_METHODS_PAY_NOW)).tap();
   } else {
