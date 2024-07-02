@@ -188,7 +188,7 @@ export async function toggleAskForCSCSetting() {
 
 export async function fillSecurityCodeSheet() {
   if (await isAndroid()) {
-    await delay(1500);
+    await delay(5000);
     await element(by.id(Selectors.ANDROID_CODE)).typeText(
       TestData.SECURITY_CODE
     );
