@@ -27,10 +27,10 @@ export async function fillPaymentDetailsSheet(props: CardDetails) {
       by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button']))
     ).tap();
   } else {
-    await element(by.id(Selectors.ANDROID_CARD)).typeText(props.number);
-    await element(by.id(Selectors.ANDROID_NAME)).typeText(props.name);
-    await element(by.id(Selectors.ANDROID_EXPIRY)).typeText(props.expiry);
-    await element(by.id(Selectors.ANDROID_CODE)).typeText(props.code);
+    await element(by.id(Selectors.ANDROID_CARD)).replaceText(props.number);
+    await element(by.id(Selectors.ANDROID_NAME)).replaceText(props.name);
+    await element(by.id(Selectors.ANDROID_EXPIRY)).replaceText(props.expiry);
+    await element(by.id(Selectors.ANDROID_CODE)).replaceText(props.code);
     await element(by.id(Selectors.ANDROID_PAY_NOW)).tap();
     await device.enableSynchronization();
   }
