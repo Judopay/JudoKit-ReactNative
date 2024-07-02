@@ -22,7 +22,7 @@ commands:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "CircleCI has just ran the :aapl: React Native E2E tests, but they failed. Review the failures here: \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                    "text": "CircleCI has just ran the :aapl: & :android: React Native E2E tests, but they failed. Review the failures here: \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
                   }
                 },
                 {
@@ -59,7 +59,7 @@ commands:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "CircleCI has just *successfully* ran the :aapl: React Native E2E tests! \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                    "text": "CircleCI has just *successfully* ran the :aapl: & :android: React Native E2E tests! \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
                   }
                 },
                 {
