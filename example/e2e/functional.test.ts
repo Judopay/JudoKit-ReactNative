@@ -147,7 +147,7 @@ describe('E2E Functional Tests', () => {
     await assertResultsScreen({ type: '4', result: '1' });
   });
 
-  it.only('should successfully complete a 3DS2 payment transaction via payment methods', async () => {
+  it('should successfully complete a 3DS2 payment transaction via payment methods', async () => {
     await toggleAskForCSCSetting();
     if (await isAndroid()) {
       await device.disableSynchronization();
@@ -157,7 +157,7 @@ describe('E2E Functional Tests', () => {
     await assertResultsScreen({ type: '1', result: '1' });
   });
 
-  it.only('should successfully complete a 3DS2 pre-auth transaction via payment methods', async () => {
+  it('should successfully complete a 3DS2 pre-auth transaction via payment methods', async () => {
     await toggleAskForCSCSetting();
     if (await isAndroid()) {
       await device.disableSynchronization();
