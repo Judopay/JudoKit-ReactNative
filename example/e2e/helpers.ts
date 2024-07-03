@@ -30,7 +30,7 @@ export async function fillPaymentDetailsSheet(props: CardDetails) {
     await element(by.id(Selectors.ANDROID_CARD)).replaceText(props.number);
     await element(by.id(Selectors.ANDROID_NAME)).replaceText(props.name);
     await element(by.id(Selectors.ANDROID_EXPIRY)).replaceText(props.expiry);
-    await element(by.id(Selectors.ANDROID_CODE)).typeText(props.code);
+    await element(by.id(Selectors.ANDROID_CODE)).replaceText(props.code);
     await element(by.id(Selectors.ANDROID_PAY_NOW)).tap();
     await device.enableSynchronization();
   }
@@ -49,7 +49,7 @@ export async function complete3DS2() {
   if (await isAndroid()) {
     await waitFor(element(by.text(Selectors.THREEDS2_TITLE_ANDROID)))
       .toBeVisible()
-      .withTimeout(15000);
+      .withTimeout(30000);
     await delay(1500);
     try {
       for (let i = 0; i < 3; i++) {
@@ -60,7 +60,7 @@ export async function complete3DS2() {
   } else {
     await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
       .toBeVisible()
-      .withTimeout(15000);
+      .withTimeout(30000);
     await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
     await delay(5000);
     try {
@@ -103,7 +103,7 @@ export async function addCardPaymentMethodAndPay() {
     code: TestData.SECURITY_CODE,
   });
   if (await isAndroid()) {
-    await delay(2000);
+    await delay(5000);
     await device.disableSynchronization();
     await element(by.id(Selectors.ANDROID_METHODS_PAY_NOW)).tap();
   } else {
@@ -188,7 +188,7 @@ export async function toggleAskForCSCSetting() {
 
 export async function fillSecurityCodeSheet() {
   if (await isAndroid()) {
-    await delay(1500);
+    await delay(5000);
     await element(by.id(Selectors.ANDROID_CODE)).typeText(
       TestData.SECURITY_CODE
     );

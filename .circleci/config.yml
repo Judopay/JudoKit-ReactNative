@@ -22,7 +22,7 @@ commands:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "CircleCI has just ran the :aapl: React Native E2E tests, but they failed. Review the failures here: \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                    "text": "CircleCI has just ran the :aapl: & :android: React Native E2E tests, but they failed. Review the failures here: \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
                   }
                 },
                 {
@@ -59,7 +59,7 @@ commands:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "CircleCI has just *successfully* ran the :aapl: React Native E2E tests! \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                    "text": "CircleCI has just *successfully* ran the :aapl: & :android: React Native E2E tests! \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
                   }
                 },
                 {
@@ -338,6 +338,10 @@ jobs:
           no-window: true
           restore-gradle-cache-prefix: v1a
           post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
+      - run:
+          name: Disable gesture navigation
+          command: |
+            adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
       - run:
           name: Run the tests
           working_directory: example
