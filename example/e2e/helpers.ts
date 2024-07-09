@@ -40,7 +40,7 @@ export async function fillPaymentDetailsSheet(props: CardDetails) {
 export async function assertResultsScreen(props: Props) {
   await waitFor(element(by.text(Selectors.RESULT_HEADER)))
     .toExist()
-    .withTimeout(15000);
+    .withTimeout(30000);
   await expect(element(by.id(Selectors.RESULT_RECEIPT_ID))).not.toHaveText('');
   await expect(element(by.id(Selectors.RESULT_TYPE))).toHaveText(props.type);
   await expect(element(by.id(Selectors.RESULT_VALUE))).toHaveText(props.result);

@@ -42,6 +42,7 @@ describe('E2E Functional Tests', () => {
     if (await isAndroid()) {
       await device.disableSynchronization();
     }
+    await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
     await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -68,6 +69,7 @@ describe('E2E Functional Tests', () => {
     if (await isAndroid()) {
       await device.disableSynchronization();
     }
+    await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
     await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
