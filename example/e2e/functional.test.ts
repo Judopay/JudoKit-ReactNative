@@ -275,4 +275,42 @@ describe('E2E Functional Tests', () => {
       .toExist()
       .withTimeout(30000);
   });
+
+  it('should successfully complete a step up payment transaction', async () => {
+    await setNoPreferenceCRI();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.FRICTIONLESS,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.DECLINED_CODE,
+    });
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
+    await complete3DS2();
+    await assertResultsScreen({ type: '1', result: '2' });
+    await expect(element(by.id(Selectors.RESULT_MESSAGE))).toHaveText(
+      'Card declined: CV2 policy'
+    );
+  });
+
+  it('should successfully complete a step up preauth transaction', async () => {
+    await setNoPreferenceCRI();
+    await element(by.text(Selectors.PAY_WITH_PREAUTH)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.FRICTIONLESS,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.DECLINED_CODE,
+    });
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
+    await complete3DS2();
+    await assertResultsScreen({ type: '2', result: '2' });
+    await expect(element(by.id(Selectors.RESULT_MESSAGE))).toHaveText(
+      'Card declined: CV2 policy'
+    );
+  });
 });
