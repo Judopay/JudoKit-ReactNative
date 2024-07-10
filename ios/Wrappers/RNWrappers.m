@@ -859,10 +859,6 @@ static NSString *const kCardSchemeAMEX = @"amex";
     if (consumer) {
         NSMutableDictionary *consumerDictionary = [NSMutableDictionary new];
 
-        if (consumer.consumerToken) {
-            consumerDictionary[@"consumerToken"] = consumer.consumerToken;
-        }
-
         if (consumer.consumerReference) {
             consumerDictionary[@"consumerReference"] = consumer.consumerReference;
         }

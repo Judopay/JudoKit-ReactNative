@@ -234,6 +234,9 @@ export interface JudoCardDetails {
 
 export interface JudoConsumer {
   consumerReference?: string;
+  /**
+   * @deprecated Consumer Token is deprecated and will be removed in a future version.
+   */
   consumerToken?: string;
 }
 
