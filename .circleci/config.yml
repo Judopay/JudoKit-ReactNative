@@ -11,7 +11,7 @@ orbs:
   android: circleci/android@2.5.0
 
 commands:
-  notify_slack_error:
+  notify_slack_error_ios:
     steps:
       - slack/notify:
           event: fail
@@ -22,7 +22,7 @@ commands:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "CircleCI has just ran the :aapl: & :android: React Native E2E tests, but they failed. Review the failures here: \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                    "text": "CircleCI has just ran the:apple_ci:iOS React Native E2E tests, but they failed. Review the failures here: \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
                   }
                 },
                 {
@@ -48,7 +48,7 @@ commands:
                 }
               ]
             }
-  notify_slack_pass:
+  notify_slack_pass_ios:
     steps:
       - slack/notify:
           event: pass
@@ -59,7 +59,81 @@ commands:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "CircleCI has just *successfully* ran the :aapl: & :android: React Native E2E tests! \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                    "text": "CircleCI has just *successfully* ran the:apple_ci:iOS React Native E2E tests! \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project:*\n$CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n$CIRCLE_BRANCH"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:* \n <https://github.com/Judopay/JudoKit-ReactNative/commit/${CIRCLE_SHA1} | ${CIRCLE_SHA1:0:7}>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author:*\n$CIRCLE_USERNAME"
+                    }
+                  ]
+                }
+              ]
+            }
+  notify_slack_pass_android:
+    steps:
+      - slack/notify:
+          event: pass
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "CircleCI has just *successfully* ran the :android: Android React Native E2E tests! \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project:*\n$CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n$CIRCLE_BRANCH"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:* \n <https://github.com/Judopay/JudoKit-ReactNative/commit/${CIRCLE_SHA1} | ${CIRCLE_SHA1:0:7}>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author:*\n$CIRCLE_USERNAME"
+                    }
+                  ]
+                }
+              ]
+            }
+  notify_slack_error_android:
+    steps:
+      - slack/notify:
+          event: fail
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "CircleCI has just ran the :android: Android React Native E2E tests, but they failed. Review the failures here: \n *<$CIRCLE_BUILD_URL | :circleci: Open build>*"
                   }
                 },
                 {
@@ -316,8 +390,8 @@ jobs:
             yarn detox:test:ios
       - store_artifacts:
           path: example/artifacts
-      - notify_slack_error
-      - notify_slack_pass
+      - notify_slack_error_ios
+      - notify_slack_pass_ios
   run_e2e_android:
     executor:
       name: android/android-machine
@@ -353,8 +427,8 @@ jobs:
           cache-prefix: v1a
       - store_artifacts:
           path: example/artifacts
-      - notify_slack_error
-      - notify_slack_pass
+      - notify_slack_error_android
+      - notify_slack_pass_android
 
 workflows:
   pull_request_checks:

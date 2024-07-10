@@ -63,6 +63,7 @@ export enum Selectors {
   SETTINGS_LISTVIEW = 'settings-list',
   ANDROID_PAY_NOW_LABEL = 'Pay Now',
   CANCEL_3DS2 = 'Cancel',
+  RESULT_MESSAGE = 'message-value',
 }
 
 export enum UserFeedback {
