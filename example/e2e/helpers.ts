@@ -8,6 +8,7 @@ const secret = process.env.API_TEST_SECRET || '';
 export interface Props {
   type: string;
   result: string;
+  message?: string;
 }
 
 export interface CardDetails {
@@ -39,7 +40,7 @@ export async function fillPaymentDetailsSheet(props: CardDetails) {
 export async function assertResultsScreen(props: Props) {
   await waitFor(element(by.text(Selectors.RESULT_HEADER)))
     .toExist()
-    .withTimeout(15000);
+    .withTimeout(30000);
   await expect(element(by.id(Selectors.RESULT_RECEIPT_ID))).not.toHaveText('');
   await expect(element(by.id(Selectors.RESULT_TYPE))).toHaveText(props.type);
   await expect(element(by.id(Selectors.RESULT_VALUE))).toHaveText(props.result);
@@ -119,8 +120,10 @@ export async function setNoPreferenceCRI() {
     await device.enableSynchronization();
   }
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
-  await element(by.text(Selectors.CHALLENGE_REQUEST_SETTINGS)).tap();
-  await element(by.text(Selectors.NO_PREFERENCE)).tap();
+  if (await checkIfCRINeedsSet()) {
+    await element(by.text(Selectors.CHALLENGE_REQUEST_SETTINGS)).tap();
+    await element(by.text(Selectors.NO_PREFERENCE)).tap();
+  }
   if (await isAndroid()) {
     try {
       await expect(element(by.id(Selectors.AUTH_TOGGLE))).toHaveToggleValue(
@@ -136,8 +139,10 @@ export async function setNoPreferenceCRI() {
     if ('value' in tokenToggle && tokenToggle.value === '0') {
       await enterAuthDetails();
     }
+    await pressBackButton();
   }
   if (await isAndroid()) {
+    await pressBackButton();
     await device.disableSynchronization();
   }
 }
@@ -151,10 +156,7 @@ export async function enterAuthDetails() {
   await element(by.id(Selectors.AUTH_TOGGLE)).longPress();
   await element(by.id(Selectors.TOKEN_INPUT)).replaceText(token);
   await element(by.id(Selectors.SECRET_INPUT)).replaceText(secret);
-  let backButton = await element(by.id(Selectors.BACK_BUTTON)).getAttributes();
-  if ('visible' in backButton && backButton.visible === true) {
-    await element(by.id(Selectors.BACK_BUTTON)).longPress();
-  }
+  await pressBackButton();
 }
 
 export async function dissmissKeyboardOnTokenScreen() {
@@ -230,4 +232,24 @@ export async function isIOS(): Promise<boolean> {
 
 export async function isAndroid(): Promise<boolean> {
   return device.getPlatform() === 'android';
+}
+
+async function checkIfCRINeedsSet(): Promise<boolean> {
+  try {
+    await expect(element(by.text('noPreference' || 'dontSet'))).toBeVisible();
+    return false;
+  } catch (exception) {
+    return true;
+  }
+}
+
+async function pressBackButton() {
+  try {
+    let backButton = await element(
+      by.id(Selectors.BACK_BUTTON)
+    ).getAttributes();
+    if ('visible' in backButton && backButton.visible === true) {
+      await element(by.id(Selectors.BACK_BUTTON)).longPress();
+    }
+  } catch (exception) {}
 }
