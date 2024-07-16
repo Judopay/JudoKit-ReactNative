@@ -1,5 +1,6 @@
 import { element, expect } from 'detox';
 import { Selectors, TestData } from './constants';
+import { expect as jestExpect } from '@jest/globals';
 
 const judoId = process.env.JUDO_ID || '';
 const token = process.env.API_TEST_TOKEN || '';
@@ -297,4 +298,13 @@ export async function toggleBillingInfoScreen() {
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
   await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
   await pressBackButton();
+}
+
+export async function assertErrorLabelText(expected: string) {
+  let errorLabel;
+  let attributes = await element(by.id(Selectors.ERROR_LABEL)).getAttributes();
+  if ('text' in attributes) {
+    errorLabel = attributes.text;
+  }
+  return jestExpect(errorLabel).toEqual(expected);
 }

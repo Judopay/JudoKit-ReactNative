@@ -16,6 +16,7 @@ export enum TestData {
   VALID_CITY = 'London',
   VALID_POST_CODE = 'NW1 3RP',
   VALID_COUNTRY = 'United Kingdom',
+  INVALID_POST_CODE = '38GL112',
 }
 
 export enum Selectors {
@@ -59,6 +60,7 @@ export enum Selectors {
   ANDROID_METHODS_PAY_NOW = 'paymentMethodsPayNowButton',
   ANDROID_PAY_NOW = 'cardEntrySubmitButton',
   ANDROID_PAY_NOW_LABEL = 'Pay Now',
+  ERROR_LABEL = 'errorLabel',
 
   // iOS Specific
   IOS_PAY_NOW = 'PAY NOW',
@@ -120,4 +122,5 @@ export enum Selectors {
 
 export enum UserFeedback {
   THREEDS2_CANCELLED = 'Unable to process transaction. Card authentication failed with 3DS Server.',
+  INVALID_POSTCODE_ERROR = 'Invalid postcode entered',
 }

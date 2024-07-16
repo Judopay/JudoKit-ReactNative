@@ -15,6 +15,7 @@ import {
   isAndroid,
   fillBillingInfoFields,
   toggleBillingInfoScreen,
+  assertErrorLabelText,
 } from './helpers';
 
 describe('E2E Functional Tests', () => {
@@ -339,5 +340,25 @@ describe('E2E Functional Tests', () => {
     await tapPayNowButton();
     await complete3DS2();
     await assertResultsScreen({ type: '1', result: '1' });
+  });
+
+  it('should validate UK post code entry', async () => {
+    await toggleBillingInfoScreen();
+    await delay(1500);
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await device.disableSynchronization();
+    await delay(1500);
+    await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).typeText(
+      TestData.INVALID_POST_CODE
+    );
+    await element(by.id(Selectors.CITY_ENTRY_FIELD)).tap();
+    await delay(2000);
+    await assertErrorLabelText(UserFeedback.INVALID_POSTCODE_ERROR);
   });
 });
