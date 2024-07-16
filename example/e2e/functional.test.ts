@@ -13,6 +13,8 @@ import {
   tapPayNowButton,
   delay,
   isAndroid,
+  fillBillingInfoFields,
+  toggleBillingInfoScreen,
 } from './helpers';
 
 describe('E2E Functional Tests', () => {
@@ -314,5 +316,28 @@ describe('E2E Functional Tests', () => {
     await expect(element(by.id(Selectors.RESULT_MESSAGE))).toHaveText(
       'Card declined: CV2 policy'
     );
+  });
+
+  it('should successfully complete a transaction with billing details', async () => {
+    await toggleBillingInfoScreen();
+    await delay(1500);
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await fillBillingInfoFields({
+      email: TestData.VALID_EMAIL,
+      country: TestData.VALID_COUNTRY,
+      mobile: TestData.VALID_PHONE,
+      addressOne: TestData.ADDRESS_ONE,
+      city: TestData.VALID_CITY,
+      postCode: TestData.VALID_POST_CODE,
+    });
+    await tapPayNowButton();
+    await complete3DS2();
+    await assertResultsScreen({ type: '1', result: '1' });
   });
 });

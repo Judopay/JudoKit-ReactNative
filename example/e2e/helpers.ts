@@ -18,6 +18,17 @@ export interface CardDetails {
   code: string;
 }
 
+export interface BillingDetails {
+  email: string;
+  country: string;
+  mobile: string;
+  addressOne: string;
+  addressTwo?: string;
+  city: string;
+  postCode: string;
+  state?: string;
+}
+
 export async function fillPaymentDetailsSheet(props: CardDetails) {
   if (await isIOS()) {
     await element(by.id(Selectors.CARD_NUMBER_INPUT)).typeText(props.number);
@@ -48,6 +59,7 @@ export async function assertResultsScreen(props: Props) {
 
 export async function complete3DS2() {
   if (await isAndroid()) {
+    await device.disableSynchronization();
     await waitFor(element(by.text(Selectors.THREEDS2_TITLE_ANDROID)))
       .toBeVisible()
       .withTimeout(30000);
@@ -252,4 +264,37 @@ async function pressBackButton() {
       await element(by.id(Selectors.BACK_BUTTON)).longPress();
     }
   } catch (exception) {}
+}
+
+export async function fillBillingInfoFields(props: BillingDetails) {
+  if (await isIOS()) {
+    await element(by.id(Selectors.EMAIL_FIELD)).typeText(props.email);
+    await element(by.id(Selectors.PHONE_FIELD)).typeText(props.mobile);
+    await element(by.id(Selectors.ADDRESS_ONE_FIELD)).typeText(
+      props.addressOne
+    );
+    await element(by.id(Selectors.CITY_FIELD)).typeText(props.city);
+    await element(by.id(Selectors.POST_CODE_FIELD)).typeText(props.postCode);
+  } else {
+    await device.disableSynchronization();
+    await delay(1500);
+    await element(by.id(Selectors.EMAIL_ENTRY_FIELD)).replaceText(props.email);
+    await element(by.id(Selectors.COUNTRY_ENTRY_FIELD)).replaceText(
+      props.country
+    );
+    await element(by.id(Selectors.PHONE_ENTRY_FIELD)).replaceText(props.mobile);
+    await element(by.id(Selectors.ADDRESS_ONE_ENTRY_FIELD)).replaceText(
+      props.addressOne
+    );
+    await element(by.id(Selectors.CITY_ENTRY_FIELD)).replaceText(props.city);
+    await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).replaceText(
+      props.postCode
+    );
+  }
+}
+
+export async function toggleBillingInfoScreen() {
+  await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
+  await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
+  await pressBackButton();
 }

@@ -39,6 +39,7 @@ const threeDSTwoSection = (
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Enable billing information screen',
         value: isBillingInformationScreenEnabled,
+        testID: 'billing-info-screen-toggle',
       },
       {
         path: challengeRequestIndicatorPath,
