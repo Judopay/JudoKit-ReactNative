@@ -56,6 +56,10 @@ export interface NetworkTimeout {
 export enum JudoTransactionType {
   Payment = 1,
   PreAuth = 2,
+  /**
+   * @deprecated Register Card functionality has been deprecated and will be
+   * removed in a future version. Please use Check Card feature instead.
+   */
   RegisterCard = 3,
   CheckCard = 4,
   SaveCard = 5,
