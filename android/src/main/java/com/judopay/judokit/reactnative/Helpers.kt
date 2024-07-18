@@ -161,7 +161,7 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
   val consumerMap = Arguments.createMap()
   consumerMap.putString("consumerReference", result?.consumer?.yourConsumerReference)
 
-  map.putMap("consumer", consumerMap)
+  map.putMap("consumerResponse", consumerMap)
 
   return map
 }
