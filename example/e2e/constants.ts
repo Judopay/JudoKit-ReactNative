@@ -110,6 +110,7 @@ export enum Selectors {
   CITY_ENTRY_FIELD = 'cityEntryField',
   POST_CODE_ENTRY_FIELD = 'postCodeEntryField',
   ADD_ADDRESS_LINE_BUTTON_ANDROID = 'addAddressLineButton',
+  BILLING_INFO_CONTAINER = 'billingInfoContainer',
 
   // Miscellaneous
   FEATURE_LIST = 'home-screen-section-list',
@@ -123,4 +124,9 @@ export enum Selectors {
 export enum UserFeedback {
   THREEDS2_CANCELLED = 'Unable to process transaction. Card authentication failed with 3DS Server.',
   INVALID_POSTCODE_ERROR = 'Invalid postcode entered',
+  INVALID_ZIPCODE_ERROR = 'Invalid ZIP code entered',
+  INVALID_EMAIL_LABEL = 'Please enter a valid email',
+  INVALID_PHONE_LABEL = 'Please enter a valid mobile number',
+  INVALID_ADDRESS_LABEL = 'Please enter a valid address',
+  INVALID_CITY_LABEL = 'Please enter a valid city',
 }

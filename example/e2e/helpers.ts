@@ -30,6 +30,8 @@ export interface BillingDetails {
   state?: string;
 }
 
+let billingInfoEnabled = false;
+
 export async function fillPaymentDetailsSheet(props: CardDetails) {
   if (await isIOS()) {
     await element(by.id(Selectors.CARD_NUMBER_INPUT)).typeText(props.number);
@@ -295,16 +297,57 @@ export async function fillBillingInfoFields(props: BillingDetails) {
 }
 
 export async function toggleBillingInfoScreen() {
-  await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
-  await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
-  await pressBackButton();
+  if (!billingInfoEnabled) {
+    await clickSettingsButton();
+    await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
+    billingInfoEnabled = true;
+    await pressBackButton();
+  }
 }
 
 export async function assertErrorLabelText(expected: string) {
   let errorLabel;
-  let attributes = await element(by.id(Selectors.ERROR_LABEL)).getAttributes();
-  if ('text' in attributes) {
-    errorLabel = attributes.text;
+  if (await isAndroid()) {
+    let attributes = await element(
+      by.id(await billingInfoErrorLabel())
+    ).getAttributes();
+    if ('text' in attributes) {
+      errorLabel = attributes.text;
+    }
+    return jestExpect(errorLabel).toEqual(expected);
+  } else {
+    await expect(element(by.text(expected))).toExist();
   }
-  return jestExpect(errorLabel).toEqual(expected);
+}
+
+export async function billingInfoPostCode(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.POST_CODE_FIELD;
+  } else return Selectors.POST_CODE_ENTRY_FIELD;
+}
+
+export async function billingInfoCity(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.CITY_FIELD;
+  } else return Selectors.CITY_ENTRY_FIELD;
+}
+
+export async function billingInfoErrorLabel(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.FIELD_ERROR_LABEL;
+  } else return Selectors.ERROR_LABEL;
+}
+
+export async function billingInfoCountry(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.COUNTRY_FIELD;
+  } else return Selectors.COUNTRY_ENTRY_FIELD;
+}
+
+export async function blurSelection() {
+  if (await isAndroid()) {
+    await element(by.id(Selectors.BILLING_INFO_CONTAINER)).tap();
+  } else {
+    await element(by.id(Selectors.EMAIL_FIELD)).tap();
+  }
 }
