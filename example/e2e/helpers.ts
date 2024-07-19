@@ -320,6 +320,14 @@ export async function assertErrorLabelText(expected: string) {
   }
 }
 
+export async function blurSelection() {
+  if (await isAndroid()) {
+    await element(by.id(Selectors.PHONE_COUNTRY_CODE_ENTRY_FIELD)).tap();
+  } else {
+    await element(by.id(Selectors.PHONE_COUNTRY_CODE)).tap();
+  }
+}
+
 export async function billingInfoPostCode(): Promise<string> {
   if (await isIOS()) {
     return Selectors.POST_CODE_FIELD;
@@ -344,10 +352,20 @@ export async function billingInfoCountry(): Promise<string> {
   } else return Selectors.COUNTRY_ENTRY_FIELD;
 }
 
-export async function blurSelection() {
-  if (await isAndroid()) {
-    await element(by.id(Selectors.BILLING_INFO_CONTAINER)).tap();
-  } else {
-    await element(by.id(Selectors.EMAIL_FIELD)).tap();
-  }
+export async function getBillingInfoEmail(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.EMAIL_FIELD;
+  } else return Selectors.EMAIL_ENTRY_FIELD;
+}
+
+export async function getBillingInfoPhone(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.PHONE_FIELD;
+  } else return Selectors.PHONE_ENTRY_FIELD;
+}
+
+export async function getBillingInfoAddress(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.ADDRESS_ONE_FIELD;
+  } else return Selectors.ADDRESS_ONE_ENTRY_FIELD;
 }

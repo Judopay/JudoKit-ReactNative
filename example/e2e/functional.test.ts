@@ -20,6 +20,9 @@ import {
   billingInfoPostCode,
   billingInfoCountry,
   blurSelection,
+  getBillingInfoEmail,
+  getBillingInfoPhone,
+  getBillingInfoAddress,
 } from './helpers';
 
 describe('E2E Functional Tests', () => {
@@ -408,5 +411,96 @@ describe('E2E Functional Tests', () => {
     await delay(1500);
     await blurSelection();
     await assertErrorLabelText(UserFeedback.INVALID_POSTCODE_ERROR);
+  });
+
+  it('should validate email entry', async () => {
+    await toggleBillingInfoScreen();
+    await delay(1500);
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await device.disableSynchronization();
+    await delay(1500);
+    await element(by.id(await getBillingInfoEmail())).typeText(
+      TestData.CARDHOLDER_NAME
+    );
+    await blurSelection();
+    await assertErrorLabelText(UserFeedback.INVALID_EMAIL_LABEL);
+  });
+
+  it('should validate phone number entry', async () => {
+    await toggleBillingInfoScreen();
+    await delay(1500);
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await device.disableSynchronization();
+    await delay(1500);
+    if (await isAndroid()) {
+      await element(by.id(await billingInfoCountry())).replaceText(
+        'United Kingdom'
+      );
+    }
+    await element(by.id(await getBillingInfoPhone())).typeText(
+      TestData.DECLINED_CODE
+    );
+    await element(by.id(await getBillingInfoEmail())).tap();
+    await assertErrorLabelText(UserFeedback.INVALID_PHONE_LABEL);
+  });
+
+  it('should validate address entry', async () => {
+    await toggleBillingInfoScreen();
+    await delay(1500);
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await device.disableSynchronization();
+    await delay(1500);
+    if (await isAndroid()) {
+      await element(by.id(await billingInfoCountry())).replaceText(
+        'United Kingdom'
+      );
+    }
+    await element(by.id(await getBillingInfoAddress())).typeText(
+      TestData.SPECIAL_CHARACTERS
+    );
+    await blurSelection();
+    await assertErrorLabelText(UserFeedback.INVALID_ADDRESS_LABEL);
+  });
+
+  it('should validate city entry', async () => {
+    await toggleBillingInfoScreen();
+    await delay(1500);
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await device.disableSynchronization();
+    await delay(1500);
+    if (await isAndroid()) {
+      await element(by.id(await billingInfoCountry())).replaceText(
+        'United Kingdom'
+      );
+    }
+    await element(by.id(await billingInfoCity())).typeText(
+      TestData.SPECIAL_CHARACTERS
+    );
+    await blurSelection();
+    await assertErrorLabelText(UserFeedback.INVALID_CITY_LABEL);
   });
 });

@@ -17,6 +17,7 @@ export enum TestData {
   VALID_POST_CODE = 'NW1 3RP',
   VALID_COUNTRY = 'United Kingdom',
   INVALID_POST_CODE = '38GL112',
+  SPECIAL_CHARACTERS = '#$@*',
 }
 
 export enum Selectors {
@@ -94,6 +95,7 @@ export enum Selectors {
   STATE_FIELD = 'State Field',
   COUNTRY_FIELD = 'Country Field',
   ADD_ADDRESS_LINE_BUTTON = 'Add address line Button',
+  PHONE_COUNTRY_CODE = 'Cardholder phone code Field',
 
   // Error Labels
   FIELD_ERROR_LABEL = 'Error Floating Label',
