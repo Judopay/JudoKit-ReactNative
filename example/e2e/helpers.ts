@@ -276,7 +276,7 @@ export async function fillBillingInfoFields(props: BillingDetails) {
     await element(by.id(Selectors.ADDRESS_ONE_FIELD)).typeText(
       props.addressOne
     );
-    await element(by.id(Selectors.CITY_FIELD)).typeText(props.city);
+    await element(by.id(Selectors.CITY_FIELD)).typeText(props.city + '\n');
     await element(by.id(Selectors.POST_CODE_FIELD)).typeText(props.postCode);
   } else {
     await device.disableSynchronization();
@@ -299,6 +299,7 @@ export async function fillBillingInfoFields(props: BillingDetails) {
 export async function toggleBillingInfoScreen() {
   if (!billingInfoEnabled) {
     await clickSettingsButton();
+    await delay(2000);
     await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
     billingInfoEnabled = true;
     await pressBackButton();
