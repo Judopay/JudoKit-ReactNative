@@ -241,53 +241,6 @@ describe('E2E Functional Tests', () => {
       .withTimeout(10000);
   });
 
-  it('should successfully complete a 3DS2 payment frictionless transaction', async () => {
-    await setNoPreferenceCRI();
-    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
-    await fillPaymentDetailsSheet({
-      number: TestData.CARD_NUMBER,
-      name: TestData.FRICTIONLESS,
-      expiry: TestData.EXPIRY_DATE,
-      code: TestData.SECURITY_CODE,
-    });
-    if (await isAndroid()) {
-      await device.disableSynchronization();
-    }
-    await assertResultsScreen({ type: '1', result: '1' });
-  });
-
-  it('should successfully complete a 3DS2 payment frictionless no method transaction', async () => {
-    await setNoPreferenceCRI();
-    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
-    await fillPaymentDetailsSheet({
-      number: TestData.CARD_NUMBER,
-      name: TestData.FRICTIONLESS_NOMETHOD,
-      expiry: TestData.EXPIRY_DATE,
-      code: TestData.SECURITY_CODE,
-    });
-    if (await isAndroid()) {
-      await device.disableSynchronization();
-    }
-    await assertResultsScreen({ type: '1', result: '1' });
-  });
-
-  it('should return error upon a 3DS2 payment frictionless auth failed transaction', async () => {
-    await setNoPreferenceCRI();
-    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
-    await fillPaymentDetailsSheet({
-      number: TestData.CARD_NUMBER,
-      name: TestData.FRICTIONLESS_AUTHFAILED,
-      expiry: TestData.EXPIRY_DATE,
-      code: TestData.SECURITY_CODE,
-    });
-    if (await isAndroid()) {
-      await device.disableSynchronization();
-    }
-    await waitFor(element(by.text(UserFeedback.THREEDS2_CANCELLED)))
-      .toExist()
-      .withTimeout(30000);
-  });
-
   it('should successfully complete a step up payment transaction', async () => {
     await setNoPreferenceCRI();
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
@@ -403,19 +356,19 @@ describe('E2E Functional Tests', () => {
       code: TestData.SECURITY_CODE,
     });
     await device.disableSynchronization();
-    await delay(1500);
+    await delay(2000);
     await element(by.id(await billingInfoCountry())).replaceText('Canada');
     await element(by.id(await billingInfoPostCode())).typeText(
       TestData.INVALID_POST_CODE
     );
-    await delay(1500);
+    await delay(2000);
     await blurSelection();
     await assertErrorLabelText(UserFeedback.INVALID_POSTCODE_ERROR);
   });
 
   it('should validate email entry', async () => {
     await toggleBillingInfoScreen();
-    await delay(1500);
+    await delay(2000);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -424,7 +377,7 @@ describe('E2E Functional Tests', () => {
       code: TestData.SECURITY_CODE,
     });
     await device.disableSynchronization();
-    await delay(1500);
+    await delay(2000);
     await element(by.id(await getBillingInfoEmail())).typeText(
       TestData.CARDHOLDER_NAME
     );
@@ -434,7 +387,7 @@ describe('E2E Functional Tests', () => {
 
   it('should validate phone number entry', async () => {
     await toggleBillingInfoScreen();
-    await delay(1500);
+    await delay(2000);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -443,7 +396,7 @@ describe('E2E Functional Tests', () => {
       code: TestData.SECURITY_CODE,
     });
     await device.disableSynchronization();
-    await delay(1500);
+    await delay(2000);
     if (await isAndroid()) {
       await element(by.id(await billingInfoCountry())).replaceText(
         'United Kingdom'
@@ -458,7 +411,7 @@ describe('E2E Functional Tests', () => {
 
   it('should validate address entry', async () => {
     await toggleBillingInfoScreen();
-    await delay(1500);
+    await delay(2000);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -467,7 +420,7 @@ describe('E2E Functional Tests', () => {
       code: TestData.SECURITY_CODE,
     });
     await device.disableSynchronization();
-    await delay(1500);
+    await delay(2000);
     if (await isAndroid()) {
       await element(by.id(await billingInfoCountry())).replaceText(
         'United Kingdom'
@@ -482,7 +435,7 @@ describe('E2E Functional Tests', () => {
 
   it('should validate city entry', async () => {
     await toggleBillingInfoScreen();
-    await delay(1500);
+    await delay(2000);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -491,7 +444,7 @@ describe('E2E Functional Tests', () => {
       code: TestData.SECURITY_CODE,
     });
     await device.disableSynchronization();
-    await delay(1500);
+    await delay(2000);
     if (await isAndroid()) {
       await element(by.id(await billingInfoCountry())).replaceText(
         'United Kingdom'
@@ -503,4 +456,51 @@ describe('E2E Functional Tests', () => {
     await blurSelection();
     await assertErrorLabelText(UserFeedback.INVALID_CITY_LABEL);
   });
+});
+
+it('should successfully complete a 3DS2 payment frictionless transaction', async () => {
+  await setNoPreferenceCRI();
+  await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+  await fillPaymentDetailsSheet({
+    number: TestData.CARD_NUMBER,
+    name: TestData.FRICTIONLESS,
+    expiry: TestData.EXPIRY_DATE,
+    code: TestData.SECURITY_CODE,
+  });
+  if (await isAndroid()) {
+    await device.disableSynchronization();
+  }
+  await assertResultsScreen({ type: '1', result: '1' });
+});
+
+it('should successfully complete a 3DS2 payment frictionless no method transaction', async () => {
+  await setNoPreferenceCRI();
+  await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+  await fillPaymentDetailsSheet({
+    number: TestData.CARD_NUMBER,
+    name: TestData.FRICTIONLESS_NOMETHOD,
+    expiry: TestData.EXPIRY_DATE,
+    code: TestData.SECURITY_CODE,
+  });
+  if (await isAndroid()) {
+    await device.disableSynchronization();
+  }
+  await assertResultsScreen({ type: '1', result: '1' });
+});
+
+it('should return error upon a 3DS2 payment frictionless auth failed transaction', async () => {
+  await setNoPreferenceCRI();
+  await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+  await fillPaymentDetailsSheet({
+    number: TestData.CARD_NUMBER,
+    name: TestData.FRICTIONLESS_AUTHFAILED,
+    expiry: TestData.EXPIRY_DATE,
+    code: TestData.SECURITY_CODE,
+  });
+  if (await isAndroid()) {
+    await device.disableSynchronization();
+  }
+  await waitFor(element(by.text(UserFeedback.THREEDS2_CANCELLED)))
+    .toExist()
+    .withTimeout(30000);
 });

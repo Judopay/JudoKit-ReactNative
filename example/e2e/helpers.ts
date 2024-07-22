@@ -280,7 +280,7 @@ export async function fillBillingInfoFields(props: BillingDetails) {
     await element(by.id(Selectors.POST_CODE_FIELD)).typeText(props.postCode);
   } else {
     await device.disableSynchronization();
-    await delay(1500);
+    await delay(3000);
     await element(by.id(Selectors.EMAIL_ENTRY_FIELD)).replaceText(props.email);
     await element(by.id(Selectors.COUNTRY_ENTRY_FIELD)).replaceText(
       props.country
