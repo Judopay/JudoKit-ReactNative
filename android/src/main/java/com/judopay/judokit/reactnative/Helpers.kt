@@ -44,7 +44,11 @@ import com.judopay.judokit.android.model.typeId
 // https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L36
 private const val TRANSACTION_TYPE_PAYMENT = "payment"
 private const val TRANSACTION_TYPE_PRE_AUTH = "preauth"
+
+@Deprecated("Register Card functionality has been deprecated. Please use Check Card feature instead.")
 private const val TRANSACTION_TYPE_REGISTER = "register"
+
+@Deprecated("Register Card functionality has been deprecated. Please use Check Card feature instead.")
 private const val TRANSACTION_TYPE_REGISTER_CARD = "registercard"
 private const val TRANSACTION_TYPE_SAVE_CARD = "save"
 private const val TRANSACTION_TYPE_CHECK_CARD = "checkcard"
@@ -57,6 +61,11 @@ private enum class TransactionType(
 ) {
   PAYMENT(1, listOf(TRANSACTION_TYPE_PAYMENT)),
   PRE_AUTH(2, listOf(TRANSACTION_TYPE_PRE_AUTH)),
+
+  @Deprecated(
+    "Register Card functionality has been deprecated and will be removed in a future version. " +
+      "Please use Check Card feature instead.",
+  )
   REGISTER_CARD(3, listOf(TRANSACTION_TYPE_REGISTER, TRANSACTION_TYPE_REGISTER_CARD)),
   CHECK_CARD(4, listOf(TRANSACTION_TYPE_CHECK_CARD)),
   SAVE_CARD(5, listOf(TRANSACTION_TYPE_SAVE_CARD)),
@@ -161,7 +170,7 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
   val consumerMap = Arguments.createMap()
   consumerMap.putString("consumerReference", result?.consumer?.yourConsumerReference)
 
-  map.putMap("consumer", consumerMap)
+  map.putMap("consumerResponse", consumerMap)
 
   return map
 }
