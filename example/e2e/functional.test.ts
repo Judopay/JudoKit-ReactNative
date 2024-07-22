@@ -456,51 +456,51 @@ describe('E2E Functional Tests', () => {
     await blurSelection();
     await assertErrorLabelText(UserFeedback.INVALID_CITY_LABEL);
   });
-});
 
-it('should successfully complete a 3DS2 payment frictionless transaction', async () => {
-  await setNoPreferenceCRI();
-  await element(by.text(Selectors.PAY_WITH_CARD)).tap();
-  await fillPaymentDetailsSheet({
-    number: TestData.CARD_NUMBER,
-    name: TestData.FRICTIONLESS,
-    expiry: TestData.EXPIRY_DATE,
-    code: TestData.SECURITY_CODE,
+  it('should successfully complete a 3DS2 payment frictionless transaction', async () => {
+    await setNoPreferenceCRI();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.FRICTIONLESS,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
+    await assertResultsScreen({ type: '1', result: '1' });
   });
-  if (await isAndroid()) {
-    await device.disableSynchronization();
-  }
-  await assertResultsScreen({ type: '1', result: '1' });
-});
 
-it('should successfully complete a 3DS2 payment frictionless no method transaction', async () => {
-  await setNoPreferenceCRI();
-  await element(by.text(Selectors.PAY_WITH_CARD)).tap();
-  await fillPaymentDetailsSheet({
-    number: TestData.CARD_NUMBER,
-    name: TestData.FRICTIONLESS_NOMETHOD,
-    expiry: TestData.EXPIRY_DATE,
-    code: TestData.SECURITY_CODE,
+  it('should successfully complete a 3DS2 payment frictionless no method transaction', async () => {
+    await setNoPreferenceCRI();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.FRICTIONLESS_NOMETHOD,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
+    await assertResultsScreen({ type: '1', result: '1' });
   });
-  if (await isAndroid()) {
-    await device.disableSynchronization();
-  }
-  await assertResultsScreen({ type: '1', result: '1' });
-});
 
-it('should return error upon a 3DS2 payment frictionless auth failed transaction', async () => {
-  await setNoPreferenceCRI();
-  await element(by.text(Selectors.PAY_WITH_CARD)).tap();
-  await fillPaymentDetailsSheet({
-    number: TestData.CARD_NUMBER,
-    name: TestData.FRICTIONLESS_AUTHFAILED,
-    expiry: TestData.EXPIRY_DATE,
-    code: TestData.SECURITY_CODE,
+  it('should return error upon a 3DS2 payment frictionless auth failed transaction', async () => {
+    await setNoPreferenceCRI();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.FRICTIONLESS_AUTHFAILED,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
+    await waitFor(element(by.text(UserFeedback.THREEDS2_CANCELLED)))
+      .toExist()
+      .withTimeout(30000);
   });
-  if (await isAndroid()) {
-    await device.disableSynchronization();
-  }
-  await waitFor(element(by.text(UserFeedback.THREEDS2_CANCELLED)))
-    .toExist()
-    .withTimeout(30000);
 });
