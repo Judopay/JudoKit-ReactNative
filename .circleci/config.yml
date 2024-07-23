@@ -390,6 +390,8 @@ jobs:
             yarn detox:test:ios
       - store_artifacts:
           path: example/artifacts
+      - notify_slack_error_ios
+      - notify_slack_pass_ios
   run_e2e_android:
     executor:
       name: android/android-machine
@@ -425,6 +427,8 @@ jobs:
           cache-prefix: v1a
       - store_artifacts:
           path: example/artifacts
+      - notify_slack_error_android
+      - notify_slack_pass_android
 
 workflows:
   pull_request_checks:
@@ -502,6 +506,10 @@ workflows:
       - run_e2e_ios:
           requires:
             - checkout_project
+          filters:
+            branches:
+              only:
+                - master
       - run_e2e_android:
         filters:
           branches:
