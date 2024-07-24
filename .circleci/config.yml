@@ -499,15 +499,19 @@ workflows:
   e2e:
     jobs:
       - checkout_project:
-        filters:
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master
       - run_e2e_ios:
           requires:
             - checkout_project
+          filters:
+            branches:
+              only:
+                - master
       - run_e2e_android:
-        filters:
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master

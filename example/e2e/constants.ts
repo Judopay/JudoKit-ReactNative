@@ -10,62 +10,125 @@ export enum TestData {
   FRICTIONLESS = 'Frictionless Successful',
   FRICTIONLESS_NOMETHOD = 'Frictionless NoMethod',
   FRICTIONLESS_AUTHFAILED = 'Frictionless AuthFailed',
+  VALID_EMAIL = 'testuser@me.com',
+  VALID_PHONE = '07123456789',
+  ADDRESS_ONE = '12 Mayfield Street',
+  VALID_CITY = 'London',
+  VALID_POST_CODE = 'NW1 3RP',
+  VALID_COUNTRY = 'United Kingdom',
+  INVALID_POST_CODE = '38GL112',
+  SPECIAL_CHARACTERS = '#$@*',
 }
 
 export enum Selectors {
+  // Settings
   SETTINGS_BUTTON = 'settings-button',
-  JUDO_ID_INPUT = 'judo-id-input',
   AUTH_TOGGLE = 'using-token-and-secret-toggle',
+  BACK_BUTTON = 'back-button',
+  CHALLENGE_REQUEST_SETTINGS = 'Challenge request indicator',
+  NO_PREFERENCE = 'No preference',
+  ASK_FOR_CSC = 'should-ask-for-csc',
+  ASK_FOR_NAME = 'should-ask-for-cardholder-name',
+  SETTINGS_LISTVIEW = 'settings-list',
+  BILLING_INFO_TOGGLE = 'billing-info-screen-toggle',
+
+  // Inputs
+  JUDO_ID_INPUT = 'judo-id-input',
   TOKEN_INPUT = 'token-input-field',
   SECRET_INPUT = 'secret-input-field',
-  BACK_BUTTON = 'back-button',
   CARD_NUMBER_INPUT = 'Card Number Field',
   CARDHOLDER_NAME_INPUT = 'Cardholder Name Field',
   EXPIRY_DATE_INPUT = 'Expiry Date Field',
   SECURITY_CODE_INPUT = 'Security Code Field',
-  THREEDS2_COMPLETE_BUTTON = 'COMPLETE',
-  THREEDS2_SCREEN_HEADER = 'SECURE CHECKOUT',
-  THREEDS2_TITLE_ANDROID = 'Payment verification',
+  TOKEN_CVV_CODE = 'card-token-security-code',
+
+  // Payment Buttons
   PAY_NOW_BUTTON = 'Submit Button',
   PAY_WITH_CARD = 'Pay with card',
   PAY_WITH_PREAUTH = 'Pre-auth with card',
   REGISTER_CARD = 'Register card',
   CHECK_CARD = 'Check card',
   SAVE_CARD = 'Save card',
-  PAYMENT_METHODS = 'Payment methods',
-  PREAUTH_METHODS = 'PreAuth methods',
   ADD_CARD_BUTTON = 'ADD CARD',
-  EXISTING_CARD = 'Visa Ending 6891 ',
-  TOKEN_PAYMENTS = 'Token Payments',
-  TOKENIZE_NEW_CARD = 'TOKENIZE A NEW CARD',
-  TOKEN_CVV_CODE = 'card-token-security-code',
-  FEATURE_LIST = 'home-screen-section-list',
-  TOKEN_SCROLL_VIEW = 'token-scroll-view',
   PAY_WITH_TOKEN = 'pay-with-token-button',
   PREAUTH_WITH_TOKEN = 'preauth-with-token-button',
-  CHALLENGE_REQUEST_SETTINGS = 'Challenge request indicator',
-  NO_PREFERENCE = 'No preference',
-  HELPER_TEXT = 'help-steps-list',
-  ASK_FOR_CSC = 'should-ask-for-csc',
-  ASK_FOR_NAME = 'should-ask-for-cardholder-name',
+
+  // Android Specific
   ANDROID_CARD = 'cardNumberInputField',
   ANDROID_NAME = 'cardHolderNameField',
   ANDROID_EXPIRY = 'expiryDateField',
   ANDROID_CODE = 'securityCodeField',
   ANDROID_METHODS_PAY_NOW = 'paymentMethodsPayNowButton',
   ANDROID_PAY_NOW = 'cardEntrySubmitButton',
+  ANDROID_PAY_NOW_LABEL = 'Pay Now',
+  ERROR_LABEL = 'errorLabel',
+
+  // iOS Specific
+  IOS_PAY_NOW = 'PAY NOW',
+
+  // 3DS2
+  THREEDS2_COMPLETE_BUTTON = 'COMPLETE',
+  THREEDS2_SCREEN_HEADER = 'SECURE CHECKOUT',
+  THREEDS2_TITLE_ANDROID = 'Payment verification',
+  CANCEL_3DS2 = 'Cancel',
+
+  // Result
   RESULT_HEADER = 'Result',
   RESULT_RECEIPT_ID = 'receiptId-value',
   RESULT_TYPE = 'type-value',
   RESULT_VALUE = 'result-value',
-  DELETE_CARD = 'Delete',
-  IOS_PAY_NOW = 'PAY NOW',
-  SETTINGS_LISTVIEW = 'settings-list',
-  ANDROID_PAY_NOW_LABEL = 'Pay Now',
-  CANCEL_3DS2 = 'Cancel',
   RESULT_MESSAGE = 'message-value',
+
+  // Token
+  TOKEN_PAYMENTS = 'Token Payments',
+  TOKENIZE_NEW_CARD = 'TOKENIZE A NEW CARD',
+  TOKEN_SCROLL_VIEW = 'token-scroll-view',
+
+  // iOS Billing Info Fields
+  EMAIL_FIELD = 'Cardholder Email Field',
+  PHONE_FIELD = 'Cardholder phone number Field',
+  ADDRESS_ONE_FIELD = 'Cardholder address line 1 code Field',
+  ADDRESS_TWO_FIELD = 'Cardholder address line 2 Field',
+  ADDRESS_THREE_FIELD = 'Cardholder address line 3 Field',
+  CITY_FIELD = 'Cardholder city Field',
+  POST_CODE_FIELD = 'Post Code Field',
+  STATE_FIELD = 'State Field',
+  COUNTRY_FIELD = 'Country Field',
+  ADD_ADDRESS_LINE_BUTTON = 'Add address line Button',
+  PHONE_COUNTRY_CODE = 'Cardholder phone code Field',
+
+  // Error Labels
+  FIELD_ERROR_LABEL = 'Error Floating Label',
+
+  // Android Billing Info Fields
+  EMAIL_ENTRY_FIELD = 'emailEntryField',
+  COUNTRY_ENTRY_FIELD = 'countryEntryField',
+  STATE_ENTRY_FIELD = 'stateEntryField',
+  PHONE_COUNTRY_CODE_ENTRY_FIELD = 'phoneCountryCodeEntryField',
+  PHONE_ENTRY_FIELD = 'phoneEntryField',
+  ADDRESS_ONE_ENTRY_FIELD = 'addressOneEntryField',
+  ADDRESS_TWO_ENTRY_FIELD = 'addressTwoEntryField',
+  ADDRESS_THREE_ENTRY_FIELD = 'addressThreeEntryField',
+  CITY_ENTRY_FIELD = 'cityEntryField',
+  POST_CODE_ENTRY_FIELD = 'postCodeEntryField',
+  ADD_ADDRESS_LINE_BUTTON_ANDROID = 'addAddressLineButton',
+  BILLING_INFO_CONTAINER = 'billingInfoContainer',
+
+  // Miscellaneous
+  FEATURE_LIST = 'home-screen-section-list',
+  EXISTING_CARD = 'Visa Ending 6891 ',
+  DELETE_CARD = 'Delete',
+  PAYMENT_METHODS = 'Payment methods',
+  PREAUTH_METHODS = 'PreAuth methods',
+  HELPER_TEXT = 'help-steps-list',
 }
 
 export enum UserFeedback {
   THREEDS2_CANCELLED = 'Unable to process transaction. Card authentication failed with 3DS Server.',
+  INVALID_POSTCODE_ERROR = 'Invalid postcode entered',
+  INVALID_ZIPCODE_ERROR = 'Invalid ZIP code entered',
+  INVALID_EMAIL_LABEL = 'Please enter a valid email',
+  INVALID_PHONE_LABEL = 'Please enter a valid mobile number',
+  INVALID_ADDRESS_LABEL = 'Please enter a valid address',
+  INVALID_CITY_LABEL = 'Please enter a valid city',
 }

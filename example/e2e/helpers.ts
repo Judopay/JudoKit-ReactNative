@@ -1,5 +1,6 @@
 import { element, expect } from 'detox';
 import { Selectors, TestData } from './constants';
+import { expect as jestExpect } from '@jest/globals';
 
 const judoId = process.env.JUDO_ID || '';
 const token = process.env.API_TEST_TOKEN || '';
@@ -17,6 +18,19 @@ export interface CardDetails {
   expiry: string;
   code: string;
 }
+
+export interface BillingDetails {
+  email: string;
+  country: string;
+  mobile: string;
+  addressOne: string;
+  addressTwo?: string;
+  city: string;
+  postCode: string;
+  state?: string;
+}
+
+let billingInfoEnabled = false;
 
 export async function fillPaymentDetailsSheet(props: CardDetails) {
   if (await isIOS()) {
@@ -48,6 +62,7 @@ export async function assertResultsScreen(props: Props) {
 
 export async function complete3DS2() {
   if (await isAndroid()) {
+    await device.disableSynchronization();
     await waitFor(element(by.text(Selectors.THREEDS2_TITLE_ANDROID)))
       .toBeVisible()
       .withTimeout(30000);
@@ -252,4 +267,106 @@ async function pressBackButton() {
       await element(by.id(Selectors.BACK_BUTTON)).longPress();
     }
   } catch (exception) {}
+}
+
+export async function fillBillingInfoFields(props: BillingDetails) {
+  if (await isIOS()) {
+    await element(by.id(Selectors.EMAIL_FIELD)).typeText(props.email);
+    await element(by.id(Selectors.PHONE_FIELD)).typeText(props.mobile);
+    await element(by.id(Selectors.ADDRESS_ONE_FIELD)).typeText(
+      props.addressOne
+    );
+    await element(by.id(Selectors.CITY_FIELD)).typeText(props.city + '\n');
+    await element(by.id(Selectors.POST_CODE_FIELD)).typeText(props.postCode);
+  } else {
+    await device.disableSynchronization();
+    await delay(3000);
+    await element(by.id(Selectors.EMAIL_ENTRY_FIELD)).replaceText(props.email);
+    await element(by.id(Selectors.COUNTRY_ENTRY_FIELD)).replaceText(
+      props.country
+    );
+    await element(by.id(Selectors.PHONE_ENTRY_FIELD)).replaceText(props.mobile);
+    await element(by.id(Selectors.ADDRESS_ONE_ENTRY_FIELD)).replaceText(
+      props.addressOne
+    );
+    await element(by.id(Selectors.CITY_ENTRY_FIELD)).replaceText(props.city);
+    await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).replaceText(
+      props.postCode
+    );
+  }
+}
+
+export async function toggleBillingInfoScreen() {
+  if (!billingInfoEnabled) {
+    await clickSettingsButton();
+    await delay(2000);
+    await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
+    billingInfoEnabled = true;
+    await pressBackButton();
+  }
+}
+
+export async function assertErrorLabelText(expected: string) {
+  let errorLabel;
+  if (await isAndroid()) {
+    let attributes = await element(
+      by.id(await billingInfoErrorLabel())
+    ).getAttributes();
+    if ('text' in attributes) {
+      errorLabel = attributes.text;
+    }
+    return jestExpect(errorLabel).toEqual(expected);
+  } else {
+    await expect(element(by.text(expected))).toExist();
+  }
+}
+
+export async function blurSelection() {
+  if (await isAndroid()) {
+    await element(by.id(Selectors.PHONE_COUNTRY_CODE_ENTRY_FIELD)).tap();
+  } else {
+    await element(by.id(Selectors.PHONE_COUNTRY_CODE)).tap();
+  }
+}
+
+export async function billingInfoPostCode(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.POST_CODE_FIELD;
+  } else return Selectors.POST_CODE_ENTRY_FIELD;
+}
+
+export async function billingInfoCity(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.CITY_FIELD;
+  } else return Selectors.CITY_ENTRY_FIELD;
+}
+
+export async function billingInfoErrorLabel(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.FIELD_ERROR_LABEL;
+  } else return Selectors.ERROR_LABEL;
+}
+
+export async function billingInfoCountry(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.COUNTRY_FIELD;
+  } else return Selectors.COUNTRY_ENTRY_FIELD;
+}
+
+export async function getBillingInfoEmail(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.EMAIL_FIELD;
+  } else return Selectors.EMAIL_ENTRY_FIELD;
+}
+
+export async function getBillingInfoPhone(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.PHONE_FIELD;
+  } else return Selectors.PHONE_ENTRY_FIELD;
+}
+
+export async function getBillingInfoAddress(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.ADDRESS_ONE_FIELD;
+  } else return Selectors.ADDRESS_ONE_ENTRY_FIELD;
 }
