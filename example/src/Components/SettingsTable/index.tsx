@@ -45,7 +45,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
   const { navigate, goBack, canGoBack } =
     useNavigation<NavigationProp<RootStackParamList>>();
   const { setItem, getItem } = useAsyncStorage(STORAGE_SETTINGS_KEY);
-  const [settings, setSettings] = useState<SettingsData>(DEFAULT_SETTINGS_DATA);
+  const [settings, setSettings] = useState<SettingsData>();
   const [settingsSections, setSettingsSections] = useState(
     transformationFunction(settings)
   );
@@ -54,6 +54,8 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
     const storedSettings = await getItem();
     if (storedSettings) {
       setSettings(JSON.parse(storedSettings));
+    } else {
+      setSettings(DEFAULT_SETTINGS_DATA);
     }
   };
 
@@ -66,8 +68,12 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
     }
   };
 
-  const handleSettingsChange = (path: string, value: boolean | string) => {
-    let updatedValue = { ..._.set(settings, path, value) };
+  const handleSettingsChange = async (
+    path: string,
+    value: boolean | string
+  ) => {
+    const currentSettings = settings ?? JSON.parse(await getItem());
+    let updatedValue = { ..._.set(currentSettings, path, value) };
 
     if (path === 'authorization.isUsingPaymentSession' && value) {
       updatedValue = {
