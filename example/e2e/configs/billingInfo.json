@@ -1,0 +1,212 @@
+{
+  "apiConfiguration": {
+    "isSandboxed": true,
+    "judoId": ""
+  },
+  "authorization": {
+    "isUsingPaymentSession": false,
+    "isUsingTokenAndSecret": true,
+    "token": "",
+    "secret": "",
+    "paymentSession": ""
+  },
+  "reference": {
+    "consumerReference": "",
+    "paymentReference": ""
+  },
+  "others": {
+    "isAddressVerificationServiceOn": false,
+    "isAmountLabelInPaymentMethodsOn": true,
+    "isAmountLabelInPaymentButtonOn": false,
+    "isSecurityCodeOn": true,
+    "isInitialRecurringPaymentOn": false,
+    "isDelayedAuthorisationOn": false,
+    "isAllowIncrementOn": false
+  },
+  "amount": {
+    "currency": "GBP",
+    "value": "0.15"
+  },
+  "paymentMethods": {
+    "isCardOn": true,
+    "isiDealOn": true,
+    "isApplePayOn": false,
+    "isGooglePayOn": false
+  },
+  "supportedCardNetworks": {
+    "isVisaOn": true,
+    "isMastercardOn": true,
+    "isAmexOn": true,
+    "isMaestroOn": false,
+    "isChinaUnionPayOn": false,
+    "isJCBOn": true,
+    "isDiscoverOn": true,
+    "isDinersClubOn": false
+  },
+  "networkTimeouts": {
+    "connectTimeout": "",
+    "readTimeout": "",
+    "writeTimeout": ""
+  },
+  "cardAddress": {
+    "isEnabled": true,
+    "line1": "My house",
+    "line2": "My street",
+    "line3": "My area",
+    "town": "My town",
+    "postCode": "TR14 8PA",
+    "countryCode": "826",
+    "state": "",
+    "phoneCountryCode": "44",
+    "mobileNumber": "0799999999",
+    "emailAddress": "email@address.com"
+  },
+  "primaryAccountDetails": {
+    "isEnabled": false,
+    "name": "test-account-name",
+    "accountNumber": "4015434234",
+    "dateOfBirth": "1970-10-11",
+    "postCode": "EC2A"
+  },
+  "applePay": {
+    "merchantId": "",
+    "requiredBillingContactFields": {
+      "isPostalAddressOn": false,
+      "isPhoneOn": false,
+      "isEmailOn": false,
+      "isNameOn": false
+    },
+    "requiredShippingContactFields": {
+      "isPostalAddressOn": false,
+      "isPhoneOn": false,
+      "isEmailOn": false,
+      "isNameOn": false
+    },
+    "returnedContactInfo": {
+      "isBillingContactsOn": false,
+      "isShippingContactsOn": false
+    },
+    "recurringPaymentRequest": {
+      "isOn": false,
+      "paymentDescription": "",
+      "managementURL": "",
+      "regularBilling": {
+        "isOn": false,
+        "label": "",
+        "amount": "",
+        "startDate": "",
+        "endDate": "",
+        "intervalUnit": "",
+        "intervalCount": ""
+      },
+      "trialBilling": {
+        "isOn": false,
+        "label": "",
+        "amount": "",
+        "startDate": "",
+        "endDate": "",
+        "intervalUnit": "",
+        "intervalCount": ""
+      },
+      "billingAgreement": "",
+      "tokenNotificationURL": ""
+    }
+  },
+  "googlePay": {
+    "isProductionEnvironmentOn": false,
+    "merchantName": "",
+    "countryCode": "GB",
+    "billingAddressFields": "NONE",
+    "isBillingAddressPhoneNumberOn": false,
+    "isShippingAddressOn": false,
+    "shippingAddressAllowedCountries": "GB, US",
+    "isShippingAddressPhoneNumberOn": false,
+    "isEmailAddressOn": false,
+    "allowPrepaidCards": true,
+    "allowCreditCards": true,
+    "transactionId": "",
+    "totalPriceStatus": "FINAL",
+    "totalPriceLabel": "",
+    "checkoutOption": "DEFAULT"
+  },
+  "threeDSTwo": {
+    "isBillingInformationScreenEnabled": true,
+    "challengeRequestIndicator": "dontSet",
+    "SCAExemption": "dontSet",
+    "maxTimeout": "30",
+    "protocolMessageVersion": "",
+    "uiCustomization": {
+      "isEnabled": false,
+      "toolbarCustomization": {
+        "textFontName": "Helvetica",
+        "textColor": "#FFFFFF",
+        "textFontSize": "16",
+        "backgroundColor": "#6A4EE1",
+        "headerText": "SECURE CHECKOUT",
+        "buttonText": "Cancel"
+      },
+      "labelCustomization": {
+        "textFontName": "Helvetica",
+        "textColor": "#262626",
+        "textFontSize": "16",
+        "headingTextFontName": "Helvetica",
+        "headingTextColor": "#262626",
+        "headingTextFontSize": "24"
+      },
+      "textBoxCustomization": {
+        "textFontName": "Helvetica",
+        "textColor": "#262626",
+        "textFontSize": "16",
+        "borderWidth": "0",
+        "borderColor": "#F6F6F6",
+        "cornerRadius": "6"
+      },
+      "submitButtonCustomization": {
+        "textFontName": "Helvetica",
+        "textColor": "#FFFFFF",
+        "textFontSize": "16",
+        "backgroundColor": "#262626",
+        "cornerRadius": "4"
+      },
+      "nextButtonCustomization": {
+        "textFontName": "Helvetica",
+        "textColor": "#FFFFFF",
+        "textFontSize": "16",
+        "backgroundColor": "#262626",
+        "cornerRadius": "4"
+      },
+      "continueButtonCustomization": {
+        "textFontName": "Helvetica",
+        "textColor": "#FFFFFF",
+        "textFontSize": "16",
+        "backgroundColor": "#262626",
+        "cornerRadius": "4"
+      },
+      "cancelButtonCustomization": {
+        "textFontName": "Helvetica",
+        "textColor": "#FFFFFF",
+        "textFontSize": "16",
+        "backgroundColor": "#262626",
+        "cornerRadius": "4"
+      },
+      "resendButtonCustomization": {
+        "textFontName": "Helvetica",
+        "textColor": "#FFFFFF",
+        "textFontSize": "16",
+        "backgroundColor": "#262626",
+        "cornerRadius": "4"
+      }
+    }
+  },
+  "tokenPayments": {
+    "shouldAskForCSC": true,
+    "shouldAskForCardholderName": false
+  },
+  "recommendation": {
+    "isOn": false,
+    "url": "",
+    "rsaPublicKey": "",
+    "timeout": "",
+    "haltTransactionInCaseOfAnyError": false
+  }
+}

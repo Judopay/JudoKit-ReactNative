@@ -3,18 +3,14 @@ import { Selectors, TestData, UserFeedback } from './constants';
 import {
   assertResultsScreen,
   clickSettingsButton,
-  enterAuthDetails,
   addCardPaymentMethodAndPay,
-  toggleAskForCSCSetting,
   complete3DS2,
   fillPaymentDetailsSheet,
-  setNoPreferenceCRI,
   fillSecurityCodeSheet,
   tapPayNowButton,
   delay,
   isAndroid,
   fillBillingInfoFields,
-  toggleBillingInfoScreen,
   assertErrorLabelText,
   billingInfoCity,
   billingInfoPostCode,
@@ -23,22 +19,23 @@ import {
   getBillingInfoEmail,
   getBillingInfoPhone,
   getBillingInfoAddress,
+  defaultConfig,
+  pressBackButton,
+  noPrefsConfig,
+  billingInfoConfig,
+  launchApp,
 } from './helpers';
 
 describe('E2E Functional Tests', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: { camera: 'YES', location: 'always' },
+      launchArgs: {
+        customSettings: defaultConfig,
+      },
     });
     await clickSettingsButton();
-    await enterAuthDetails();
-  });
-
-  beforeEach(async () => {
-    await device.launchApp();
-    if (await isAndroid()) {
-      await device.disableSynchronization();
-    }
+    await pressBackButton();
   });
 
   afterEach(async () => {
@@ -46,7 +43,6 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 token payment transaction', async () => {
-    await toggleAskForCSCSetting();
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
     if (await isAndroid()) {
@@ -73,7 +69,7 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 token pre-auth transaction', async () => {
-    await toggleAskForCSCSetting();
+    await launchApp(defaultConfig);
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
     if (await isAndroid()) {
@@ -100,6 +96,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 payment transaction', async () => {
+    await launchApp(defaultConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -115,6 +115,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 pre-auth transaction', async () => {
+    await launchApp(defaultConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_PREAUTH)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -130,6 +134,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 register card transaction', async () => {
+    await launchApp(defaultConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.REGISTER_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -145,6 +153,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 check card transaction', async () => {
+    await launchApp(defaultConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.CHECK_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -160,7 +172,7 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 payment transaction via payment methods', async () => {
-    await toggleAskForCSCSetting();
+    await launchApp(defaultConfig);
     if (await isAndroid()) {
       await device.disableSynchronization();
     }
@@ -170,7 +182,7 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 pre-auth transaction via payment methods', async () => {
-    await toggleAskForCSCSetting();
+    await launchApp(defaultConfig);
     if (await isAndroid()) {
       await device.disableSynchronization();
     }
@@ -180,6 +192,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should return error message upon a failed 3DS2 payment transaction', async () => {
+    await launchApp(defaultConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.FAILED_CARD_NUMBER,
@@ -198,6 +214,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should return error message upon a declined 3DS2 payment transaction', async () => {
+    await launchApp(defaultConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -210,14 +230,14 @@ describe('E2E Functional Tests', () => {
     }
     await complete3DS2();
     await assertResultsScreen({ type: '1', result: '2' });
-    await expect(
-      element(
-        by.text('Card declined: Additional customer authentication required')
-      )
-    ).toBeVisible();
+    await expect(element(by.text('Card declined: CV2 policy'))).toBeVisible();
   });
 
   it('should handle a 3DS2 payment transaction verification cancellation', async () => {
+    await launchApp(defaultConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -242,7 +262,12 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a step up payment transaction', async () => {
-    await setNoPreferenceCRI();
+    await launchApp(noPrefsConfig);
+    await clickSettingsButton();
+    await pressBackButton();
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -261,7 +286,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a step up preauth transaction', async () => {
-    await setNoPreferenceCRI();
+    await launchApp(noPrefsConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_PREAUTH)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -280,8 +308,12 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a transaction with billing details', async () => {
-    await toggleBillingInfoScreen();
-    await delay(1500);
+    await launchApp(billingInfoConfig);
+    await clickSettingsButton();
+    await pressBackButton();
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -303,8 +335,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should validate UK post code entry', async () => {
-    await toggleBillingInfoScreen();
-    await delay(1500);
+    await launchApp(billingInfoConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -323,8 +357,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should validate US post code entry', async () => {
-    await toggleBillingInfoScreen();
-    await delay(1500);
+    await launchApp(billingInfoConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -346,8 +382,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should validate CA post code entry', async () => {
-    await toggleBillingInfoScreen();
-    await delay(1500);
+    await launchApp(billingInfoConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -367,8 +405,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should validate email entry', async () => {
-    await toggleBillingInfoScreen();
-    await delay(2000);
+    await launchApp(billingInfoConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -386,8 +426,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should validate phone number entry', async () => {
-    await toggleBillingInfoScreen();
-    await delay(2000);
+    await launchApp(billingInfoConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -410,8 +452,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should validate address entry', async () => {
-    await toggleBillingInfoScreen();
-    await delay(2000);
+    await launchApp(billingInfoConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -434,8 +478,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should validate city entry', async () => {
-    await toggleBillingInfoScreen();
-    await delay(2000);
+    await launchApp(billingInfoConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -458,7 +504,12 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 payment frictionless transaction', async () => {
-    await setNoPreferenceCRI();
+    await launchApp(noPrefsConfig);
+    await clickSettingsButton();
+    await pressBackButton();
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -473,7 +524,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should successfully complete a 3DS2 payment frictionless no method transaction', async () => {
-    await setNoPreferenceCRI();
+    await launchApp(noPrefsConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -488,7 +542,10 @@ describe('E2E Functional Tests', () => {
   });
 
   it('should return error upon a 3DS2 payment frictionless auth failed transaction', async () => {
-    await setNoPreferenceCRI();
+    await launchApp(noPrefsConfig);
+    if (await isAndroid()) {
+      await device.disableSynchronization();
+    }
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,

@@ -7,7 +7,6 @@ import {
   request,
   RESULTS,
 } from 'react-native-permissions';
-
 import 'react-native-gesture-handler';
 import {
   DarkTheme,
@@ -16,7 +15,29 @@ import {
 } from '@react-navigation/native';
 import { Theme } from '@react-navigation/native/lib/typescript/src/types';
 import ApplicationRouter from './ApplicationRouter';
-import { IS_IOS } from '../Data/Constants';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import {
+  IS_IOS,
+  DEFAULT_SETTINGS_DATA,
+  STORAGE_SETTINGS_KEY,
+} from '../Data/Constants';
+import { Buffer } from 'buffer';
+import { LaunchArguments } from 'react-native-launch-arguments';
+interface MyExpectedArgs {
+  customSettings?: string;
+}
+const args = LaunchArguments.value<MyExpectedArgs>();
+
+const getSettingsFromEnv = () => {
+  const base64Settings = args.customSettings;
+  if (base64Settings) {
+    const decodedSettings = Buffer.from(base64Settings, 'base64').toString(
+      'utf-8'
+    );
+    return JSON.parse(decodedSettings);
+  }
+  return DEFAULT_SETTINGS_DATA;
+};
 
 const Application = () => {
   const scheme = useColorScheme();
@@ -113,6 +134,17 @@ const Application = () => {
 
     requestPostNotificationsPermissionsIfNeeded();
   }, []);
+
+  const { setItem } = useAsyncStorage(STORAGE_SETTINGS_KEY);
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      const settings = getSettingsFromEnv();
+      await setItem(JSON.stringify(settings));
+    };
+
+    loadSettings();
+  }, [setItem]);
 
   return (
     <ThemeProvider value={theme}>
