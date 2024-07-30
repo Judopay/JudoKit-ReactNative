@@ -29,14 +29,19 @@ interface MyExpectedArgs {
 const args = LaunchArguments.value<MyExpectedArgs>();
 
 const getSettingsFromEnv = () => {
-  const base64Settings = args.customSettings;
-  if (base64Settings) {
-    const decodedSettings = Buffer.from(base64Settings, 'base64').toString(
-      'utf-8'
-    );
-    return JSON.parse(decodedSettings);
+  try {
+    const base64Settings = args.customSettings;
+    if (base64Settings) {
+      const decodedSettings = Buffer.from(base64Settings, 'base64').toString(
+        'utf-8'
+      );
+      return JSON.parse(decodedSettings);
+    }
+    return DEFAULT_SETTINGS_DATA;
+  } catch (error) {
+    console.error('Error while getting settings from environment:', error);
+    return DEFAULT_SETTINGS_DATA;
   }
-  return DEFAULT_SETTINGS_DATA;
 };
 
 const Application = () => {

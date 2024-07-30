@@ -418,4 +418,13 @@ export async function launchApp(config: string) {
       customSettings: config,
     },
   });
+  if (await isAndroid()) {
+    await device.disableSynchronization();
+  }
+}
+
+export async function disableSync() {
+  if (await isAndroid()) {
+    await device.disableSynchronization();
+  }
 }
