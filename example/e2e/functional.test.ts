@@ -35,8 +35,11 @@ describe('E2E Functional Tests', () => {
         customSettings: defaultConfig,
       },
     });
+    await delay(5000);
     await clickSettingsButton();
+    await delay(5000);
     await pressBackButton();
+    await delay(5000);
   });
 
   afterEach(async () => {
