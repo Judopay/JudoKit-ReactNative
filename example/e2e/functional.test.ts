@@ -35,11 +35,8 @@ describe('E2E Functional Tests', () => {
         customSettings: defaultConfig,
       },
     });
-    await delay(5000);
     await clickSettingsButton();
-    await delay(5000);
     await pressBackButton();
-    await delay(5000);
   });
 
   afterEach(async () => {
@@ -47,6 +44,9 @@ describe('E2E Functional Tests', () => {
   });
 
   it.only('should successfully complete a 3DS2 token payment transaction', async () => {
+    console.log('defaultConfig: ', defaultConfig);
+    await clickSettingsButton();
+    await pressBackButton();
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
     await disableSync();

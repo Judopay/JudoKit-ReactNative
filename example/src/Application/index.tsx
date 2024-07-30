@@ -27,6 +27,7 @@ interface MyExpectedArgs {
   customSettings?: string;
 }
 const args = LaunchArguments.value<MyExpectedArgs>();
+console.log('args: ', args);
 
 const getSettingsFromEnv = () => {
   try {
