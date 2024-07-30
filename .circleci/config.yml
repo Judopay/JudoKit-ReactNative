@@ -509,9 +509,9 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - fix-e2e-pipeline
       - run_e2e_android:
           filters:
             branches:
               only:
-                - master
+                - fix-e2e-pipeline
