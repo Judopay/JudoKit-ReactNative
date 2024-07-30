@@ -1,6 +1,7 @@
 import { element, expect } from 'detox';
 import { Selectors, TestData } from './constants';
 import { expect as jestExpect } from '@jest/globals';
+import { processJSONFile } from './processJSONFile';
 
 const judoId = process.env.JUDO_ID || '';
 const token = process.env.API_TEST_TOKEN || '';
@@ -258,7 +259,7 @@ async function checkIfCRINeedsSet(): Promise<boolean> {
   }
 }
 
-async function pressBackButton() {
+export async function pressBackButton() {
   try {
     let backButton = await element(
       by.id(Selectors.BACK_BUTTON)
@@ -369,4 +370,61 @@ export async function getBillingInfoAddress(): Promise<string> {
   if (await isIOS()) {
     return Selectors.ADDRESS_ONE_FIELD;
   } else return Selectors.ADDRESS_ONE_ENTRY_FIELD;
+}
+
+export async function toggleBillingInfoScreenOff() {
+  if (billingInfoEnabled) {
+    await clickSettingsButton();
+    await delay(2000);
+    await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
+    billingInfoEnabled = false;
+    await pressBackButton();
+  }
+}
+
+export const defaultConfig = processJSONFile('./configs/default.json', {
+  apiConfiguration: {
+    judoId: process.env.JUDO_ID,
+  },
+  authorization: {
+    token: process.env.TEST_API_TOKEN,
+    secret: process.env.TEST_API_SECRET,
+  },
+});
+
+export const noPrefsConfig = processJSONFile('./configs/noPreferenceCRI.json', {
+  apiConfiguration: {
+    judoId: process.env.JUDO_ID,
+  },
+  authorization: {
+    token: process.env.TEST_API_TOKEN,
+    secret: process.env.TEST_API_SECRET,
+  },
+});
+
+export const billingInfoConfig = processJSONFile('./configs/billingInfo.json', {
+  apiConfiguration: {
+    judoId: process.env.JUDO_ID,
+  },
+  authorization: {
+    token: process.env.TEST_API_TOKEN,
+    secret: process.env.TEST_API_SECRET,
+  },
+});
+
+export async function launchApp(config: string) {
+  await device.launchApp({
+    launchArgs: {
+      customSettings: config,
+    },
+  });
+  if (await isAndroid()) {
+    await device.disableSynchronization();
+  }
+}
+
+export async function disableSync() {
+  if (await isAndroid()) {
+    await device.disableSynchronization();
+  }
 }
