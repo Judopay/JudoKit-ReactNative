@@ -222,6 +222,7 @@ describe('E2E Functional Tests', () => {
   it('should successfully complete a step up payment transaction', async () => {
     await launchApp(noPrefsConfig);
     await clickSettingsButton();
+    await delay(2000);
     await pressBackButton();
     await disableSync();
     await delay(2000);
@@ -260,6 +261,7 @@ describe('E2E Functional Tests', () => {
   it('should successfully complete a transaction with billing details', async () => {
     await launchApp(billingInfoConfig);
     await clickSettingsButton();
+    await delay(2000);
     await pressBackButton();
     await disableSync();
     await delay(2000);
@@ -434,6 +436,7 @@ describe('E2E Functional Tests', () => {
   it('should successfully complete a 3DS2 payment frictionless transaction', async () => {
     await launchApp(noPrefsConfig);
     await clickSettingsButton();
+    await delay(2000);
     await pressBackButton();
     await disableSync();
     await delay(2000);
