@@ -387,8 +387,8 @@ export const defaultConfig = processJSONFile('./configs/default.json', {
     judoId: process.env.JUDO_ID,
   },
   authorization: {
-    token: process.env.TEST_API_TOKEN,
-    secret: process.env.TEST_API_SECRET,
+    token: process.env.API_TEST_TOKEN,
+    secret: process.env.API_TEST_SECRET,
   },
 });
 
@@ -397,8 +397,8 @@ export const noPrefsConfig = processJSONFile('./configs/noPreferenceCRI.json', {
     judoId: process.env.JUDO_ID,
   },
   authorization: {
-    token: process.env.TEST_API_TOKEN,
-    secret: process.env.TEST_API_SECRET,
+    token: process.env.API_TEST_TOKEN,
+    secret: process.env.API_TEST_SECRET,
   },
 });
 
@@ -407,8 +407,8 @@ export const billingInfoConfig = processJSONFile('./configs/billingInfo.json', {
     judoId: process.env.JUDO_ID,
   },
   authorization: {
-    token: process.env.TEST_API_TOKEN,
-    secret: process.env.TEST_API_SECRET,
+    token: process.env.API_TEST_TOKEN,
+    secret: process.env.API_TEST_SECRET,
   },
 });
 

@@ -46,6 +46,7 @@ describe('E2E Functional Tests', () => {
   it('should successfully complete a 3DS2 token payment transaction', async () => {
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
+    await delay(2000);
     await disableSync();
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
     await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap();
@@ -71,6 +72,7 @@ describe('E2E Functional Tests', () => {
     await launchApp(defaultConfig);
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
+    await delay(2000);
     await disableSync();
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
     await element(by.text(Selectors.TOKENIZE_NEW_CARD)).tap();
@@ -222,6 +224,7 @@ describe('E2E Functional Tests', () => {
   it('should successfully complete a step up payment transaction', async () => {
     await launchApp(noPrefsConfig);
     await clickSettingsButton();
+    await delay(2000);
     await pressBackButton();
     await disableSync();
     await delay(2000);
@@ -260,6 +263,7 @@ describe('E2E Functional Tests', () => {
   it('should successfully complete a transaction with billing details', async () => {
     await launchApp(billingInfoConfig);
     await clickSettingsButton();
+    await delay(2000);
     await pressBackButton();
     await disableSync();
     await delay(2000);
@@ -434,6 +438,7 @@ describe('E2E Functional Tests', () => {
   it('should successfully complete a 3DS2 payment frictionless transaction', async () => {
     await launchApp(noPrefsConfig);
     await clickSettingsButton();
+    await delay(2000);
     await pressBackButton();
     await disableSync();
     await delay(2000);
