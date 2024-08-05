@@ -45,7 +45,8 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
   const { navigate, goBack, canGoBack } =
     useNavigation<NavigationProp<RootStackParamList>>();
   const { setItem, getItem } = useAsyncStorage(STORAGE_SETTINGS_KEY);
-  const [settings, setSettings] = useState<SettingsData>();
+  const [settings, setSettings] = useState<SettingsData>(DEFAULT_SETTINGS_DATA);
+  const [areSettingsSetUp, setSettingsAsSetUp] = useState<Boolean>(false);
   const [settingsSections, setSettingsSections] = useState(
     transformationFunction(settings)
   );
@@ -54,9 +55,8 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
     const storedSettings = await getItem();
     if (storedSettings) {
       setSettings(JSON.parse(storedSettings));
-    } else {
-      setSettings(DEFAULT_SETTINGS_DATA);
     }
+    setSettingsAsSetUp(true);
   };
 
   const writeSettingsToStorage = async (objectToWrite: SettingsData) => {
@@ -72,7 +72,17 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
     path: string,
     value: boolean | string
   ) => {
-    const currentSettings = settings ?? JSON.parse(await getItem());
+    let currentSettings = settings;
+
+    // A hack solution preventing settings from being overriden by defaults in case when we re-open the screen,and the state gets reset.
+    if (!areSettingsSetUp) {
+      const memoryStoredSettings = await getItem();
+      if (memoryStoredSettings) {
+        currentSettings = JSON.parse(memoryStoredSettings);
+        setSettingsAsSetUp(true);
+      }
+    }
+
     let updatedValue = { ..._.set(currentSettings, path, value) };
 
     if (path === 'authorization.isUsingPaymentSession' && value) {
