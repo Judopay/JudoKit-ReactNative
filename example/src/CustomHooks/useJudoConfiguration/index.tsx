@@ -8,9 +8,8 @@ import {
   judoAuthorizationFromSettingsData,
   judoConfigurationFromSettingsData,
 } from '../../Data/Mapping';
-import { useNavigation } from '@react-navigation/native';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { fromJSONString } from '../../Functions';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
+import { appStorage } from '../../Application';
 
 export interface UseJudoConfigurationResult {
   isSandboxed: boolean;
@@ -19,43 +18,27 @@ export interface UseJudoConfigurationResult {
 }
 
 export function useJudoConfiguration(): UseJudoConfigurationResult {
-  const navigation = useNavigation();
+  const [settings, _] = useMMKVStorage(
+    STORAGE_SETTINGS_KEY,
+    appStorage,
+    DEFAULT_SETTINGS_DATA
+  );
 
-  const { getItem } = useAsyncStorage(STORAGE_SETTINGS_KEY);
-  const [settingsData, setSettingsData] = useState(DEFAULT_SETTINGS_DATA);
   const [configuration, setConfiguration] = useState<JudoConfiguration>(
-    judoConfigurationFromSettingsData(settingsData)
+    judoConfigurationFromSettingsData(settings)
   );
 
   const {
     apiConfiguration: { isSandboxed },
-  } = settingsData;
-
-  const reloadSettings = async () => {
-    const data = await getItem();
-    setSettingsData(fromJSONString(data, DEFAULT_SETTINGS_DATA));
-  };
+  } = settings;
 
   useEffect(() => {
-    setConfiguration(judoConfigurationFromSettingsData(settingsData));
-  }, [settingsData]);
-
-  const onFocus = () => {
-    reloadSettings().catch(console.error);
-  };
-
-  useEffect(() => {
-    navigation.addListener('focus', onFocus);
-
-    return () => {
-      navigation.removeListener('focus', onFocus);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation]);
+    setConfiguration(judoConfigurationFromSettingsData(settings));
+  }, [settings]);
 
   return {
     isSandboxed,
-    authorization: judoAuthorizationFromSettingsData(settingsData),
+    authorization: judoAuthorizationFromSettingsData(settings),
     configuration,
   };
 }

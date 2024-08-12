@@ -22,13 +22,14 @@ import {
   SingleSelectionTableParams,
 } from '../../Data/TypeDefinitions';
 import { useSingleSelectionTableListener } from '../../Application/ApplicationRouter/Screens/SettingsSingleSelectionScreen';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
 import {
   DEFAULT_SETTINGS_DATA,
   IS_IOS,
   STORAGE_SETTINGS_KEY,
 } from '../../Data/Constants';
 import _ from 'lodash';
+import { appStorage } from '../../Application';
 
 export interface SettingsTableProps {
   transformationFunction: (
@@ -44,46 +45,19 @@ const ItemSeparatorComponent = () => (
 const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
   const { navigate, goBack, canGoBack } =
     useNavigation<NavigationProp<RootStackParamList>>();
-  const { setItem, getItem } = useAsyncStorage(STORAGE_SETTINGS_KEY);
-  const [settings, setSettings] = useState<SettingsData>(DEFAULT_SETTINGS_DATA);
-  const [areSettingsSetUp, setSettingsAsSetUp] = useState<Boolean>(false);
+
+  const [settings, setSettings] = useMMKVStorage(
+    STORAGE_SETTINGS_KEY,
+    appStorage,
+    DEFAULT_SETTINGS_DATA
+  );
+
   const [settingsSections, setSettingsSections] = useState(
     transformationFunction(settings)
   );
 
-  const readSettingsFromStorage = async () => {
-    const storedSettings = await getItem();
-    if (storedSettings) {
-      setSettings(JSON.parse(storedSettings));
-    }
-    setSettingsAsSetUp(true);
-  };
-
-  const writeSettingsToStorage = async (objectToWrite: SettingsData) => {
-    try {
-      const settingsString = JSON.stringify(objectToWrite);
-      await setItem(settingsString);
-    } catch (e) {
-      console.error('Failed to write settings to storage:', e);
-    }
-  };
-
-  const handleSettingsChange = async (
-    path: string,
-    value: boolean | string
-  ) => {
-    let currentSettings = settings;
-
-    // A hack solution preventing settings from being overriden by defaults in case when we re-open the screen,and the state gets reset.
-    if (!areSettingsSetUp) {
-      const memoryStoredSettings = await getItem();
-      if (memoryStoredSettings) {
-        currentSettings = JSON.parse(memoryStoredSettings);
-        setSettingsAsSetUp(true);
-      }
-    }
-
-    let updatedValue = { ..._.set(currentSettings, path, value) };
+  const handleSettingsChange = (path: string, value: boolean | string) => {
+    let updatedValue = { ..._.set(settings, path, value) };
 
     if (path === 'authorization.isUsingPaymentSession' && value) {
       updatedValue = {
@@ -101,15 +75,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
   };
 
   useEffect(() => {
-    readSettingsFromStorage().catch(console.error);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (settings) {
-      writeSettingsToStorage(settings).catch(console.error);
-      setSettingsSections(transformationFunction(settings));
-    }
+    setSettingsSections(transformationFunction(settings));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 

@@ -15,6 +15,8 @@ import _ from 'lodash';
 import { ResultItem } from '../Application/ApplicationRouter/Screens/ResultScreen';
 import Snackbar from 'react-native-snackbar';
 import { DefaultTheme } from '@react-navigation/native';
+import { Buffer } from 'buffer';
+import { DEFAULT_SETTINGS_DATA } from '../Data/Constants';
 
 interface PromiseForFeature {
   featureType: DemoFeatureType;
@@ -243,4 +245,24 @@ export const regeneratePaymentReferenceIfNeeded = (
       metadata,
     },
   };
+};
+
+export interface MyExpectedArgs {
+  customSettings?: string;
+}
+
+export const getSettingsFromEnv = (args: MyExpectedArgs) => {
+  try {
+    const base64Settings = args.customSettings;
+    if (base64Settings) {
+      const decodedSettings = Buffer.from(base64Settings, 'base64').toString(
+        'utf-8'
+      );
+      return JSON.parse(decodedSettings);
+    }
+    return DEFAULT_SETTINGS_DATA;
+  } catch (error) {
+    console.error('Error while getting settings from environment:', error);
+    return DEFAULT_SETTINGS_DATA;
+  }
 };
