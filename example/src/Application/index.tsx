@@ -131,7 +131,9 @@ const Application = () => {
   useEffect(() => {
     const loadSettings = async () => {
       const settings = getSettingsFromEnv(args);
-      setSettingsModel(settings);
+      if (settings) {
+        setSettingsModel(settings);
+      }
     };
 
     loadSettings().catch(console.error);

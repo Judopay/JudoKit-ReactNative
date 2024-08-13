@@ -16,7 +16,6 @@ import { ResultItem } from '../Application/ApplicationRouter/Screens/ResultScree
 import Snackbar from 'react-native-snackbar';
 import { DefaultTheme } from '@react-navigation/native';
 import { Buffer } from 'buffer';
-import { DEFAULT_SETTINGS_DATA } from '../Data/Constants';
 
 interface PromiseForFeature {
   featureType: DemoFeatureType;
@@ -260,9 +259,8 @@ export const getSettingsFromEnv = (args: MyExpectedArgs) => {
       );
       return JSON.parse(decodedSettings);
     }
-    return DEFAULT_SETTINGS_DATA;
   } catch (error) {
     console.error('Error while getting settings from environment:', error);
-    return DEFAULT_SETTINGS_DATA;
   }
+  return null;
 };
