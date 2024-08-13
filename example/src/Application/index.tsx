@@ -15,38 +15,26 @@ import {
 } from '@react-navigation/native';
 import { Theme } from '@react-navigation/native/lib/typescript/src/types';
 import ApplicationRouter from './ApplicationRouter';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { MMKVLoader, useMMKVStorage } from 'react-native-mmkv-storage';
 import {
   IS_IOS,
   DEFAULT_SETTINGS_DATA,
   STORAGE_SETTINGS_KEY,
 } from '../Data/Constants';
-import { Buffer } from 'buffer';
 import { LaunchArguments } from 'react-native-launch-arguments';
-interface MyExpectedArgs {
-  customSettings?: string;
-}
-const args = LaunchArguments.value<MyExpectedArgs>();
+import { getSettingsFromEnv, MyExpectedArgs } from '../Functions';
 
-const getSettingsFromEnv = () => {
-  try {
-    const base64Settings = args.customSettings;
-    if (base64Settings) {
-      const decodedSettings = Buffer.from(base64Settings, 'base64').toString(
-        'utf-8'
-      );
-      return JSON.parse(decodedSettings);
-    }
-    return DEFAULT_SETTINGS_DATA;
-  } catch (error) {
-    console.error('Error while getting settings from environment:', error);
-    return DEFAULT_SETTINGS_DATA;
-  }
-};
+const args = LaunchArguments.value<MyExpectedArgs>();
+export const appStorage = new MMKVLoader().initialize();
 
 const Application = () => {
   const scheme = useColorScheme();
   const [theme, setTheme] = useState<Theme>(DefaultTheme);
+  const [_, setSettingsModel] = useMMKVStorage(
+    STORAGE_SETTINGS_KEY,
+    appStorage,
+    DEFAULT_SETTINGS_DATA
+  );
 
   useEffect(() => {
     setTheme(scheme === 'dark' ? DarkTheme : DefaultTheme);
@@ -140,16 +128,16 @@ const Application = () => {
     requestPostNotificationsPermissionsIfNeeded();
   }, []);
 
-  const { setItem } = useAsyncStorage(STORAGE_SETTINGS_KEY);
-
   useEffect(() => {
     const loadSettings = async () => {
-      const settings = getSettingsFromEnv();
-      await setItem(JSON.stringify(settings));
+      const settings = getSettingsFromEnv(args);
+      if (settings) {
+        setSettingsModel(settings);
+      }
     };
 
-    loadSettings();
-  }, [setItem]);
+    loadSettings().catch(console.error);
+  }, [setSettingsModel]);
 
   return (
     <ThemeProvider value={theme}>

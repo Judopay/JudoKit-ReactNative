@@ -2,18 +2,18 @@ import React, { FC, useEffect, useState } from 'react';
 import SettingsTable from '../../../../Components/SettingsTable';
 import { buildSettingsSections } from '../../../../Data/SettingsSections';
 import { StackScreenProps } from '@react-navigation/stack';
-import {
-  RootStackParamList,
-  Screen,
-  SettingsData,
-} from '../../../../Data/TypeDefinitions';
+import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import { useTheme } from '@react-navigation/native';
 import { ActivityIndicator, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { encode as btoa } from 'base-64';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { STORAGE_SETTINGS_KEY } from '../../../../Data/Constants';
 import { onErrorSnackbar, onSuccessSnackbar } from '../../../../Functions';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
+import {
+  DEFAULT_SETTINGS_DATA,
+  STORAGE_SETTINGS_KEY,
+} from '../../../../Data/Constants';
+import { appStorage } from '../../../index';
 
 const generateRandomString = (length: number = 36) => {
   const char = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -27,12 +27,16 @@ const generateRandomString = (length: number = 36) => {
 const SettingsMainScreen: FC<
   StackScreenProps<RootStackParamList, Screen.SETTINGS>
 > = ({ navigation }) => {
-  const { setItem, getItem } = useAsyncStorage(STORAGE_SETTINGS_KEY);
   const { goBack, canGoBack } = navigation;
   const [isLoading, setIsLoading] = useState(false);
   const {
     colors: { background: backgroundColor, primary },
   } = useTheme();
+  const [settings, setSettings] = useMMKVStorage(
+    STORAGE_SETTINGS_KEY,
+    appStorage,
+    DEFAULT_SETTINGS_DATA
+  );
 
   const generatePaymentSession = () => {
     setIsLoading(true);
@@ -49,19 +53,12 @@ const SettingsMainScreen: FC<
   };
 
   const fetchAndPersistSession = async () => {
-    const settings = await getItem();
-    const parsedSettings: SettingsData = JSON.parse(settings || '{}');
-
-    if (Object.keys(parsedSettings).length === 0) {
-      throw new Error('Failed to read stored settings.');
-    }
-
     const {
       authorization: { token = '', secret = '' },
       amount: { currency = '', value: amount = '' },
       apiConfiguration: { isSandboxed = true, judoId = '' },
       reference: { consumerReference: yourConsumerReference = '' },
-    } = parsedSettings;
+    } = settings;
 
     if (token.length === 0) {
       throw new Error('Token is not set.');
@@ -113,21 +110,20 @@ const SettingsMainScreen: FC<
       const response = await result.json();
 
       const updatedSettings = {
-        ...parsedSettings,
+        ...settings,
         reference: {
-          ...parsedSettings.reference,
+          ...settings.reference,
           paymentReference: yourPaymentReference,
         },
         authorization: {
-          ...parsedSettings.authorization,
+          ...settings.authorization,
           isUsingPaymentSession: true,
           isUsingTokenAndSecret: false,
           paymentSession: response.reference,
         },
       };
 
-      const stringifySettings = JSON.stringify(updatedSettings);
-      await setItem(stringifySettings);
+      setSettings(updatedSettings);
     } else {
       throw new Error('Failed to create payment session.');
     }
