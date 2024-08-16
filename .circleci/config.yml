@@ -228,7 +228,7 @@ commands:
     description: Install Android SDK
     steps:
       - brew_install:
-          tools: 'android-commandlinetools'
+          tools: 'openjdk@17 android-commandlinetools'
       - run:
           name: Configuring Environment Variables
           command: |
@@ -236,7 +236,7 @@ commands:
             echo 'export ANDROID_HOME="/opt/homebrew/share/android-commandlinetools"' >> $BASH_ENV
             echo 'export ANDROID_SDK_ROOT="/opt/homebrew/share/android-commandlinetools"' >> $BASH_ENV
             echo 'export PATH="$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH"' >> $BASH_ENV
-            echo 'export JAVA_HOME=$(/usr/libexec/java_home)' >> $BASH_ENV
+            echo 'export JAVA_HOME=$(/opt/homebrew/opt/openjdk@17/bin/java)' >> $BASH_ENV
             source $BASH_ENV
       - run:
           name: Accepting Android Licenses
