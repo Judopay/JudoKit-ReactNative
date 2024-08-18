@@ -228,7 +228,7 @@ commands:
     description: Install Android SDK
     steps:
       - brew_install:
-          tools: '--cask temurin17 android-commandlinetools'
+          tools: '--cask temurin@17 android-commandlinetools'
       - run:
           name: Configuring Environment Variables
           command: |
