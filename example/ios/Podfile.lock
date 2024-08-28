@@ -14,7 +14,7 @@ PODS:
     - Judo3DS2_iOS (= 1.2.2)
     - RavelinEncrypt (= 1.1.2)
     - TrustKit (~> 3.0.4)
-  - JudoKit-ReactNative (4.3.4):
+  - JudoKit-ReactNative (4.3.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1498,11 +1498,11 @@ SPEC CHECKSUMS:
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
+  glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 8c1577f3fdb849cbe7729c2e7b5abc4b845e88f8
   Judo3DS2_iOS: a9c732bc4bd72faf16c0594eed6bc30d02cdcebc
   JudoKit-iOS: 16618cca92aaed856da8fbfe6c35c5b2350531ad
-  JudoKit-ReactNative: 303d1a9b504bf5dd1f8f30ede98ee237e58c09f8
+  JudoKit-ReactNative: 684bebaaae88756d135e32a26000255097b5eb82
   MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
   MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
   RavelinEncrypt: ea533da1cb48ccf84382cb161979b27bfb23d467
