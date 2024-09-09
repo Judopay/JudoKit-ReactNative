@@ -418,6 +418,9 @@ jobs:
           command: |
             adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
       - run:
+          name: Check simulator is running
+          command: adb devices
+      - run:
           name: Run the tests
           working_directory: example
           command: |
