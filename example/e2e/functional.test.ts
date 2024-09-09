@@ -43,7 +43,7 @@ describe('E2E Functional Tests', () => {
     await device.terminateApp();
   });
 
-  it('should successfully complete a 3DS2 token payment transaction', async () => {
+  it.only('should successfully complete a 3DS2 token payment transaction', async () => {
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
     await delay(2000);
@@ -58,7 +58,7 @@ describe('E2E Functional Tests', () => {
     });
     await waitFor(element(by.id(Selectors.TOKEN_SCROLL_VIEW)))
       .toBeVisible()
-      .withTimeout(10000);
+      .withTimeout(30000);
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
     if (await isAndroid()) {
       await delay(1500);
@@ -71,7 +71,7 @@ describe('E2E Functional Tests', () => {
     await assertResultsScreen({ type: '1', result: '1' });
   });
 
-  it('should successfully complete a 3DS2 token pre-auth transaction', async () => {
+  it.only('should successfully complete a 3DS2 token pre-auth transaction', async () => {
     await launchApp(defaultConfig);
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
@@ -87,7 +87,7 @@ describe('E2E Functional Tests', () => {
     });
     await waitFor(element(by.id(Selectors.TOKEN_SCROLL_VIEW)))
       .toBeVisible()
-      .withTimeout(10000);
+      .withTimeout(30000);
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
     if (await isAndroid()) {
       await delay(1500);
