@@ -56,6 +56,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    await waitFor(element(by.id(Selectors.TOKEN_SCROLL_VIEW)))
+      .toBeVisible()
+      .withTimeout(10000);
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
     if (await isAndroid()) {
       await delay(1500);
@@ -82,6 +85,9 @@ describe('E2E Functional Tests', () => {
       expiry: TestData.EXPIRY_DATE,
       code: TestData.SECURITY_CODE,
     });
+    await waitFor(element(by.id(Selectors.TOKEN_SCROLL_VIEW)))
+      .toBeVisible()
+      .withTimeout(10000);
     await element(by.id(Selectors.TOKEN_SCROLL_VIEW)).scrollTo('bottom');
     if (await isAndroid()) {
       await delay(1500);

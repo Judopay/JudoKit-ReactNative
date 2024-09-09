@@ -510,9 +510,9 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - CT-2978-address-test-flakiness
       - run_e2e_android:
           filters:
             branches:
               only:
-                - master
+                - CT-2978-address-test-flakiness

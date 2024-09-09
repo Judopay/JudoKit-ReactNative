@@ -124,6 +124,9 @@ export async function addCardPaymentMethodAndPay() {
     await device.disableSynchronization();
     await element(by.id(Selectors.ANDROID_METHODS_PAY_NOW)).tap();
   } else {
+    await waitFor(element(by.text(Selectors.IOS_PAY_NOW)))
+      .toBeVisible()
+      .withTimeout(10000);
     await element(by.text(Selectors.IOS_PAY_NOW)).tap();
   }
   await fillSecurityCodeSheet();
