@@ -167,6 +167,9 @@ export async function setNoPreferenceCRI() {
 }
 
 export async function clickSettingsButton() {
+  await waitFor(element(by.id(Selectors.SETTINGS_BUTTON)))
+    .toBeVisible()
+    .withTimeout(10000);
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
 }
 
