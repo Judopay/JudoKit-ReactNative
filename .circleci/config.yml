@@ -412,7 +412,7 @@ jobs:
           avd-name: Pixel_3a_API_34_x86_64
           no-window: true
           restore-gradle-cache-prefix: v1a
-          post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
+          post-emulator-launch-assemble-command: 'echo "Emulator is ready" & adb logcat *:E'
       - run:
           name: Disable gesture navigation
           command: |
@@ -427,7 +427,6 @@ jobs:
             yarn start &
             yarn detox:build:android
             yarn detox:test:android
-            adb shell logcat
       - android/save-gradle-cache:
           cache-prefix: v1a
       - store_artifacts:
