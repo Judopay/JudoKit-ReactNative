@@ -427,6 +427,7 @@ jobs:
             yarn start &
             yarn detox:build:android
             yarn detox:test:android
+            adb shell logcat
       - android/save-gradle-cache:
           cache-prefix: v1a
       - store_artifacts:
