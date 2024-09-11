@@ -406,6 +406,7 @@ jobs:
           avd-name: Pixel_8_API_34_x86_64
           system-image: system-images;android-34;google_apis;x86_64
           install: true
+          additional-args: '-memory 4096'
       - setup_avd_screen_size:
           avd_name: Pixel_8_API_34_x86_64
       - android/start-emulator:
