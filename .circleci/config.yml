@@ -414,6 +414,10 @@ jobs:
           restore-gradle-cache-prefix: v1a
           post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
       - run:
+          name: Logcat
+          command: adb -s emulator-5554 logcat
+          background: true
+      - run:
           name: Disable gesture navigation
           command: |
             adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
@@ -426,7 +430,6 @@ jobs:
           command: |
             yarn start &
             yarn detox:build:android
-            /opt/android/sdk/platform-tools/adb -s emulator-5554 shell "ps | grep \"com\.judopay\.wallet$\""
             yarn detox:test:android
       - android/save-gradle-cache:
           cache-prefix: v1a
