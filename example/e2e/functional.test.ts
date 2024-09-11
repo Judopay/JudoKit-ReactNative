@@ -29,12 +29,14 @@ import {
 
 describe('E2E Functional Tests', () => {
   beforeAll(async () => {
+    await device.takeScreenshot('Before launching app');
     await device.launchApp({
       permissions: { camera: 'YES', location: 'always' },
       launchArgs: {
         customSettings: defaultConfig,
       },
     });
+    await device.takeScreenshot('Before tapping settings');
     await clickSettingsButton();
     await pressBackButton();
   });
@@ -43,7 +45,7 @@ describe('E2E Functional Tests', () => {
     await device.terminateApp();
   });
 
-  it.only('should successfully complete a 3DS2 token payment transaction', async () => {
+  it('should successfully complete a 3DS2 token payment transaction', async () => {
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
     await delay(2000);
@@ -71,7 +73,7 @@ describe('E2E Functional Tests', () => {
     await assertResultsScreen({ type: '1', result: '1' });
   });
 
-  it.only('should successfully complete a 3DS2 token pre-auth transaction', async () => {
+  it('should successfully complete a 3DS2 token pre-auth transaction', async () => {
     await launchApp(defaultConfig);
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
@@ -100,7 +102,7 @@ describe('E2E Functional Tests', () => {
     await assertResultsScreen({ type: '2', result: '1' });
   });
 
-  it('should successfully complete a 3DS2 payment transaction', async () => {
+  it.only('should successfully complete a 3DS2 payment transaction', async () => {
     await launchApp(defaultConfig);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
