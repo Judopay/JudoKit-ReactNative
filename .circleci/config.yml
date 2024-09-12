@@ -404,14 +404,13 @@ jobs:
       - android/accept-licenses
       - android/create-avd:
           avd-name: Pixel_3a_API_34_x86_64
-          system-image: system-images;android-34;default;x86_64
+          system-image: system-images;android-34;google_apis;x86_64
           install: true
       - setup_avd_screen_size:
           avd_name: Pixel_3a_API_34_x86_64
       - android/start-emulator:
           avd-name: Pixel_3a_API_34_x86_64
           no-window: true
-          restore-gradle-cache-prefix: v1a
           memory: 4096
           gpu: 'host'
           run-logcat: true
@@ -420,15 +419,6 @@ jobs:
           name: Disable gesture navigation
           command: |
             adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
-      - run:
-          name: Check simulator is running
-          command: adb devices
-      - run:
-          name: Try with Test Butler approach
-          command: |
-            curl -f -o ~/test-butler-2.2.1.apk https://repo1.maven.org/maven2/com/linkedin/testbutler/test-butler-app/2.2.1/test-butler-app-2.2.1.apk
-            adb install ~/test-butler-2.2.1.apk
-            adb shell am startservice com.linkedin.android.testbutler/com.linkedin.android.testbutler.ButlerService
       - run:
           name: Run the tests
           working_directory: example
