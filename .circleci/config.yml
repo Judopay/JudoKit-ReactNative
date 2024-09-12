@@ -403,13 +403,13 @@ jobs:
       - yarn_install
       - android/accept-licenses
       - android/create-avd:
-          avd-name: Pixel_6_API_34_x86_64
+          avd-name: Pixel_3a_API_34_x86_64
           system-image: system-images;android-34;google_apis;x86_64
           install: true
       - setup_avd_screen_size:
-          avd_name: Pixel_6_API_34_x86_64
+          avd_name: Pixel_3a_API_34_x86_64
       - android/start-emulator:
-          avd-name: Pixel_6_API_34_x86_64
+          avd-name: Pixel_3a_API_34_x86_64
           no-window: true
           restore-gradle-cache-prefix: v1a
           memory: 4096
@@ -423,6 +423,9 @@ jobs:
       - run:
           name: Check simulator is running
           command: adb devices
+      - run:
+          name: Set UI as debug app to prevent dialogs
+          command: adb shell am set-debug-app com.android.systemui
       - run:
           name: Run the tests
           working_directory: example
