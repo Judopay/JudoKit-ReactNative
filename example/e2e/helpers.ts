@@ -43,6 +43,9 @@ export async function fillPaymentDetailsSheet(props: CardDetails) {
       by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button']))
     ).tap();
   } else {
+    await waitFor(element(by.id(Selectors.ANDROID_CARD)))
+      .toBeVisible()
+      .withTimeout(30000);
     await element(by.id(Selectors.ANDROID_CARD)).replaceText(props.number);
     await element(by.id(Selectors.ANDROID_NAME)).replaceText(props.name);
     await element(by.id(Selectors.ANDROID_EXPIRY)).replaceText(props.expiry);
