@@ -413,11 +413,9 @@ jobs:
           no-window: true
           restore-gradle-cache-prefix: v1a
           memory: 4096
+          gpu: 'host'
+          run-logcat: true
           post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
-      - run:
-          name: Logcat
-          command: adb -s emulator-5554 logcat
-          background: true
       - run:
           name: Disable gesture navigation
           command: |
