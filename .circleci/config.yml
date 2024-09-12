@@ -424,36 +424,12 @@ jobs:
           name: Check simulator is running
           command: adb devices
       - run:
-          name: Dismiss dialogs
+          name: Try with Test Butler approach
           command: |
-            echo ""
-            echo "[Waiting for launcher to start]"
-            LAUNCHER_READY=
-            while [[ -z ${LAUNCHER_READY} ]]; do
-                UI_FOCUS=`adb shell dumpsys window windows 2>/dev/null | grep -i mCurrentFocus`
-                echo "(DEBUG) Current focus: ${UI_FOCUS}"
-
-                case $UI_FOCUS in
-                *"Launcher"*)
-                    LAUNCHER_READY=true
-                ;;
-                "")
-                    echo "Waiting for window service..."
-                    sleep 3
-                ;;
-                *"Not Responding"*)
-                    echo "Detected an ANR! Dismissing..."
-                    adb shell input keyevent KEYCODE_DPAD_DOWN
-                    adb shell input keyevent KEYCODE_DPAD_DOWN
-                    adb shell input keyevent KEYCODE_ENTER
-                ;;
-                *)
-                    echo "Waiting for launcher..."
-                    sleep 3
-                ;;
-                esac
-            done
-            echo "Launcher is ready"
+            curl -f -o ~/test-butler-2.2.1.apk https://repo1.maven.org/maven2/com/linkedin/testbutler/test-butler-app/2.2.1/test-butler-app-2.2.1.apk
+            adb install ~/test-butler-2.2.1.apk
+            adb shell am startservice com.linkedin.android.testbutler/com.linkedin.android.testbutler.ButlerService
+            adb shell ps | grep butler
       - run:
           name: Run the tests
           working_directory: example
