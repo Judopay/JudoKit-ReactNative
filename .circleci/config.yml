@@ -404,7 +404,7 @@ jobs:
       - android/accept-licenses
       - android/create-avd:
           avd-name: Pixel_3a_API_34_x86_64
-          system-image: system-images;android-34;google_apis;x86_64
+          system-image: system-images;android-34;default;x86_64
           install: true
       - setup_avd_screen_size:
           avd_name: Pixel_3a_API_34_x86_64
