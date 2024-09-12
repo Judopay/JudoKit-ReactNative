@@ -429,7 +429,6 @@ jobs:
             curl -f -o ~/test-butler-2.2.1.apk https://repo1.maven.org/maven2/com/linkedin/testbutler/test-butler-app/2.2.1/test-butler-app-2.2.1.apk
             adb install ~/test-butler-2.2.1.apk
             adb shell am startservice com.linkedin.android.testbutler/com.linkedin.android.testbutler.ButlerService
-            adb shell ps | grep butler
       - run:
           name: Run the tests
           working_directory: example
