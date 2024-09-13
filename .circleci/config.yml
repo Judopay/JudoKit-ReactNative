@@ -420,6 +420,10 @@ jobs:
           command: |
             adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
       - run:
+          name: Try and dismiss any dialogs
+          working_directory: example
+          command: bash handledialog.sh
+      - run:
           name: Run the tests
           working_directory: example
           command: |
