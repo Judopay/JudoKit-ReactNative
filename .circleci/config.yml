@@ -423,6 +423,7 @@ jobs:
           name: Try and dismiss any dialogs
           working_directory: example
           command: bash handledialog.sh
+          background: true
       - run:
           name: Run the tests
           working_directory: example

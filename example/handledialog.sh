@@ -1,8 +1,4 @@
 #!/bin/bash
-
-echo "[Waiting for emulator to finish booting]"
-android-wait-for-emulator
-
 echo ""
 echo "[Waiting for launcher to start]"
 LAUNCHER_READY=
