@@ -419,6 +419,11 @@ jobs:
           name: Disable gesture navigation
           command: |
             adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
+      - run:
+          name: Dismiss dialogs
+          command: |
+            adb shell dumpsys window windows | grep -E 'isn't responding' && adb shell input keyevent 61 && adb shell input keyevent 66 || true
+            adb exec-out screencap -p > example/artifacts/screen.png
       # - run:
       #     name: Try and dismiss any dialogs
       #     working_directory: example
@@ -429,7 +434,6 @@ jobs:
           working_directory: example
           command: |
             adb shell dumpsys window windows | grep -E 'has stopped' && adb shell input keyevent 61 && adb shell input keyevent 66 || true
-            adb shell dumpsys window windows | grep -E 'Not Responding' && adb shell input keyevent 61  && adb shell input keyevent 61  && adb shell input keyevent 66 || true
             yarn start &
             yarn detox:build:android
             yarn detox:test:android
