@@ -422,7 +422,7 @@ jobs:
       - run:
           name: Dismiss dialogs
           command: |
-            adb shell dumpsys window windows | grep -E 'isn't responding' && adb shell input keyevent 61 && adb shell input keyevent 66 || true
+            adb shell dumpsys window windows | grep -E "isn't responding" && adb shell input keyevent 61 && adb shell input keyevent 66 || true
             adb exec-out screencap -p > example/artifacts/screen.png
       # - run:
       #     name: Try and dismiss any dialogs
