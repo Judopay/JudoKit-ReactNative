@@ -403,15 +403,16 @@ jobs:
       - yarn_install
       - android/accept-licenses
       - android/create-avd:
-          avd-name: Pixel_3a_API_32_x86_64
+          avd-name: Pixel_4_API_32_x86_64
           system-image: system-images;android-32;google_apis;x86_64
           install: true
       - setup_avd_screen_size:
-          avd_name: Pixel_3a_API_32_x86_64
+          avd_name: Pixel_4_API_32_x86_64
       - android/start-emulator:
-          avd-name: Pixel_3a_API_32_x86_64
+          avd-name: Pixel_4_API_32_x86_64
           no-window: true
           memory: 8192
+          gpu: 'host'
           run-logcat: true
           wait-for-emulator: true
           post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
