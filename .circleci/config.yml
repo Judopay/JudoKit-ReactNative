@@ -423,9 +423,9 @@ jobs:
           name: Dismiss dialogs
           command: |
             adb shell dumpsys window windows
-            adb shell input keyevent 61 && adb shell input keyevent 66 || true
-            adb shell input keyevent 61 && adb shell input keyevent 66 || true
-            adb shell input keyevent 61 && adb shell input keyevent 66 || true
+            adb shell input keyevent 61 && adb shell input keyevent 61 && adb shell input keyevent 66 || true
+            adb shell input keyevent 61 && adb shell input keyevent 61 && adb shell input keyevent 66 || true
+            adb shell input keyevent 61 && adb shell input keyevent 61 && adb shell input keyevent 66 || true
       # - run:
       #     name: Try and dismiss any dialogs
       #     working_directory: example
