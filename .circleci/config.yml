@@ -271,15 +271,15 @@ commands:
       width:
         description: The width of the screen in pixels
         type: string
-        default: '1440'
+        default: '1080'
       height:
         description: The height of the screen in pixels
         type: string
-        default: '2560'
+        default: '2220'
       density:
         description: The screen density in DPI
         type: string
-        default: '480'
+        default: '440'
       size:
         description: The screen size type
         type: string
