@@ -4,10 +4,8 @@ import {
   assertResultsScreen,
   clickSettingsButton,
   fillPaymentDetailsSheet,
-  defaultConfig,
   pressBackButton,
   noPrefsConfig,
-  launchApp,
   disableSync,
 } from './helpers';
 
@@ -16,7 +14,7 @@ describe('E2E Frictionless Tests', () => {
     await device.launchApp({
       permissions: { camera: 'YES', location: 'always' },
       launchArgs: {
-        customSettings: defaultConfig,
+        customSettings: noPrefsConfig,
       },
     });
     await clickSettingsButton();
@@ -28,7 +26,6 @@ describe('E2E Frictionless Tests', () => {
   });
 
   it('should successfully complete a 3DS2 payment frictionless no method transaction', async () => {
-    await launchApp(noPrefsConfig);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -41,7 +38,6 @@ describe('E2E Frictionless Tests', () => {
   });
 
   it('should return error upon a 3DS2 payment frictionless auth failed transaction', async () => {
-    await launchApp(noPrefsConfig);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,

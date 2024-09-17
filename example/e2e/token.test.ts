@@ -11,7 +11,6 @@ import {
   isAndroid,
   defaultConfig,
   pressBackButton,
-  launchApp,
   disableSync,
 } from './helpers';
 
@@ -60,7 +59,6 @@ describe('E2E Token Payment Tests', () => {
   });
 
   it('should successfully complete a 3DS2 token pre-auth transaction', async () => {
-    await launchApp(defaultConfig);
     await element(by.id(Selectors.FEATURE_LIST)).scrollTo('bottom');
     await element(by.text(Selectors.TOKEN_PAYMENTS)).tap();
     await delay(2000);

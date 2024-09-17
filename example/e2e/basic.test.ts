@@ -7,7 +7,6 @@ import {
   fillPaymentDetailsSheet,
   defaultConfig,
   pressBackButton,
-  launchApp,
   disableSync,
 } from './helpers';
 
@@ -28,7 +27,6 @@ describe('E2E Basic Transactions Tests', () => {
   });
 
   it('should successfully complete a 3DS2 payment transaction', async () => {
-    await launchApp(defaultConfig);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -42,7 +40,6 @@ describe('E2E Basic Transactions Tests', () => {
   });
 
   it('should successfully complete a 3DS2 pre-auth transaction', async () => {
-    await launchApp(defaultConfig);
     await element(by.text(Selectors.PAY_WITH_PREAUTH)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -56,7 +53,6 @@ describe('E2E Basic Transactions Tests', () => {
   });
 
   it('should successfully complete a 3DS2 register card transaction', async () => {
-    await launchApp(defaultConfig);
     await element(by.text(Selectors.REGISTER_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -70,7 +66,6 @@ describe('E2E Basic Transactions Tests', () => {
   });
 
   it('should successfully complete a 3DS2 check card transaction', async () => {
-    await launchApp(defaultConfig);
     await element(by.text(Selectors.CHECK_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,

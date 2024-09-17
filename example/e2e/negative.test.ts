@@ -8,7 +8,6 @@ import {
   isAndroid,
   defaultConfig,
   pressBackButton,
-  launchApp,
   disableSync,
 } from './helpers';
 
@@ -29,7 +28,6 @@ describe('E2E Negative Flow Tests', () => {
   });
 
   it('should return error message upon a failed 3DS2 payment transaction', async () => {
-    await launchApp(defaultConfig);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.FAILED_CARD_NUMBER,
@@ -46,7 +44,6 @@ describe('E2E Negative Flow Tests', () => {
   });
 
   it('should return error message upon a declined 3DS2 payment transaction', async () => {
-    await launchApp(defaultConfig);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
@@ -61,7 +58,6 @@ describe('E2E Negative Flow Tests', () => {
   });
 
   it('should handle a 3DS2 payment transaction verification cancellation', async () => {
-    await launchApp(defaultConfig);
     await element(by.text(Selectors.PAY_WITH_CARD)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,

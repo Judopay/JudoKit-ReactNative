@@ -17,7 +17,6 @@ import {
   getBillingInfoEmail,
   getBillingInfoPhone,
   getBillingInfoAddress,
-  defaultConfig,
   pressBackButton,
   billingInfoConfig,
   launchApp,
@@ -29,7 +28,7 @@ describe('E2E Billing Info Tests', () => {
     await device.launchApp({
       permissions: { camera: 'YES', location: 'always' },
       launchArgs: {
-        customSettings: defaultConfig,
+        customSettings: billingInfoConfig,
       },
     });
     await clickSettingsButton();

@@ -6,10 +6,8 @@ import {
   complete3DS2,
   fillPaymentDetailsSheet,
   delay,
-  defaultConfig,
   pressBackButton,
   noPrefsConfig,
-  launchApp,
   disableSync,
 } from './helpers';
 
@@ -18,7 +16,7 @@ describe('E2E Step Up Tests', () => {
     await device.launchApp({
       permissions: { camera: 'YES', location: 'always' },
       launchArgs: {
-        customSettings: defaultConfig,
+        customSettings: noPrefsConfig,
       },
     });
     await clickSettingsButton();
@@ -30,7 +28,6 @@ describe('E2E Step Up Tests', () => {
   });
 
   it('should successfully complete a step up payment transaction', async () => {
-    await launchApp(noPrefsConfig);
     await clickSettingsButton();
     await delay(2000);
     await pressBackButton();
@@ -52,7 +49,6 @@ describe('E2E Step Up Tests', () => {
   });
 
   it('should successfully complete a step up preauth transaction', async () => {
-    await launchApp(noPrefsConfig);
     await element(by.text(Selectors.PAY_WITH_PREAUTH)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,
