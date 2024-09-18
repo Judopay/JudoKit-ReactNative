@@ -414,6 +414,7 @@ jobs:
           gpu: 'host'
           run-logcat: true
           wait-for-emulator: true
+          restore-gradle-cache-prefix: v1a
           post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
       - run:
           name: Run the tests
