@@ -9,6 +9,7 @@ import {
   pressBackButton,
   noPrefsConfig,
   disableSync,
+  launchApp,
 } from './helpers';
 
 describe('E2E Step Up Tests', () => {
@@ -49,6 +50,7 @@ describe('E2E Step Up Tests', () => {
   });
 
   it('should successfully complete a step up preauth transaction', async () => {
+    await launchApp(noPrefsConfig);
     await element(by.text(Selectors.PAY_WITH_PREAUTH)).tap();
     await fillPaymentDetailsSheet({
       number: TestData.CARD_NUMBER,

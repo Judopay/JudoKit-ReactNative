@@ -1,4 +1,4 @@
-import { element } from 'detox';
+import { element, expect } from 'detox';
 import { Selectors, TestData, UserFeedback } from './constants';
 import {
   assertResultsScreen,
@@ -9,7 +9,6 @@ import {
   delay,
   isAndroid,
   fillBillingInfoFields,
-  assertErrorLabelText,
   billingInfoCity,
   billingInfoPostCode,
   billingInfoCountry,
@@ -40,7 +39,6 @@ describe('E2E Billing Info Tests', () => {
   });
 
   it('should successfully complete a transaction with billing details', async () => {
-    await launchApp(billingInfoConfig);
     await clickSettingsButton();
     await delay(2000);
     await pressBackButton();
@@ -82,7 +80,9 @@ describe('E2E Billing Info Tests', () => {
     );
     await element(by.id(await billingInfoCity())).tap();
     await delay(2000);
-    await assertErrorLabelText(UserFeedback.INVALID_POSTCODE_ERROR);
+    await expect(
+      element(by.text(UserFeedback.INVALID_POSTCODE_ERROR))
+    ).toExist();
   });
 
   it('should validate US post code entry', async () => {
@@ -104,7 +104,9 @@ describe('E2E Billing Info Tests', () => {
     );
     await delay(1500);
     await blurSelection();
-    await assertErrorLabelText(UserFeedback.INVALID_ZIPCODE_ERROR);
+    await expect(
+      element(by.text(UserFeedback.INVALID_ZIPCODE_ERROR))
+    ).toExist();
   });
 
   it('should validate CA post code entry', async () => {
@@ -122,9 +124,11 @@ describe('E2E Billing Info Tests', () => {
     await element(by.id(await billingInfoPostCode())).typeText(
       TestData.INVALID_POST_CODE
     );
-    await delay(2000);
+    await delay(1500);
     await blurSelection();
-    await assertErrorLabelText(UserFeedback.INVALID_POSTCODE_ERROR);
+    await expect(
+      element(by.text(UserFeedback.INVALID_POSTCODE_ERROR))
+    ).toExist();
   });
 
   it('should validate email entry', async () => {
@@ -142,7 +146,7 @@ describe('E2E Billing Info Tests', () => {
       TestData.CARDHOLDER_NAME
     );
     await blurSelection();
-    await assertErrorLabelText(UserFeedback.INVALID_EMAIL_LABEL);
+    await expect(element(by.text(UserFeedback.INVALID_EMAIL_LABEL))).toExist();
   });
 
   it('should validate phone number entry', async () => {
@@ -165,7 +169,7 @@ describe('E2E Billing Info Tests', () => {
       TestData.DECLINED_CODE
     );
     await element(by.id(await getBillingInfoEmail())).tap();
-    await assertErrorLabelText(UserFeedback.INVALID_PHONE_LABEL);
+    await expect(element(by.text(UserFeedback.INVALID_PHONE_LABEL))).toExist();
   });
 
   it('should validate address entry', async () => {
@@ -188,7 +192,9 @@ describe('E2E Billing Info Tests', () => {
       TestData.SPECIAL_CHARACTERS
     );
     await blurSelection();
-    await assertErrorLabelText(UserFeedback.INVALID_ADDRESS_LABEL);
+    await expect(
+      element(by.text(UserFeedback.INVALID_ADDRESS_LABEL))
+    ).toExist();
   });
 
   it('should validate city entry', async () => {
@@ -211,6 +217,6 @@ describe('E2E Billing Info Tests', () => {
       TestData.SPECIAL_CHARACTERS
     );
     await blurSelection();
-    await assertErrorLabelText(UserFeedback.INVALID_CITY_LABEL);
+    await expect(element(by.text(UserFeedback.INVALID_CITY_LABEL))).toExist();
   });
 });
