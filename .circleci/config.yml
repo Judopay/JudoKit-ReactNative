@@ -271,15 +271,15 @@ commands:
       width:
         description: The width of the screen in pixels
         type: string
-        default: '1440'
+        default: '1080'
       height:
         description: The height of the screen in pixels
         type: string
-        default: '2560'
+        default: '2220'
       density:
         description: The screen density in DPI
         type: string
-        default: '480'
+        default: '440'
       size:
         description: The screen size type
         type: string
@@ -403,20 +403,19 @@ jobs:
       - yarn_install
       - android/accept-licenses
       - android/create-avd:
-          avd-name: Pixel_3a_API_34_x86_64
-          system-image: system-images;android-34;google_apis;x86_64
+          avd-name: Pixel_3_API_34_x86_64
+          system-image: system-images;android-34;google_atd;x86_64
           install: true
       - setup_avd_screen_size:
-          avd_name: Pixel_3a_API_34_x86_64
+          avd_name: Pixel_3_API_34_x86_64
       - android/start-emulator:
-          avd-name: Pixel_3a_API_34_x86_64
-          no-window: true
+          avd-name: Pixel_3_API_34_x86_64
+          memory: 4096
+          gpu: 'host'
+          run-logcat: true
+          wait-for-emulator: true
           restore-gradle-cache-prefix: v1a
           post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
-      - run:
-          name: Disable gesture navigation
-          command: |
-            adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
       - run:
           name: Run the tests
           working_directory: example

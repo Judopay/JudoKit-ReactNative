@@ -43,6 +43,9 @@ export async function fillPaymentDetailsSheet(props: CardDetails) {
       by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button']))
     ).tap();
   } else {
+    await waitFor(element(by.id(Selectors.ANDROID_CARD)))
+      .toBeVisible()
+      .withTimeout(30000);
     await element(by.id(Selectors.ANDROID_CARD)).replaceText(props.number);
     await element(by.id(Selectors.ANDROID_NAME)).replaceText(props.name);
     await element(by.id(Selectors.ANDROID_EXPIRY)).replaceText(props.expiry);
@@ -124,6 +127,9 @@ export async function addCardPaymentMethodAndPay() {
     await device.disableSynchronization();
     await element(by.id(Selectors.ANDROID_METHODS_PAY_NOW)).tap();
   } else {
+    await waitFor(element(by.text(Selectors.IOS_PAY_NOW)))
+      .toBeVisible()
+      .withTimeout(10000);
     await element(by.text(Selectors.IOS_PAY_NOW)).tap();
   }
   await fillSecurityCodeSheet();
@@ -164,6 +170,9 @@ export async function setNoPreferenceCRI() {
 }
 
 export async function clickSettingsButton() {
+  await waitFor(element(by.id(Selectors.SETTINGS_BUTTON)))
+    .toBeVisible()
+    .withTimeout(10000);
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
 }
 
