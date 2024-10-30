@@ -397,7 +397,7 @@ export async function disableSync() {
   }
 }
 
-export async function setupRavelinConfig(url: string) {
+export async function setupRavelinConfigWithURL(url: string) {
   const recommendationURL = process.env.RAVELIN_REC_URL;
   const ravelinConfig = processJSONFile('./configs/ravelin.json', {
     apiConfiguration: {

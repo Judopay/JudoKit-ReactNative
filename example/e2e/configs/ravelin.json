@@ -203,7 +203,7 @@
     "shouldAskForCardholderName": false
   },
   "recommendation": {
-    "isOn": false,
+    "isOn": true,
     "url": "",
     "rsaPublicKey": "",
     "timeout": "",

@@ -122,6 +122,7 @@ export enum Selectors {
   PREAUTH_METHODS = 'PreAuth methods',
   HELPER_TEXT = 'help-steps-list',
   GENERATE_PAYMENT_SESSION = 'generateSessionButton',
+  SESSION_CREATED_TOAST = 'Payment session created.',
 }
 
 export enum UserFeedback {
