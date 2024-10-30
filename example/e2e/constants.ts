@@ -121,6 +121,7 @@ export enum Selectors {
   PAYMENT_METHODS = 'Payment methods',
   PREAUTH_METHODS = 'PreAuth methods',
   HELPER_TEXT = 'help-steps-list',
+  GENERATE_PAYMENT_SESSION = 'generateSessionButton',
 }
 
 export enum UserFeedback {
