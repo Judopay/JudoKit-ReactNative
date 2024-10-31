@@ -502,7 +502,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - CT-2890-implement-ravelin-ui-tests
       - run_e2e_ios:
           requires:
             - checkout_project
