@@ -31,6 +31,11 @@ export interface BillingDetails {
   state?: string;
 }
 
+export interface ravelinConfig {
+  url: string;
+  haltTransaction?: boolean;
+}
+
 let billingInfoEnabled = false;
 
 export async function fillPaymentDetailsSheet(props: CardDetails) {
@@ -382,6 +387,7 @@ export const billingInfoConfig = processJSONFile('./configs/billingInfo.json', {
 
 export async function launchApp(config: string) {
   await device.launchApp({
+    permissions: { camera: 'YES', location: 'always' },
     launchArgs: {
       customSettings: config,
     },
@@ -397,7 +403,7 @@ export async function disableSync() {
   }
 }
 
-export async function setupRavelinConfigWithURL(url: string) {
+export async function setupRavelinConfigWithURL(config: ravelinConfig) {
   const recommendationURL = process.env.RAVELIN_REC_URL;
   const ravelinConfig = processJSONFile('./configs/ravelin.json', {
     apiConfiguration: {
@@ -414,9 +420,9 @@ export async function setupRavelinConfigWithURL(url: string) {
     },
     recommendation: {
       isOn: true,
-      url: recommendationURL + url,
+      url: recommendationURL + config.url,
       rsaPublicKey: process.env.RAVELIN_RSA_KEY,
-      haltTransactionInCaseOfAnyError: false,
+      haltTransactionInCaseOfAnyError: config.haltTransaction,
     },
   });
   return ravelinConfig;
@@ -424,8 +430,4 @@ export async function setupRavelinConfigWithURL(url: string) {
 
 export async function tapGenerateSessionButton() {
   await element(by.id(Selectors.GENERATE_PAYMENT_SESSION)).tap();
-}
-
-export async function updateRecommendationURLWith() {
-  await tapGenerateSessionButton();
 }

@@ -18,10 +18,11 @@ describe('E2E Ravelin Tests', () => {
   });
 
   it('should successfully perform prevented transaction', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL('7');
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '7' });
     await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
+    await delay(1000);
     await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
       .toBeVisible()
       .withTimeout(10000);
@@ -42,10 +43,11 @@ describe('E2E Ravelin Tests', () => {
   });
 
   it('should successfully perform review with challenge transaction', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL('25');
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '25' });
     await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
+    await delay(1000);
     await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
       .toBeVisible()
       .withTimeout(10000);
@@ -63,10 +65,11 @@ describe('E2E Ravelin Tests', () => {
   });
 
   it('should successfully perform allow no preference transaction', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL('19');
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '19' });
     await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
+    await delay(1000);
     await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
       .toBeVisible()
       .withTimeout(10000);
@@ -83,10 +86,11 @@ describe('E2E Ravelin Tests', () => {
   });
 
   it('should successfully perform review no challenge transaction', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL('24');
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '24' });
     await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
+    await delay(1000);
     await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
       .toBeVisible()
       .withTimeout(10000);
@@ -103,10 +107,35 @@ describe('E2E Ravelin Tests', () => {
   });
 
   it('should successfully perform allow challenge as mandate transaction', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL('18');
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '18' });
     await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
+    await delay(1000);
+    await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await disableSync();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await disableSync();
+    await complete3DS2();
+    await assertResultsScreen({ type: '1', result: '1' });
+  });
+
+  it('should successfully perform transaction without sending CRI', async () => {
+    let ravelinConfig = await setupRavelinConfigWithURL({
+      url: '35',
+    });
+    await launchApp(ravelinConfig);
+    await clickSettingsButton();
+    await tapGenerateSessionButton();
+    await delay(1000);
     await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
       .toBeVisible()
       .withTimeout(10000);
@@ -120,5 +149,129 @@ describe('E2E Ravelin Tests', () => {
     });
     await disableSync();
     await assertResultsScreen({ type: '1', result: '1' });
+  });
+
+  it('should successfully perform transaction without sending SCA', async () => {
+    let ravelinConfig = await setupRavelinConfigWithURL({
+      url: '60',
+    });
+    await launchApp(ravelinConfig);
+    await clickSettingsButton();
+    await tapGenerateSessionButton();
+    await delay(1000);
+    await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await disableSync();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await disableSync();
+    await assertResultsScreen({ type: '1', result: '1' });
+  });
+
+  it('should successfully perform transaction without sending both SCA and CRI', async () => {
+    let ravelinConfig = await setupRavelinConfigWithURL({
+      url: '71',
+    });
+    await launchApp(ravelinConfig);
+    await clickSettingsButton();
+    await tapGenerateSessionButton();
+    await delay(1000);
+    await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await disableSync();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await disableSync();
+    await complete3DS2();
+    await assertResultsScreen({ type: '1', result: '1' });
+  });
+
+  it('should successfully perform transaction using SDK configuration', async () => {
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '78' });
+    await launchApp(ravelinConfig);
+    await clickSettingsButton();
+    await tapGenerateSessionButton();
+    await delay(1000);
+    await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await disableSync();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await disableSync();
+    await complete3DS2();
+    await assertResultsScreen({ type: '1', result: '1' });
+  });
+
+  it('should successfully prevent transaction with empty object', async () => {
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '67' });
+    await launchApp(ravelinConfig);
+    await clickSettingsButton();
+    await tapGenerateSessionButton();
+    await delay(1000);
+    await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await disableSync();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await delay(2500);
+    await expect(
+      element(
+        by.text('The recommendation server has prevented this transaction.')
+      )
+    ).toBeVisible();
+  });
+
+  it('should successfully halt transaction with settings switch', async () => {
+    let ravelinConfig = await setupRavelinConfigWithURL({
+      url: '5',
+      haltTransaction: true,
+    });
+    await launchApp(ravelinConfig);
+    await clickSettingsButton();
+    await tapGenerateSessionButton();
+    await delay(1000);
+    await waitFor(element(by.text(Selectors.SESSION_CREATED_TOAST)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await disableSync();
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await delay(2500);
+    await expect(
+      element(
+        by.text(
+          'There was an error when retrieving the recommendation response.'
+        )
+      )
+    ).toBeVisible();
   });
 });
