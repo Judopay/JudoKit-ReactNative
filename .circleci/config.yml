@@ -391,8 +391,8 @@ jobs:
             yarn detox:test:ios
       - store_artifacts:
           path: example/artifacts
-      - notify_slack_error_ios
-      - notify_slack_pass_ios
+      # - notify_slack_error_ios
+      # - notify_slack_pass_ios
   run_e2e_android:
     executor:
       name: android/android-machine
@@ -509,7 +509,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - CT-2890-implement-ravelin-ui-tests
       - run_e2e_android:
           filters:
             branches:

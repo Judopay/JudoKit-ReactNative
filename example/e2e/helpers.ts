@@ -147,6 +147,9 @@ export async function clickSettingsButton() {
     .toBeVisible()
     .withTimeout(10000);
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
+  await waitFor(element(by.text('Settings')))
+    .toBeVisible()
+    .withTimeout(2500);
 }
 
 export async function enterAuthDetails() {
