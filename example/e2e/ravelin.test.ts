@@ -10,16 +10,26 @@ import {
   launchApp,
   complete3DS2,
   assertResultsScreen,
+  pressBackButton,
 } from './helpers';
 
 describe('E2E Ravelin Tests', () => {
+  beforeAll(async () => {
+    await device.launchApp({
+      permissions: { camera: 'YES', location: 'always' },
+      launchArgs: {
+        customSettings: await setupRavelinConfigWithURL({ url: '7' }),
+      },
+    });
+    await clickSettingsButton();
+    await pressBackButton();
+  });
+
   afterEach(async () => {
     await device.terminateApp();
   });
 
   it('should successfully perform prevented transaction', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL({ url: '7' });
-    await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
     await delay(1000);
