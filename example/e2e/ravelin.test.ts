@@ -1,5 +1,5 @@
 import { element, expect } from 'detox';
-import { Selectors, TestData } from './constants';
+import { Selectors, TestData, UserFeedback } from './constants';
 import {
   clickSettingsButton,
   fillPaymentDetailsSheet,
@@ -46,9 +46,7 @@ describe('E2E Ravelin Tests', () => {
     });
     await delay(2500);
     await expect(
-      element(
-        by.text('The recommendation server has prevented this transaction.')
-      )
+      element(by.text(UserFeedback.TRANSACTION_PREVENTED))
     ).toBeVisible();
   });
 
@@ -139,9 +137,7 @@ describe('E2E Ravelin Tests', () => {
   });
 
   it('should successfully perform transaction without sending CRI', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL({
-      url: '35',
-    });
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '35' });
     await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
@@ -162,9 +158,7 @@ describe('E2E Ravelin Tests', () => {
   });
 
   it('should successfully perform transaction without sending SCA', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL({
-      url: '60',
-    });
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '60' });
     await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
@@ -185,9 +179,7 @@ describe('E2E Ravelin Tests', () => {
   });
 
   it('should successfully perform transaction without sending both SCA and CRI', async () => {
-    let ravelinConfig = await setupRavelinConfigWithURL({
-      url: '71',
-    });
+    let ravelinConfig = await setupRavelinConfigWithURL({ url: '71' });
     await launchApp(ravelinConfig);
     await clickSettingsButton();
     await tapGenerateSessionButton();
@@ -249,9 +241,7 @@ describe('E2E Ravelin Tests', () => {
     });
     await delay(2500);
     await expect(
-      element(
-        by.text('The recommendation server has prevented this transaction.')
-      )
+      element(by.text(UserFeedback.TRANSACTION_PREVENTED))
     ).toBeVisible();
   });
 
@@ -277,11 +267,7 @@ describe('E2E Ravelin Tests', () => {
     });
     await delay(2500);
     await expect(
-      element(
-        by.text(
-          'There was an error when retrieving the recommendation response.'
-        )
-      )
+      element(by.text(UserFeedback.RECOMMENDATION_ERROR))
     ).toBeVisible();
   });
 });

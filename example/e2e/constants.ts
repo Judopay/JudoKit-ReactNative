@@ -133,4 +133,6 @@ export enum UserFeedback {
   INVALID_PHONE_LABEL = 'Please enter a valid mobile number',
   INVALID_ADDRESS_LABEL = 'Please enter a valid address',
   INVALID_CITY_LABEL = 'Please enter a valid city',
+  TRANSACTION_PREVENTED = 'The recommendation server has prevented this transaction.',
+  RECOMMENDATION_ERROR = 'There was an error when retrieving the recommendation response.',
 }
