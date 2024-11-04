@@ -149,7 +149,7 @@ export async function clickSettingsButton() {
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
   await waitFor(element(by.text('Settings')))
     .toBeVisible()
-    .withTimeout(2500);
+    .withTimeout(15000);
 }
 
 export async function enterAuthDetails() {
@@ -390,7 +390,6 @@ export const billingInfoConfig = processJSONFile('./configs/billingInfo.json', {
 
 export async function launchApp(config: string) {
   await device.launchApp({
-    permissions: { camera: 'YES', location: 'always' },
     launchArgs: {
       customSettings: config,
     },

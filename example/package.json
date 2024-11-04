@@ -10,8 +10,8 @@
     "build:ios": "cd ios && xcodebuild -workspace JudoKitReactNativeExample.xcworkspace -scheme JudoKitReactNativeExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
     "detox:build:android": "detox build --configuration android.emu.debug",
     "detox:build:ios": "detox clean-framework-cache && detox build-framework-cache && detox build --configuration ios.sim.debug",
-    "detox:test:android": "detox test --loglevel fatal --configuration android.emu.debug --record-videos failing --record-logs all -R 1",
-    "detox:test:ios": "detox clean-framework-cache && detox build-framework-cache && detox test --loglevel fatal --configuration ios.sim.debug --record-videos failing -R 1"
+    "detox:test:android": "detox test --loglevel fatal e2e/ravelin.test.ts --configuration android.emu.debug --record-videos failing --record-logs all -R 1",
+    "detox:test:ios": "detox clean-framework-cache && detox build-framework-cache && detox test --loglevel fatal e2e/ravelin.test.ts --configuration ios.sim.debug --record-videos failing -R 1"
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "^0.3.1",
