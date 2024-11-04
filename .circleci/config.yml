@@ -7,8 +7,8 @@ executors:
     resource_class: 'macos.m1.medium.gen1'
 
 orbs:
-  slack: circleci/slack@5.0.0
-  android: circleci/android@3.0.1
+  slack: circleci/slack@4.13.1
+  android: circleci/android@2.5.0
 
 commands:
   notify_slack_error_ios:
