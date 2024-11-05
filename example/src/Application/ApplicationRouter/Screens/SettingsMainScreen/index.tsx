@@ -150,6 +150,7 @@ const SettingsMainScreen: FC<
         onPress={() => {
           generatePaymentSession();
         }}
+        testID="generateSessionButton"
       />
     );
   };

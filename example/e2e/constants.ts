@@ -121,6 +121,8 @@ export enum Selectors {
   PAYMENT_METHODS = 'Payment methods',
   PREAUTH_METHODS = 'PreAuth methods',
   HELPER_TEXT = 'help-steps-list',
+  GENERATE_PAYMENT_SESSION = 'generateSessionButton',
+  SESSION_CREATED_TOAST = 'Payment session created.',
 }
 
 export enum UserFeedback {
@@ -131,4 +133,6 @@ export enum UserFeedback {
   INVALID_PHONE_LABEL = 'Please enter a valid mobile number',
   INVALID_ADDRESS_LABEL = 'Please enter a valid address',
   INVALID_CITY_LABEL = 'Please enter a valid city',
+  TRANSACTION_PREVENTED = 'The recommendation server has prevented this transaction.',
+  RECOMMENDATION_ERROR = 'There was an error when retrieving the recommendation response.',
 }

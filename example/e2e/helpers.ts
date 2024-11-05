@@ -31,6 +31,11 @@ export interface BillingDetails {
   state?: string;
 }
 
+export interface ravelinConfig {
+  url: string;
+  haltTransaction?: boolean;
+}
+
 let billingInfoEnabled = false;
 
 export async function fillPaymentDetailsSheet(props: CardDetails) {
@@ -137,43 +142,14 @@ export async function addCardPaymentMethodAndPay() {
   await complete3DS2();
 }
 
-export async function setNoPreferenceCRI() {
-  if (await isAndroid()) {
-    await device.enableSynchronization();
-  }
-  await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
-  if (await checkIfCRINeedsSet()) {
-    await element(by.text(Selectors.CHALLENGE_REQUEST_SETTINGS)).tap();
-    await element(by.text(Selectors.NO_PREFERENCE)).tap();
-  }
-  if (await isAndroid()) {
-    try {
-      await expect(element(by.id(Selectors.AUTH_TOGGLE))).toHaveToggleValue(
-        true
-      );
-    } catch (exception) {
-      await enterAuthDetails();
-    }
-  } else {
-    let tokenToggle = await element(
-      by.id(Selectors.AUTH_TOGGLE)
-    ).getAttributes();
-    if ('value' in tokenToggle && tokenToggle.value === '0') {
-      await enterAuthDetails();
-    }
-    await pressBackButton();
-  }
-  if (await isAndroid()) {
-    await pressBackButton();
-    await device.disableSynchronization();
-  }
-}
-
 export async function clickSettingsButton() {
   await waitFor(element(by.id(Selectors.SETTINGS_BUTTON)))
     .toBeVisible()
     .withTimeout(10000);
   await element(by.id(Selectors.SETTINGS_BUTTON)).tap();
+  await waitFor(element(by.text('Settings')))
+    .toBeVisible()
+    .withTimeout(15000);
 }
 
 export async function enterAuthDetails() {
@@ -257,15 +233,6 @@ export async function isIOS(): Promise<boolean> {
 
 export async function isAndroid(): Promise<boolean> {
   return device.getPlatform() === 'android';
-}
-
-async function checkIfCRINeedsSet(): Promise<boolean> {
-  try {
-    await expect(element(by.text('noPreference' || 'dontSet'))).toBeVisible();
-    return false;
-  } catch (exception) {
-    return true;
-  }
 }
 
 export async function pressBackButton() {
@@ -436,4 +403,33 @@ export async function disableSync() {
   if (await isAndroid()) {
     await device.disableSynchronization();
   }
+}
+
+export async function setupRavelinConfigWithURL(config: ravelinConfig) {
+  const recommendationURL = process.env.RAVELIN_REC_URL;
+  const ravelinConfig = processJSONFile('./configs/ravelin.json', {
+    apiConfiguration: {
+      judoId: process.env.JUDO_ID,
+    },
+    authorization: {
+      token: process.env.API_TEST_TOKEN,
+      secret: process.env.API_TEST_SECRET,
+    },
+    reference: {
+      consumerReference: `RAVELIN-TRANSACTION-${crypto
+        .randomUUID()
+        .slice(0, 8)}`,
+    },
+    recommendation: {
+      isOn: true,
+      url: recommendationURL + config.url,
+      rsaPublicKey: process.env.RAVELIN_RSA_KEY,
+      haltTransactionInCaseOfAnyError: config.haltTransaction,
+    },
+  });
+  return ravelinConfig;
+}
+
+export async function tapGenerateSessionButton() {
+  await element(by.id(Selectors.GENERATE_PAYMENT_SESSION)).tap();
 }
