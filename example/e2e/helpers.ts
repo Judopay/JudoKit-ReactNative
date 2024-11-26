@@ -1,5 +1,5 @@
 import { element, expect } from 'detox';
-import { Selectors, TestData } from './constants';
+import { Ideal, Selectors, TestData } from './constants';
 import { expect as jestExpect } from '@jest/globals';
 import { processJSONFile } from './processJSONFile';
 
@@ -432,4 +432,41 @@ export async function setupRavelinConfigWithURL(config: ravelinConfig) {
 
 export async function tapGenerateSessionButton() {
   await element(by.id(Selectors.GENERATE_PAYMENT_SESSION)).tap();
+}
+
+export const idealConfig = processJSONFile('./configs/default.json', {
+  apiConfiguration: {
+    judoId: process.env.IDEAL_JUDO_ID,
+  },
+  authorization: {
+    token: process.env.IDEAL_API_TEST_TOKEN,
+    secret: process.env.IDEAL_API_TEST_SECRET,
+  },
+  amount: {
+    currency: 'EUR',
+  },
+  paymentMethods: {
+    isCardOn: false,
+    isiDealOn: true,
+  },
+});
+
+export async function clickButtonOnWebViewWithText(text: string) {
+  const button = web.element(by.web.xpath(`//button[text()="${text}"]`));
+  await expect(button).toExist();
+  await button.tap();
+}
+
+export async function completeIdealWebFlow() {
+  await clickButtonOnWebViewWithText(Ideal.NEXT_BUTTON);
+  await clickButtonOnWebViewWithText(Ideal.LOGIN_BUTTON);
+  await clickButtonOnWebViewWithText(Ideal.MAKE_PAYMENT_BUTTON);
+  await clickButtonOnWebViewWithText(Ideal.BACK_BUTTON);
+}
+
+export async function assertIdealPayment() {
+  await waitFor(element(by.text(Selectors.RESULT_HEADER)))
+    .toExist()
+    .withTimeout(30000);
+  await expect(element(by.id(Selectors.RESULT_RECEIPT_ID))).not.toHaveText('');
 }
