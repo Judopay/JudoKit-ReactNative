@@ -1,5 +1,5 @@
 import { element, expect } from 'detox';
-import { Ideal, Selectors, TestData } from './constants';
+import { Ideal, Selectors, TestData, UserFeedback } from './constants';
 import { expect as jestExpect } from '@jest/globals';
 import { processJSONFile } from './processJSONFile';
 
@@ -211,9 +211,10 @@ export async function fillCardholderNameSheet() {
 
 export async function tapPayNowButton() {
   if (await isIOS()) {
-    await element(
-      by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button']))
-    ).tap();
+    await waitFor(element(by.text(Selectors.IOS_PAY_NOW)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await element(by.text(Selectors.IOS_PAY_NOW)).tap();
   } else {
     await element(by.text(Selectors.ANDROID_PAY_NOW_LABEL)).tap();
   }
@@ -453,6 +454,7 @@ export const idealConfig = processJSONFile('./configs/default.json', {
 
 export async function clickButtonOnWebViewWithText(text: string) {
   const button = web.element(by.web.xpath(`//button[text()="${text}"]`));
+  await delay(1500);
   await expect(button).toExist();
   await button.tap();
 }
@@ -469,4 +471,16 @@ export async function assertIdealPayment() {
     .toExist()
     .withTimeout(30000);
   await expect(element(by.id(Selectors.RESULT_RECEIPT_ID))).not.toHaveText('');
+}
+
+export async function assertIdealError() {
+  if (await isIOS()) {
+    await waitFor(element(by.text(UserFeedback.IDEAL_ERROR_IOS)))
+      .toBeVisible()
+      .withTimeout(5000);
+  } else {
+    await waitFor(element(by.text(UserFeedback.IDEAL_ERROR)))
+      .toBeVisible()
+      .withTimeout(5000);
+  }
 }

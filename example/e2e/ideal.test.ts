@@ -1,5 +1,5 @@
 import { element } from 'detox';
-import { Ideal, Selectors, UserFeedback } from './constants';
+import { Ideal, Selectors } from './constants';
 import {
   clickSettingsButton,
   idealConfig,
@@ -11,6 +11,7 @@ import {
   clickButtonOnWebViewWithText,
   launchApp,
   assertIdealPayment,
+  assertIdealError,
 } from './helpers';
 
 describe('E2E iDEAL Payment Tests', () => {
@@ -45,8 +46,6 @@ describe('E2E iDEAL Payment Tests', () => {
     await delay(1500);
     await tapPayNowButton();
     await clickButtonOnWebViewWithText(Ideal.ABORT_BUTTON);
-    await waitFor(element(by.text(UserFeedback.IDEAL_ERROR)))
-      .toBeVisible()
-      .withTimeout(5000);
+    await assertIdealError();
   });
 });

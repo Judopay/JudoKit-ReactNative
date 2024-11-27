@@ -136,6 +136,7 @@ export enum UserFeedback {
   TRANSACTION_PREVENTED = 'The recommendation server has prevented this transaction.',
   RECOMMENDATION_ERROR = 'There was an error when retrieving the recommendation response.',
   IDEAL_ERROR = 'The request has failed or responded without data.',
+  IDEAL_ERROR_IOS = 'The transaction was cancelled by the user.',
 }
 
 export enum Ideal {
