@@ -12,7 +12,6 @@ import {
   billingInfoCity,
   billingInfoPostCode,
   billingInfoCountry,
-  blurSelection,
   getBillingInfoEmail,
   getBillingInfoPhone,
   getBillingInfoAddress,
@@ -20,6 +19,7 @@ import {
   billingInfoConfig,
   launchApp,
   disableSync,
+  blurSelection,
 } from './helpers';
 
 describe('E2E Billing Info Tests', () => {
