@@ -135,8 +135,8 @@ export enum UserFeedback {
   INVALID_CITY_LABEL = 'Please enter a valid city',
   TRANSACTION_PREVENTED = 'The recommendation server has prevented this transaction.',
   RECOMMENDATION_ERROR = 'There was an error when retrieving the recommendation response.',
-  IDEAL_ERROR = 'The request has failed or responded without data.',
-  IDEAL_ERROR_IOS = 'The transaction was cancelled by the user.',
+  REQUEST_FAILED_ERROR = 'The request has failed or responded without data.',
+  TRANSACTION_CANCELLED_ERROR = 'The transaction was cancelled by the user.',
 }
 
 export enum Ideal {

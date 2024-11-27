@@ -383,11 +383,11 @@ export async function assertIdealPayment() {
 
 export async function assertIdealError() {
   if (await isIOS()) {
-    await waitFor(element(by.text(UserFeedback.IDEAL_ERROR_IOS)))
+    await waitFor(element(by.text(UserFeedback.TRANSACTION_CANCELLED_ERROR)))
       .toBeVisible()
       .withTimeout(5000);
   } else {
-    await waitFor(element(by.text(UserFeedback.IDEAL_ERROR)))
+    await waitFor(element(by.text(UserFeedback.REQUEST_FAILED_ERROR)))
       .toBeVisible()
       .withTimeout(5000);
   }
