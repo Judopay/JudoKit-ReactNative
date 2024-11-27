@@ -6,12 +6,12 @@ import {
   delay,
   disableSync,
   pressBackButton,
-  tapPayNowButton,
   completeIdealWebFlow,
   clickButtonOnWebViewWithText,
   launchApp,
   assertIdealPayment,
   assertIdealError,
+  idealPressPayNow,
 } from './helpers';
 
 describe('E2E iDEAL Payment Tests', () => {
@@ -34,7 +34,7 @@ describe('E2E iDEAL Payment Tests', () => {
     await disableSync();
     await element(by.text(Selectors.PAYMENT_METHODS)).tap();
     await delay(1500);
-    await tapPayNowButton();
+    await idealPressPayNow();
     await completeIdealWebFlow();
     await assertIdealPayment();
   });
@@ -44,7 +44,7 @@ describe('E2E iDEAL Payment Tests', () => {
     await disableSync();
     await element(by.text(Selectors.PAYMENT_METHODS)).tap();
     await delay(1500);
-    await tapPayNowButton();
+    await idealPressPayNow();
     await clickButtonOnWebViewWithText(Ideal.ABORT_BUTTON);
     await assertIdealError();
   });

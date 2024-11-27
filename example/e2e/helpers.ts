@@ -161,10 +161,9 @@ export async function fillSecurityCodeSheet() {
 
 export async function tapPayNowButton() {
   if (await isIOS()) {
-    await waitFor(element(by.text(Selectors.IOS_PAY_NOW)))
-      .toBeVisible()
-      .withTimeout(10000);
-    await element(by.text(Selectors.IOS_PAY_NOW)).tap();
+    await element(
+      by.id(Selectors.PAY_NOW_BUTTON).and(by.traits(['button']))
+    ).tap();
   } else {
     await element(by.text(Selectors.ANDROID_PAY_NOW_LABEL)).tap();
   }
@@ -391,5 +390,16 @@ export async function assertIdealError() {
     await waitFor(element(by.text(UserFeedback.IDEAL_ERROR)))
       .toBeVisible()
       .withTimeout(5000);
+  }
+}
+
+export async function idealPressPayNow() {
+  if (await isIOS()) {
+    await waitFor(element(by.text(Selectors.IOS_PAY_NOW)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await element(by.text(Selectors.IOS_PAY_NOW)).tap();
+  } else {
+    await element(by.text(Selectors.ANDROID_PAY_NOW_LABEL)).tap();
   }
 }
