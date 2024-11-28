@@ -1,11 +1,6 @@
 import { element, expect } from 'detox';
-import { Selectors, TestData } from './constants';
-import { expect as jestExpect } from '@jest/globals';
+import { Ideal, Selectors, TestData, UserFeedback } from './constants';
 import { processJSONFile } from './processJSONFile';
-
-const judoId = process.env.JUDO_ID || '';
-const token = process.env.API_TEST_TOKEN || '';
-const secret = process.env.API_TEST_SECRET || '';
 
 export interface Props {
   type: string;
@@ -35,8 +30,6 @@ export interface ravelinConfig {
   url: string;
   haltTransaction?: boolean;
 }
-
-let billingInfoEnabled = false;
 
 export async function fillPaymentDetailsSheet(props: CardDetails) {
   if (await isIOS()) {
@@ -152,43 +145,6 @@ export async function clickSettingsButton() {
     .withTimeout(15000);
 }
 
-export async function enterAuthDetails() {
-  await element(by.id(Selectors.JUDO_ID_INPUT)).replaceText(judoId);
-  await element(by.id(Selectors.AUTH_TOGGLE)).longPress();
-  await element(by.id(Selectors.TOKEN_INPUT)).replaceText(token);
-  await element(by.id(Selectors.SECRET_INPUT)).replaceText(secret);
-  await pressBackButton();
-}
-
-export async function dissmissKeyboardOnTokenScreen() {
-  await element(by.id(Selectors.HELPER_TEXT)).tap();
-}
-
-export async function toggleAskForCSCSetting() {
-  if (await isAndroid()) {
-    await device.enableSynchronization();
-  }
-  await clickSettingsButton();
-  await element(by.id(Selectors.SETTINGS_LISTVIEW)).scrollTo('bottom');
-  if (await isAndroid()) {
-    try {
-      await expect(element(by.id(Selectors.ASK_FOR_CSC))).toHaveToggleValue(
-        true
-      );
-    } catch (exception) {
-      await element(by.id(Selectors.ASK_FOR_CSC)).tap();
-    }
-  } else {
-    let askForCSCToggle = await element(
-      by.id(Selectors.ASK_FOR_CSC)
-    ).getAttributes();
-    if ('value' in askForCSCToggle && askForCSCToggle.value === '0') {
-      await element(by.id(Selectors.ASK_FOR_CSC)).tap();
-    }
-  }
-  await element(by.id(Selectors.BACK_BUTTON)).longPress();
-}
-
 export async function fillSecurityCodeSheet() {
   if (await isAndroid()) {
     await delay(5000);
@@ -201,12 +157,6 @@ export async function fillSecurityCodeSheet() {
       TestData.SECURITY_CODE
     );
   }
-}
-
-export async function fillCardholderNameSheet() {
-  await element(by.id(Selectors.CARDHOLDER_NAME_INPUT)).typeText(
-    TestData.CARDHOLDER_NAME
-  );
 }
 
 export async function tapPayNowButton() {
@@ -273,39 +223,6 @@ export async function fillBillingInfoFields(props: BillingDetails) {
   }
 }
 
-export async function toggleBillingInfoScreen() {
-  if (!billingInfoEnabled) {
-    await clickSettingsButton();
-    await delay(2000);
-    await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
-    billingInfoEnabled = true;
-    await pressBackButton();
-  }
-}
-
-export async function assertErrorLabelText(expected: string) {
-  let errorLabel;
-  if (await isAndroid()) {
-    let attributes = await element(
-      by.id(await billingInfoErrorLabel())
-    ).getAttributes();
-    if ('text' in attributes) {
-      errorLabel = attributes.text;
-    }
-    return jestExpect(errorLabel).toEqual(expected);
-  } else {
-    await expect(element(by.text(expected))).toExist();
-  }
-}
-
-export async function blurSelection() {
-  if (await isAndroid()) {
-    await element(by.id(Selectors.PHONE_COUNTRY_CODE_ENTRY_FIELD)).tap();
-  } else {
-    await element(by.id(Selectors.PHONE_COUNTRY_CODE)).tap();
-  }
-}
-
 export async function billingInfoPostCode(): Promise<string> {
   if (await isIOS()) {
     return Selectors.POST_CODE_FIELD;
@@ -316,12 +233,6 @@ export async function billingInfoCity(): Promise<string> {
   if (await isIOS()) {
     return Selectors.CITY_FIELD;
   } else return Selectors.CITY_ENTRY_FIELD;
-}
-
-export async function billingInfoErrorLabel(): Promise<string> {
-  if (await isIOS()) {
-    return Selectors.FIELD_ERROR_LABEL;
-  } else return Selectors.ERROR_LABEL;
 }
 
 export async function billingInfoCountry(): Promise<string> {
@@ -348,13 +259,11 @@ export async function getBillingInfoAddress(): Promise<string> {
   } else return Selectors.ADDRESS_ONE_ENTRY_FIELD;
 }
 
-export async function toggleBillingInfoScreenOff() {
-  if (billingInfoEnabled) {
-    await clickSettingsButton();
-    await delay(2000);
-    await element(by.id(Selectors.BILLING_INFO_TOGGLE)).tap();
-    billingInfoEnabled = false;
-    await pressBackButton();
+export async function blurSelection() {
+  if (await isAndroid()) {
+    await element(by.id(Selectors.PHONE_COUNTRY_CODE_ENTRY_FIELD)).tap();
+  } else {
+    await element(by.id(Selectors.PHONE_COUNTRY_CODE)).tap();
   }
 }
 
@@ -432,4 +341,65 @@ export async function setupRavelinConfigWithURL(config: ravelinConfig) {
 
 export async function tapGenerateSessionButton() {
   await element(by.id(Selectors.GENERATE_PAYMENT_SESSION)).tap();
+}
+
+export const idealConfig = processJSONFile('./configs/default.json', {
+  apiConfiguration: {
+    judoId: process.env.IDEAL_JUDO_ID,
+  },
+  authorization: {
+    token: process.env.IDEAL_API_TEST_TOKEN,
+    secret: process.env.IDEAL_API_TEST_SECRET,
+  },
+  amount: {
+    currency: 'EUR',
+  },
+  paymentMethods: {
+    isCardOn: false,
+    isiDealOn: true,
+  },
+});
+
+export async function clickButtonOnWebViewWithText(text: string) {
+  const button = web.element(by.web.xpath(`//button[text()="${text}"]`));
+  await delay(1500);
+  await expect(button).toExist();
+  await button.tap();
+}
+
+export async function completeIdealWebFlow() {
+  await clickButtonOnWebViewWithText(Ideal.NEXT_BUTTON);
+  await clickButtonOnWebViewWithText(Ideal.LOGIN_BUTTON);
+  await clickButtonOnWebViewWithText(Ideal.MAKE_PAYMENT_BUTTON);
+  await clickButtonOnWebViewWithText(Ideal.BACK_BUTTON);
+}
+
+export async function assertIdealPayment() {
+  await waitFor(element(by.text(Selectors.RESULT_HEADER)))
+    .toExist()
+    .withTimeout(30000);
+  await expect(element(by.id(Selectors.RESULT_RECEIPT_ID))).not.toHaveText('');
+}
+
+export async function assertIdealError() {
+  if (await isIOS()) {
+    await waitFor(element(by.text(UserFeedback.TRANSACTION_CANCELLED_ERROR)))
+      .toBeVisible()
+      .withTimeout(5000);
+  } else {
+    await waitFor(element(by.text(UserFeedback.REQUEST_FAILED_ERROR)))
+      .toBeVisible()
+      .withTimeout(5000);
+  }
+}
+
+export async function idealPressPayNow() {
+  if (await isIOS()) {
+    await waitFor(element(by.text(Selectors.IOS_PAY_NOW)))
+      .toBeVisible()
+      .withTimeout(10000);
+    await element(by.text(Selectors.IOS_PAY_NOW)).tap();
+  } else {
+    await element(by.text(Selectors.ANDROID_PAY_NOW_LABEL)).tap();
+  }
 }
