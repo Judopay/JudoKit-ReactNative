@@ -9,16 +9,16 @@ PODS:
     - hermes-engine/Pre-built (= 0.74.5)
   - hermes-engine/Pre-built (0.74.5)
   - Judo3DS2_iOS (1.2.2)
-  - JudoKit-iOS (4.0.1):
+  - JudoKit-iOS (4.0.2):
     - DeviceDNA (= 2.1.2)
     - Judo3DS2_iOS (= 1.2.2)
     - RavelinEncrypt (= 1.1.2)
     - TrustKit (~> 3.0.4)
-  - JudoKit-ReactNative (4.3.5):
+  - JudoKit-ReactNative (4.3.6):
     - DoubleConversion
     - glog
     - hermes-engine
-    - JudoKit-iOS (= 4.0.1)
+    - JudoKit-iOS (= 4.0.2)
     - RCT-Folly (= 2024.01.01.00)
     - RCTRequired
     - RCTTypeSafety
@@ -1501,8 +1501,8 @@ SPEC CHECKSUMS:
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 8c1577f3fdb849cbe7729c2e7b5abc4b845e88f8
   Judo3DS2_iOS: a9c732bc4bd72faf16c0594eed6bc30d02cdcebc
-  JudoKit-iOS: 16618cca92aaed856da8fbfe6c35c5b2350531ad
-  JudoKit-ReactNative: 684bebaaae88756d135e32a26000255097b5eb82
+  JudoKit-iOS: 0455f94aed1d8b85c7f1e4788d956033fef54714
+  JudoKit-ReactNative: 55397489771affafd7aabaf95a580f61fb684d18
   MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
   MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
   RavelinEncrypt: ea533da1cb48ccf84382cb161979b27bfb23d467
