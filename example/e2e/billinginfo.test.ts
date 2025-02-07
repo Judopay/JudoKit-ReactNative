@@ -75,6 +75,10 @@ describe('E2E Billing Info Tests', () => {
     });
     await device.disableSynchronization();
     await delay(1500);
+    await element(by.id(await billingInfoCountry())).replaceText(
+      'United Kingdom'
+    );
+    await delay(1500);
     await element(by.id(await billingInfoPostCode())).typeText(
       TestData.INVALID_POST_CODE
     );
@@ -96,9 +100,6 @@ describe('E2E Billing Info Tests', () => {
     });
     await device.disableSynchronization();
     await delay(1500);
-    await element(by.id(await billingInfoCountry())).replaceText(
-      'United States'
-    );
     await element(by.id(await billingInfoPostCode())).typeText(
       TestData.INVALID_POST_CODE
     );
