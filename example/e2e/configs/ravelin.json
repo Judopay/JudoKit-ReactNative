@@ -99,17 +99,7 @@
         "intervalUnit": "",
         "intervalCount": ""
       },
-      "trialBilling": {
-        "isOn": false,
-        "label": "",
-        "amount": "",
-        "startDate": "",
-        "endDate": "",
-        "intervalUnit": "",
-        "intervalCount": ""
-      },
-      "billingAgreement": "",
-      "tokenNotificationURL": ""
+      "billingAgreement": ""
     }
   },
   "googlePay": {

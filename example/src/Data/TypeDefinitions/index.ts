@@ -103,17 +103,7 @@ export interface SettingsData {
         intervalUnit: string;
         intervalCount: string;
       };
-      trialBilling: {
-        isOn: boolean;
-        label: string;
-        amount: string;
-        startDate: string;
-        endDate: string;
-        intervalUnit: string;
-        intervalCount: string;
-      };
       billingAgreement: string;
-      tokenNotificationURL: string;
     };
   };
   googlePay: {

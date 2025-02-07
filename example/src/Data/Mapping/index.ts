@@ -597,16 +597,11 @@ export const judoConfigurationFromSettingsData = ({
   const {
     isOn: recurringPaymentRequestIsOn = false,
     regularBilling = {} as Record<string, any>,
-    trialBilling = {} as Record<string, any>,
   } = recurringPaymentRequest || {};
 
   if (recurringPaymentRequestIsOn) {
-    const {
-      paymentDescription,
-      managementURL,
-      billingAgreement,
-      tokenNotificationURL,
-    } = recurringPaymentRequest;
+    const { paymentDescription, managementURL, billingAgreement } =
+      recurringPaymentRequest;
 
     const {
       isOn: regularBillingIsOn = false,
@@ -617,16 +612,6 @@ export const judoConfigurationFromSettingsData = ({
       intervalUnit: regularBillingIntervalUnit,
       intervalCount: regularBillingIntervalCount,
     } = regularBilling;
-
-    const {
-      isOn: trialBillingIsOn = false,
-      label: trialBillingLabel,
-      amount: trialBillingAmount,
-      startDate: trialBillingStartDate,
-      endDate: trialBillingEndDate,
-      intervalUnit: trialBillingIntervalUnit,
-      intervalCount: trialBillingIntervalCount,
-    } = trialBilling;
 
     const intervalUnit = (intervalUnitString: string) => {
       switch (intervalUnitString) {
@@ -656,7 +641,6 @@ export const judoConfigurationFromSettingsData = ({
       // @ts-ignore
       managementURL: managementURL || undefined,
       billingAgreement: billingAgreement || undefined,
-      tokenNotificationURL: tokenNotificationURL || undefined,
       // @ts-ignore
       regularBilling: regularBillingIsOn
         ? {
@@ -667,18 +651,6 @@ export const judoConfigurationFromSettingsData = ({
             intervalUnit: intervalUnit(regularBillingIntervalUnit),
             intervalCount: regularBillingIntervalCount
               ? Number(regularBillingIntervalCount)
-              : undefined,
-          }
-        : undefined,
-      trialBilling: trialBillingIsOn
-        ? {
-            label: trialBillingLabel,
-            amount: trialBillingAmount,
-            startDate: trialBillingStartDate,
-            endDate: trialBillingEndDate,
-            intervalUnit: intervalUnit(trialBillingIntervalUnit),
-            intervalCount: trialBillingIntervalCount
-              ? Number(trialBillingIntervalCount)
               : undefined,
           }
         : undefined,
