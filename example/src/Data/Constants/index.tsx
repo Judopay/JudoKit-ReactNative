@@ -104,17 +104,7 @@ export const DEFAULT_SETTINGS_DATA: SettingsData = {
         intervalUnit: '',
         intervalCount: '',
       },
-      trialBilling: {
-        isOn: false,
-        label: '',
-        amount: '',
-        startDate: '',
-        endDate: '',
-        intervalUnit: '',
-        intervalCount: '',
-      },
       billingAgreement: '',
-      tokenNotificationURL: '',
     },
   },
   googlePay: {
