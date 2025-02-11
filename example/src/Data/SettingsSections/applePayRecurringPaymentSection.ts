@@ -22,8 +22,6 @@ const applePayRecurringPaymentSection = (
   const managementURLPath = 'applePay.recurringPaymentRequest.managementURL';
   const billingAgreementPath =
     'applePay.recurringPaymentRequest.billingAgreement';
-  const tokenNotificationURLPath =
-    'applePay.recurringPaymentRequest.tokenNotificationURL';
 
   const isRegularBillingOnPath =
     'applePay.recurringPaymentRequest.regularBilling.isOn';
@@ -40,22 +38,6 @@ const applePayRecurringPaymentSection = (
     'applePay.recurringPaymentRequest.regularBilling.intervalUnit';
   const regularBillingIntervalCountPath =
     'applePay.recurringPaymentRequest.regularBilling.intervalCount';
-
-  const isTrialBillingOnPath =
-    'applePay.recurringPaymentRequest.trialBilling.isOn';
-  const isTrialBillingOn = _.get(data, isTrialBillingOnPath);
-  const trialBillingLabelPath =
-    'applePay.recurringPaymentRequest.trialBilling.label';
-  const trialBillingAmountPath =
-    'applePay.recurringPaymentRequest.trialBilling.amount';
-  const trialBillingStartDatePath =
-    'applePay.recurringPaymentRequest.trialBilling.startDate';
-  const trialBillingEndDatePath =
-    'applePay.recurringPaymentRequest.trialBilling.endDate';
-  const trialBillingIntervalUnitPath =
-    'applePay.recurringPaymentRequest.trialBilling.intervalUnit';
-  const trialBillingIntervalCountPath =
-    'applePay.recurringPaymentRequest.trialBilling.intervalCount';
 
   const regularBillingConfiguration = [
     {
@@ -112,61 +94,6 @@ const applePayRecurringPaymentSection = (
       : []),
   ];
 
-  const trialBillingConfiguration = [
-    {
-      path: 'trialBilling',
-      dataType: SettingsItemDataType.SECTION_SEPARATOR,
-      title: 'TRIAL BILLING',
-    },
-    {
-      path: isTrialBillingOnPath,
-      dataType: SettingsItemDataType.BOOLEAN,
-      title: 'Enable trial billing item',
-      value: isTrialBillingOn,
-    },
-    ...(isTrialBillingOn
-      ? [
-          {
-            path: trialBillingLabelPath,
-            dataType: SettingsItemDataType.TEXT,
-            title: 'Label',
-            value: _.get(data, trialBillingLabelPath),
-          },
-          {
-            path: trialBillingAmountPath,
-            dataType: SettingsItemDataType.TEXT,
-            title: 'Amount',
-            value: _.get(data, trialBillingAmountPath),
-          },
-          {
-            path: trialBillingStartDatePath,
-            dataType: SettingsItemDataType.TEXT,
-            title: 'Start date',
-            value: _.get(data, trialBillingStartDatePath),
-          },
-          {
-            path: trialBillingEndDatePath,
-            dataType: SettingsItemDataType.TEXT,
-            title: 'End date',
-            value: _.get(data, trialBillingEndDatePath),
-          },
-          {
-            path: trialBillingIntervalUnitPath,
-            dataType: SettingsItemDataType.SINGLE_SELECTION,
-            title: 'Interval unit',
-            value: _.get(data, trialBillingIntervalUnitPath),
-            options: INTERVAL_UNIT_OPTIONS,
-          },
-          {
-            path: trialBillingIntervalCountPath,
-            dataType: SettingsItemDataType.TEXT,
-            title: 'Interval count',
-            value: _.get(data, trialBillingIntervalCountPath),
-          },
-        ]
-      : []),
-  ];
-
   return {
     header: 'APPLE PAY RECURRING PAYMENT',
     data: [
@@ -196,14 +123,7 @@ const applePayRecurringPaymentSection = (
               title: 'Billing agreement',
               value: _.get(data, billingAgreementPath),
             },
-            {
-              path: tokenNotificationURLPath,
-              dataType: SettingsItemDataType.TEXT,
-              title: 'Token notification URL',
-              value: _.get(data, tokenNotificationURLPath),
-            },
             ...regularBillingConfiguration,
-            ...trialBillingConfiguration,
           ]
         : []),
     ],
