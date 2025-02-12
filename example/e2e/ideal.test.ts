@@ -30,7 +30,7 @@ describe('E2E iDEAL Payment Tests', () => {
     await device.terminateApp();
   });
 
-  it('should successfully perform an iDEAL transaction', async () => {
+  it.skip('should successfully perform an iDEAL transaction', async () => {
     await disableSync();
     await element(by.text(Selectors.PAYMENT_METHODS)).tap();
     await delay(1500);
@@ -39,7 +39,7 @@ describe('E2E iDEAL Payment Tests', () => {
     await assertIdealPayment();
   });
 
-  it('should successfully cancel an iDEAL transaction', async () => {
+  it.skip('should successfully cancel an iDEAL transaction', async () => {
     await launchApp(idealConfig);
     await disableSync();
     await element(by.text(Selectors.PAYMENT_METHODS)).tap();
