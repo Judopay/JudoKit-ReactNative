@@ -100,7 +100,7 @@ const SettingsMainScreen: FC<
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Api-Version': '6.20.0',
+        'Api-Version': '6.21.0',
         'Authorization': `Basic ${btoa(`${token}:${secret}`)}`,
       },
       body,
