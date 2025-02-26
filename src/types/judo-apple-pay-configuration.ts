@@ -66,8 +66,14 @@ export interface JudoApplePayRecurringPaymentRequest {
   paymentDescription: string;
   managementURL: string;
   regularBilling: JudoRecurringPaymentSummaryItem;
+  /**
+   * Reserved for future use. Currently not implemented.
+   */
   trialBilling?: JudoRecurringPaymentSummaryItem;
   billingAgreement?: string;
+  /**
+   * Reserved for future use. Currently not implemented.
+   */
   tokenNotificationURL?: string;
 }
 
