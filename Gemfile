@@ -11,7 +11,7 @@ ruby '>= 2.6.10'
 gem 'cocoapods', '>= 1.13', '< 1.15'
 gem 'activesupport', '>= 6.1.7.5', '< 7.1.0'
 
-gem 'fastlane', '= 2.220.0'
+gem 'fastlane', '= 2.226.0'
 gem 'colorize', '~> 1.1'
 
 # temporary workaround: https://github.com/fastlane/fastlane/issues/21794#issuecomment-2102563823
