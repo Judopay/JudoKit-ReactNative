@@ -234,6 +234,7 @@ export interface JudoCardDetails {
   cardFunding?: string;
   cardScheme?: string;
   cardHolderName?: string;
+  ownerType?: string;
 }
 
 export interface JudoConsumer {
@@ -253,6 +254,7 @@ export interface JudoResponse {
   message?: string;
   judoId?: string;
   merchantName?: string;
+  emailAddress?: string;
   appearsOnStatementAs?: string;
   originalAmount?: string;
   netAmount?: string;
