@@ -147,6 +147,7 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
   map.putString("message", result?.message)
   map.putString("judoId", result?.judoId)
   map.putString("merchantName", result?.merchantName)
+  map.putString("emailAddress", result?.emailAddress)
   map.putString("appearsOnStatementAs", result?.appearsOnStatementAs)
   map.putString("originalAmount", result?.originalAmount.toString())
   map.putString("netAmount", result?.netAmount.toString())
@@ -164,6 +165,7 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
   cardDetailsMap.putString("cardFunding", result?.cardDetails?.funding)
   cardDetailsMap.putString("cardScheme", result?.cardDetails?.scheme)
   cardDetailsMap.putString("cardHolderName", result?.cardDetails?.cardHolderName)
+  cardDetailsMap.putString("ownerType", result?.cardDetails?.ownerType)
 
   map.putMap("cardDetails", cardDetailsMap)
 

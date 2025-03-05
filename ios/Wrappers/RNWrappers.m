@@ -796,6 +796,7 @@ static NSString *const kCardSchemeAMEX = @"amex";
     [mappedResponse setValue:response.message forKey:@"message"];
     [mappedResponse setValue:response.judoId forKey:@"judoId"];
     [mappedResponse setValue:response.merchantName forKey:@"merchantName"];
+    [mappedResponse setValue:response.emailAddress forKey:@"emailAddress"];
     [mappedResponse setValue:response.appearsOnStatementAs forKey:@"appearsOnStatementAs"];
     [mappedResponse setValue:response.originalAmount forKey:@"originalAmount"];
     [mappedResponse setValue:response.netAmount forKey:@"netAmount"];
@@ -848,6 +849,10 @@ static NSString *const kCardSchemeAMEX = @"amex";
 
         if (cardDetails.cardHolderName) {
             cardDetailsDictionary[@"cardHolderName"] = cardDetails.cardHolderName;
+        }
+
+        if (cardDetails.ownerType) {
+            cardDetailsDictionary[@"ownerType"] = cardDetails.ownerType;
         }
 
         [mappedResponse setValue:[NSDictionary dictionaryWithDictionary:cardDetailsDictionary]
