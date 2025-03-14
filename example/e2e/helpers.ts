@@ -17,13 +17,11 @@ export interface CardDetails {
 
 export interface BillingDetails {
   email: string;
-  country: string;
   mobile: string;
   addressOne: string;
   addressTwo?: string;
   city: string;
   postCode: string;
-  state?: string;
 }
 
 export interface ravelinConfig {
@@ -209,9 +207,6 @@ export async function fillBillingInfoFields(props: BillingDetails) {
     await device.disableSynchronization();
     await delay(3000);
     await element(by.id(Selectors.EMAIL_ENTRY_FIELD)).replaceText(props.email);
-    await element(by.id(Selectors.COUNTRY_ENTRY_FIELD)).replaceText(
-      props.country
-    );
     await element(by.id(Selectors.PHONE_ENTRY_FIELD)).replaceText(props.mobile);
     await element(by.id(Selectors.ADDRESS_ONE_ENTRY_FIELD)).replaceText(
       props.addressOne
@@ -259,11 +254,41 @@ export async function getBillingInfoAddress(): Promise<string> {
   } else return Selectors.ADDRESS_ONE_ENTRY_FIELD;
 }
 
+export async function getBillingInfoState(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.STATE_FIELD;
+  } else return Selectors.STATE_ENTRY_FIELD;
+}
+
 export async function blurSelection() {
   if (await isAndroid()) {
     await element(by.id(Selectors.PHONE_COUNTRY_CODE_ENTRY_FIELD)).tap();
   } else {
     await element(by.id(Selectors.PHONE_COUNTRY_CODE)).tap();
+  }
+}
+
+export async function fillCountryAndStateFields(
+  country: string,
+  state: string
+) {
+  if (await isIOS()) {
+    await device.enableSynchronization();
+    await element(by.id(await billingInfoCountry())).tap();
+    await element(by.id(Selectors.COUNTRY_PICKER)).setColumnToValue(0, country);
+    await element(by.id(await getBillingInfoState())).tap();
+    await element(by.id(Selectors.STATE_PICKER)).setColumnToValue(0, state);
+    await element(by.id(Selectors.POST_CODE_FIELD)).typeText(
+      TestData.VALID_POST_CODE
+    );
+    await delay(1000);
+  } else if (await isAndroid()) {
+    await device.disableSynchronization();
+    await element(by.id(await billingInfoCountry())).replaceText(country);
+    await element(by.id(await getBillingInfoState())).replaceText(state);
+    await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).replaceText(
+      TestData.VALID_POST_CODE
+    );
   }
 }
 
