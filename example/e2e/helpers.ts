@@ -278,17 +278,37 @@ export async function fillCountryAndStateFields(
     await element(by.id(Selectors.COUNTRY_PICKER)).setColumnToValue(0, country);
     await element(by.id(await getBillingInfoState())).tap();
     await element(by.id(Selectors.STATE_PICKER)).setColumnToValue(0, state);
-    await element(by.id(Selectors.POST_CODE_FIELD)).typeText(
-      TestData.VALID_POST_CODE
-    );
+    await fillPostCodeField(country);
     await delay(1000);
   } else if (await isAndroid()) {
     await device.disableSynchronization();
     await element(by.id(await billingInfoCountry())).replaceText(country);
     await element(by.id(await getBillingInfoState())).replaceText(state);
-    await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).replaceText(
-      TestData.VALID_POST_CODE
-    );
+    await fillPostCodeField(country);
+  }
+}
+
+async function fillPostCodeField(country: string) {
+  if (country === 'United States') {
+    if (await isIOS()) {
+      await element(by.id(Selectors.POST_CODE_FIELD)).typeText(
+        TestData.VALID_ZIP_CODE
+      );
+    } else {
+      await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).replaceText(
+        TestData.VALID_ZIP_CODE
+      );
+    }
+  } else {
+    if (await isIOS()) {
+      await element(by.id(Selectors.POST_CODE_FIELD)).typeText(
+        TestData.VALID_POST_CODE
+      );
+    } else {
+      await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).replaceText(
+        TestData.VALID_POST_CODE
+      );
+    }
   }
 }
 

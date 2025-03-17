@@ -18,6 +18,7 @@ export enum TestData {
   VALID_COUNTRY = 'United Kingdom',
   INVALID_POST_CODE = '38GL112',
   SPECIAL_CHARACTERS = '#$@*',
+  VALID_ZIP_CODE = '90210',
 }
 
 export enum Selectors {
