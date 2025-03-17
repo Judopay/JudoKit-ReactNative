@@ -1,5 +1,5 @@
 import { element, expect } from 'detox';
-import { Ideal, Selectors, TestData, UserFeedback } from './constants';
+import { Selectors, TestData } from './constants';
 import { processJSONFile } from './processJSONFile';
 
 export interface Props {
@@ -386,65 +386,4 @@ export async function setupRavelinConfigWithURL(config: ravelinConfig) {
 
 export async function tapGenerateSessionButton() {
   await element(by.id(Selectors.GENERATE_PAYMENT_SESSION)).tap();
-}
-
-export const idealConfig = processJSONFile('./configs/default.json', {
-  apiConfiguration: {
-    judoId: process.env.IDEAL_JUDO_ID,
-  },
-  authorization: {
-    token: process.env.IDEAL_API_TEST_TOKEN,
-    secret: process.env.IDEAL_API_TEST_SECRET,
-  },
-  amount: {
-    currency: 'EUR',
-  },
-  paymentMethods: {
-    isCardOn: false,
-    isiDealOn: true,
-  },
-});
-
-export async function clickButtonOnWebViewWithText(text: string) {
-  const button = web.element(by.web.xpath(`//button[text()="${text}"]`));
-  await delay(1500);
-  await expect(button).toExist();
-  await button.tap();
-}
-
-export async function completeIdealWebFlow() {
-  await clickButtonOnWebViewWithText(Ideal.NEXT_BUTTON);
-  await clickButtonOnWebViewWithText(Ideal.LOGIN_BUTTON);
-  await clickButtonOnWebViewWithText(Ideal.MAKE_PAYMENT_BUTTON);
-  await clickButtonOnWebViewWithText(Ideal.BACK_BUTTON);
-}
-
-export async function assertIdealPayment() {
-  await waitFor(element(by.text(Selectors.RESULT_HEADER)))
-    .toExist()
-    .withTimeout(30000);
-  await expect(element(by.id(Selectors.RESULT_RECEIPT_ID))).not.toHaveText('');
-}
-
-export async function assertIdealError() {
-  if (await isIOS()) {
-    await waitFor(element(by.text(UserFeedback.TRANSACTION_CANCELLED_ERROR)))
-      .toBeVisible()
-      .withTimeout(5000);
-  } else {
-    await waitFor(element(by.text(UserFeedback.REQUEST_FAILED_ERROR)))
-      .toBeVisible()
-      .withTimeout(5000);
-  }
-}
-
-export async function idealPressPayNow() {
-  if (await isIOS()) {
-    await waitFor(element(by.text(Selectors.IOS_PAY_NOW)))
-      .toBeVisible()
-      .withTimeout(10000);
-    await element(by.text(Selectors.IOS_PAY_NOW)).tap();
-  } else {
-    await element(by.text(Selectors.ANDROID_PAY_NOW_LABEL)).tap();
-  }
 }

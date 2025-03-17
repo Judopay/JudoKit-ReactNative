@@ -141,11 +141,3 @@ export enum UserFeedback {
   REQUEST_FAILED_ERROR = 'The request has failed or responded without data.',
   TRANSACTION_CANCELLED_ERROR = 'The transaction was cancelled by the user.',
 }
-
-export enum Ideal {
-  NEXT_BUTTON = 'Next',
-  LOGIN_BUTTON = 'Login',
-  MAKE_PAYMENT_BUTTON = 'Make Payment',
-  BACK_BUTTON = 'Back to where you came from',
-  ABORT_BUTTON = 'Abort',
-}
