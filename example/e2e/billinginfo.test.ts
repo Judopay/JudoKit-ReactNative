@@ -59,6 +59,7 @@ describe('E2E Billing Info Tests', () => {
       city: TestData.VALID_CITY,
       postCode: TestData.VALID_POST_CODE,
     });
+    await fillCountryAndStateFields('United States', 'California');
     await tapPayNowButton();
     await complete3DS2();
     await assertResultsScreen({ type: '1', result: '1' });
