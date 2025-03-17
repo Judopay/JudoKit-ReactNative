@@ -502,7 +502,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - CT-3048
       - run_e2e_ios:
           requires:
             - checkout_project
