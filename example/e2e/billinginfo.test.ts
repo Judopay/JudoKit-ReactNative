@@ -21,6 +21,7 @@ import {
   disableSync,
   blurSelection,
   fillCountryAndStateFields,
+  isIOS,
 } from './helpers';
 
 describe('E2E Billing Info Tests', () => {
@@ -101,6 +102,11 @@ describe('E2E Billing Info Tests', () => {
     });
     await device.disableSynchronization();
     await delay(1500);
+    if (await isIOS()) {
+      await element(by.id(await billingInfoCountry())).replaceText(
+        'United States'
+      );
+    }
     await element(by.id(await billingInfoPostCode())).typeText(
       TestData.INVALID_POST_CODE
     );
