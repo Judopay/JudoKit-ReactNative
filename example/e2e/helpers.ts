@@ -256,8 +256,9 @@ export async function getBillingInfoAddress(): Promise<string> {
 
 export async function getBillingInfoState(): Promise<string> {
   if (await isIOS()) {
-    return Selectors.STATE_FIELD;
-  } else return Selectors.STATE_ENTRY_FIELD;
+    return Selectors.ADMINISTRATIVE_DIVISION_FIELD;
+  }
+  return Selectors.STATE_ENTRY_FIELD;
 }
 
 export async function blurSelection() {
@@ -277,7 +278,9 @@ export async function fillCountryAndStateFields(
     await element(by.id(await billingInfoCountry())).tap();
     await element(by.id(Selectors.COUNTRY_PICKER)).setColumnToValue(0, country);
     await element(by.id(await getBillingInfoState())).tap();
-    await element(by.id(Selectors.STATE_PICKER)).setColumnToValue(0, state);
+    await element(
+      by.id(Selectors.ADMINISTRATIVE_DIVISION_PICKER)
+    ).setColumnToValue(0, state);
     await fillPostCodeField(country);
     await delay(1000);
   } else if (await isAndroid()) {
