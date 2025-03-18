@@ -20,6 +20,8 @@ import {
   launchApp,
   disableSync,
   blurSelection,
+  fillCountryAndStateFields,
+  isIOS,
 } from './helpers';
 
 describe('E2E Billing Info Tests', () => {
@@ -53,12 +55,12 @@ describe('E2E Billing Info Tests', () => {
     });
     await fillBillingInfoFields({
       email: TestData.VALID_EMAIL,
-      country: TestData.VALID_COUNTRY,
       mobile: TestData.VALID_PHONE,
       addressOne: TestData.ADDRESS_ONE,
       city: TestData.VALID_CITY,
       postCode: TestData.VALID_POST_CODE,
     });
+    await fillCountryAndStateFields('United States', 'California');
     await tapPayNowButton();
     await complete3DS2();
     await assertResultsScreen({ type: '1', result: '1' });
@@ -100,6 +102,11 @@ describe('E2E Billing Info Tests', () => {
     });
     await device.disableSynchronization();
     await delay(1500);
+    if (await isIOS()) {
+      await element(by.id(await billingInfoCountry())).replaceText(
+        'United States'
+      );
+    }
     await element(by.id(await billingInfoPostCode())).typeText(
       TestData.INVALID_POST_CODE
     );
@@ -219,5 +226,49 @@ describe('E2E Billing Info Tests', () => {
     );
     await blurSelection();
     await expect(element(by.text(UserFeedback.INVALID_CITY_LABEL))).toExist();
+  });
+
+  it('should successfully complete transaction with an India state', async () => {
+    await launchApp(billingInfoConfig);
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await fillBillingInfoFields({
+      email: TestData.VALID_EMAIL,
+      mobile: TestData.VALID_PHONE,
+      addressOne: TestData.ADDRESS_ONE,
+      city: TestData.VALID_CITY,
+      postCode: TestData.VALID_POST_CODE,
+    });
+    await fillCountryAndStateFields('India', 'Kerala');
+    await tapPayNowButton();
+    await complete3DS2();
+    await assertResultsScreen({ type: '1', result: '1' });
+  });
+
+  it('should successfully complete transaction with an China state', async () => {
+    await launchApp(billingInfoConfig);
+    await element(by.text(Selectors.PAY_WITH_CARD)).tap();
+    await fillPaymentDetailsSheet({
+      number: TestData.CARD_NUMBER,
+      name: TestData.CARDHOLDER_NAME,
+      expiry: TestData.EXPIRY_DATE,
+      code: TestData.SECURITY_CODE,
+    });
+    await fillBillingInfoFields({
+      email: TestData.VALID_EMAIL,
+      mobile: TestData.VALID_PHONE,
+      addressOne: TestData.ADDRESS_ONE,
+      city: TestData.VALID_CITY,
+      postCode: TestData.VALID_POST_CODE,
+    });
+    await fillCountryAndStateFields('China', 'Henan Sheng');
+    await tapPayNowButton();
+    await complete3DS2();
+    await assertResultsScreen({ type: '1', result: '1' });
   });
 });

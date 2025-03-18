@@ -1,5 +1,5 @@
 import { element, expect } from 'detox';
-import { Ideal, Selectors, TestData, UserFeedback } from './constants';
+import { Selectors, TestData } from './constants';
 import { processJSONFile } from './processJSONFile';
 
 export interface Props {
@@ -17,13 +17,11 @@ export interface CardDetails {
 
 export interface BillingDetails {
   email: string;
-  country: string;
   mobile: string;
   addressOne: string;
   addressTwo?: string;
   city: string;
   postCode: string;
-  state?: string;
 }
 
 export interface ravelinConfig {
@@ -209,9 +207,6 @@ export async function fillBillingInfoFields(props: BillingDetails) {
     await device.disableSynchronization();
     await delay(3000);
     await element(by.id(Selectors.EMAIL_ENTRY_FIELD)).replaceText(props.email);
-    await element(by.id(Selectors.COUNTRY_ENTRY_FIELD)).replaceText(
-      props.country
-    );
     await element(by.id(Selectors.PHONE_ENTRY_FIELD)).replaceText(props.mobile);
     await element(by.id(Selectors.ADDRESS_ONE_ENTRY_FIELD)).replaceText(
       props.addressOne
@@ -259,11 +254,64 @@ export async function getBillingInfoAddress(): Promise<string> {
   } else return Selectors.ADDRESS_ONE_ENTRY_FIELD;
 }
 
+export async function getBillingInfoState(): Promise<string> {
+  if (await isIOS()) {
+    return Selectors.ADMINISTRATIVE_DIVISION_FIELD;
+  }
+  return Selectors.STATE_ENTRY_FIELD;
+}
+
 export async function blurSelection() {
   if (await isAndroid()) {
     await element(by.id(Selectors.PHONE_COUNTRY_CODE_ENTRY_FIELD)).tap();
   } else {
     await element(by.id(Selectors.PHONE_COUNTRY_CODE)).tap();
+  }
+}
+
+export async function fillCountryAndStateFields(
+  country: string,
+  state: string
+) {
+  if (await isIOS()) {
+    await device.enableSynchronization();
+    await element(by.id(await billingInfoCountry())).tap();
+    await element(by.id(Selectors.COUNTRY_PICKER)).setColumnToValue(0, country);
+    await element(by.id(await getBillingInfoState())).tap();
+    await element(
+      by.id(Selectors.ADMINISTRATIVE_DIVISION_PICKER)
+    ).setColumnToValue(0, state);
+    await fillPostCodeField(country);
+    await delay(1000);
+  } else if (await isAndroid()) {
+    await device.disableSynchronization();
+    await element(by.id(await billingInfoCountry())).replaceText(country);
+    await element(by.id(await getBillingInfoState())).replaceText(state);
+    await fillPostCodeField(country);
+  }
+}
+
+async function fillPostCodeField(country: string) {
+  if (country === 'United States') {
+    if (await isIOS()) {
+      await element(by.id(Selectors.POST_CODE_FIELD)).typeText(
+        TestData.VALID_ZIP_CODE
+      );
+    } else {
+      await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).replaceText(
+        TestData.VALID_ZIP_CODE
+      );
+    }
+  } else {
+    if (await isIOS()) {
+      await element(by.id(Selectors.POST_CODE_FIELD)).typeText(
+        TestData.VALID_POST_CODE
+      );
+    } else {
+      await element(by.id(Selectors.POST_CODE_ENTRY_FIELD)).replaceText(
+        TestData.VALID_POST_CODE
+      );
+    }
   }
 }
 
@@ -341,65 +389,4 @@ export async function setupRavelinConfigWithURL(config: ravelinConfig) {
 
 export async function tapGenerateSessionButton() {
   await element(by.id(Selectors.GENERATE_PAYMENT_SESSION)).tap();
-}
-
-export const idealConfig = processJSONFile('./configs/default.json', {
-  apiConfiguration: {
-    judoId: process.env.IDEAL_JUDO_ID,
-  },
-  authorization: {
-    token: process.env.IDEAL_API_TEST_TOKEN,
-    secret: process.env.IDEAL_API_TEST_SECRET,
-  },
-  amount: {
-    currency: 'EUR',
-  },
-  paymentMethods: {
-    isCardOn: false,
-    isiDealOn: true,
-  },
-});
-
-export async function clickButtonOnWebViewWithText(text: string) {
-  const button = web.element(by.web.xpath(`//button[text()="${text}"]`));
-  await delay(1500);
-  await expect(button).toExist();
-  await button.tap();
-}
-
-export async function completeIdealWebFlow() {
-  await clickButtonOnWebViewWithText(Ideal.NEXT_BUTTON);
-  await clickButtonOnWebViewWithText(Ideal.LOGIN_BUTTON);
-  await clickButtonOnWebViewWithText(Ideal.MAKE_PAYMENT_BUTTON);
-  await clickButtonOnWebViewWithText(Ideal.BACK_BUTTON);
-}
-
-export async function assertIdealPayment() {
-  await waitFor(element(by.text(Selectors.RESULT_HEADER)))
-    .toExist()
-    .withTimeout(30000);
-  await expect(element(by.id(Selectors.RESULT_RECEIPT_ID))).not.toHaveText('');
-}
-
-export async function assertIdealError() {
-  if (await isIOS()) {
-    await waitFor(element(by.text(UserFeedback.TRANSACTION_CANCELLED_ERROR)))
-      .toBeVisible()
-      .withTimeout(5000);
-  } else {
-    await waitFor(element(by.text(UserFeedback.REQUEST_FAILED_ERROR)))
-      .toBeVisible()
-      .withTimeout(5000);
-  }
-}
-
-export async function idealPressPayNow() {
-  if (await isIOS()) {
-    await waitFor(element(by.text(Selectors.IOS_PAY_NOW)))
-      .toBeVisible()
-      .withTimeout(10000);
-    await element(by.text(Selectors.IOS_PAY_NOW)).tap();
-  } else {
-    await element(by.text(Selectors.ANDROID_PAY_NOW_LABEL)).tap();
-  }
 }

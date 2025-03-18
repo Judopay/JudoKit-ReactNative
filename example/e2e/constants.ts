@@ -18,6 +18,7 @@ export enum TestData {
   VALID_COUNTRY = 'United Kingdom',
   INVALID_POST_CODE = '38GL112',
   SPECIAL_CHARACTERS = '#$@*',
+  VALID_ZIP_CODE = '90210',
 }
 
 export enum Selectors {
@@ -92,8 +93,10 @@ export enum Selectors {
   ADDRESS_THREE_FIELD = 'Cardholder address line 3 Field',
   CITY_FIELD = 'Cardholder city Field',
   POST_CODE_FIELD = 'Post Code Field',
-  STATE_FIELD = 'State Field',
+  ADMINISTRATIVE_DIVISION_FIELD = 'Administrative Division Field',
+  ADMINISTRATIVE_DIVISION_PICKER = 'Administrative Division Picker',
   COUNTRY_FIELD = 'Country Field',
+  COUNTRY_PICKER = 'Country Picker',
   ADD_ADDRESS_LINE_BUTTON = 'Add address line Button',
   PHONE_COUNTRY_CODE = 'Cardholder phone code Field',
 
@@ -137,12 +140,4 @@ export enum UserFeedback {
   RECOMMENDATION_ERROR = 'There was an error when retrieving the recommendation response.',
   REQUEST_FAILED_ERROR = 'The request has failed or responded without data.',
   TRANSACTION_CANCELLED_ERROR = 'The transaction was cancelled by the user.',
-}
-
-export enum Ideal {
-  NEXT_BUTTON = 'Next',
-  LOGIN_BUTTON = 'Login',
-  MAKE_PAYMENT_BUTTON = 'Make Payment',
-  BACK_BUTTON = 'Back to where you came from',
-  ABORT_BUTTON = 'Abort',
 }
