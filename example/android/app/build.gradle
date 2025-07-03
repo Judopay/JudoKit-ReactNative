@@ -135,5 +135,3 @@ dependencies {
   androidTestImplementation('com.wix:detox:+')
   implementation 'androidx.appcompat:appcompat:1.6.1'
 }
-
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

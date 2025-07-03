@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
     JudoSDKInvocationTypeTokenTransaction
 };
 
-@interface JudoKitReactNative ()
+@interface JudoKitReactNativeComponent ()
 
 @property (nonatomic, strong) JudoKit *judoKit;
 @property (nonatomic, strong) JPApiService *apiService;
@@ -45,7 +45,7 @@ typedef NS_ENUM(NSUInteger, JudoSDKInvocationType) {
 
 @end
 
-@implementation JudoKitReactNative
+@implementation JudoKitReactNativeComponent
 RCT_EXPORT_MODULE()
 
 //----------------------------------------------

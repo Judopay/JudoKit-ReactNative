@@ -45,6 +45,14 @@
     "judopay",
     "judo-kit"
   ],
+  "codegenConfig": {
+    "name": "JudoKitReactNativeComponentSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.judopay.judokit.reactnative"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Judopay/JudoKit-ReactNative.git"
@@ -65,7 +73,7 @@
     "@react-native/eslint-config": "^0.79.2",
     "@types/jest": "^28.1.8",
     "@types/react": "^18.2.21",
-    "@types/react-native": "^0.73.0",
+    "@types/react-native": "0.72.4",
     "commitlint": "^17.8.1",
     "del-cli": "^5.1.0",
     "eslint": "^8.57.0",

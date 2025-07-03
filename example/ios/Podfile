@@ -5,6 +5,8 @@
 #     {paths: [process.argv[1]]},
 #   )', __dir__]).strip
 
+ENV['RCT_NEW_ARCH_ENABLED'] = '1'
+
 # react-native-permissions block start
 
 def node_require(script)
@@ -33,14 +35,17 @@ setup_permissions([
 
 # react-native-permissions block end
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+# linkage = ENV['USE_FRAMEWORKS']
+# if linkage != nil
+#   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+#   use_frameworks! :linkage => linkage.to_sym
+# end
 
 target 'JudoKitReactNativeExample' do
   config = use_native_modules!
+
+  # use_modular_headers!
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
 
   use_react_native!(
     :path => config[:reactNativePath],
