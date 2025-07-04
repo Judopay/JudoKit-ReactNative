@@ -470,7 +470,7 @@ internal fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
     }
 
     if (it and idealPaymentValue == idealPaymentValue) {
-      paymentMethods?.add(PaymentMethod.IDEAL)
+      // noop
     }
 
     if (it and allPaymentValues == allPaymentValues) {
