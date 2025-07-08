@@ -36,9 +36,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - MMKV (1.3.13):
-    - MMKVCore (~> 1.3.13)
-  - MMKVCore (1.3.13)
+  - MMKV (1.3.14):
+    - MMKVCore (~> 1.3.14)
+  - MMKVCore (1.3.14)
   - RavelinEncrypt (1.1.2)
   - RCT-Folly (2024.01.01.00):
     - boost
@@ -1276,7 +1276,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - SocketRocket (0.7.0)
-  - TrustKit (3.0.4)
+  - TrustKit (3.0.7)
   - Wormholy (1.7.0)
   - Yoga (0.0.0)
 
@@ -1503,8 +1503,8 @@ SPEC CHECKSUMS:
   Judo3DS2_iOS: 47f51a3f2d500100975c9d9e53f29018fd070141
   JudoKit-iOS: 506e16b62aa5ca86b84c37cac333e741b14e2728
   JudoKit-ReactNative: d7d7ff905189b52846e9fd6ff4c5cc73f42e511b
-  MMKV: 5854d45476fc3757bacfa7e13cc0fbcd274ab0e4
-  MMKVCore: edbad9714bb70344544148f086a4a69061ff31b6
+  MMKV: 7b5df6a8bf785c6705cc490c541b9d8a957c4a64
+  MMKVCore: 3f40b896e9ab522452df9df3ce983471aa2449ba
   RavelinEncrypt: ea533da1cb48ccf84382cb161979b27bfb23d467
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 3afceddffa65aee666dafd6f0116f1d975db1584
@@ -1563,7 +1563,7 @@ SPEC CHECKSUMS:
   RNSnackbar: eb4e012514c60433cbe933be0846e8f2abb6d2b6
   RNVectorIcons: 2a2f79274248390b80684ea3c4400bd374a15c90
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  TrustKit: 403e8d2cfbff2abfc37cd41acc558dab8ec78e59
+  TrustKit: 1050f3ce0595f8ed775f1237b7f590e3a4f93e91
   Wormholy: ab1c8c2f02f58587a0941deb0088555ffbf039a1
   Yoga: 950bbfd7e6f04790fdb51149ed51df41f329fcc8
 
