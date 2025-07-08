@@ -22,7 +22,7 @@
     "buffer": "^6.0.3",
     "lodash": "^4.17.21",
     "react": "18.2.0",
-    "react-native": "0.74.5",
+    "react-native": "0.74.6",
     "react-native-gesture-handler": "^2.18.1",
     "react-native-launch-arguments": "^4.0.2",
     "react-native-mmkv-storage": "^0.10.2",
