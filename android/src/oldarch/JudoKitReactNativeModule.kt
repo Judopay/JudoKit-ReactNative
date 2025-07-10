@@ -22,9 +22,14 @@ class JudoKitReactNativeModule internal constructor(
 ) : ReactContextBaseJavaModule(reactContext) {
   override fun getName() = MODULE_NAME
 
+  companion object {
+    const val NAME = "JudoKitReactNative"
+  }
+
   private val listener = JudoActivityEventListener()
 
   init {
+    println("Modules architecture: OLD ARCH activated")
     reactContext.addActivityEventListener(listener)
   }
 

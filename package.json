@@ -45,6 +45,14 @@
     "judopay",
     "judo-kit"
   ],
+  "codegenConfig": {
+    "name": "JudoKitReactNativeSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.judopay.judokit.reactnative"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Judopay/JudoKit-ReactNative.git"

@@ -22,7 +22,6 @@ import {
   SingleSelectionTableParams,
 } from '../../Data/TypeDefinitions';
 import { useSingleSelectionTableListener } from '../../Application/ApplicationRouter/Screens/SettingsSingleSelectionScreen';
-import { useMMKVStorage } from 'react-native-mmkv-storage';
 import {
   DEFAULT_SETTINGS_DATA,
   IS_IOS,
@@ -30,6 +29,23 @@ import {
 } from '../../Data/Constants';
 import _ from 'lodash';
 import { appStorage } from '../../Application';
+import { MMKV } from 'react-native-mmkv';
+
+export function useMMKVState<T>(
+  key: string,
+  storage: MMKV,
+  defaultValue: T
+): [T, (value: T) => void] {
+  const [value, setValue] = useState<T>(() => {
+    const stored = storage.getString(key);
+    return stored ? JSON.parse(stored) : defaultValue;
+  });
+  const update = (newValue: T) => {
+    setValue(newValue);
+    storage.set(key, JSON.stringify(newValue));
+  };
+  return [value, update];
+}
 
 export interface SettingsTableProps {
   transformationFunction: (
@@ -46,7 +62,7 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
   const { navigate, goBack, canGoBack } =
     useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [settings, setSettings] = useMMKVStorage(
+  const [settings, setSettings] = useMMKVState(
     STORAGE_SETTINGS_KEY,
     appStorage,
     DEFAULT_SETTINGS_DATA

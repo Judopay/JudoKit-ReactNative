@@ -8,12 +8,28 @@ import { ActivityIndicator, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { encode as btoa } from 'base-64';
 import { onErrorSnackbar, onSuccessSnackbar } from '../../../../Functions';
-import { useMMKVStorage } from 'react-native-mmkv-storage';
 import {
   DEFAULT_SETTINGS_DATA,
   STORAGE_SETTINGS_KEY,
 } from '../../../../Data/Constants';
 import { appStorage } from '../../../index';
+import { MMKV } from 'react-native-mmkv';
+
+export function useMMKVState<T>(
+  key: string,
+  storage: MMKV,
+  defaultValue: T
+): [T, (value: T) => void] {
+  const [value, setValue] = useState<T>(() => {
+    const stored = storage.getString(key);
+    return stored ? JSON.parse(stored) : defaultValue;
+  });
+  const update = (newValue: T) => {
+    setValue(newValue);
+    storage.set(key, JSON.stringify(newValue));
+  };
+  return [value, update];
+}
 
 const generateRandomString = (length: number = 36) => {
   const char = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -32,7 +48,7 @@ const SettingsMainScreen: FC<
   const {
     colors: { background: backgroundColor, primary },
   } = useTheme();
-  const [settings, setSettings] = useMMKVStorage(
+  const [settings, setSettings] = useMMKVState(
     STORAGE_SETTINGS_KEY,
     appStorage,
     DEFAULT_SETTINGS_DATA
