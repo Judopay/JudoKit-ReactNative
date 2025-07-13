@@ -250,4 +250,4 @@ export interface Spec extends TurboModule {
   }): Promise<JudoResponse>;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('JudoKitReactNativeComponent');
+export default TurboModuleRegistry.getEnforcing<Spec>('JudoKitReactNative');

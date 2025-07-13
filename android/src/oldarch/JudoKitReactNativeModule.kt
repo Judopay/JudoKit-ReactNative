@@ -25,6 +25,7 @@ class JudoKitReactNativeModule internal constructor(
   private val listener = JudoActivityEventListener()
 
   init {
+    println("Modules architecture: OLD ARCH activated")
     reactContext.addActivityEventListener(listener)
   }
 

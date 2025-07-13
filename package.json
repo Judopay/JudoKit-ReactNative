@@ -46,7 +46,7 @@
     "judo-kit"
   ],
   "codegenConfig": {
-    "name": "JudoKitReactNativeComponent",
+    "name": "JudoKitReactNativeSpec",
     "type": "modules",
     "jsSrcsDir": "src",
     "android": {
