@@ -25,8 +25,8 @@
 static const NSErrorDomain _Nonnull RNJudoErrorDomain = @"com.judopay.react-native.error-domain";
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import <JudoKitReactNativeComponent/JudoKitReactNativeComponent.h>
-@interface JudoKitReactNative : NSObject <JudoKitReactNativeComponentSpec>
+#import <JudoKitReactNativeSpec/JudoKitReactNativeSpec.h>
+@interface JudoKitReactNative : NSObject <NativeJudoKitReactNativeModuleSpec>
 
 #else
 #import <React/RCTBridgeModule.h>
