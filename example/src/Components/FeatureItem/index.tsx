@@ -1,6 +1,5 @@
-import { Text, View } from 'react-native';
+import { Text, Pressable } from 'react-native';
 import React, { FC } from 'react';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useTheme } from '@react-navigation/native';
 
 export interface FeatureItemProps {
@@ -15,15 +14,14 @@ const FeatureItem: FC<FeatureItemProps> = ({ title, details, onPress }) => {
   } = useTheme();
 
   return (
-    <TouchableHighlight onPress={onPress}>
-      <View
-        style={{
-          paddingLeft: 20,
-          paddingRight: 20,
-          paddingTop: 16,
-          paddingBottom: 16,
-          backgroundColor: card,
-        }}
+    <Pressable
+        onPress={onPress}
+        style={({ pressed }) => ({
+          paddingHorizontal: 20,
+          paddingVertical: 16,
+          backgroundColor: pressed ? '#e0e0e0' : card,
+          borderRadius: 6,
+        })}
       >
         <Text
           style={{
@@ -41,10 +39,9 @@ const FeatureItem: FC<FeatureItemProps> = ({ title, details, onPress }) => {
             marginTop: 2,
           }}
         >
-          {details}
-        </Text>
-      </View>
-    </TouchableHighlight>
+        {details}
+      </Text>
+    </Pressable>
   );
 };
 

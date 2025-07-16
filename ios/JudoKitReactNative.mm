@@ -243,3 +243,90 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
 }
 
 @end
+
+//----------------------------------------------
+// MARK: - New arch turbomodule implementation
+//----------------------------------------------
+
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <JudoKitReactNativeSpec/JudoKitReactNativeSpec.h>
+
+@implementation JudoKitReactNative (TurboModule)
+
+//- (void)fetchTransactionDetails:(JS::NativeJudoKitReactNativeModule::SpecFetchTransactionDetailsParams &)params
+//                        resolve:(RCTPromiseResolveBlock)resolve
+//                         reject:(RCTPromiseRejectBlock)reject {
+//    NSDictionary *props = (__bridge_transfer NSDictionary *)params.propsDict();
+//    [self fetchTransactionDetails:props
+// fetchTransactionDetailsWithResolver:resolve
+//                         rejecter:reject];
+//}
+
+// - (void)invokeApplePay:(JS::NativeJudoKitReactNativeModule::SpecInvokeApplePayParams &)params
+//                resolve:(RCTPromiseResolveBlock)resolve
+//                 reject:(RCTPromiseRejectBlock)reject {
+//     NSDictionary *props = (__bridge_transfer NSDictionary *)params.propsDict();
+//     [self invokeSDKWithType:JudoSDKInvocationTypeApplePay
+//              withProperties:props
+//                    resolver:resolve
+//                 andRejecter:reject];
+// }
+
+//- (void)invokeGooglePay:(JS::NativeJudoKitReactNativeModule::SpecInvokeGooglePayParams &)params
+//                resolve:(RCTPromiseResolveBlock)resolve
+//                 reject:(RCTPromiseRejectBlock)reject {
+//    NSError *error = [NSError errorWithDomain:@"JudoKitReactNative"
+//                                         code:0
+//                                     userInfo:@{NSLocalizedDescriptionKey: @"Google Pay is not supported on iOS"}];
+//    reject(kJudoPromiseRejectionCode, @"GOOGLE_PAY_UNSUPPORTED", error);
+//}
+//
+//- (void)invokePaymentMethodScreen:(JS::NativeJudoKitReactNativeModule::SpecInvokePaymentMethodScreenParams &)params
+//                          resolve:(RCTPromiseResolveBlock)resolve
+//                           reject:(RCTPromiseRejectBlock)reject {
+//    NSDictionary *props = (__bridge_transfer NSDictionary *)params.propsDict();
+//    [self invokeSDKWithType:JudoSDKInvocationTypePaymentMethods
+//             withProperties:props
+//                   resolver:resolve
+//                andRejecter:reject];
+//}
+//
+//- (void)invokeTransaction:(JS::NativeJudoKitReactNativeModule::SpecInvokeTransactionParams &)params
+//                  resolve:(RCTPromiseResolveBlock)resolve
+//                   reject:(RCTPromiseRejectBlock)reject {
+//    NSDictionary *props = (__bridge_transfer NSDictionary *)params.propsDict();
+//    [self invokeSDKWithType:JudoSDKInvocationTypeTransaction
+//             withProperties:props
+//                   resolver:resolve
+//                andRejecter:reject];
+//}
+
+//- (void)isApplePayAvailableWithConfiguration:()
+//                                     resolve:(RCTPromiseResolveBlock)resolve
+//                                      reject:(RCTPromiseRejectBlock)reject {
+//    // JPConfiguration *config = [RNWrappers configurationFromProperties:configuration];
+//    // BOOL available = [JudoKit isApplePayAvailableWithConfiguration:config];
+//    BOOL available = false;
+//    resolve(@(available));
+//}
+
+// - (void)isApplePayAvailableWithConfiguration:(NSDictionary *)configuration
+//                                      resolve:(RCTPromiseResolveBlock)resolve
+//                                       reject:(RCTPromiseRejectBlock)reject {
+//     JPConfiguration *config = [RNWrappers configurationFromProperties:configuration];
+//     BOOL available = [JudoKit isApplePayAvailableWithConfiguration:config];
+//     resolve(@(available));
+// }
+
+//- (void)performTokenTransaction:(JS::NativeJudoKitReactNativeModule::SpecPerformTokenTransactionParams &)params
+//                        resolve:(RCTPromiseResolveBlock)resolve
+//                         reject:(RCTPromiseRejectBlock)reject {
+//    NSDictionary *props = (__bridge_transfer NSDictionary *)params.propsDict();
+//    [self invokeSDKWithType:JudoSDKInvocationTypeTokenTransaction
+//             withProperties:props
+//                   resolver:resolve
+//                andRejecter:reject];
+//}
+
+@end
+#endif

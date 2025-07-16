@@ -17,7 +17,7 @@ export function useMMKVState<T>(
   defaultValue: T
 ): [T, (value: T) => void] {
   const [value, setValue] = useState<T>(() => {
-    const stored = storage.getString(key);
+    const stored = storage?.getString(key);
     return stored ? JSON.parse(stored) : defaultValue;
   });
   const update = (newValue: T) => {
