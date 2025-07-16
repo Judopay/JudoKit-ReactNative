@@ -195,59 +195,71 @@ type JudoResponse = {
   consumerResponse?: JudoConsumer;
 };
 
+/**
+ * Allows using types that codegen doesn't support, which will be generated
+ * as object, but keeping the TS type for type-checking.
+ *
+ * Note that for some reason this only works for turbo modules, not for native components.
+ */
+export type UnsafeObject = any;
+
 export interface Spec extends TurboModule {
-  isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean>;
+  // isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean>;
 
-  invokeTransaction(params: {
-    configuration: JudoConfiguration;
-    transactionType: number;
-    authorization: { token: string; secret?: string; paymentSession?: string };
-    sandboxed: boolean;
-    packageVersion: string;
-  }): Promise<JudoResponse>;
+  // isApplePayAvailableWithConfiguration(configuration: UnsafeObject<JudoConfiguration>): Promise<boolean>;
 
-  fetchTransactionDetails(params: {
-    authorization: { token: string; secret?: string; paymentSession?: string };
-    sandboxed: boolean;
-    receiptId: string;
-    packageVersion: string;
-  }): Promise<JudoResponse>;
+  // isApplePayAvailableWithConfiguration(): Promise<void>;
 
-  performTokenTransaction(params: {
-    configuration: JudoConfiguration;
-    transactionMode: number;
-    authorization: { token: string; secret?: string; paymentSession?: string };
-    sandboxed: boolean;
-    cardToken: string;
-    securityCode?: string;
-    cardholderName?: string;
-    cardScheme: string;
-    packageVersion: string;
-  }): Promise<JudoResponse>;
+  // invokeTransaction(params: {
+  //   configuration: JudoConfiguration;
+  //   transactionType: number;
+  //   authorization: { token: string; secret?: string; paymentSession?: string };
+  //   sandboxed: boolean;
+  //   packageVersion: string;
+  // }): Promise<JudoResponse>;
 
-  invokeApplePay(params: {
-    configuration: JudoConfiguration;
-    transactionMode: number;
-    authorization: { token: string; secret?: string; paymentSession?: string };
-    sandboxed: boolean;
-    packageVersion: string;
-  }): Promise<JudoResponse>;
+  // fetchTransactionDetails(params: {
+  //   authorization: { token: string; secret?: string; paymentSession?: string };
+  //   sandboxed: boolean;
+  //   receiptId: string;
+  //   packageVersion: string;
+  // }): Promise<JudoResponse>;
 
-  invokeGooglePay(params: {
-    configuration: JudoConfiguration;
-    transactionMode: number;
-    authorization: { token: string; secret?: string; paymentSession?: string };
-    sandboxed: boolean;
-    packageVersion: string;
-  }): Promise<JudoResponse>;
+  // performTokenTransaction(params: {
+  //   configuration: JudoConfiguration;
+  //   transactionMode: number;
+  //   authorization: { token: string; secret?: string; paymentSession?: string };
+  //   sandboxed: boolean;
+  //   cardToken: string;
+  //   securityCode?: string;
+  //   cardholderName?: string;
+  //   cardScheme: string;
+  //   packageVersion: string;
+  // }): Promise<JudoResponse>;
 
-  invokePaymentMethodScreen(params: {
-    configuration: JudoConfiguration;
-    transactionMode: number;
-    authorization: { token: string; secret?: string; paymentSession?: string };
-    sandboxed: boolean;
-    packageVersion: string;
-  }): Promise<JudoResponse>;
+  // invokeApplePay(params: {
+  //   configuration: JudoConfiguration;
+  //   transactionMode: number;
+  //   authorization: { token: string; secret?: string; paymentSession?: string };
+  //   sandboxed: boolean;
+  //   packageVersion: string;
+  // }): Promise<JudoResponse>;
+
+  // invokeGooglePay(params: {
+  //   configuration: JudoConfiguration;
+  //   transactionMode: number;
+  //   authorization: { token: string; secret?: string; paymentSession?: string };
+  //   sandboxed: boolean;
+  //   packageVersion: string;
+  // }): Promise<JudoResponse>;
+
+  // invokePaymentMethodScreen(params: {
+  //   configuration: JudoConfiguration;
+  //   transactionMode: number;
+  //   authorization: { token: string; secret?: string; paymentSession?: string };
+  //   sandboxed: boolean;
+  //   packageVersion: string;
+  // }): Promise<JudoResponse>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('JudoKitReactNative');

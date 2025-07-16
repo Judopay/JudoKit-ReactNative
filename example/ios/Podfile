@@ -43,11 +43,16 @@ end
 
 target 'JudoKitReactNativeExample' do
   config = use_native_modules!
+  
+  new_arch_enabled = ENV['NEW_ARCH_ENABLED'].nil? ? true : ENV['NEW_ARCH_ENABLED'] == 'true'
 
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+#    :bridgeless_enabled => new_arch_enabled,
+    :fabric_enabled =>  new_arch_enabled,
+    :hermes_enabled => true,
   )
 
   pod 'Wormholy'
