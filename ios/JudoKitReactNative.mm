@@ -250,8 +250,46 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <JudoKitReactNativeSpec/JudoKitReactNativeSpec.h>
+#import <React/RCTUtils.h>
 
 @implementation JudoKitReactNative (TurboModule)
+
+- (void)invokeTransaction:(JS::NativeJudoKitReactNativeModule::SpecInvokeTransactionParams &)params
+                resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject {
+   NSString *judoId = [NSString stringWithString: params.configuration().judoId()];
+   NSString *amountValue = [NSString stringWithString: params.configuration().amount().value()];
+   NSString *amountCurrency = [NSString stringWithString: params.configuration().amount().currency()];
+   NSString *consumerReference = [NSString stringWithString: params.configuration().reference().consumerReference()];
+   NSString *paymentReference = [NSString stringWithString: params.configuration().reference().paymentReference()];
+   NSDictionary *amount = @{
+     @"value": amountValue,
+     @"currency": amountCurrency
+   };
+   NSDictionary *reference = @{
+     @"consumerReference": consumerReference,
+     @"paymentReference": paymentReference
+   };
+   NSDictionary *configuration = @{
+     @"judoId": judoId,
+     @"amount": amount,
+     @"reference": reference
+   };
+   NSMutableDictionary *authorization = [NSMutableDictionary dictionary];
+   authorization[@"token"] = params.authorization().token();
+   authorization[@"secret"] = params.authorization().secret();
+   authorization[@"paymentSession"] = @"";
+   NSMutableDictionary *props = [NSMutableDictionary dictionary];
+   props[@"configuration"] = configuration;
+   props[@"authorization"] = authorization;
+   props[@"transactionType"] = @(params.transactionType());
+   props[@"sandboxed"] = @(params.sandboxed());
+   // props[@"packageVersion"] = @(params.packageVersion());
+  [self invokeSDKWithType:JudoSDKInvocationTypeTransaction
+           withProperties:props
+                 resolver:resolve
+              andRejecter:reject];
+}
 
 //- (void)fetchTransactionDetails:(JS::NativeJudoKitReactNativeModule::SpecFetchTransactionDetailsParams &)params
 //                        resolve:(RCTPromiseResolveBlock)resolve
