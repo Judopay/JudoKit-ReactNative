@@ -50,7 +50,6 @@ target 'JudoKitReactNativeExample' do
     :path => config[:reactNativePath],
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
-#    :bridgeless_enabled => new_arch_enabled,
     :fabric_enabled =>  new_arch_enabled,
     :hermes_enabled => true,
   )

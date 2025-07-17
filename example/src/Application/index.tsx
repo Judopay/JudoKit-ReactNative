@@ -41,21 +41,20 @@ export function useMMKVState<T>(
 }
 
 const args = LaunchArguments.value<MyExpectedArgs>();
-// export const appStorage = new MMKV();
+export const appStorage = new MMKV();
 
 const Application = () => {
   const scheme = useColorScheme();
   const [theme, setTheme] = useState<Theme>(DefaultTheme);
   const [_, setSettingsModel] = useMMKVState(
     STORAGE_SETTINGS_KEY,
-    // appStorage,
-    null,
+    appStorage,
     DEFAULT_SETTINGS_DATA
   );
 
-  // useEffect(() => {
-  //   setTheme(scheme === 'dark' ? DarkTheme : DefaultTheme);
-  // }, [scheme]);
+  useEffect(() => {
+    setTheme(scheme === 'dark' ? DarkTheme : DefaultTheme);
+  }, [scheme]);
 
   const requestPostNotificationsPermissionsIfNeeded = () => {
     const title = 'Permissions needed';
