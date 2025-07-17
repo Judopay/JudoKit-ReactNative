@@ -328,5 +328,11 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
 //                andRejecter:reject];
 //}
 
-@end
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+  return std::make_shared<facebook::react::NativeJudoKitReactNativeModuleSpecJSI>(params);
+}
+
 #endif
+@end

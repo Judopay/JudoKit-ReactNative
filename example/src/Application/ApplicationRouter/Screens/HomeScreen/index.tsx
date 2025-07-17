@@ -37,7 +37,7 @@ const SectionSeparatorComponent = () => <Separator key="separator-key" />;
 const HomeScreen: FC<
   NativeStackScreenProps<RootStackParamList, Screen.HOME>
 > = () => {
-  // const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
+  const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
   const {
     colors: { background: backgroundColor },
   } = useTheme();

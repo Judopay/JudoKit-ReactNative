@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import SettingsTable from '../../../../Components/SettingsTable';
 import { buildSettingsSections } from '../../../../Data/SettingsSections';
-import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import { useTheme } from '@react-navigation/native';
 import { ActivityIndicator, SafeAreaView } from 'react-native';
@@ -13,6 +12,7 @@ import {
   STORAGE_SETTINGS_KEY,
 } from '../../../../Data/Constants';
 import { appStorage } from '../../../index';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MMKV } from 'react-native-mmkv';
 
 export function useMMKVState<T>(
@@ -41,7 +41,7 @@ const generateRandomString = (length: number = 36) => {
 };
 
 const SettingsMainScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.SETTINGS>
+  NativeStackScreenProps<RootStackParamList, Screen.SETTINGS>
 > = ({ navigation }) => {
   const { goBack, canGoBack } = navigation;
   const [isLoading, setIsLoading] = useState(false);

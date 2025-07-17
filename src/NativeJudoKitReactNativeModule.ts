@@ -195,20 +195,37 @@ type JudoResponse = {
   consumerResponse?: JudoConsumer;
 };
 
+enum JudoTransactionType {
+  Transaction = 0,
+  ApplePay = 1,
+  PaymentMethods = 2,
+  TokenTransaction = 3,
+}
+
 /**
  * Allows using types that codegen doesn't support, which will be generated
  * as object, but keeping the TS type for type-checking.
  *
  * Note that for some reason this only works for turbo modules, not for native components.
  */
-export type UnsafeObject = any;
+export type UnsafeObject<T> = T;
 
 export interface Spec extends TurboModule {
+
+    // Example from Stripe
+  // confirmPayment(
+  //   paymentIntentClientSecret: string,
+  //   params?: UnsafeObject<PaymentIntent.ConfirmParams>,
+  //   options?: UnsafeObject<PaymentIntent.ConfirmOptions>
+  // ): Promise<ConfirmPaymentResult>;
+
   // isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean>;
 
   // isApplePayAvailableWithConfiguration(configuration: UnsafeObject<JudoConfiguration>): Promise<boolean>;
 
   // isApplePayAvailableWithConfiguration(): Promise<void>;
+
+  // invokeTransaction(): Promise<void>;
 
   // invokeTransaction(params: {
   //   configuration: JudoConfiguration;
