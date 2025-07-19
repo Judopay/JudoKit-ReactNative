@@ -212,7 +212,7 @@ export interface Spec extends TurboModule {
 
   invokeTransaction(params: {
     configuration: JudoConfiguration;
-    transactionType: number;
+    transactionType: JudoTransactionType;
     authorization: JudoAuthorization;
     sandboxed: boolean;
     packageVersion: string;
