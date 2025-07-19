@@ -208,6 +208,12 @@ enum JudoTransactionType {
   TokenTransaction = 3,
 }
 
+enum JudoTransactionMode {
+  Payment = 0,
+  PreAuth = 1,
+  ServerToServer = 2,
+}
+
 export interface Spec extends TurboModule {
 
   invokeTransaction(params: {
@@ -218,50 +224,49 @@ export interface Spec extends TurboModule {
     packageVersion: string;
   }): Promise<JudoResponse>;
 
-  // isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean>;
+  invokeApplePay(params: {
+    configuration: JudoConfiguration;
+    transactionMode: JudoTransactionMode;
+    authorization: JudoAuthorization;
+    sandboxed: boolean;
+    packageVersion: string;
+  }): Promise<JudoResponse>;
 
-  // isApplePayAvailableWithConfiguration(configuration: UnsafeObject<JudoConfiguration>): Promise<boolean>;
+  invokePaymentMethodScreen(params: {
+    configuration: JudoConfiguration;
+    transactionMode: JudoTransactionMode;
+    authorization: JudoAuthorization;
+    sandboxed: boolean;
+    packageVersion: string;
+  }): Promise<JudoResponse>;
+
+  performTokenTransaction(params: {
+    configuration: JudoConfiguration;
+    transactionMode: JudoTransactionMode;
+    authorization: JudoAuthorization;
+    sandboxed: boolean;
+    cardToken: string;
+    securityCode?: string;
+    cardholderName?: string;
+    cardScheme: string;
+    packageVersion: string;
+  }): Promise<JudoResponse>;
+
+  // invokeGooglePay(params: {
+  //   configuration: JudoConfiguration;
+  //   // transactionMode: number;
+  //   authorization: JudoAuthorization;
+  //   // authorization: { token: string; secret?: string; paymentSession?: string };
+  //   sandboxed: boolean;
+  //   packageVersion: string;
+  // }): Promise<JudoResponse>;
+
+  // isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean>;
 
   // fetchTransactionDetails(params: {
   //   authorization: { token: string; secret?: string; paymentSession?: string };
   //   sandboxed: boolean;
   //   receiptId: string;
-  //   packageVersion: string;
-  // }): Promise<JudoResponse>;
-
-  // performTokenTransaction(params: {
-  //   configuration: JudoConfiguration;
-  //   transactionMode: number;
-  //   authorization: { token: string; secret?: string; paymentSession?: string };
-  //   sandboxed: boolean;
-  //   cardToken: string;
-  //   securityCode?: string;
-  //   cardholderName?: string;
-  //   cardScheme: string;
-  //   packageVersion: string;
-  // }): Promise<JudoResponse>;
-
-  // invokeApplePay(params: {
-  //   configuration: JudoConfiguration;
-  //   transactionMode: number;
-  //   authorization: { token: string; secret?: string; paymentSession?: string };
-  //   sandboxed: boolean;
-  //   packageVersion: string;
-  // }): Promise<JudoResponse>;
-
-  // invokeGooglePay(params: {
-  //   configuration: JudoConfiguration;
-  //   transactionMode: number;
-  //   authorization: { token: string; secret?: string; paymentSession?: string };
-  //   sandboxed: boolean;
-  //   packageVersion: string;
-  // }): Promise<JudoResponse>;
-
-  // invokePaymentMethodScreen(params: {
-  //   configuration: JudoConfiguration;
-  //   transactionMode: number;
-  //   authorization: { token: string; secret?: string; paymentSession?: string };
-  //   sandboxed: boolean;
   //   packageVersion: string;
   // }): Promise<JudoResponse>;
 }
