@@ -10,7 +10,7 @@ import {
 import Separator from '../../../../Components/Separator';
 import { useTheme } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import type { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeEventNotifier } from '../../../../CustomHooks/useEventListener';
 import {
   RootStackParamList,
@@ -36,7 +36,7 @@ const ItemSeparatorComponent = () => (
 );
 
 const SettingsSingleSelectionScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.SINGLE_SELECTION>
+  NativeStackScreenProps<RootStackParamList, Screen.SINGLE_SELECTION>
 > = ({ route: { params } }) => {
   const { sectionListData, selectedItemId, path } = params;
   const {

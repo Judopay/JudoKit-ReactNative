@@ -1,6 +1,8 @@
 package com.judopay.judokit.reactnative
 
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.turbomodule.core.interfaces.TurboModule
 import com.judopay.judokit.android.Judo
@@ -13,9 +15,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 @ReactModule(name = "JudoKitReactNative")
-class JudoKitReactNativeModule(private val reactContext: ReactApplicationContext) :
-  NativeJudoKitReactNativeModuleSpec(reactContext), TurboModule {
-
+class JudoKitReactNativeModule(
+  private val reactContext: ReactApplicationContext,
+) : NativeJudoKitReactNativeModuleSpec(reactContext),
+  TurboModule {
   companion object {
     const val NAME = "JudoKitReactNative"
     const val REQUEST_FAILED_MESSAGE = "The request was unsuccessful."
@@ -29,7 +32,10 @@ class JudoKitReactNativeModule(private val reactContext: ReactApplicationContext
     reactContext.addActivityEventListener(listener)
   }
 
-  override fun invokeTransaction(options: ReadableMap, promise: Promise) {
+  override fun invokeTransaction(
+    options: ReadableMap,
+    promise: Promise,
+  ) {
     try {
       val judo = getTransactionConfiguration(options)
       startJudoActivity(judo, promise)
@@ -38,7 +44,10 @@ class JudoKitReactNativeModule(private val reactContext: ReactApplicationContext
     }
   }
 
-  override fun invokeGooglePay(options: ReadableMap, promise: Promise) {
+  override fun invokeGooglePay(
+    options: ReadableMap,
+    promise: Promise,
+  ) {
     try {
       val judo = getGoogleTransactionConfiguration(options)
       startJudoActivity(judo, promise)
@@ -47,7 +56,10 @@ class JudoKitReactNativeModule(private val reactContext: ReactApplicationContext
     }
   }
 
-  override fun invokePaymentMethodScreen(options: ReadableMap, promise: Promise) {
+  override fun invokePaymentMethodScreen(
+    options: ReadableMap,
+    promise: Promise,
+  ) {
     try {
       val judo = getPaymentMethodsConfiguration(options)
       startJudoActivity(judo, promise)
@@ -56,12 +68,15 @@ class JudoKitReactNativeModule(private val reactContext: ReactApplicationContext
     }
   }
 
-  override fun performTokenTransaction(options: ReadableMap, promise: Promise) {
+  override fun performTokenTransaction(
+    options: ReadableMap,
+    promise: Promise,
+  ) {
     val cardToken = options.getString("cardToken")
     if (cardToken.isNullOrEmpty()) {
       promise.reject(
         JUDO_PROMISE_REJECTION_CODE,
-        "No card token provided, please make sure you provide it when invoking performTokenTransaction."
+        "No card token provided, please make sure you provide it when invoking performTokenTransaction.",
       )
       return
     }
@@ -74,50 +89,61 @@ class JudoKitReactNativeModule(private val reactContext: ReactApplicationContext
     }
   }
 
-  override fun fetchTransactionDetails(options: ReadableMap, promise: Promise) {
+  override fun fetchTransactionDetails(
+    options: ReadableMap,
+    promise: Promise,
+  ) {
     try {
       val judo = getJudoConfigurationForApiService(options)
       val receiptId = options.getString("receiptId") ?: ""
 
       val service = JudoApiServiceFactory.create(reactContext, judo)
 
-      service.fetchTransactionWithReceiptId(receiptId).enqueue(object : Callback<JudoApiCallResult<Receipt>> {
-        override fun onResponse(
-          call: Call<JudoApiCallResult<Receipt>>,
-          response: Response<JudoApiCallResult<Receipt>>
-        ) {
-          when (val result = response.body()) {
-            is JudoApiCallResult.Success -> {
-              val receipt = result.data
-              if (receipt != null) {
-                val judoResult = receipt.toJudoResult()
-                promise.resolve(getMappedResult(judoResult))
-              } else {
+      service.fetchTransactionWithReceiptId(receiptId).enqueue(
+        object : Callback<JudoApiCallResult<Receipt>> {
+          override fun onResponse(
+            call: Call<JudoApiCallResult<Receipt>>,
+            response: Response<JudoApiCallResult<Receipt>>,
+          ) {
+            when (val result = response.body()) {
+              is JudoApiCallResult.Success -> {
+                val receipt = result.data
+                if (receipt != null) {
+                  val judoResult = receipt.toJudoResult()
+                  promise.resolve(getMappedResult(judoResult))
+                } else {
+                  promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
+                }
+              }
+
+              is JudoApiCallResult.Failure -> {
+                val message = result.error?.message ?: REQUEST_FAILED_MESSAGE
+                promise.reject(JUDO_PROMISE_REJECTION_CODE, message)
+              }
+
+              else -> {
                 promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
               }
             }
-
-            is JudoApiCallResult.Failure -> {
-              val message = result.error?.message ?: REQUEST_FAILED_MESSAGE
-              promise.reject(JUDO_PROMISE_REJECTION_CODE, message)
-            }
-
-            else -> {
-              promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
-            }
           }
-        }
 
-        override fun onFailure(call: Call<JudoApiCallResult<Receipt>>, t: Throwable) {
-          promise.reject(JUDO_PROMISE_REJECTION_CODE, t.localizedMessage, t)
-        }
-      })
+          override fun onFailure(
+            call: Call<JudoApiCallResult<Receipt>>,
+            t: Throwable,
+          ) {
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, t.localizedMessage, t)
+          }
+        },
+      )
     } catch (e: Exception) {
       promise.reject(JUDO_PROMISE_REJECTION_CODE, e.localizedMessage, e)
     }
   }
 
-  private fun startJudoActivity(judo: Judo, promise: Promise) {
+  private fun startJudoActivity(
+    judo: Judo,
+    promise: Promise,
+  ) {
     currentActivity?.let {
       listener.transactionPromise = promise
       val intent = judo.toJudoActivityIntent(it)
@@ -127,11 +153,17 @@ class JudoKitReactNativeModule(private val reactContext: ReactApplicationContext
 
   // ApplePay methods impl. requied by new arch (interface shared with iOS):
 
-  override fun isApplePayAvailableWithConfiguration(configuration: ReadableMap, promise: Promise) {
+  override fun isApplePayAvailableWithConfiguration(
+    configuration: ReadableMap,
+    promise: Promise,
+  ) {
     promise.reject("APPLE_PAY_UNSUPPORTED", "Apple Pay is not supported on Android.")
   }
 
-  override fun invokeApplePay(params: ReadableMap, promise: Promise) {
+  override fun invokeApplePay(
+    params: ReadableMap,
+    promise: Promise,
+  ) {
     promise.reject("APPLE_PAY_UNSUPPORTED", "Apple Pay is not supported on Android.")
-  } 
+  }
 }

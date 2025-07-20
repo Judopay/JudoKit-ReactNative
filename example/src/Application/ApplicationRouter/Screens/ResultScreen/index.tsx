@@ -7,7 +7,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import {
   NavigationProp,
@@ -31,7 +31,7 @@ const ItemSeparatorComponent = () => (
 );
 const SectionSeparatorComponent = () => <Separator key="separator-key" />;
 
-const ResultScreen: FC<StackScreenProps<RootStackParamList, Screen.RESULT>> = ({
+const ResultScreen: FC<NativeStackScreenProps<RootStackParamList, Screen.RESULT>> = ({
   route: {
     params: { items = [] },
   },

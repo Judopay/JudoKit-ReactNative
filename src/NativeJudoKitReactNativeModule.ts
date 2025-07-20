@@ -252,23 +252,22 @@ export interface Spec extends TurboModule {
     packageVersion: string;
   }): Promise<JudoResponse>;
 
-  // invokeGooglePay(params: {
-  //   configuration: JudoConfiguration;
-  //   // transactionMode: number;
-  //   authorization: JudoAuthorization;
-  //   // authorization: { token: string; secret?: string; paymentSession?: string };
-  //   sandboxed: boolean;
-  //   packageVersion: string;
-  // }): Promise<JudoResponse>;
+  invokeGooglePay(params: {
+    configuration: JudoConfiguration;
+    transactionMode: JudoTransactionMode;
+    authorization: JudoAuthorization;
+    sandboxed: boolean;
+    packageVersion: string;
+  }): Promise<JudoResponse>;
 
-  // isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean>;
+  isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean>;
 
-  // fetchTransactionDetails(params: {
-  //   authorization: { token: string; secret?: string; paymentSession?: string };
-  //   sandboxed: boolean;
-  //   receiptId: string;
-  //   packageVersion: string;
-  // }): Promise<JudoResponse>;
+  fetchTransactionDetails(params: {
+    authorization: JudoAuthorization;
+    sandboxed: boolean;
+    receiptId: string;
+    packageVersion: string;
+  }): Promise<JudoResponse>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('JudoKitReactNative');

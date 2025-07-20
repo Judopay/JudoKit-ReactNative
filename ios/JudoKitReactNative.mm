@@ -255,140 +255,141 @@ RCT_REMAP_METHOD(fetchTransactionDetails,
 @implementation JudoKitReactNative (TurboModule)
 
 NSDictionary *buildConfigurationDict(const JS::NativeJudoKitReactNativeModule::JudoConfiguration &config) {
-  NSDictionary *amount = @{
-    @"value": config.amount().value(),
-    @"currency": config.amount().currency(),
-  };
-  NSDictionary *reference = @{
-    @"consumerReference": config.reference().consumerReference(),
-    @"paymentReference": config.reference().paymentReference() ?: [NSNull null],
-  };
-  NSDictionary *cardAddress = @{
-    @"line1": config.cardAddress()->line1() ?: [NSNull null],
-    @"line2": config.cardAddress()->line2() ?: [NSNull null],
-    @"line3": config.cardAddress()->line3() ?: [NSNull null],
-    @"postCode": config.cardAddress()->postCode() ?: [NSNull null],
-    @"town": config.cardAddress()->town() ?: [NSNull null],
-    @"state": config.cardAddress()->state() ?: [NSNull null],
-  };
-  return @{
-    @"judoId": config.judoId(),
-    @"amount": amount,
-    @"reference": reference,
-    @"cardAddress": cardAddress,
-    @"mobileNumber": config.mobileNumber() ?: [NSNull null],
-    @"phoneCountryCode": config.phoneCountryCode() ?: [NSNull null],
-    @"emailAddress": config.emailAddress() ?: [NSNull null],
-  };
+    NSDictionary *amount = @{
+        @"value" : config.amount().value(),
+        @"currency" : config.amount().currency(),
+    };
+    NSDictionary *reference = @{
+        @"consumerReference" : config.reference().consumerReference(),
+        @"paymentReference" : config.reference().paymentReference() ?: [NSNull null],
+    };
+    NSDictionary *cardAddress = @{
+        @"line1" : config.cardAddress()->line1() ?: [NSNull null],
+        @"line2" : config.cardAddress()->line2() ?: [NSNull null],
+        @"line3" : config.cardAddress()->line3() ?: [NSNull null],
+        @"postCode" : config.cardAddress()->postCode() ?: [NSNull null],
+        @"town" : config.cardAddress()->town() ?: [NSNull null],
+        @"state" : config.cardAddress()->state() ?: [NSNull null],
+    };
+    return @{
+        @"judoId" : config.judoId(),
+        @"amount" : amount,
+        @"reference" : reference,
+        @"cardAddress" : cardAddress,
+        @"mobileNumber" : config.mobileNumber() ?: [NSNull null],
+        @"phoneCountryCode" : config.phoneCountryCode() ?: [NSNull null],
+        @"emailAddress" : config.emailAddress() ?: [NSNull null],
+    };
 }
 
 NSDictionary *buildAuthorizationDict(const JS::NativeJudoKitReactNativeModule::JudoAuthorization &auth) {
-  return @{
-    @"token": auth.token(),
-    @"secret": auth.secret() ?: [NSNull null],
-    @"paymentSession": auth.paymentSession() ?: [NSNull null],
-  };
+    return @{
+        @"token" : auth.token(),
+        @"secret" : auth.secret() ?: [NSNull null],
+        @"paymentSession" : auth.paymentSession() ?: [NSNull null],
+    };
 }
 
 - (void)invokeTransaction:(JS::NativeJudoKitReactNativeModule::SpecInvokeTransactionParams &)params
                   resolve:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject {
-  NSDictionary *props = @{
-    @"configuration": buildConfigurationDict(params.configuration()),
-    @"transactionType": @(params.transactionType()),
-    @"authorization": buildAuthorizationDict(params.authorization()),
-    @"sandboxed": @(params.sandboxed()),
-    @"packageVersion": params.packageVersion() ?: [NSNull null],
-  };
-  [self invokeSDKWithType:JudoSDKInvocationTypeTransaction
-           withProperties:props
-                 resolver:resolve
-              andRejecter:reject];
+    NSDictionary *props = @{
+        @"configuration" : buildConfigurationDict(params.configuration()),
+        @"transactionType" : @(params.transactionType()),
+        @"authorization" : buildAuthorizationDict(params.authorization()),
+        @"sandboxed" : @(params.sandboxed()),
+        @"packageVersion" : params.packageVersion() ?: [NSNull null],
+    };
+    [self invokeSDKWithType:JudoSDKInvocationTypeTransaction
+             withProperties:props
+                   resolver:resolve
+                andRejecter:reject];
 }
 
 - (void)invokeApplePay:(JS::NativeJudoKitReactNativeModule::SpecInvokeApplePayParams &)params
                resolve:(RCTPromiseResolveBlock)resolve
                 reject:(RCTPromiseRejectBlock)reject {
-  NSDictionary *props = @{
-    @"configuration": buildConfigurationDict(params.configuration()),
-    @"transactionMode": @(params.transactionMode()),
-    @"authorization": buildAuthorizationDict(params.authorization()),
-    @"sandboxed": @(params.sandboxed()),
-    @"packageVersion": params.packageVersion() ?: [NSNull null],
-  };
-  [self invokeSDKWithType:JudoSDKInvocationTypeApplePay
-           withProperties:props
-                 resolver:resolve
-              andRejecter:reject];
+    NSDictionary *props = @{
+        @"configuration" : buildConfigurationDict(params.configuration()),
+        @"transactionMode" : @(params.transactionMode()),
+        @"authorization" : buildAuthorizationDict(params.authorization()),
+        @"sandboxed" : @(params.sandboxed()),
+        @"packageVersion" : params.packageVersion() ?: [NSNull null],
+    };
+    [self invokeSDKWithType:JudoSDKInvocationTypeApplePay
+             withProperties:props
+                   resolver:resolve
+                andRejecter:reject];
 }
 
 - (void)invokePaymentMethodScreen:(JS::NativeJudoKitReactNativeModule::SpecInvokePaymentMethodScreenParams &)params
                           resolve:(RCTPromiseResolveBlock)resolve
                            reject:(RCTPromiseRejectBlock)reject {
-  NSDictionary *props = @{
-    @"configuration": buildConfigurationDict(params.configuration()),
-    @"transactionMode": @(params.transactionMode()),
-    @"authorization": buildAuthorizationDict(params.authorization()),
-    @"sandboxed": @(params.sandboxed()),
-    @"packageVersion": params.packageVersion() ?: [NSNull null],
-  };
-  [self invokeSDKWithType:JudoSDKInvocationTypePaymentMethods
-           withProperties:props
-                 resolver:resolve
-              andRejecter:reject];
+    NSDictionary *props = @{
+        @"configuration" : buildConfigurationDict(params.configuration()),
+        @"transactionMode" : @(params.transactionMode()),
+        @"authorization" : buildAuthorizationDict(params.authorization()),
+        @"sandboxed" : @(params.sandboxed()),
+        @"packageVersion" : params.packageVersion() ?: [NSNull null],
+    };
+    [self invokeSDKWithType:JudoSDKInvocationTypePaymentMethods
+             withProperties:props
+                   resolver:resolve
+                andRejecter:reject];
 }
 
 - (void)performTokenTransaction:(JS::NativeJudoKitReactNativeModule::SpecPerformTokenTransactionParams &)params
-                       resolve:(RCTPromiseResolveBlock)resolve
-                        reject:(RCTPromiseRejectBlock)reject {
-  NSDictionary *props = @{
-    @"configuration": buildConfigurationDict(params.configuration()),
-    @"transactionMode": @(params.transactionMode()),
-    @"authorization": buildAuthorizationDict(params.authorization()),
-    @"sandboxed": @(params.sandboxed()),
-    @"cardToken": params.cardToken(),
-    @"securityCode": params.securityCode() ?: [NSNull null],
-    @"cardholderName": params.cardholderName() ?: [NSNull null],
-    @"cardScheme": params.cardScheme(),
-    @"packageVersion": params.packageVersion() ?: [NSNull null],
-  };               
-   [self invokeSDKWithType:JudoSDKInvocationTypeTokenTransaction
-            withProperties:props
-                  resolver:resolve
-               andRejecter:reject];
+                        resolve:(RCTPromiseResolveBlock)resolve
+                         reject:(RCTPromiseRejectBlock)reject {
+    NSDictionary *props = @{
+        @"configuration" : buildConfigurationDict(params.configuration()),
+        @"transactionMode" : @(params.transactionMode()),
+        @"authorization" : buildAuthorizationDict(params.authorization()),
+        @"sandboxed" : @(params.sandboxed()),
+        @"cardToken" : params.cardToken(),
+        @"securityCode" : params.securityCode() ?: [NSNull null],
+        @"cardholderName" : params.cardholderName() ?: [NSNull null],
+        @"cardScheme" : params.cardScheme(),
+        @"packageVersion" : params.packageVersion() ?: [NSNull null],
+    };
+    [self invokeSDKWithType:JudoSDKInvocationTypeTokenTransaction
+             withProperties:props
+                   resolver:resolve
+                andRejecter:reject];
 }
 
-//- (void)invokeGooglePay:(JS::NativeJudoKitReactNativeModule::SpecInvokeGooglePayParams &)params
-//                resolve:(RCTPromiseResolveBlock)resolve
-//                 reject:(RCTPromiseRejectBlock)reject {
-//    NSError *error = [NSError errorWithDomain:@"JudoKitReactNative"
-//                                         code:0
-//                                     userInfo:@{NSLocalizedDescriptionKey: @"Google Pay is not supported on iOS"}];
-//    reject(kJudoPromiseRejectionCode, @"GOOGLE_PAY_UNSUPPORTED", error);
-//}
+- (void)invokeGooglePay:(JS::NativeJudoKitReactNativeModule::SpecInvokeGooglePayParams &)params
+                resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject {
+    NSError *error = [NSError errorWithDomain:@"JudoKitReactNative"
+                                         code:0
+                                     userInfo:@{NSLocalizedDescriptionKey : @"Google Pay is not supported on iOS"}];
+    reject(kJudoPromiseRejectionCode, @"GOOGLE_PAY_UNSUPPORTED", error);
+}
 
-//- (void)isApplePayAvailableWithConfiguration:()
-//                                     resolve:(RCTPromiseResolveBlock)resolve
-//                                      reject:(RCTPromiseRejectBlock)reject {
-//    // JPConfiguration *config = [RNWrappers configurationFromProperties:configuration];
-//    // BOOL available = [JudoKit isApplePayAvailableWithConfiguration:config];
-//    BOOL available = false;
-//    resolve(@(available));
-//}
+// TODO
+- (void)isApplePayAvailableWithConfiguration:()
+                                     resolve:(RCTPromiseResolveBlock)resolve
+                                      reject:(RCTPromiseRejectBlock)reject {
+    // JPConfiguration *config = [RNWrappers configurationFromProperties:configuration];
+    // BOOL available = [JudoKit isApplePayAvailableWithConfiguration:config];
+    BOOL available = false;
+    resolve(@(available));
+}
 
-//- (void)fetchTransactionDetails:(JS::NativeJudoKitReactNativeModule::SpecFetchTransactionDetailsParams &)params
-//                        resolve:(RCTPromiseResolveBlock)resolve
-//                         reject:(RCTPromiseRejectBlock)reject {
-//    NSDictionary *props = (__bridge_transfer NSDictionary *)params.propsDict();
-//    [self fetchTransactionDetails:props
-// fetchTransactionDetailsWithResolver:resolve
-//                         rejecter:reject];
-//}
+// TODO
+- (void)fetchTransactionDetails:(JS::NativeJudoKitReactNativeModule::SpecFetchTransactionDetailsParams &)params
+                        resolve:(RCTPromiseResolveBlock)resolve
+                         reject:(RCTPromiseRejectBlock)reject {
+    //    NSDictionary *props = (__bridge_transfer NSDictionary *)params.propsDict();
+    //    [self fetchTransactionDetails:props
+    // fetchTransactionDetailsWithResolver:resolve
+    //                         rejecter:reject];
+}
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
-    (const facebook::react::ObjCTurboModule::InitParams &)params
-{
-  return std::make_shared<facebook::react::NativeJudoKitReactNativeModuleSpecJSI>(params);
+    (const facebook::react::ObjCTurboModule::InitParams &)params {
+    return std::make_shared<facebook::react::NativeJudoKitReactNativeModuleSpecJSI>(params);
 }
 
 #endif
