@@ -314,11 +314,11 @@ static NSString *const kCardSchemeAMEX = @"amex";
     NSNumber *bitmask = [configuration optionalNumberForKey:@"paymentMethods"];
 
     if (!bitmask) {
-        return @[ JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal ];
+        return @[ JPPaymentMethod.card, JPPaymentMethod.applePay ];
     }
 
     if (BitmaskContains(bitmask.intValue, IOSPaymentMethodAll)) {
-        return @[ JPPaymentMethod.card, JPPaymentMethod.applePay, JPPaymentMethod.iDeal ];
+        return @[ JPPaymentMethod.card, JPPaymentMethod.applePay ];
     }
 
     NSMutableArray<JPPaymentMethod *> *paymentMethods = [NSMutableArray new];
@@ -329,10 +329,6 @@ static NSString *const kCardSchemeAMEX = @"amex";
 
     if (BitmaskContains(bitmask.intValue, IOSPaymentMethodApplePay)) {
         [paymentMethods addObject:JPPaymentMethod.applePay];
-    }
-
-    if (BitmaskContains(bitmask.intValue, IOSPaymentMethodIDEAL)) {
-        [paymentMethods addObject:JPPaymentMethod.iDeal];
     }
 
     return paymentMethods;
@@ -872,33 +868,6 @@ static NSString *const kCardSchemeAMEX = @"amex";
             [mappedResponse setValue:[NSDictionary dictionaryWithDictionary:consumerDictionary]
                               forKey:@"consumerResponse"];
         }
-    }
-
-    JPOrderDetails *orderDetails = response.orderDetails;
-
-    if (orderDetails) {
-        NSMutableDictionary *orderDetailsDictionary = [NSMutableDictionary new];
-
-        if (orderDetails.orderId) {
-            orderDetailsDictionary[@"orderId"] = orderDetails.orderId;
-        }
-
-        if (orderDetails.orderStatus) {
-            orderDetailsDictionary[@"orderStatus"] = orderDetails.orderStatus;
-        }
-
-        if (orderDetails.orderFailureReason) {
-            orderDetailsDictionary[@"orderFailureReason"] = orderDetails.orderFailureReason;
-        }
-
-        if (orderDetails.timestamp) {
-            orderDetailsDictionary[@"timestamp"] = orderDetails.timestamp;
-        }
-
-        orderDetailsDictionary[@"amount"] = @(orderDetails.amount);
-
-        [mappedResponse setValue:[NSDictionary dictionaryWithDictionary:orderDetailsDictionary]
-                          forKey:@"orderDetails"];
     }
 
     return [NSDictionary dictionaryWithDictionary:mappedResponse];

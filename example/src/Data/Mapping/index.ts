@@ -203,7 +203,7 @@ export const judoConfigurationFromSettingsData = ({
   }
 
   // paymentMethods
-  const { isCardOn, isApplePayOn, isGooglePayOn, isiDealOn } = paymentMethods;
+  const { isCardOn, isApplePayOn, isGooglePayOn } = paymentMethods;
   let methods = 0;
 
   if (isCardOn) {
@@ -216,10 +216,6 @@ export const judoConfigurationFromSettingsData = ({
 
   if (isGooglePayOn) {
     methods |= JudoPaymentMethod.GooglePay;
-  }
-
-  if (isiDealOn) {
-    methods |= JudoPaymentMethod.iDEAL;
   }
 
   configuration = {

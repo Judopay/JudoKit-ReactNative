@@ -29,7 +29,6 @@
   },
   "paymentMethods": {
     "isCardOn": true,
-    "isiDealOn": true,
     "isApplePayOn": false,
     "isGooglePayOn": false
   },

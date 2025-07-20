@@ -33,7 +33,6 @@ export interface SettingsData {
   };
   paymentMethods: {
     isCardOn: boolean;
-    isiDealOn: boolean;
     isApplePayOn: boolean;
     isGooglePayOn: boolean;
   };

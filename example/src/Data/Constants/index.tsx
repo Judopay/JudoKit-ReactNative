@@ -34,7 +34,6 @@ export const DEFAULT_SETTINGS_DATA: SettingsData = {
   },
   paymentMethods: {
     isCardOn: true,
-    isiDealOn: true,
     isApplePayOn: false,
     isGooglePayOn: false,
   },

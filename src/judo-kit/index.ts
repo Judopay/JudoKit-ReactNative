@@ -187,7 +187,7 @@ export class JudoPay {
 
   /**
    * A method for invoking the Judo wallet, allowing users to pay with their preferred payment method.
-   * (Cards, Apple Pay/Google Pay, iDEAL)
+   * (Cards, Apple Pay/Google Pay)
    *
    * @param mode - a JudoTransactionMode value that defines if the transaction is either a payment or pre-auth.
    * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
