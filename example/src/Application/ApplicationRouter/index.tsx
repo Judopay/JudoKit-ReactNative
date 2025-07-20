@@ -42,7 +42,7 @@ const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
         <Stack.Screen
           name={Screen.SETTINGS}
           component={SettingsMainScreen}
-          options={options('Settings')} 
+          options={options('Settings')}
         />
         <Stack.Screen
           name={Screen.THREE_DS_UI_SETTINGS}
