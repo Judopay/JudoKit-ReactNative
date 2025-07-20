@@ -180,7 +180,8 @@ commands:
             - yarn-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/package.json" }}-{{ checksum "~/.tmp/checksumfiles/yarn.lock" }}-{{ .Environment.CACHE_VERSION }}
       - run:
           name: Yarn Install
-          command: 'export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install --immutable'
+          # command: 'export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install --immutable'
+          command: 'export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install'
       - save_cache:
           paths:
             - <<parameters.cache_folder>>
