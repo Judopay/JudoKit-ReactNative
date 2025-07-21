@@ -19,8 +19,6 @@ class JudoKitReactNativePackage : BaseReactPackage() {
   ): NativeModule? =
     if (name == JudoKitReactNativeModule.NAME) {
       JudoKitReactNativeModule(reactContext)
-    } else {
-      null // Todo: old arch!
     }
 
   override fun getReactModuleInfoProvider() =

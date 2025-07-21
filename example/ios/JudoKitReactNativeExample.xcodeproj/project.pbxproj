@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* JudoKitReactNativeExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* JudoKitReactNativeExampleTests.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		449FF17F2BFE1EB200A66616 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 449FF17E2BFE1EB200A66616 /* PrivacyInfo.xcprivacy */; };
 		472A453F7DBDCDA521745982 /* libPods-JudoKitReactNativeExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4BBB430577CD0887C2C39D1 /* libPods-JudoKitReactNativeExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -279,9 +278,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -296,9 +299,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JudoKitReactNativeExample/Pods-JudoKitReactNativeExample-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JudoKitReactNativeExample/Pods-JudoKitReactNativeExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -357,9 +364,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JudoKitReactNativeExample/Pods-JudoKitReactNativeExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JudoKitReactNativeExample/Pods-JudoKitReactNativeExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -374,9 +385,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests/Pods-JudoKitReactNativeExample-JudoKitReactNativeExampleTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -399,7 +414,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				99EF569C2E27BA9C00789EAF /* AppDelegate.swift in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
