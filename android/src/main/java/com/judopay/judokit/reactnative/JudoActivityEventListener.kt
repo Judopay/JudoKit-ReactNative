@@ -20,7 +20,7 @@ class JudoActivityEventListener : BaseActivityEventListener() {
   internal var transactionPromise: Promise? = null
 
   override fun onActivityResult(
-    activity: Activity,
+    activity: Activity?,
     requestCode: Int,
     resultCode: Int,
     data: Intent?,

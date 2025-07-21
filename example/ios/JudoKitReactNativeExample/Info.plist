@@ -35,8 +35,6 @@
 	<string>We need camera permissions for the scan card functionality</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This sample app would like to know your location.</string>
-	<key>RCTNewArchEnabled</key>
-	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
