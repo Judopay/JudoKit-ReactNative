@@ -16,10 +16,7 @@ class JudoKitReactNativePackage : BaseReactPackage() {
   override fun getModule(
     name: String,
     reactContext: ReactApplicationContext,
-  ): NativeModule? =
-    if (name == JudoKitReactNativeModule.NAME) {
-      JudoKitReactNativeModule(reactContext)
-    }
+  ): NativeModule? = JudoKitReactNativeModule(reactContext)
 
   override fun getReactModuleInfoProvider() =
     ReactModuleInfoProvider {
