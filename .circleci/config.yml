@@ -181,7 +181,7 @@ commands:
       - run:
           name: Yarn Install
           # command: 'export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install --immutable'
-          command: 'export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install && yarn react-native codegen'
+          command: 'export YARN_CACHE_FOLDER=<<parameters.cache_folder>> && yarn install'
       - save_cache:
           paths:
             - <<parameters.cache_folder>>
