@@ -367,13 +367,16 @@ NSDictionary *buildAuthorizationDict(const JS::NativeJudoKitReactNativeModule::J
     reject(kJudoPromiseRejectionCode, @"GOOGLE_PAY_UNSUPPORTED", error);
 }
 
-// TODO
-- (void)isApplePayAvailableWithConfiguration:()
+- (void)isApplePayAvailableWithConfiguration:(JS::NativeJudoKitReactNativeModule::SpecIsApplePayAvailableWithConfigurationParams)params
                                      resolve:(RCTPromiseResolveBlock)resolve
                                       reject:(RCTPromiseRejectBlock)reject {
-    // JPConfiguration *config = [RNWrappers configurationFromProperties:configuration];
-    // BOOL available = [JudoKit isApplePayAvailableWithConfiguration:config];
-    BOOL available = false;
+    NSDictionary *props = @{
+        @"configuration" : buildConfigurationDict(params.configuration()),
+        @"authorization" : buildAuthorizationDict(params.authorization()),
+        @"sandboxed" : @(params.sandboxed()),
+    };
+    JPConfiguration *config = [RNWrappers configurationFromProperties:props];
+    BOOL available = [JudoKit isApplePayAvailableWithConfiguration:config];
     resolve(@(available));
 }
 

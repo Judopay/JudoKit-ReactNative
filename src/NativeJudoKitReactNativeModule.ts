@@ -260,7 +260,11 @@ export interface Spec extends TurboModule {
     packageVersion: string;
   }): Promise<JudoResponse>;
 
-  isApplePayAvailableWithConfiguration(configuration: JudoConfiguration): Promise<boolean>;
+  isApplePayAvailableWithConfiguration(params: {
+    configuration: JudoConfiguration;
+    authorization: JudoAuthorization;
+    sandboxed: boolean;
+  }): Promise<JudoResponse>;
 
   fetchTransactionDetails(params: {
     authorization: JudoAuthorization;
