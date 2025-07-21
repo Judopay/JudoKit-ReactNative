@@ -380,14 +380,26 @@ NSDictionary *buildAuthorizationDict(const JS::NativeJudoKitReactNativeModule::J
     resolve(@(available));
 }
 
-// TODO
 - (void)fetchTransactionDetails:(JS::NativeJudoKitReactNativeModule::SpecFetchTransactionDetailsParams &)params
                         resolve:(RCTPromiseResolveBlock)resolve
                          reject:(RCTPromiseRejectBlock)reject {
-    //    NSDictionary *props = (__bridge_transfer NSDictionary *)params.propsDict();
-    //    [self fetchTransactionDetails:props
-    // fetchTransactionDetailsWithResolver:resolve
-    //                         rejecter:reject];
+    @try {
+        NSDictionary *properties = @{
+            @"authorization" : buildAuthorizationDict(params.authorization()),
+            @"sandboxed" : @(params.sandboxed()),
+            @"receiptId" : params.receiptId(),
+            @"packageVersion" : params.packageVersion() ?: [NSNull null],
+        };
+        self.apiService = [RNWrappers apiServiceFromProperties:properties];
+        self.completionBlock = [self completionBlockWithResolve:resolve andReject:reject];
+        NSString *receiptId = [RNWrappers receiptIdFromProperties:properties];
+        [self.apiService fetchTransactionWithReceiptId:receiptId completion:self.completionBlock];
+    } @catch (NSException *exception) {
+        NSError *error = [[NSError alloc] initWithDomain:RNJudoErrorDomain
+                                                    code:0
+                                                userInfo:exception.userInfo];
+        reject(kJudoPromiseRejectionCode, exception.reason, error);
+    }
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
