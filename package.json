@@ -116,6 +116,9 @@
       "@react-native",
       "prettier"
     ],
+    "plugins": [
+      "prettier"
+    ],
     "rules": {
       "no-bitwise": [
         "error",

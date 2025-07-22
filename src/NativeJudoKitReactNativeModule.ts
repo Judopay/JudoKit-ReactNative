@@ -1,5 +1,5 @@
-import type {TurboModule} from 'react-native';
-import {TurboModuleRegistry} from 'react-native';
+import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
 
 type JudoAmount = {
   value: string;
@@ -57,10 +57,10 @@ type NetworkTimeout = {
 };
 
 type JudoAuthorization = {
-  token: string,
-  secret?: string,
-  paymentSession?: string,
-}
+  token: string;
+  secret?: string;
+  paymentSession?: string;
+};
 
 type JudoConfiguration = {
   judoId: string;
@@ -215,7 +215,6 @@ enum JudoTransactionMode {
 }
 
 export interface Spec extends TurboModule {
-
   invokeTransaction(params: {
     configuration: JudoConfiguration;
     transactionType: JudoTransactionType;

@@ -27,9 +27,8 @@ test('isApplePayAvailableWithConfiguration will return false as mocked', async (
 
   const judoPay = new JudoPay(authorization);
 
-  const response = await judoPay.isApplePayAvailableWithConfiguration(
-    configuration
-  );
+  const response =
+    await judoPay.isApplePayAvailableWithConfiguration(configuration);
 
   expect(response).toBeFalsy();
 });
