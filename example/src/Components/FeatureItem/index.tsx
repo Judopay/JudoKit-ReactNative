@@ -15,30 +15,30 @@ const FeatureItem: FC<FeatureItemProps> = ({ title, details, onPress }) => {
 
   return (
     <Pressable
-        onPress={onPress}
-        style={({ pressed }) => ({
-          paddingHorizontal: 20,
-          paddingVertical: 16,
-          backgroundColor: pressed ? '#e0e0e0' : card,
-          borderRadius: 6,
-        })}
+      onPress={onPress}
+      style={({ pressed }) => ({
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+        backgroundColor: pressed ? '#e0e0e0' : card,
+        borderRadius: 6,
+      })}
+    >
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 'bold',
+          color: text,
+        }}
       >
-        <Text
-          style={{
-            fontSize: 14,
-            fontWeight: 'bold',
-            color: text,
-          }}
-        >
-          {title}
-        </Text>
-        <Text
-          style={{
-            fontSize: 12,
-            color: '#6e6e6e',
-            marginTop: 2,
-          }}
-        >
+        {title}
+      </Text>
+      <Text
+        style={{
+          fontSize: 12,
+          color: '#6e6e6e',
+          marginTop: 2,
+        }}
+      >
         {details}
       </Text>
     </Pressable>

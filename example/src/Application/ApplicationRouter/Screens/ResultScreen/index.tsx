@@ -31,7 +31,9 @@ const ItemSeparatorComponent = () => (
 );
 const SectionSeparatorComponent = () => <Separator key="separator-key" />;
 
-const ResultScreen: FC<NativeStackScreenProps<RootStackParamList, Screen.RESULT>> = ({
+const ResultScreen: FC<
+  NativeStackScreenProps<RootStackParamList, Screen.RESULT>
+> = ({
   route: {
     params: { items = [] },
   },
