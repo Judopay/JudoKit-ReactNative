@@ -407,5 +407,5 @@ NSDictionary *buildAuthorizationDict(const JS::NativeJudoKitReactNativeModule::J
     return std::make_shared<facebook::react::NativeJudoKitReactNativeModuleSpecJSI>(params);
 }
 
-#endif
 @end
+#endif
