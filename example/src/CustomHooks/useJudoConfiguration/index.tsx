@@ -9,23 +9,6 @@ import {
   judoConfigurationFromSettingsData,
 } from '../../Data/Mapping';
 import { appStorage } from '../../Application';
-import { MMKV } from 'react-native-mmkv';
-
-export function useMMKVState<T>(
-  key: string,
-  storage: MMKV,
-  defaultValue: T
-): [T, (value: T) => void] {
-  const [value, setValue] = useState<T>(() => {
-    const stored = storage?.getString(key);
-    return stored ? JSON.parse(stored) : defaultValue;
-  });
-  const update = (newValue: T) => {
-    setValue(newValue);
-    storage.set(key, JSON.stringify(newValue));
-  };
-  return [value, update];
-}
 
 export interface UseJudoConfigurationResult {
   isSandboxed: boolean;
@@ -34,11 +17,8 @@ export interface UseJudoConfigurationResult {
 }
 
 export function useJudoConfiguration(): UseJudoConfigurationResult {
-  const [settings, _] = useMMKVState(
-    STORAGE_SETTINGS_KEY,
-    appStorage,
-    DEFAULT_SETTINGS_DATA
-  );
+  const raw = appStorage.getString(STORAGE_SETTINGS_KEY);
+  const settings = raw ? JSON.parse(raw) : DEFAULT_SETTINGS_DATA;
 
   const [configuration, setConfiguration] = useState<JudoConfiguration>(
     judoConfigurationFromSettingsData(settings)
