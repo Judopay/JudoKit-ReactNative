@@ -6,30 +6,17 @@ import { useTheme } from '@react-navigation/native';
 import { ActivityIndicator, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { encode as btoa } from 'base-64';
-import { onErrorSnackbar, onSuccessSnackbar } from '../../../../Functions';
+import {
+  onErrorSnackbar,
+  onSuccessSnackbar,
+  useMMKVState,
+} from '../../../../Functions';
 import {
   DEFAULT_SETTINGS_DATA,
   STORAGE_SETTINGS_KEY,
 } from '../../../../Data/Constants';
 import { appStorage } from '../../../index';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MMKV } from 'react-native-mmkv';
-
-export function useMMKVState<T>(
-  key: string,
-  storage: MMKV,
-  defaultValue: T
-): [T, (value: T) => void] {
-  const [value, setValue] = useState<T>(() => {
-    const stored = storage.getString(key);
-    return stored ? JSON.parse(stored) : defaultValue;
-  });
-  const update = (newValue: T) => {
-    setValue(newValue);
-    storage.set(key, JSON.stringify(newValue));
-  };
-  return [value, update];
-}
 
 const generateRandomString = (length: number = 36) => {
   const char = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';

@@ -29,23 +29,7 @@ import {
 } from '../../Data/Constants';
 import _ from 'lodash';
 import { appStorage } from '../../Application';
-import { MMKV } from 'react-native-mmkv';
-
-export function useMMKVState<T>(
-  key: string,
-  storage: MMKV,
-  defaultValue: T
-): [T, (value: T) => void] {
-  const [value, setValue] = useState<T>(() => {
-    const stored = storage.getString(key);
-    return stored ? JSON.parse(stored) : defaultValue;
-  });
-  const update = (newValue: T) => {
-    setValue(newValue);
-    storage.set(key, JSON.stringify(newValue));
-  };
-  return [value, update];
-}
+import { useMMKVState } from '../../Functions';
 
 export interface SettingsTableProps {
   transformationFunction: (
