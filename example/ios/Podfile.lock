@@ -1665,7 +1665,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNGestureHandler (2.27.1):
+  - RNGestureHandler (2.27.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1754,7 +1754,7 @@ PODS:
     - Yoga
   - RNSnackbar (2.9.0):
     - React-Core
-  - RNVectorIcons (10.2.0):
+  - RNVectorIcons (10.3.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2101,11 +2101,11 @@ SPEC CHECKSUMS:
   ReactCodegen: 008c319179d681a6a00966edfc67fda68f9fbb2e
   ReactCommon: 0c097b53f03d6bf166edbcd0915da32f3015dd90
   RNCMaskedView: 308c763227e237d4d260bd8841870e099572bb3e
-  RNGestureHandler: 3ab8e53e9d405a340ea6612d5c2ef42e6e8477e3
+  RNGestureHandler: bb8e7019e9d33e099f5408a566485ceef0323070
   RNPermissions: 746d5b093d13c3f7e20ed5ddaef6e49ea218d550
   RNScreens: ef16970d0f91f1750ca82ba0db5d521fc0055fba
   RNSnackbar: c1b235eb606b03938c693ce769ed3059c31dff9b
-  RNVectorIcons: bd818296a51dc2bb8c3bd97a3ca399df1afe216d
+  RNVectorIcons: 0e915baaf807d5dfed506a14f23a29476c1f07f9
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   TrustKit: 1050f3ce0595f8ed775f1237b7f590e3a4f93e91
   Wormholy: ab1c8c2f02f58587a0941deb0088555ffbf039a1
