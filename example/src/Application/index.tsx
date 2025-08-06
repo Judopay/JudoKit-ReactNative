@@ -15,6 +15,7 @@ import {
 } from '@react-navigation/native';
 import { Theme } from '@react-navigation/native/lib/typescript/src/types';
 import ApplicationRouter from './ApplicationRouter';
+import { MMKVLoader, useMMKVStorage } from 'react-native-mmkv-storage';
 import {
   IS_IOS,
   DEFAULT_SETTINGS_DATA,
@@ -22,31 +23,14 @@ import {
 } from '../Data/Constants';
 import { LaunchArguments } from 'react-native-launch-arguments';
 import { getSettingsFromEnv, MyExpectedArgs } from '../Functions';
-import { MMKV } from 'react-native-mmkv';
-
-export function useMMKVState<T>(
-  key: string,
-  storage: MMKV,
-  defaultValue: T
-): [T, (value: T) => void] {
-  const [value, setValue] = useState<T>(() => {
-    const stored = storage?.getString(key);
-    return stored ? JSON.parse(stored) : defaultValue;
-  });
-  const update = (newValue: T) => {
-    setValue(newValue);
-    storage.set(key, JSON.stringify(newValue));
-  };
-  return [value, update];
-}
 
 const args = LaunchArguments.value<MyExpectedArgs>();
-export const appStorage = new MMKV();
+export const appStorage = new MMKVLoader().initialize();
 
 const Application = () => {
   const scheme = useColorScheme();
   const [theme, setTheme] = useState<Theme>(DefaultTheme);
-  const [_, setSettingsModel] = useMMKVState(
+  const [_, setSettingsModel] = useMMKVStorage(
     STORAGE_SETTINGS_KEY,
     appStorage,
     DEFAULT_SETTINGS_DATA

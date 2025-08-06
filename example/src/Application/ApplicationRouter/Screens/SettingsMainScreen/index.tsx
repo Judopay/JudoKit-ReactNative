@@ -6,17 +6,14 @@ import { useTheme } from '@react-navigation/native';
 import { ActivityIndicator, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { encode as btoa } from 'base-64';
-import {
-  onErrorSnackbar,
-  onSuccessSnackbar,
-  useMMKVState,
-} from '../../../../Functions';
+import { onErrorSnackbar, onSuccessSnackbar } from '../../../../Functions';
 import {
   DEFAULT_SETTINGS_DATA,
   STORAGE_SETTINGS_KEY,
 } from '../../../../Data/Constants';
 import { appStorage } from '../../../index';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
 
 const generateRandomString = (length: number = 36) => {
   const char = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -35,7 +32,7 @@ const SettingsMainScreen: FC<
   const {
     colors: { background: backgroundColor, primary },
   } = useTheme();
-  const [settings, setSettings] = useMMKVState(
+  const [settings, setSettings] = useMMKVStorage(
     STORAGE_SETTINGS_KEY,
     appStorage,
     DEFAULT_SETTINGS_DATA
@@ -110,7 +107,7 @@ const SettingsMainScreen: FC<
     });
 
     if (result.ok) {
-      const response = (await result.json()) as { reference: string };
+      const response = await result.json();
 
       const updatedSettings = {
         ...settings,

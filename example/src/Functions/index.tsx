@@ -16,8 +16,6 @@ import { ResultItem } from '../Application/ApplicationRouter/Screens/ResultScree
 import Snackbar from 'react-native-snackbar';
 import { DefaultTheme } from '@react-navigation/native';
 import { Buffer } from 'buffer';
-import { MMKV } from 'react-native-mmkv';
-import { useState } from 'react';
 
 interface PromiseForFeature {
   featureType: DemoFeatureType;
@@ -266,19 +264,3 @@ export const getSettingsFromEnv = (args: MyExpectedArgs) => {
   }
   return null;
 };
-
-export function useMMKVState<T>(
-  key: string,
-  storage: MMKV,
-  defaultValue: T
-): [T, (value: T) => void] {
-  const [value, setValue] = useState<T>(() => {
-    const stored = storage.getString(key);
-    return stored ? JSON.parse(stored) : defaultValue;
-  });
-  const update = (newValue: T) => {
-    setValue(newValue);
-    storage.set(key, JSON.stringify(newValue));
-  };
-  return [value, update];
-}

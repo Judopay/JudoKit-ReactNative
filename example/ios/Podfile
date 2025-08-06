@@ -1,22 +1,13 @@
-# Resolve react_native_pods.rb with node to allow for hoisting
-# require Pod::Executable.execute_command('node', ['-p',
-#   'require.resolve(
-#     "react-native/scripts/react_native_pods.rb",
-#     {paths: [process.argv[1]]},
-#   )', __dir__]).strip
-
-# react-native-permissions block start
-
-ENV['RCT_NEW_ARCH_ENABLED'] = '1'
-
 def node_require(script)
   # Resolve script with node to allow for hoisting
   require Pod::Executable.execute_command('node', ['-p',
     "require.resolve(
-     '#{script}',
+      '#{script}',
       {paths: [process.argv[1]]},
     )", __dir__]).strip
 end
+
+# react-native-permissions block start
 
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
@@ -44,22 +35,13 @@ end
 target 'JudoKitReactNativeExample' do
   config = use_native_modules!
   
-  new_arch_enabled = ENV['NEW_ARCH_ENABLED'].nil? ? true : ENV['NEW_ARCH_ENABLED'] == 'true'
-
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
-    :fabric_enabled =>  new_arch_enabled,
-    :hermes_enabled => true,
   )
 
   pod 'Wormholy'
-
-  target 'JudoKitReactNativeExampleTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
