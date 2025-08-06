@@ -1,4 +1,4 @@
-import { Text, Pressable } from 'react-native';
+import { Text, View, TouchableHighlight } from 'react-native';
 import React, { FC } from 'react';
 import { useTheme } from '@react-navigation/native';
 
@@ -14,34 +14,36 @@ const FeatureItem: FC<FeatureItemProps> = ({ title, details, onPress }) => {
   } = useTheme();
 
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => ({
-        paddingHorizontal: 20,
-        paddingVertical: 16,
-        backgroundColor: pressed ? '#e0e0e0' : card,
-        borderRadius: 6,
-      })}
-    >
-      <Text
+    <TouchableHighlight onPress={onPress}>
+      <View
         style={{
-          fontSize: 14,
-          fontWeight: 'bold',
-          color: text,
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: 16,
+          paddingBottom: 16,
+          backgroundColor: card,
         }}
       >
-        {title}
-      </Text>
-      <Text
-        style={{
-          fontSize: 12,
-          color: '#6e6e6e',
-          marginTop: 2,
-        }}
-      >
-        {details}
-      </Text>
-    </Pressable>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: 'bold',
+            color: text,
+          }}
+        >
+          {title}
+        </Text>
+        <Text
+          style={{
+            fontSize: 12,
+            color: '#6e6e6e',
+            marginTop: 2,
+          }}
+        >
+          {details}
+        </Text>
+      </View>
+    </TouchableHighlight>
   );
 };
 
