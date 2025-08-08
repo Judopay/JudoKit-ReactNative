@@ -47,10 +47,12 @@ const Application = () => {
     const buttonNegative = 'Cancel';
     const buttonPositive = 'OK';
 
-    check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS)
+    // @ts-ignore
+    check('android.permission.POST_NOTIFICATIONS')
       .then((result) => {
         if (result === RESULTS.DENIED) {
-          request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS, {
+          // @ts-ignore
+          request(`android.permission.POST_NOTIFICATIONS`, {
             buttonNegative,
             buttonPositive,
             title,

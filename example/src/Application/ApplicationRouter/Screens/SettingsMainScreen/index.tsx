@@ -107,7 +107,7 @@ const SettingsMainScreen: FC<
     });
 
     if (result.ok) {
-      const response = await result.json();
+      const response = (await result.json()) as Record<'reference', string>;
 
       const updatedSettings = {
         ...settings,

@@ -168,24 +168,6 @@ export function transformToListOfResultItems(
   return mapToResultItemList(result);
 }
 
-export function fromJSONString<T>(value: string | null, defaultValue: T): T {
-  try {
-    return value ? (parseJSON(value) as T) : defaultValue;
-  } catch (error) {
-    console.warn(error);
-    return defaultValue;
-  }
-}
-
-export function parseJSON<T>(value: string | null): T | undefined {
-  try {
-    return value === 'undefined' ? undefined : JSON.parse(value ?? '');
-  } catch (error) {
-    console.warn(error);
-    return undefined;
-  }
-}
-
 export const onErrorSnackbar = (error: Error) => {
   const { message } = error;
   Snackbar.show({
