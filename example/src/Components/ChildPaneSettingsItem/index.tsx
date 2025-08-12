@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useTheme } from '@react-navigation/native';
 import { Text, TouchableHighlight, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 
 export interface ChildPaneSettingsItemProps {
   title: string;
@@ -41,7 +41,7 @@ const ChildPaneSettingsItem: FC<ChildPaneSettingsItemProps> = ({
         >
           {title}
         </Text>
-        <Icon name="chevron-forward" size={20} color={border} />
+        <Ionicons name="chevron-forward" size={20} color={border} />
       </View>
     </TouchableHighlight>
   );

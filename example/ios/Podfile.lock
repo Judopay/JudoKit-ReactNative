@@ -1689,8 +1689,6 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-launch-arguments (4.1.0):
-    - React
   - react-native-mmkv-storage (0.11.2):
     - boost
     - DoubleConversion
@@ -1721,7 +1719,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context (5.5.2):
+  - react-native-safe-area-context (5.6.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -1740,8 +1738,8 @@ PODS:
     - React-hermes
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.5.2)
-    - react-native-safe-area-context/fabric (= 5.5.2)
+    - react-native-safe-area-context/common (= 5.6.0)
+    - react-native-safe-area-context/fabric (= 5.6.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1752,7 +1750,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/common (5.5.2):
+  - react-native-safe-area-context/common (5.6.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -1781,7 +1779,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/fabric (5.5.2):
+  - react-native-safe-area-context/fabric (5.6.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -1811,6 +1809,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - react-native-vector-icons-ionicons (12.3.0)
   - React-NativeModulesApple (0.80.2):
     - boost
     - DoubleConversion
@@ -2314,7 +2313,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNGestureHandler (2.27.2):
+  - RNGestureHandler (2.28.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2435,35 +2434,6 @@ PODS:
     - Yoga
   - RNSnackbar (2.9.0):
     - React-Core
-  - RNVectorIcons (10.3.0):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - SocketRocket
-    - Yoga
   - SocketRocket (0.7.1)
   - TrustKit (3.0.7)
   - Wormholy (1.7.0)
@@ -2512,9 +2482,9 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-launch-arguments (from `../node_modules/react-native-launch-arguments`)
   - react-native-mmkv-storage (from `../node_modules/react-native-mmkv-storage`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - "react-native-vector-icons-ionicons (from `../node_modules/@react-native-vector-icons/ionicons`)"
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-oscompat (from `../node_modules/react-native/ReactCommon/oscompat`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -2551,7 +2521,6 @@ DEPENDENCIES:
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSnackbar (from `../node_modules/react-native-snackbar`)
-  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - SocketRocket (~> 0.7.1)
   - Wormholy
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -2652,12 +2621,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
-  react-native-launch-arguments:
-    :path: "../node_modules/react-native-launch-arguments"
   react-native-mmkv-storage:
     :path: "../node_modules/react-native-mmkv-storage"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-vector-icons-ionicons:
+    :path: "../node_modules/@react-native-vector-icons/ionicons"
   React-NativeModulesApple:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-oscompat:
@@ -2730,8 +2699,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSnackbar:
     :path: "../node_modules/react-native-snackbar"
-  RNVectorIcons:
-    :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -2783,9 +2750,9 @@ SPEC CHECKSUMS:
   React-logger: 7cfc7b1ae1f8e5fe5097f9c746137cc3a8fad4ce
   React-Mapbuffer: 7018c5b7da5b13ed22fe55dae51d50187a00b2d7
   React-microtasksnativemodule: 8ff9cb220a8efa625b5885996bd69e69db9edf02
-  react-native-launch-arguments: 165260aba9544f00c66fae3e136b11484d0cb49b
   react-native-mmkv-storage: d4458aed5ceaa095d794453d51755b2a7a81ced4
-  react-native-safe-area-context: 68d1363b8354472a961aa6861ba8451beaf9a810
+  react-native-safe-area-context: b84e3cefd1ec3d38aa1d8bfbc2a15400ffe05181
+  react-native-vector-icons-ionicons: ad07e944a092a5cf71b8b569d8f5ce2bf674c415
   React-NativeModulesApple: 37c08c3c54db55854de816b0df0f3683832be35a
   React-oscompat: 56d6de59f9ae95cd006a1c40be2cde83bc06a4e1
   React-perflogger: 4008bd05a8b6c157b06608c0ea0b8bd5d9c5e6c9
@@ -2818,11 +2785,10 @@ SPEC CHECKSUMS:
   ReactCodegen: 439c427ccc115d71d16cc84256e5fbdc7fcef57a
   ReactCommon: 592ef441605638b95e533653259254b4bd35ff4f
   RNCMaskedView: 7e0ce15656772a939ff0d269100bca3a182163c8
-  RNGestureHandler: a0c83d8e4422f2ac04d1acb1741866a5184c7b73
+  RNGestureHandler: db29d3e7edf41a11d133cc3ffd4029762376ed1a
   RNPermissions: c53930880d553deb1bc0b902a4e6f68d4630c7af
   RNScreens: c63849403489bd068ea160f276fbc8416f19f2f7
   RNSnackbar: c1b235eb606b03938c693ce769ed3059c31dff9b
-  RNVectorIcons: be4d047a76ad307ffe54732208fb0498fcb8477f
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   TrustKit: 1050f3ce0595f8ed775f1237b7f590e3a4f93e91
   Wormholy: ab1c8c2f02f58587a0941deb0088555ffbf039a1

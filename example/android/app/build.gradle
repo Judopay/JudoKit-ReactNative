@@ -71,13 +71,6 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
 
-/**
- * https://www.npmjs.com/package/react-native-vector-icons
- * `react-native-vector-icons` fonts being copied from this module at build time
- * so that the fonts and JS are always in sync
- */
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
-
 android {
   ndkVersion rootProject.ext.ndkVersion
   buildToolsVersion rootProject.ext.buildToolsVersion
@@ -121,7 +114,7 @@ dependencies {
   implementation("com.facebook.react:react-android")
 
   // The following is for `JudoApiServiceFactory.externalInterceptors` in `MainApplication.java`
-  implementation "com.github.chuckerteam.chucker:library:3.5.2"
+  implementation "com.github.chuckerteam.chucker:library:4.2.0"
   implementation "com.judopay:judokit-android:5.0.2"
 
   // This is for Ravelin recommendation feature
@@ -135,5 +128,5 @@ dependencies {
 
   // This is for Detox test framework
   androidTestImplementation('com.wix:detox:+')
-  implementation 'androidx.appcompat:appcompat:1.6.1'
+  implementation 'androidx.appcompat:appcompat:1.7.1'
 }

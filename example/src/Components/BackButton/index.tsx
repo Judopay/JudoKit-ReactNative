@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigation, useTheme } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
+import { TouchableOpacity } from 'react-native';
 
 const BackButton: FC = () => {
   const {
@@ -15,16 +16,12 @@ const BackButton: FC = () => {
   };
 
   return (
-    <Icon.Button
+    <TouchableOpacity
       testID="back-button"
-      name="chevron-back"
-      size={28}
-      color={primary}
-      backgroundColor="transparent"
-      selectionColor="transparent"
-      underlayColor="transparent"
       onPress={() => navigateBackIfPossible()}
-    />
+    >
+      <Ionicons name="chevron-back" size={28} color={primary} />
+    </TouchableOpacity>
   );
 };
 

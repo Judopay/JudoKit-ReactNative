@@ -3,8 +3,12 @@ import SettingsTable from '../../../../Components/SettingsTable';
 import { buildSettingsSections } from '../../../../Data/SettingsSections';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import { useTheme } from '@react-navigation/native';
-import { ActivityIndicator, SafeAreaView } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { encode as btoa } from 'base-64';
 import { onErrorSnackbar, onSuccessSnackbar } from '../../../../Functions';
 import {
@@ -139,19 +143,15 @@ const SettingsMainScreen: FC<
         }}
       />
     ) : (
-      <Icon.Button
+      <TouchableOpacity
         disabled={isLoading}
-        name="color-wand-outline"
-        size={28}
-        color={primary}
-        backgroundColor="transparent"
-        selectionColor="transparent"
-        underlayColor="transparent"
+        testID="generateSessionButton"
         onPress={() => {
           generatePaymentSession();
         }}
-        testID="generateSessionButton"
-      />
+      >
+        <Ionicons name="color-wand-outline" size={28} color={primary} />
+      </TouchableOpacity>
     );
   };
 

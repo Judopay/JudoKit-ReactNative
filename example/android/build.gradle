@@ -1,36 +1,34 @@
 buildscript {
-    ext {
-        buildToolsVersion = "35.0.0"
-        minSdkVersion = 24
-        compileSdkVersion = 35
-        targetSdkVersion = 35
-        ndkVersion = "26.1.10909125"
-        kotlinVersion = "1.9.23"
-    }
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.6.0")
-        classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
-    }
+  ext {
+    buildToolsVersion = "35.0.0"
+    minSdkVersion = 24
+    compileSdkVersion = 35
+    targetSdkVersion = 35
+    ndkVersion = "27.1.12297006"
+    kotlinVersion = "2.1.21"
+  }
+  repositories {
+    google()
+    mavenCentral()
+  }
+  dependencies {
+    classpath("com.android.tools.build:gradle")
+    classpath("com.facebook.react:react-native-gradle-plugin")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+  }
 }
 
 allprojects {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        // Ravelin - optional - only required if you are using Ravelin
-        maven {
-          url 'https://maven.ravelin.com/public/repositories/core-android/'
-          }
-      // This is for Detox test framework
-      maven { url("$rootDir/../node_modules/detox/Detox-android") }
+  repositories {
+    google()
+    mavenCentral()
+    // Ravelin - optional - only required if you are using Ravelin
+    maven {
+      url 'https://maven.ravelin.com/public/repositories/core-android/'
     }
+    // This is for Detox test framework
+    maven { url("$rootDir/../node_modules/detox/Detox-android") }
+  }
 }
 
 apply plugin: "com.facebook.react.rootproject"

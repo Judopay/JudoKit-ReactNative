@@ -3,33 +3,36 @@ package com.judopay.judokit.reactnative
 import com.facebook.react.BaseReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
-import com.facebook.react.uimanager.ViewManager
 
 class JudoKitReactNativePackage : BaseReactPackage() {
-  override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> =
-    listOf(JudoKitReactNativeModule(reactContext))
-
-  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> = emptyList()
-
   override fun getModule(
     name: String,
     reactContext: ReactApplicationContext,
-  ): NativeModule? = JudoKitReactNativeModule(reactContext)
-
-  override fun getReactModuleInfoProvider() =
-    ReactModuleInfoProvider {
-      mapOf(
-        JudoKitReactNativeModule.NAME to
-          ReactModuleInfo(
-            name = JudoKitReactNativeModule.NAME,
-            className = JudoKitReactNativeModule::class.java.name,
-            canOverrideExistingModule = false,
-            needsEagerInit = false,
-            isCxxModule = false,
-            isTurboModule = true,
-          ),
-      )
+  ): NativeModule? =
+    if (name == JudoKitReactNativeModuleImpl.NAME) {
+      JudoKitReactNativeModule(reactContext)
+    } else {
+      null
     }
+
+  override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
+    val moduleList: Array<Class<out NativeModule?>> = arrayOf(JudoKitReactNativeModule::class.java)
+    val reactModuleInfoMap: MutableMap<String, ReactModuleInfo> = HashMap()
+    for (moduleClass in moduleList) {
+      val reactModule = moduleClass.getAnnotation(ReactModule::class.java) ?: continue
+      reactModuleInfoMap[reactModule.name] =
+        ReactModuleInfo(
+          reactModule.name,
+          moduleClass.name,
+          true,
+          reactModule.needsEagerInit,
+          reactModule.isCxxModule,
+          BuildConfig.IS_NEW_ARCHITECTURE_ENABLED,
+        )
+    }
+    return ReactModuleInfoProvider { reactModuleInfoMap }
+  }
 }

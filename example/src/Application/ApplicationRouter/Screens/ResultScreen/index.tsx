@@ -16,7 +16,7 @@ import {
   useTheme,
 } from '@react-navigation/native';
 import Separator from '../../../../Components/Separator';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 // import Clipboard from '@react-native-community/clipboard';
 // import Snackbar from 'react-native-snackbar';
 
@@ -119,7 +119,7 @@ const ResultScreen: FC<
             ) : null}
           </View>
           {subItems ? (
-            <Icon name="chevron-forward" size={20} color={primary} />
+            <Ionicons name="chevron-forward" size={20} color={primary} />
           ) : null}
         </View>
       </TouchableHighlight>
