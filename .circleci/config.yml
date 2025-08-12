@@ -254,6 +254,8 @@ commands:
       - run:
           name: Install Ruby dependencies with Bundler
           command: |
+            rbenv install 3.4.0
+            rbenv rehash
             bundle config set --local clean 'true'
             bundle config set --local path 'vendor/bundle'
             bundle check || bundle install
