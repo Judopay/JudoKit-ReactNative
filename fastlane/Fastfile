@@ -156,7 +156,7 @@ platform :android do
 
   desc "[Android] Build Sample App"
   lane :build_sample_app do | options |
-    gradle(tasks: ['clean', 'assembleRelease'], project_dir: './example/android')
+    gradle(tasks: ['clean', 'generateCodegenArtifactsFromSchema', 'assembleRelease'], project_dir: './example/android')
   end
 
   desc "[Android] Distribute Sample App"
