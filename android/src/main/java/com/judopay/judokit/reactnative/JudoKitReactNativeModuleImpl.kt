@@ -30,8 +30,8 @@ class JudoKitReactNativeModuleImpl(
     try {
       val judo = getTransactionConfiguration(options)
       startJudoActivity(currentActivity, judo, promise)
-    } catch (e: Exception) {
-      promise.reject(JUDO_PROMISE_REJECTION_CODE, e.localizedMessage, e)
+    } catch (error: Exception) {
+      promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
@@ -43,8 +43,8 @@ class JudoKitReactNativeModuleImpl(
     try {
       val judo = getGoogleTransactionConfiguration(options)
       startJudoActivity(currentActivity, judo, promise)
-    } catch (e: Exception) {
-      promise.reject(JUDO_PROMISE_REJECTION_CODE, e.localizedMessage, e)
+    } catch (error: Exception) {
+      promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
@@ -56,8 +56,8 @@ class JudoKitReactNativeModuleImpl(
     try {
       val judo = getPaymentMethodsConfiguration(options)
       startJudoActivity(currentActivity, judo, promise)
-    } catch (e: Exception) {
-      promise.reject(JUDO_PROMISE_REJECTION_CODE, e.localizedMessage, e)
+    } catch (error: Exception) {
+      promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
@@ -66,8 +66,7 @@ class JudoKitReactNativeModuleImpl(
     options: ReadableMap,
     promise: Promise,
   ) {
-    val cardToken = options.getString("cardToken")
-    if (cardToken.isNullOrEmpty()) {
+    if (options.cardToken.isNullOrEmpty()) {
       promise.reject(
         JUDO_PROMISE_REJECTION_CODE,
         "No card token provided, please make sure you provide it when invoking performTokenTransaction.",
@@ -78,8 +77,8 @@ class JudoKitReactNativeModuleImpl(
     try {
       val judo = getTokenTransactionConfiguration(options)
       startJudoActivity(currentActivity, judo, promise)
-    } catch (e: Exception) {
-      promise.reject(JUDO_PROMISE_REJECTION_CODE, e.localizedMessage, e)
+    } catch (error: Exception) {
+      promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
@@ -89,7 +88,7 @@ class JudoKitReactNativeModuleImpl(
   ) {
     try {
       val judo = getJudoConfigurationForApiService(options)
-      val receiptId = options.getString("receiptId") ?: ""
+      val receiptId = options.receiptId ?: ""
 
       val service = JudoApiServiceFactory.create(reactContext, judo)
 
@@ -129,14 +128,14 @@ class JudoKitReactNativeModuleImpl(
 
           override fun onFailure(
             call: Call<JudoApiCallResult<Receipt>>,
-            t: Throwable,
+            throwable: Throwable,
           ) {
-            promise.reject(JUDO_PROMISE_REJECTION_CODE, t.localizedMessage, t)
+            promise.reject(JUDO_PROMISE_REJECTION_CODE, throwable.localizedMessage, throwable)
           }
         },
       )
-    } catch (e: Exception) {
-      promise.reject(JUDO_PROMISE_REJECTION_CODE, e.localizedMessage, e)
+    } catch (error: Exception) {
+      promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
