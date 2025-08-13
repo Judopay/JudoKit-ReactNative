@@ -51,6 +51,11 @@ android {
     buildFeatures {
       buildConfig true
     }
+    sourceSets {
+      main {
+        manifest.srcFile "src/main/AndroidManifestNew.xml"
+      }
+    }
   }
 
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
@@ -94,7 +99,9 @@ android {
       if (isNewArchitectureEnabled()) {
         srcDirs += [
           "src/fabric/java",
-          "${project.buildDir}/generated/source/codegen/java",
+          // Codegen specs
+          "generated/java",
+          "generated/jni"
         ]
       } else {
         srcDirs += [
@@ -121,9 +128,10 @@ dependencies {
   implementation "com.judopay:judokit-android:${getExtOrDefault('judoKitAndroidVersion')}"
 }
 
-react {
-  jsRootDir = file("../src/")
-  libraryName = "JudoKitReactNative"
-  codegenJavaPackageName = "com.judopay.judokit.reactnative"
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../src/")
+    libraryName = "JudoKitReactNative"
+    codegenJavaPackageName = "com.judopay.judokit.reactnative"
+  }
 }
-

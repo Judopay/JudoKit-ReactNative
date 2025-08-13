@@ -1,13 +1,21 @@
 const path = require('path');
-const pak = require('../package.json');
+const pkg = require('../package.json');
 
 module.exports = {
+  project: {
+    ios: {
+      automaticPodsInstallation: true,
+    },
+  },
   dependencies: {
-    ...(process.env.NO_FLIPPER
-      ? { 'react-native-flipper': { platforms: { ios: null } } }
-      : {}),
-    [pak.name]: {
+    [pkg.name]: {
       root: path.join(__dirname, '..'),
+      platforms: {
+        // Codegen script incorrectly fails without this
+        // So we explicitly specify the platforms with empty object
+        ios: {},
+        android: {},
+      },
     },
   },
 };
