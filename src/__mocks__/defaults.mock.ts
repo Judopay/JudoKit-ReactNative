@@ -41,8 +41,7 @@ const uiConfiguration: JudoUIConfiguration = {
 const paymentMethods: JudoPaymentMethod =
   JudoPaymentMethod.Card |
   JudoPaymentMethod.ApplePay |
-  JudoPaymentMethod.GooglePay |
-  JudoPaymentMethod.iDEAL;
+  JudoPaymentMethod.GooglePay;
 
 const supportedCardNetworks: JudoCardNetwork =
   JudoCardNetwork.Visa | JudoCardNetwork.Mastercard | JudoCardNetwork.Amex;

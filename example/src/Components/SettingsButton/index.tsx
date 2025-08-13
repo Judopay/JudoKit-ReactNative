@@ -4,8 +4,9 @@ import {
   useNavigation,
   useTheme,
 } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { RootStackParamList, Screen } from '../../Data/TypeDefinitions';
+import { TouchableOpacity } from 'react-native';
 
 const SettingsButton: FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -14,16 +15,12 @@ const SettingsButton: FC = () => {
   } = useTheme();
 
   return (
-    <Icon.Button
+    <TouchableOpacity
       testID="settings-button"
-      name="settings-outline"
-      size={28}
-      color={primary}
-      backgroundColor="transparent"
-      selectionColor="transparent"
-      underlayColor="transparent"
       onPress={() => navigation.navigate(Screen.SETTINGS)}
-    />
+    >
+      <Ionicons name="settings-outline" size={28} color={primary} />
+    </TouchableOpacity>
   );
 };
 

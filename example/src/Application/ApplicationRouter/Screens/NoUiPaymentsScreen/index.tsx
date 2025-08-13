@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import {
   KeyboardAvoidingView,
@@ -26,7 +26,7 @@ import {
 } from '../../../../Functions';
 
 const NoUiPaymentsScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.NO_UI_PAYMENTS>
+  NativeStackScreenProps<RootStackParamList, Screen.NO_UI_PAYMENTS>
 > = () => {
   const {
     colors: { background: backgroundColor },

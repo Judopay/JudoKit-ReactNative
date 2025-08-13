@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import Separator from '../../../../Components/Separator';
 import { useTheme } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import type { StackScreenProps } from '@react-navigation/stack';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeEventNotifier } from '../../../../CustomHooks/useEventListener';
 import {
   RootStackParamList,
@@ -36,7 +36,7 @@ const ItemSeparatorComponent = () => (
 );
 
 const SettingsSingleSelectionScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.SINGLE_SELECTION>
+  NativeStackScreenProps<RootStackParamList, Screen.SINGLE_SELECTION>
 > = ({ route: { params } }) => {
   const { sectionListData, selectedItemId, path } = params;
   const {
@@ -82,7 +82,7 @@ const SettingsSingleSelectionScreen: FC<
             {title}
           </Text>
           {id === itemId ? (
-            <Icon name="checkmark-sharp" size={20} color={primary} />
+            <Ionicons name="checkmark-sharp" size={20} color={primary} />
           ) : null}
         </View>
       </TouchableHighlight>

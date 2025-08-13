@@ -27,7 +27,7 @@ import {
   Screen,
 } from '../../../../Data/TypeDefinitions';
 import { FEATURES } from '../../../../Data/Constants';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const ItemSeparatorComponent = () => (
   <Separator inset={20} key="separator-with-inset-key" />
@@ -35,7 +35,7 @@ const ItemSeparatorComponent = () => (
 const SectionSeparatorComponent = () => <Separator key="separator-key" />;
 
 const HomeScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.HOME>
+  NativeStackScreenProps<RootStackParamList, Screen.HOME>
 > = () => {
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
   const {

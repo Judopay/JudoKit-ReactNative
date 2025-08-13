@@ -455,7 +455,6 @@ internal fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
 
   val cardPaymentValue = 1
   val googlePaymentValue = 1 shl 2
-  val idealPaymentValue = 1 shl 3
   val allPaymentValues = 1 shl 5
 
   options.paymentMethodValue?.let {
@@ -467,10 +466,6 @@ internal fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
 
     if (it and googlePaymentValue == googlePaymentValue) {
       paymentMethods?.add(PaymentMethod.GOOGLE_PAY)
-    }
-
-    if (it and idealPaymentValue == idealPaymentValue) {
-      // noop
     }
 
     if (it and allPaymentValues == allPaymentValues) {

@@ -200,7 +200,6 @@ export enum JudoPaymentMethod {
   Card = 1 << 0,
   ApplePay = 1 << 1,
   GooglePay = 1 << 2,
-  iDEAL = 1 << 3,
   All = 1 << 5,
 }
 

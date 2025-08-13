@@ -1,19 +1,23 @@
 import React, { FC, useEffect, useState } from 'react';
 import SettingsTable from '../../../../Components/SettingsTable';
 import { buildSettingsSections } from '../../../../Data/SettingsSections';
-import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import { useTheme } from '@react-navigation/native';
-import { ActivityIndicator, SafeAreaView } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { encode as btoa } from 'base-64';
 import { onErrorSnackbar, onSuccessSnackbar } from '../../../../Functions';
-import { useMMKVStorage } from 'react-native-mmkv-storage';
 import {
   DEFAULT_SETTINGS_DATA,
   STORAGE_SETTINGS_KEY,
 } from '../../../../Data/Constants';
 import { appStorage } from '../../../index';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
 
 const generateRandomString = (length: number = 36) => {
   const char = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -25,7 +29,7 @@ const generateRandomString = (length: number = 36) => {
 };
 
 const SettingsMainScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.SETTINGS>
+  NativeStackScreenProps<RootStackParamList, Screen.SETTINGS>
 > = ({ navigation }) => {
   const { goBack, canGoBack } = navigation;
   const [isLoading, setIsLoading] = useState(false);
@@ -107,7 +111,7 @@ const SettingsMainScreen: FC<
     });
 
     if (result.ok) {
-      const response = await result.json();
+      const response = (await result.json()) as Record<'reference', string>;
 
       const updatedSettings = {
         ...settings,
@@ -139,19 +143,15 @@ const SettingsMainScreen: FC<
         }}
       />
     ) : (
-      <Icon.Button
+      <TouchableOpacity
         disabled={isLoading}
-        name="color-wand-outline"
-        size={28}
-        color={primary}
-        backgroundColor="transparent"
-        selectionColor="transparent"
-        underlayColor="transparent"
+        testID="generateSessionButton"
         onPress={() => {
           generatePaymentSession();
         }}
-        testID="generateSessionButton"
-      />
+      >
+        <Ionicons name="color-wand-outline" size={28} color={primary} />
+      </TouchableOpacity>
     );
   };
 

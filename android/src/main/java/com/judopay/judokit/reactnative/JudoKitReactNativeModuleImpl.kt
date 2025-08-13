@@ -1,9 +1,8 @@
 package com.judopay.judokit.reactnative
 
+import android.app.Activity
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
 import com.judopay.judokit.android.Judo
 import com.judopay.judokit.android.api.factory.JudoApiServiceFactory
@@ -14,65 +13,60 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-const val REQUEST_FAILED_MESSAGE = "The request was unsuccessful."
-const val MODULE_NAME = "JudoKitReactNative"
-
-class JudoKitReactNativeModule internal constructor(
+class JudoKitReactNativeModuleImpl(
   private val reactContext: ReactApplicationContext,
-) : ReactContextBaseJavaModule(reactContext) {
-  override fun getName() = MODULE_NAME
-
+) {
   private val listener = JudoActivityEventListener()
 
   init {
     reactContext.addActivityEventListener(listener)
   }
 
-  @ReactMethod
   fun invokeTransaction(
+    currentActivity: Activity?,
     options: ReadableMap,
     promise: Promise,
   ) {
     try {
       val judo = getTransactionConfiguration(options)
-      startJudoActivity(judo, promise)
+      startJudoActivity(currentActivity, judo, promise)
     } catch (error: Exception) {
       promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
-  @ReactMethod
   fun invokeGooglePay(
+    currentActivity: Activity?,
     options: ReadableMap,
     promise: Promise,
   ) {
     try {
       val judo = getGoogleTransactionConfiguration(options)
-      startJudoActivity(judo, promise)
+      startJudoActivity(currentActivity, judo, promise)
     } catch (error: Exception) {
       promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
-  @ReactMethod
   fun invokePaymentMethodScreen(
+    currentActivity: Activity?,
     options: ReadableMap,
     promise: Promise,
   ) {
     try {
       val judo = getPaymentMethodsConfiguration(options)
-      startJudoActivity(judo, promise)
+      startJudoActivity(currentActivity, judo, promise)
     } catch (error: Exception) {
       promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
-  @ReactMethod
   fun performTokenTransaction(
+    currentActivity: Activity?,
     options: ReadableMap,
     promise: Promise,
   ) {
-    if (options.cardToken == null) {
+    if (options.cardToken.isNullOrEmpty()) {
       promise.reject(
         JUDO_PROMISE_REJECTION_CODE,
         "No card token provided, please make sure you provide it when invoking performTokenTransaction.",
@@ -82,13 +76,12 @@ class JudoKitReactNativeModule internal constructor(
 
     try {
       val judo = getTokenTransactionConfiguration(options)
-      startJudoActivity(judo, promise)
+      startJudoActivity(currentActivity, judo, promise)
     } catch (error: Exception) {
       promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
-  @ReactMethod
   fun fetchTransactionDetails(
     options: ReadableMap,
     promise: Promise,
@@ -99,7 +92,7 @@ class JudoKitReactNativeModule internal constructor(
 
       val service = JudoApiServiceFactory.create(reactContext, judo)
 
-      val fetchTransactionDetailsCallback =
+      service.fetchTransactionWithReceiptId(receiptId).enqueue(
         object : Callback<JudoApiCallResult<Receipt>> {
           override fun onResponse(
             call: Call<JudoApiCallResult<Receipt>>,
@@ -112,7 +105,10 @@ class JudoKitReactNativeModule internal constructor(
                   val judoResult = receipt.toJudoResult()
                   promise.resolve(getMappedResult(judoResult))
                 } else {
-                  promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
+                  promise.reject(
+                    JUDO_PROMISE_REJECTION_CODE,
+                    REQUEST_FAILED_MESSAGE,
+                  )
                 }
               }
 
@@ -122,7 +118,10 @@ class JudoKitReactNativeModule internal constructor(
               }
 
               else -> {
-                promise.reject(JUDO_PROMISE_REJECTION_CODE, REQUEST_FAILED_MESSAGE)
+                promise.reject(
+                  JUDO_PROMISE_REJECTION_CODE,
+                  REQUEST_FAILED_MESSAGE,
+                )
               }
             }
           }
@@ -133,22 +132,39 @@ class JudoKitReactNativeModule internal constructor(
           ) {
             promise.reject(JUDO_PROMISE_REJECTION_CODE, throwable.localizedMessage, throwable)
           }
-        }
-
-      service
-        .fetchTransactionWithReceiptId(receiptId)
-        .enqueue(fetchTransactionDetailsCallback)
+        },
+      )
     } catch (error: Exception) {
       promise.reject(JUDO_PROMISE_REJECTION_CODE, error.localizedMessage, error)
     }
   }
 
-  private fun startJudoActivity(
-    configuration: Judo,
+  fun isApplePayAvailableWithConfiguration(
+    params: ReadableMap,
     promise: Promise,
-  ) = currentActivity?.let {
-    listener.transactionPromise = promise
-    val intent = configuration.toJudoActivityIntent(it)
-    it.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE)
+  ) = promise.reject(JUDO_PROMISE_REJECTION_CODE, APPLE_PAY_UNSUPPORTED)
+
+  fun invokeApplePay(
+    params: ReadableMap,
+    promise: Promise,
+  ) = promise.reject(JUDO_PROMISE_REJECTION_CODE, APPLE_PAY_UNSUPPORTED)
+
+  private fun startJudoActivity(
+    currentActivity: Activity?,
+    judo: Judo,
+    promise: Promise,
+  ) {
+    currentActivity?.let {
+      listener.transactionPromise = promise
+      val intent = judo.toJudoActivityIntent(it)
+      it.startActivityForResult(intent, JUDO_PAYMENT_WIDGET_REQUEST_CODE)
+    } ?: promise.reject(JUDO_PROMISE_REJECTION_CODE, "No current activity available")
+  }
+
+  companion object {
+    const val REQUEST_FAILED_MESSAGE = "The request was unsuccessful."
+    const val JUDO_PROMISE_REJECTION_CODE = "JUDO_ERROR"
+    const val APPLE_PAY_UNSUPPORTED = "Apple Pay is not supported on Android."
+    const val NAME = "JudoKitReactNative"
   }
 }

@@ -7,7 +7,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import {
   NavigationProp,
@@ -16,7 +16,7 @@ import {
   useTheme,
 } from '@react-navigation/native';
 import Separator from '../../../../Components/Separator';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 // import Clipboard from '@react-native-community/clipboard';
 // import Snackbar from 'react-native-snackbar';
 
@@ -31,7 +31,9 @@ const ItemSeparatorComponent = () => (
 );
 const SectionSeparatorComponent = () => <Separator key="separator-key" />;
 
-const ResultScreen: FC<StackScreenProps<RootStackParamList, Screen.RESULT>> = ({
+const ResultScreen: FC<
+  NativeStackScreenProps<RootStackParamList, Screen.RESULT>
+> = ({
   route: {
     params: { items = [] },
   },
@@ -117,7 +119,7 @@ const ResultScreen: FC<StackScreenProps<RootStackParamList, Screen.RESULT>> = ({
             ) : null}
           </View>
           {subItems ? (
-            <Icon name="chevron-forward" size={20} color={primary} />
+            <Ionicons name="chevron-forward" size={20} color={primary} />
           ) : null}
         </View>
       </TouchableHighlight>

@@ -1,6 +1,6 @@
 import { NavigationContainer, Theme } from '@react-navigation/native';
 import React, { FC } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './Screens/HomeScreen';
 import SettingsMainScreen from './Screens/SettingsMainScreen';
 import SettingsButton from '../../Components/SettingsButton';
@@ -13,7 +13,7 @@ import TokenPaymentsScreen from './Screens/TokenPaymentsScreen';
 import GetTransactionDetailsScreen from './Screens/GetTransactionDetailsScreen';
 import SettingsApplePayScreen from './Screens/SettingsApplePay';
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 interface ApplicationRouterProps {
   theme?: Theme;
@@ -31,10 +31,9 @@ const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
     headerRight,
     title: '[ReactNative] Features',
   };
-
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator initialRouteName={Screen.HOME}>
+      <Stack.Navigator>
         <Stack.Screen
           name={Screen.HOME}
           component={HomeScreen}

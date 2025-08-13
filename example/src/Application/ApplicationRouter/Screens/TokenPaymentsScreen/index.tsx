@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import {
   KeyboardAvoidingView,
@@ -29,7 +29,7 @@ import {
 } from '../../../../Functions';
 
 const TokenPaymentsScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.TOKEN_PAYMENTS>
+  NativeStackScreenProps<RootStackParamList, Screen.TOKEN_PAYMENTS>
 > = () => {
   const {
     colors: { background: backgroundColor },

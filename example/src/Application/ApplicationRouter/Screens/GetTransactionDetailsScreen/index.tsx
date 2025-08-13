@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import {
   KeyboardAvoidingView,
@@ -21,7 +21,7 @@ import { useJudoConfiguration } from '../../../../CustomHooks/useJudoConfigurati
 import { onError, transformToListOfResultItems } from '../../../../Functions';
 
 const GetTransactionDetailsScreen: FC<
-  StackScreenProps<RootStackParamList, Screen.GET_TRANSACTION_DETAILS>
+  NativeStackScreenProps<RootStackParamList, Screen.GET_TRANSACTION_DETAILS>
 > = () => {
   const {
     colors: { background: backgroundColor },

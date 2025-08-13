@@ -1,6 +1,5 @@
-import { Text, View } from 'react-native';
+import { Text, View, TouchableHighlight } from 'react-native';
 import React, { FC } from 'react';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useTheme } from '@react-navigation/native';
 
 export interface FeatureItemProps {

@@ -49,6 +49,8 @@ react {
   //
   //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
   // hermesFlags = ["-O", "-output-source-map"]
+
+  autolinkLibrariesWithApp()
 }
 
 /**
@@ -68,13 +70,6 @@ def enableProguardInReleaseBuilds = false
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
-
-/**
- * https://www.npmjs.com/package/react-native-vector-icons
- * `react-native-vector-icons` fonts being copied from this module at build time
- * so that the fonts and JS are always in sync
- */
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 android {
   ndkVersion rootProject.ext.ndkVersion
@@ -119,8 +114,8 @@ dependencies {
   implementation("com.facebook.react:react-android")
 
   // The following is for `JudoApiServiceFactory.externalInterceptors` in `MainApplication.java`
-  implementation "com.github.chuckerteam.chucker:library:3.5.2"
-  implementation "com.judopay:judokit-android:4.3.8.0.1"
+  implementation "com.github.chuckerteam.chucker:library:4.2.0"
+  implementation "com.judopay:judokit-android:5.0.2"
 
   // This is for Ravelin recommendation feature
   implementation 'com.ravelin.sdk:ravelin-encrypt:3.1.0'
@@ -133,7 +128,5 @@ dependencies {
 
   // This is for Detox test framework
   androidTestImplementation('com.wix:detox:+')
-  implementation 'androidx.appcompat:appcompat:1.6.1'
+  implementation 'androidx.appcompat:appcompat:1.7.1'
 }
-
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

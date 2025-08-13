@@ -21,10 +21,11 @@ import {
   DEFAULT_SETTINGS_DATA,
   STORAGE_SETTINGS_KEY,
 } from '../Data/Constants';
-import { LaunchArguments } from 'react-native-launch-arguments';
-import { getSettingsFromEnv, MyExpectedArgs } from '../Functions';
+// import { LaunchArguments } from 'react-native-launch-arguments';
+// import { getSettingsFromEnv, MyExpectedArgs } from '../Functions';
 
-const args = LaunchArguments.value<MyExpectedArgs>();
+// https://github.com/iamolegga/react-native-launch-arguments/issues/36
+// const args = LaunchArguments.value<MyExpectedArgs>();
 export const appStorage = new MMKVLoader().initialize();
 
 const Application = () => {
@@ -47,10 +48,12 @@ const Application = () => {
     const buttonNegative = 'Cancel';
     const buttonPositive = 'OK';
 
-    check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS)
+    // @ts-ignore
+    check('android.permission.POST_NOTIFICATIONS')
       .then((result) => {
         if (result === RESULTS.DENIED) {
-          request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS, {
+          // @ts-ignore
+          request(`android.permission.POST_NOTIFICATIONS`, {
             buttonNegative,
             buttonPositive,
             title,
@@ -130,10 +133,10 @@ const Application = () => {
 
   useEffect(() => {
     const loadSettings = async () => {
-      const settings = getSettingsFromEnv(args);
-      if (settings) {
-        setSettingsModel(settings);
-      }
+      // const settings = getSettingsFromEnv(args);
+      // if (settings) {
+      //   setSettingsModel(settings);
+      // }
     };
 
     loadSettings().catch(console.error);

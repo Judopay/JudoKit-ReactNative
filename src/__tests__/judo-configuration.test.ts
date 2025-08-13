@@ -197,12 +197,10 @@ test('check JudoPaymentMethod enum keys/values', () => {
     '1',
     '2',
     '4',
-    '8',
     '32',
     'Card',
     'ApplePay',
     'GooglePay',
-    'iDEAL',
     'All',
   ]);
 });
