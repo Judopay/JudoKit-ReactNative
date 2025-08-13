@@ -8,7 +8,7 @@ executors:
 
 orbs:
   slack: circleci/slack@4.13.1
-  android: circleci/android@2.5.0
+  android: circleci/android@3.1.0
 
 commands:
   notify_slack_error_ios:
@@ -395,27 +395,27 @@ jobs:
       - notify_slack_pass_ios
   run_e2e_android:
     executor:
-      name: android/android-machine
-      resource-class: large
-      tag: 2024.04.1
+      name: android/android_machine
+      resource_class: large
+      tag: 2024.11.1
     steps:
       - checkout
       - yarn_install
-      - android/accept-licenses
-      - android/create-avd:
-          avd-name: Pixel_3_API_34_x86_64
-          system-image: system-images;android-34;google_atd;x86_64
+      - android/accept_licenses
+      - android/create_avd:
+          avd_name: Pixel_3_API_34_x86_64
+          system_image: system-images;android-34;google_atd;x86_64
           install: true
       - setup_avd_screen_size:
           avd_name: Pixel_3_API_34_x86_64
-      - android/start-emulator:
-          avd-name: Pixel_3_API_34_x86_64
+      - android/start_emulator:
+          avd_name: Pixel_3_API_34_x86_64
           memory: 4096
           gpu: 'host'
-          run-logcat: true
-          wait-for-emulator: true
-          restore-gradle-cache-prefix: v1a
-          post-emulator-launch-assemble-command: 'echo "Emulator is ready"'
+          run_logcat: true
+          wait_for_emulator: true
+          restore_gradle_cache_prefix: v1a
+          post_emulator_launch_assemble_command: 'echo "Emulator is ready"'
       - run:
           name: Run the tests
           working_directory: example
@@ -423,8 +423,8 @@ jobs:
             yarn start &
             yarn detox:build:android
             yarn detox:test:android
-      - android/save-gradle-cache:
-          cache-prefix: v1a
+      - android/save_gradle_cache:
+          cache_prefix: v1a
       - store_artifacts:
           path: example/artifacts
       - notify_slack_error_android
