@@ -5,6 +5,16 @@ __metadata:
   version: 8
   cacheKey: 10
 
+"@adeptus_artifex/react-native-launch-arguments@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@adeptus_artifex/react-native-launch-arguments@npm:0.1.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/1b7ac66c3c911809b8b593ccf17f2f6fb5384a51332d530ce0e5e46f88e5c4ae4b8f1132fc2a0385834d1c9de2d537458d5ef438ec41e107debe0e4ce339c66f
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -9260,6 +9270,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "judokit-react-native-example@workspace:example"
   dependencies:
+    "@adeptus_artifex/react-native-launch-arguments": "npm:^0.1.3"
     "@babel/core": "npm:^7.28.0"
     "@babel/preset-env": "npm:^7.28.0"
     "@babel/runtime": "npm:^7.28.2"
