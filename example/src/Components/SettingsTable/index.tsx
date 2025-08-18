@@ -28,7 +28,6 @@ import {
   IS_IOS,
   STORAGE_SETTINGS_KEY,
 } from '../../Data/Constants';
-import _ from 'lodash';
 import { appStorage } from '../../Application';
 
 export interface SettingsTableProps {
@@ -57,21 +56,46 @@ const SettingsTable: FC<SettingsTableProps> = ({ transformationFunction }) => {
   );
 
   const handleSettingsChange = (path: string, value: boolean | string) => {
-    let updatedValue = { ..._.set(settings, path, value) };
+    let valueToUpdate = { ...settings };
+
+    updateValue(valueToUpdate, path, value);
 
     if (path === 'authorization.isUsingPaymentSession' && value) {
-      updatedValue = {
-        ..._.set(updatedValue, 'authorization.isUsingTokenAndSecret', false),
-      };
+      updateValue(valueToUpdate, 'authorization.isUsingTokenAndSecret', false);
     }
 
     if (path === 'authorization.isUsingTokenAndSecret' && value) {
-      updatedValue = {
-        ..._.set(updatedValue, 'authorization.isUsingPaymentSession', false),
-      };
+      updateValue(valueToUpdate, 'authorization.isUsingPaymentSession', false);
     }
 
-    setSettings(updatedValue);
+    setSettings(valueToUpdate);
+  };
+
+  const updateValue = (
+    valueToUpdate: Record<string, any>,
+    path: string,
+    value: boolean | string
+  ) => {
+    const pathParts = path.split('.');
+
+    let current = valueToUpdate;
+
+    for (let i = 0; i < pathParts.length - 1; i++) {
+      const key = pathParts[i];
+
+      if (key && current[key] === undefined) {
+        current[key] = {};
+      }
+
+      if (key) {
+        current = current[key] = { ...current[key] };
+      }
+    }
+
+    const finalKey = pathParts[pathParts.length - 1];
+    if (finalKey) {
+      current[finalKey] = value;
+    }
   };
 
   useEffect(() => {

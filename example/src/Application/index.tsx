@@ -21,11 +21,10 @@ import {
   DEFAULT_SETTINGS_DATA,
   STORAGE_SETTINGS_KEY,
 } from '../Data/Constants';
-// import { LaunchArguments } from 'react-native-launch-arguments';
-// import { getSettingsFromEnv, MyExpectedArgs } from '../Functions';
+import { LaunchArguments } from '@adeptus_artifex/react-native-launch-arguments';
+import { getSettingsFromEnv, MyExpectedArgs } from '../Functions';
 
-// https://github.com/iamolegga/react-native-launch-arguments/issues/36
-// const args = LaunchArguments.value<MyExpectedArgs>();
+const args = LaunchArguments.value<MyExpectedArgs>();
 export const appStorage = new MMKVLoader().initialize();
 
 const Application = () => {
@@ -133,10 +132,10 @@ const Application = () => {
 
   useEffect(() => {
     const loadSettings = async () => {
-      // const settings = getSettingsFromEnv(args);
-      // if (settings) {
-      //   setSettingsModel(settings);
-      // }
+      const settings = getSettingsFromEnv(args);
+      if (settings) {
+        setSettingsModel(settings);
+      }
     };
 
     loadSettings().catch(console.error);
