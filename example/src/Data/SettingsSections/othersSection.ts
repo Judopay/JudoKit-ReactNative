@@ -1,67 +1,45 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { OTHERS_KEYS } from '../Constants';
 
-const othersSection = (data: SettingsData): SectionListData<SettingsItem> => {
-  const isAddressVerificationServiceOnPath =
-    'others.isAddressVerificationServiceOn';
-  const isAmountLabelInPaymentMethodsOnPath =
-    'others.isAmountLabelInPaymentMethodsOn';
-  const isAmountLabelInPaymentButtonOnPath =
-    'others.isAmountLabelInPaymentButtonOn';
-  const isSecurityCodeOnPath = 'others.isSecurityCodeOn';
-  const isInitialRecurringPaymentOnPath = 'others.isInitialRecurringPaymentOn';
-  const isDelayedAuthorisationOnPath = 'others.isDelayedAuthorisationOn';
-  const isAllowIncrementOnPath = 'others.isAllowIncrementOn';
-
+const othersSection = (): SectionListData<SettingsItem> => {
   return {
     header: 'OTHERS',
     data: [
       {
-        path: isAddressVerificationServiceOnPath,
+        path: OTHERS_KEYS.IS_ADDRESS_VERIFICATION_SERVICE_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Address Verification Service',
-        value: _.get(data, isAddressVerificationServiceOnPath),
       },
       {
-        path: isAmountLabelInPaymentMethodsOnPath,
+        path: OTHERS_KEYS.IS_AMOUNT_LABEL_IN_PAYMENT_METHODS_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Amount label in Payment Methods',
-        value: _.get(data, isAmountLabelInPaymentMethodsOnPath),
       },
       {
-        path: isAmountLabelInPaymentButtonOnPath,
+        path: OTHERS_KEYS.IS_AMOUNT_LABEL_IN_PAYMENT_BUTTON_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Amount label in Payment Button',
-        value: _.get(data, isAmountLabelInPaymentButtonOnPath),
       },
       {
-        path: isSecurityCodeOnPath,
+        path: OTHERS_KEYS.IS_SECURITY_CODE_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Security code',
-        value: _.get(data, isSecurityCodeOnPath),
       },
       {
-        path: isInitialRecurringPaymentOnPath,
+        path: OTHERS_KEYS.IS_INITIAL_RECURRING_PAYMENT_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Initial recurring payment',
-        value: _.get(data, isInitialRecurringPaymentOnPath),
       },
       {
-        path: isDelayedAuthorisationOnPath,
+        path: OTHERS_KEYS.IS_DELAYED_AUTHORISATION_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Delayed authorisation',
-        value: _.get(data, isDelayedAuthorisationOnPath),
       },
       {
-        path: isAllowIncrementOnPath,
+        path: OTHERS_KEYS.IS_ALLOW_INCREMENT_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Allow increment',
-        value: _.get(data, isAllowIncrementOnPath),
       },
     ],
   };

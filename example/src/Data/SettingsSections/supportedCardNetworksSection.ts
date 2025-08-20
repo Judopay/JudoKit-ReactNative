@@ -1,73 +1,50 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { SUPPORTED_CARD_NETWORKS_KEYS } from '../Constants';
 
-const supportedCardNetworksSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isVisaOnPath = 'supportedCardNetworks.isVisaOn';
-  const isMastercardOnPath = 'supportedCardNetworks.isMastercardOn';
-  const isAmexOnPath = 'supportedCardNetworks.isAmexOn';
-  const isMaestroOnPath = 'supportedCardNetworks.isMaestroOn';
-  const isChinaUnionPayOnPath = 'supportedCardNetworks.isChinaUnionPayOn';
-  const isJCBOnPath = 'supportedCardNetworks.isJCBOn';
-  const isDiscoverOnPath = 'supportedCardNetworks.isDiscoverOn';
-  const isDinersClubOnPath = 'supportedCardNetworks.';
-
+const supportedCardNetworksSection = (): SectionListData<SettingsItem> => {
   return {
     header: 'SUPPORTED CARD NETWORKS',
     data: [
       {
-        path: isVisaOnPath,
+        path: SUPPORTED_CARD_NETWORKS_KEYS.IS_VISA_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Visa',
-        value: _.get(data, isVisaOnPath),
       },
       {
-        path: isMastercardOnPath,
+        path: SUPPORTED_CARD_NETWORKS_KEYS.IS_MASTERCARD_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'MasterCard',
-        value: _.get(data, isMastercardOnPath),
       },
       {
-        path: isAmexOnPath,
+        path: SUPPORTED_CARD_NETWORKS_KEYS.IS_AMEX_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'AMEX',
-        value: _.get(data, isAmexOnPath),
       },
       {
-        path: isMaestroOnPath,
+        path: SUPPORTED_CARD_NETWORKS_KEYS.IS_MAESTRO_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Maestro',
-        value: _.get(data, isMaestroOnPath),
       },
       {
-        path: isChinaUnionPayOnPath,
+        path: SUPPORTED_CARD_NETWORKS_KEYS.IS_CHINA_UNION_PAY_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'China Union Pay',
-        value: _.get(data, isChinaUnionPayOnPath),
       },
       {
-        path: isJCBOnPath,
+        path: SUPPORTED_CARD_NETWORKS_KEYS.IS_JCB_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'JCB',
-        value: _.get(data, isJCBOnPath),
       },
       {
-        path: isDiscoverOnPath,
+        path: SUPPORTED_CARD_NETWORKS_KEYS.IS_DISCOVER_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Discover',
-        value: _.get(data, isDiscoverOnPath),
       },
       {
-        path: isDinersClubOnPath,
+        path: SUPPORTED_CARD_NETWORKS_KEYS.IS_DINERS_CLUB_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Diners Club',
-        value: _.get(data, isDinersClubOnPath),
       },
     ],
   };

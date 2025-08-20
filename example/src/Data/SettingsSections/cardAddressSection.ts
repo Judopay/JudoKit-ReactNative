@@ -1,98 +1,70 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { CARD_ADDRESS_KEYS } from '../Constants';
+import { getBoolOrFalse } from '../Mapping';
 
-const cardAddressSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isEnabledPath = 'cardAddress.isEnabled';
-  const line1Path = 'cardAddress.line1';
-  const line2Path = 'cardAddress.line2';
-  const line3Path = 'cardAddress.line3';
-  const townPath = 'cardAddress.town';
-  const postCodePath = 'cardAddress.postCode';
-  const countryCodePath = 'cardAddress.countryCode';
-  const statePath = 'cardAddress.state';
-  const phoneCountryCodePath = 'cardAddress.phoneCountryCode';
-  const mobileNumberPath = 'cardAddress.mobileNumber';
-  const emailAddressPath = 'cardAddress.emailAddress';
-
-  const isEnabled = _.get(data, isEnabledPath);
+const cardAddressSection = (): SectionListData<SettingsItem> => {
+  const isEnabled = getBoolOrFalse(CARD_ADDRESS_KEYS.IS_ENABLED);
 
   return {
     header: 'ADDRESS',
     data: [
       {
-        path: isEnabledPath,
+        path: CARD_ADDRESS_KEYS.IS_ENABLED,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Enable card address',
-        value: isEnabled,
       },
       ...(isEnabled
         ? [
             {
-              path: line1Path,
+              path: CARD_ADDRESS_KEYS.LINE1,
               dataType: SettingsItemDataType.TEXT,
               title: 'Line 1',
-              value: _.get(data, line1Path),
             },
             {
-              path: line2Path,
+              path: CARD_ADDRESS_KEYS.LINE2,
               dataType: SettingsItemDataType.TEXT,
               title: 'Line 2',
-              value: _.get(data, line2Path),
             },
             {
-              path: line3Path,
+              path: CARD_ADDRESS_KEYS.LINE3,
               dataType: SettingsItemDataType.TEXT,
               title: 'Line 3',
-              value: _.get(data, line3Path),
             },
             {
-              path: townPath,
+              path: CARD_ADDRESS_KEYS.TOWN,
               dataType: SettingsItemDataType.TEXT,
               title: 'Town',
-              value: _.get(data, townPath),
             },
             {
-              path: postCodePath,
+              path: CARD_ADDRESS_KEYS.POST_CODE,
               dataType: SettingsItemDataType.TEXT,
               title: 'Post code',
-              value: _.get(data, postCodePath),
             },
             {
-              path: countryCodePath,
+              path: CARD_ADDRESS_KEYS.COUNTRY_CODE,
               dataType: SettingsItemDataType.TEXT,
               title: 'Country code',
-              value: _.get(data, countryCodePath),
             },
             {
-              path: statePath,
+              path: CARD_ADDRESS_KEYS.STATE,
               dataType: SettingsItemDataType.TEXT,
               title: 'State',
-              value: _.get(data, statePath),
             },
             {
-              path: phoneCountryCodePath,
+              path: CARD_ADDRESS_KEYS.PHONE_COUNTRY_CODE,
               dataType: SettingsItemDataType.TEXT,
               title: 'Phone country code',
-              value: _.get(data, phoneCountryCodePath),
             },
             {
-              path: mobileNumberPath,
+              path: CARD_ADDRESS_KEYS.MOBILE_NUMBER,
               dataType: SettingsItemDataType.TEXT,
               title: 'Mobile number',
-              value: _.get(data, mobileNumberPath),
             },
             {
-              path: emailAddressPath,
+              path: CARD_ADDRESS_KEYS.EMAIL_ADDRESS,
               dataType: SettingsItemDataType.TEXT,
               title: 'Email address',
-              value: _.get(data, emailAddressPath),
             },
           ]
         : []),

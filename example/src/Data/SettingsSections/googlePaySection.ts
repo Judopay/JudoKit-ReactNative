@@ -1,158 +1,93 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
 import {
   GOOGLE_PAY_BILLING_ADDRESS_FIELD_OPTIONS,
   GOOGLE_PAY_CHECKOUT_OPTION_OPTIONS,
+  GOOGLE_PAY_KEYS,
   GOOGLE_PAY_PRICE_STATUS_OPTIONS,
 } from '../Constants';
-import _ from 'lodash';
 
-const googlePaySection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isProductionEnvironmentOnPath = 'googlePay.isProductionEnvironmentOn';
-  const merchantNamePath = 'googlePay.merchantName';
-  const countryCodePath = 'googlePay.countryCode';
-  const billingAddressFieldsPath = 'googlePay.billingAddressFields';
-  const isBillingAddressPhoneNumberOnPath =
-    'googlePay.isBillingAddressPhoneNumberOn';
-  const isShippingAddressOnPath = 'googlePay.isShippingAddressOn';
-  const shippingAddressAllowedCountriesPath =
-    'googlePay.shippingAddressAllowedCountries';
-  const isShippingAddressPhoneNumberOnPath =
-    'googlePay.isShippingAddressPhoneNumberOn';
-  const isEmailAddressOnPath = 'googlePay.isEmailAddressOn';
-  const allowPrepaidCardsPath = 'googlePay.allowPrepaidCards';
-  const allowCreditCardsPath = 'googlePay.allowCreditCards';
-  const transactionIdPath = 'googlePay.transactionId';
-  const totalPriceStatusPath = 'googlePay.totalPriceStatus';
-  const totalPriceLabelPath = 'googlePay.totalPriceLabel';
-  const checkoutOptionPath = 'googlePay.checkoutOption';
-
-  const isProductionEnvironmentOn = _.get(data, isProductionEnvironmentOnPath);
-  const merchantName = _.get(data, merchantNamePath);
-  const countryCode = _.get(data, countryCodePath);
-  const billingAddressFields = _.get(data, billingAddressFieldsPath);
-  const isBillingAddressPhoneNumberOn = _.get(
-    data,
-    isBillingAddressPhoneNumberOnPath
-  );
-  const isShippingAddressOn = _.get(data, isShippingAddressOnPath);
-  const shippingAddressAllowedCountries = _.get(
-    data,
-    shippingAddressAllowedCountriesPath
-  );
-  const isShippingAddressPhoneNumberOn = _.get(
-    data,
-    isShippingAddressPhoneNumberOnPath
-  );
-  const isEmailAddressOn = _.get(data, isEmailAddressOnPath);
-  const isAllowPrepaidCardsOn = _.get(data, allowPrepaidCardsPath);
-  const isAllowCreditCardsOn = _.get(data, allowCreditCardsPath);
-  const transactionId = _.get(data, transactionIdPath);
-  const totalPriceStatus = _.get(data, totalPriceStatusPath);
-  const totalPriceLabel = _.get(data, totalPriceLabelPath);
-  const checkoutOption = _.get(data, checkoutOptionPath);
-
+const googlePaySection = (): SectionListData<SettingsItem> => {
   return {
     header: 'GOOGLE PAY',
     data: [
       {
-        path: isProductionEnvironmentOnPath,
+        path: GOOGLE_PAY_KEYS.IS_PRODUCTION_ENVIRONMENT_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Production environment',
-        value: isProductionEnvironmentOn,
       },
       {
-        path: merchantNamePath,
+        path: GOOGLE_PAY_KEYS.MERCHANT_NAME,
         dataType: SettingsItemDataType.TEXT,
         title: 'Merchant name',
-        value: merchantName,
       },
       {
-        path: countryCodePath,
+        path: GOOGLE_PAY_KEYS.COUNTRY_CODE,
         dataType: SettingsItemDataType.TEXT,
         title: 'Country code',
-        value: countryCode,
       },
       {
-        path: billingAddressFieldsPath,
+        path: GOOGLE_PAY_KEYS.BILLING_ADDRESS_FIELDS,
         dataType: SettingsItemDataType.SINGLE_SELECTION,
         options: GOOGLE_PAY_BILLING_ADDRESS_FIELD_OPTIONS,
         title: 'Billing address',
-        value: billingAddressFields,
       },
       {
-        path: isBillingAddressPhoneNumberOnPath,
+        path: GOOGLE_PAY_KEYS.IS_BILLING_ADDRESS_PHONE_NUMBER_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Billing address phone number',
-        value: isBillingAddressPhoneNumberOn,
       },
       {
-        path: isShippingAddressOnPath,
+        path: GOOGLE_PAY_KEYS.IS_SHIPPING_ADDRESS_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Shipping address',
-        value: isShippingAddressOn,
       },
       {
-        path: shippingAddressAllowedCountriesPath,
+        path: GOOGLE_PAY_KEYS.SHIPPING_ADDRESS_ALLOWED_COUNTRIES,
         dataType: SettingsItemDataType.TEXT,
         title: 'Shipping address allowed countries',
-        value: shippingAddressAllowedCountries,
       },
       {
-        path: isShippingAddressPhoneNumberOnPath,
+        path: GOOGLE_PAY_KEYS.IS_SHIPPING_ADDRESS_PHONE_NUMBER_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Shipping address phone number',
-        value: isShippingAddressPhoneNumberOn,
       },
       {
-        path: isEmailAddressOnPath,
+        path: GOOGLE_PAY_KEYS.IS_EMAIL_ADDRESS_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Email address',
-        value: isEmailAddressOn,
       },
       {
-        path: allowPrepaidCardsPath,
+        path: GOOGLE_PAY_KEYS.ALLOW_PREPAID_CARDS,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Allow prepaid cards',
-        value: isAllowPrepaidCardsOn,
       },
       {
-        path: allowCreditCardsPath,
+        path: GOOGLE_PAY_KEYS.ALLOW_CREDIT_CARDS,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Allow credit cards',
-        value: isAllowCreditCardsOn,
       },
       {
-        path: transactionIdPath,
+        path: GOOGLE_PAY_KEYS.TRANSACTION_ID,
         dataType: SettingsItemDataType.TEXT,
         title: 'Transaction ID',
-        value: transactionId,
       },
       {
-        path: totalPriceStatusPath,
+        path: GOOGLE_PAY_KEYS.TOTAL_PRICE_STATUS,
         dataType: SettingsItemDataType.SINGLE_SELECTION,
         options: GOOGLE_PAY_PRICE_STATUS_OPTIONS,
         title: 'Total price status',
-        value: totalPriceStatus,
       },
       {
-        path: totalPriceLabelPath,
+        path: GOOGLE_PAY_KEYS.TOTAL_PRICE_LABEL,
         dataType: SettingsItemDataType.TEXT,
         title: 'Total price label',
-        value: totalPriceLabel,
       },
       {
-        path: checkoutOptionPath,
+        path: GOOGLE_PAY_KEYS.CHECKOUT_OPTION,
         dataType: SettingsItemDataType.SINGLE_SELECTION,
         options: GOOGLE_PAY_CHECKOUT_OPTION_OPTIONS,
         title: 'Checkout option',
-        value: checkoutOption,
       },
     ],
   };

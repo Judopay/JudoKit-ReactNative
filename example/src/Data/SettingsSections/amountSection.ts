@@ -1,30 +1,20 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import { CURRENCY_OPTIONS } from '../Constants';
-import _ from 'lodash';
+import { AMOUNT_KEYS, CURRENCY_OPTIONS } from '../Constants';
 
-const amountSection = (data: SettingsData): SectionListData<SettingsItem> => {
-  const currencyPath = 'amount.currency';
-  const valuePath = 'amount.value';
-
+const amountSection = (): SectionListData<SettingsItem> => {
   return {
     header: 'AMOUNT',
     data: [
       {
-        path: valuePath,
+        path: AMOUNT_KEYS.VALUE,
         dataType: SettingsItemDataType.TEXT,
         title: 'Amount',
-        value: _.get(data, valuePath),
       },
       {
-        path: currencyPath,
+        path: AMOUNT_KEYS.CURRENCY,
         dataType: SettingsItemDataType.SINGLE_SELECTION,
         title: 'Currency',
-        value: _.get(data, currencyPath),
         options: CURRENCY_OPTIONS,
       },
     ],

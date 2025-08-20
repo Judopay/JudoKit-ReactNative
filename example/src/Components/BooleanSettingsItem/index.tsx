@@ -1,20 +1,28 @@
 import React, { FC } from 'react';
 import { useTheme } from '@react-navigation/native';
 import { Switch, Text, View } from 'react-native';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
+import { appStorage } from '../../Application';
+import { Persistable } from '../../Data/TypeDefinitions';
 
-export interface BooleanSettingsItemProps {
+export interface BooleanSettingsItemProps extends Persistable<boolean> {
   title: string;
-  value: boolean;
   onValueChange?: (value: boolean) => void;
   testID?: string;
 }
 
 const BooleanSettingsItem: FC<BooleanSettingsItemProps> = ({
+  storageKey,
   title,
-  value,
-  onValueChange,
   testID,
+  defaultValue = false,
 }) => {
+  const [value, setValue] = useMMKVStorage(
+    storageKey,
+    appStorage,
+    defaultValue
+  );
+
   const {
     colors: { card, text },
   } = useTheme();
@@ -43,7 +51,7 @@ const BooleanSettingsItem: FC<BooleanSettingsItemProps> = ({
       >
         {title}
       </Text>
-      <Switch value={value} onValueChange={onValueChange} testID={testID} />
+      <Switch value={value} onValueChange={setValue} testID={testID} />
     </View>
   );
 };

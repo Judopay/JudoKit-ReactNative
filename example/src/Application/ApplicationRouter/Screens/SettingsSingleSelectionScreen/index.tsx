@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import {
   SafeAreaView,
   SectionList,
@@ -8,27 +8,20 @@ import {
   View,
 } from 'react-native';
 import Separator from '../../../../Components/Separator';
-import { useTheme } from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useTheme,
+} from '@react-navigation/native';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeEventNotifier } from '../../../../CustomHooks/useEventListener';
 import {
   RootStackParamList,
   Screen,
   SingleSelectionTableItem,
 } from '../../../../Data/TypeDefinitions';
-
-const notifier = makeEventNotifier<{
-  item: SingleSelectionTableItem;
-  path: string;
-}>('OnSingleSelectionTableItemSelected');
-
-export function useSingleSelectionTableListener(
-  listener: typeof notifier.notify,
-  deps: ReadonlyArray<any>
-) {
-  notifier.useEventListener(listener, deps);
-}
+import { useMMKVStorage } from 'react-native-mmkv-storage';
+import { appStorage } from '../../../index';
 
 const SectionSeparatorComponent = () => <Separator key="separator-key" />;
 const ItemSeparatorComponent = () => (
@@ -38,15 +31,20 @@ const ItemSeparatorComponent = () => (
 const SettingsSingleSelectionScreen: FC<
   NativeStackScreenProps<RootStackParamList, Screen.SINGLE_SELECTION>
 > = ({ route: { params } }) => {
-  const { sectionListData, selectedItemId, path } = params;
+  const { sectionListData, path } = params;
   const {
     colors: { background: backgroundColor, primary, text, card },
   } = useTheme();
-  const [itemId, setItemId] = useState(selectedItemId);
+
+  const [value, setValue] = useMMKVStorage<string>(path, appStorage);
+  const { goBack, canGoBack } =
+    useNavigation<NavigationProp<RootStackParamList>>();
 
   const onPress = (item: SingleSelectionTableItem) => {
-    setItemId(item.id);
-    notifier.notify({ item, path });
+    setValue(item.id);
+    if (canGoBack()) {
+      goBack();
+    }
   };
 
   const renderItem = (
@@ -81,7 +79,7 @@ const SettingsSingleSelectionScreen: FC<
           >
             {title}
           </Text>
-          {id === itemId ? (
+          {id === value ? (
             <Ionicons name="checkmark-sharp" size={20} color={primary} />
           ) : null}
         </View>

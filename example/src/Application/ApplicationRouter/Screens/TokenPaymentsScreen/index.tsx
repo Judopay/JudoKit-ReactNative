@@ -13,11 +13,10 @@ import {
   useNavigation,
   useTheme,
 } from '@react-navigation/native';
-import { IS_IOS } from '../../../../Data/Constants';
+import { API_CONFIGURATION_KEYS, IS_IOS } from '../../../../Data/Constants';
 import HowToStepsList from '../../../../Components/HowToStepsList';
 import TextInput from '../../../../Components/TextInput';
 import Button from '../../../../Components/Button';
-import { useJudoConfiguration } from '../../../../CustomHooks/useJudoConfiguration';
 import JudoPay, {
   JudoTransactionMode,
   JudoTransactionType,
@@ -28,6 +27,12 @@ import {
   transformToListOfResultItems,
 } from '../../../../Functions';
 
+import {
+  getBoolOrFalse,
+  judoAuthorizationFromSettingsData,
+  judoConfigurationFromSettingsData,
+} from '../../../../Data/Mapping';
+
 const TokenPaymentsScreen: FC<
   NativeStackScreenProps<RootStackParamList, Screen.TOKEN_PAYMENTS>
 > = () => {
@@ -35,8 +40,6 @@ const TokenPaymentsScreen: FC<
     colors: { background: backgroundColor },
   } = useTheme();
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
-  const { isSandboxed, authorization, configuration } = useJudoConfiguration();
-
   const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
 
@@ -52,12 +55,12 @@ const TokenPaymentsScreen: FC<
   const invokeSaveCard = () => {
     setIsLoading(true);
 
-    const judo = new JudoPay(authorization);
-    judo.isSandboxed = isSandboxed;
+    const judo = new JudoPay(judoAuthorizationFromSettingsData());
+    judo.isSandboxed = getBoolOrFalse(API_CONFIGURATION_KEYS.IS_SANDBOXED);
     judo
       .invokeTransaction(
         JudoTransactionType.SaveCard,
-        regeneratePaymentReferenceIfNeeded(configuration)
+        regeneratePaymentReferenceIfNeeded(judoConfigurationFromSettingsData())
       )
       .then((result) => {
         setIsLoading(false);
@@ -81,8 +84,8 @@ const TokenPaymentsScreen: FC<
   const invokeTokenPayment = (mode: JudoTransactionMode) => {
     setIsLoading(true);
 
-    const judo = new JudoPay(authorization);
-    judo.isSandboxed = isSandboxed;
+    const judo = new JudoPay(judoAuthorizationFromSettingsData());
+    judo.isSandboxed = getBoolOrFalse(API_CONFIGURATION_KEYS.IS_SANDBOXED);
 
     const code = cardSecurityCode.length > 0 ? cardSecurityCode : undefined;
     const name = cardholderName.length > 0 ? cardholderName : undefined;
@@ -90,7 +93,7 @@ const TokenPaymentsScreen: FC<
     judo
       .performTokenTransaction(
         mode,
-        regeneratePaymentReferenceIfNeeded(configuration),
+        regeneratePaymentReferenceIfNeeded(judoConfigurationFromSettingsData()),
         token,
         code,
         name,

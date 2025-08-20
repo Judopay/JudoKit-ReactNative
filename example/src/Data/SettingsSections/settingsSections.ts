@@ -1,4 +1,4 @@
-import { SettingsData, SettingsItem } from '../TypeDefinitions';
+import { SettingsItem } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
 import { IS_ANDROID, IS_IOS } from '../Constants';
 import apiConfigurationSection from './apiConfigurationSection';
@@ -17,19 +17,17 @@ import tokenPaymentsSection from './tokenPaymentsSection';
 import recommendationFeatureSection from './recommendationFeatureSection';
 import applePayChildPaneSection from './applePayChildPaneSection';
 
-const settingsSections = (
-  data: SettingsData
-): ReadonlyArray<SectionListData<SettingsItem>> => {
+const settingsSections = (): ReadonlyArray<SectionListData<SettingsItem>> => {
   let sections: ReadonlyArray<SectionListData<SettingsItem>> = [
-    apiConfigurationSection(data),
-    authorizationSection(data),
-    threeDSTwoSection(data),
-    recommendationFeatureSection(data),
-    networkTimeoutsSection(data),
-    referenceSection(data),
-    amountSection(data),
-    cardAddressSection(data),
-    primaryAccountDetailsSection(data),
+    apiConfigurationSection(),
+    authorizationSection(),
+    threeDSTwoSection(),
+    recommendationFeatureSection(),
+    networkTimeoutsSection(),
+    referenceSection(),
+    amountSection(),
+    cardAddressSection(),
+    primaryAccountDetailsSection(),
   ];
 
   if (IS_IOS) {
@@ -37,15 +35,15 @@ const settingsSections = (
   }
 
   if (IS_ANDROID) {
-    sections = [...sections, googlePaySection(data)];
+    sections = [...sections, googlePaySection()];
   }
 
   return [
     ...sections,
-    supportedCardNetworksSection(data),
-    paymentMethodsSection(data),
-    othersSection(data),
-    tokenPaymentsSection(data),
+    supportedCardNetworksSection(),
+    paymentMethodsSection(),
+    othersSection(),
+    tokenPaymentsSection(),
   ];
 };
 

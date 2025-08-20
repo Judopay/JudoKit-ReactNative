@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 import {
   SafeAreaView,
   SectionList,
@@ -19,15 +19,19 @@ import {
   regeneratePaymentReferenceIfNeeded,
   transformToListOfResultItems,
 } from '../../../../Functions';
-import { useJudoConfiguration } from '../../../../CustomHooks/useJudoConfiguration';
 import { JudoResponse } from 'judokit-react-native';
 import {
   DemoFeature,
   RootStackParamList,
   Screen,
 } from '../../../../Data/TypeDefinitions';
-import { FEATURES } from '../../../../Data/Constants';
+import { API_CONFIGURATION_KEYS, FEATURES } from '../../../../Data/Constants';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {
+  getBoolOrFalse,
+  judoAuthorizationFromSettingsData,
+  judoConfigurationFromSettingsData,
+} from '../../../../Data/Mapping';
 
 const ItemSeparatorComponent = () => (
   <Separator inset={20} key="separator-with-inset-key" />
@@ -41,7 +45,6 @@ const HomeScreen: FC<
   const {
     colors: { background: backgroundColor },
   } = useTheme();
-  const { configuration, isSandboxed, authorization } = useJudoConfiguration();
 
   const onSuccess = (response: JudoResponse) =>
     navigate(Screen.RESULT, { items: transformToListOfResultItems(response) });
@@ -50,20 +53,21 @@ const HomeScreen: FC<
     // @ts-ignore
     navigate(screen, props);
 
-  const onFeatureItemPress = useCallback(
-    (item: DemoFeature) =>
-      dispatch({
-        featureType: item.type,
-        configuration: regeneratePaymentReferenceIfNeeded(configuration),
-        isSandboxed,
-        authorization,
-        onSuccess,
-        onError,
-        onNavigate,
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [configuration, isSandboxed, authorization]
-  );
+  const onFeatureItemPress = (item: DemoFeature) => {
+    const isSandboxed = getBoolOrFalse(API_CONFIGURATION_KEYS.IS_SANDBOXED);
+
+    dispatch({
+      featureType: item.type,
+      configuration: regeneratePaymentReferenceIfNeeded(
+        judoConfigurationFromSettingsData()
+      ),
+      isSandboxed,
+      authorization: judoAuthorizationFromSettingsData(),
+      onSuccess,
+      onError,
+      onNavigate,
+    });
+  };
 
   const renderItem = (
     renderItemInfo: SectionListRenderItemInfo<DemoFeature>
