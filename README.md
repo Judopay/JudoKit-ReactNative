@@ -29,7 +29,7 @@ judoKit
   .invokeTransaction(JudoTransactionType.Payment, {
     judoId: '123456',
     amount: {
-      value: '1.5',
+      value: '1.50',
       currency: 'GBP',
     },
     reference: {
@@ -69,7 +69,7 @@ const judoKit = new JudoPay(authorization);
 
 function App(): React.JSX.Element {
   const invokeJudoKit = () => {
-    const amount: JudoAmount = {value: '1.5', currency: 'GBP'};
+    const amount: JudoAmount = {value: '1.50', currency: 'GBP'};
     const reference: JudoReference = {
       paymentReference: 'your-payment-reference',
       consumerReference: 'your-consumer-reference',
