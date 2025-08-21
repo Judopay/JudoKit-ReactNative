@@ -1,4 +1,4 @@
-import { SettingsData, SettingsItem } from '../TypeDefinitions';
+import { SettingsItem } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
 import applePayMainSection from './applePayMainSection';
 import applePayRequiredBillingContactFieldsSection from './applePayRequiredBillingContactFieldsSection';
@@ -6,15 +6,15 @@ import applePayRequiredShippingContactFieldsSection from './applePayRequiredShip
 import applePayReturnedContactInfoSection from './applePayReturnedContactInfoSection';
 import applePayRecurringPaymentSection from './applePayRecurringPaymentSection';
 
-const applePaySettingsSections = (
-  data: SettingsData
-): ReadonlyArray<SectionListData<SettingsItem>> => {
+const applePaySettingsSections = (): ReadonlyArray<
+  SectionListData<SettingsItem>
+> => {
   return [
-    applePayMainSection(data),
-    applePayRequiredBillingContactFieldsSection(data),
-    applePayRequiredShippingContactFieldsSection(data),
-    applePayReturnedContactInfoSection(data),
-    applePayRecurringPaymentSection(data),
+    applePayMainSection(),
+    applePayRequiredBillingContactFieldsSection(),
+    applePayRequiredShippingContactFieldsSection(),
+    applePayReturnedContactInfoSection(),
+    applePayRecurringPaymentSection(),
   ];
 };
 

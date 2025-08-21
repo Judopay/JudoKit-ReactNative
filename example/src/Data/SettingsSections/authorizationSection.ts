@@ -1,69 +1,54 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { AUTHORIZATION_KEYS } from '../Constants';
+import { getBoolOrFalse } from '../Mapping';
 
-const authorizationSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isUsingPaymentSessionPath = 'authorization.isUsingPaymentSession';
-  const isUsingTokenAndSecretPath = 'authorization.isUsingTokenAndSecret';
-  const tokenPath = 'authorization.token';
-  const secretPath = 'authorization.secret';
-  const paymentSessionPath = 'authorization.paymentSession';
-
-  let isUsingPaymentSession = _.get(data, isUsingPaymentSessionPath);
-  let isUsingTokenAndSecret = _.get(data, isUsingTokenAndSecretPath);
+const authorizationSection = (): SectionListData<SettingsItem> => {
+  const isUsingPaymentSession =
+    getBoolOrFalse(AUTHORIZATION_KEYS.IS_USING_PAYMENT_SESSION) ?? false;
+  const isUsingTokenAndSecret =
+    getBoolOrFalse(AUTHORIZATION_KEYS.IS_USING_TOKEN_AND_SECRET) ?? false;
 
   return {
     header: 'AUTHORIZATION',
     data: [
       {
-        path: isUsingPaymentSessionPath,
+        path: AUTHORIZATION_KEYS.IS_USING_PAYMENT_SESSION,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Using payment session',
-        value: isUsingPaymentSession,
       },
       ...(isUsingPaymentSession
         ? [
             {
-              path: tokenPath,
+              path: AUTHORIZATION_KEYS.TOKEN,
               dataType: SettingsItemDataType.TEXT,
               title: 'Token',
-              value: _.get(data, tokenPath),
             },
             {
-              path: paymentSessionPath,
+              path: AUTHORIZATION_KEYS.PAYMENT_SESSION,
               dataType: SettingsItemDataType.TEXT,
               title: 'Payment Session',
-              value: _.get(data, paymentSessionPath),
             },
           ]
         : []),
       {
-        path: isUsingTokenAndSecretPath,
+        path: AUTHORIZATION_KEYS.IS_USING_TOKEN_AND_SECRET,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Using token and secret',
-        value: isUsingTokenAndSecret,
         testID: 'using-token-and-secret-toggle',
       },
       ...(isUsingTokenAndSecret
         ? [
             {
-              path: tokenPath,
+              path: AUTHORIZATION_KEYS.TOKEN,
               dataType: SettingsItemDataType.TEXT,
               title: 'Token',
-              value: _.get(data, tokenPath),
               testID: 'token-input-field',
             },
             {
-              path: secretPath,
+              path: AUTHORIZATION_KEYS.SECRET,
               dataType: SettingsItemDataType.TEXT,
               title: 'Secret',
-              value: _.get(data, secretPath),
               testID: 'secret-input-field',
             },
           ]

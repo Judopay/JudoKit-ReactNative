@@ -1,43 +1,15 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
-import { INTERVAL_UNIT_OPTIONS } from '../Constants';
+import { APPLE_PAY_KEYS, INTERVAL_UNIT_OPTIONS } from '../Constants';
+import { getBoolOrFalse } from '../Mapping';
 
-const applePayRecurringPaymentSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isApplePayRecurringPaymentOnPath =
-    'applePay.recurringPaymentRequest.isOn';
-  const isApplePayRecurringPaymentOn = _.get(
-    data,
-    isApplePayRecurringPaymentOnPath
+const applePayRecurringPaymentSection = (): SectionListData<SettingsItem> => {
+  const isApplePayRecurringPaymentOn = getBoolOrFalse(
+    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.IS_ON
   );
-
-  const paymentDescriptionPath =
-    'applePay.recurringPaymentRequest.paymentDescription';
-  const managementURLPath = 'applePay.recurringPaymentRequest.managementURL';
-  const billingAgreementPath =
-    'applePay.recurringPaymentRequest.billingAgreement';
-
-  const isRegularBillingOnPath =
-    'applePay.recurringPaymentRequest.regularBilling.isOn';
-  const isRegularBillingOn = _.get(data, isRegularBillingOnPath);
-  const regularBillingLabelPath =
-    'applePay.recurringPaymentRequest.regularBilling.label';
-  const regularBillingAmountPath =
-    'applePay.recurringPaymentRequest.regularBilling.amount';
-  const regularBillingStartDatePath =
-    'applePay.recurringPaymentRequest.regularBilling.startDate';
-  const regularBillingEndDatePath =
-    'applePay.recurringPaymentRequest.regularBilling.endDate';
-  const regularBillingIntervalUnitPath =
-    'applePay.recurringPaymentRequest.regularBilling.intervalUnit';
-  const regularBillingIntervalCountPath =
-    'applePay.recurringPaymentRequest.regularBilling.intervalCount';
+  const isRegularBillingOn = getBoolOrFalse(
+    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON
+  );
 
   const regularBillingConfiguration = [
     {
@@ -46,49 +18,48 @@ const applePayRecurringPaymentSection = (
       title: 'REGULAR BILLING',
     },
     {
-      path: isRegularBillingOnPath,
+      path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON,
       dataType: SettingsItemDataType.BOOLEAN,
       title: 'Enable regular billing item',
-      value: isRegularBillingOn,
     },
     ...(isRegularBillingOn
       ? [
           {
-            path: regularBillingLabelPath,
+            path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
+              .LABEL,
             dataType: SettingsItemDataType.TEXT,
             title: 'Label',
-            value: _.get(data, regularBillingLabelPath),
           },
           {
-            path: regularBillingAmountPath,
+            path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
+              .AMOUNT,
             dataType: SettingsItemDataType.TEXT,
             title: 'Amount',
-            value: _.get(data, regularBillingAmountPath),
           },
           {
-            path: regularBillingStartDatePath,
+            path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
+              .START_DATE,
             dataType: SettingsItemDataType.TEXT,
             title: 'Start date',
-            value: _.get(data, regularBillingStartDatePath),
           },
           {
-            path: regularBillingEndDatePath,
+            path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
+              .END_DATE,
             dataType: SettingsItemDataType.TEXT,
             title: 'End date',
-            value: _.get(data, regularBillingEndDatePath),
           },
           {
-            path: regularBillingIntervalUnitPath,
+            path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
+              .INTERVAL_UNIT,
             dataType: SettingsItemDataType.SINGLE_SELECTION,
             title: 'Interval unit',
-            value: _.get(data, regularBillingIntervalUnitPath),
             options: INTERVAL_UNIT_OPTIONS,
           },
           {
-            path: regularBillingIntervalCountPath,
+            path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
+              .INTERVAL_COUNT,
             dataType: SettingsItemDataType.TEXT,
             title: 'Interval count',
-            value: _.get(data, regularBillingIntervalCountPath),
           },
         ]
       : []),
@@ -98,30 +69,27 @@ const applePayRecurringPaymentSection = (
     header: 'APPLE PAY RECURRING PAYMENT',
     data: [
       {
-        path: isApplePayRecurringPaymentOnPath,
+        path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.IS_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Enable recurring payment',
-        value: isApplePayRecurringPaymentOn,
       },
       ...(isApplePayRecurringPaymentOn
         ? [
             {
-              path: paymentDescriptionPath,
+              path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST
+                .PAYMENT_DESCRIPTION,
               dataType: SettingsItemDataType.TEXT,
               title: 'Payment description',
-              value: _.get(data, paymentDescriptionPath),
             },
             {
-              path: managementURLPath,
+              path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.MANAGEMENT_URL,
               dataType: SettingsItemDataType.TEXT,
               title: 'Management URL',
-              value: _.get(data, managementURLPath),
             },
             {
-              path: billingAgreementPath,
+              path: APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.BILLING_AGREEMENT,
               dataType: SettingsItemDataType.TEXT,
               title: 'Billing agreement',
-              value: _.get(data, billingAgreementPath),
             },
             ...regularBillingConfiguration,
           ]

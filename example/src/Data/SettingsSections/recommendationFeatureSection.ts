@@ -1,57 +1,40 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { RECOMMENDATION_KEYS } from '../Constants';
+import { getBoolOrFalse } from '../Mapping';
 
-const recommendationFeatureSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isRecommendationFeatureOnPath = 'recommendation.isOn';
-  const urlPath = 'recommendation.url';
-  const rsaPublicKeyPath = 'recommendation.rsaPublicKey';
-  const timeoutPath = 'recommendation.timeout';
-  const haltTransactionInCaseOfAnyErrorKeyPath =
-    'recommendation.haltTransactionInCaseOfAnyError';
-
-  const isRecommendationFeatureOn = _.get(data, isRecommendationFeatureOnPath);
+const recommendationFeatureSection = (): SectionListData<SettingsItem> => {
+  const isRecommendationFeatureOn = getBoolOrFalse(RECOMMENDATION_KEYS.IS_ON);
 
   return {
     header: 'RECOMMENDATION FEATURE',
     data: [
       {
-        path: isRecommendationFeatureOnPath,
+        path: RECOMMENDATION_KEYS.IS_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Enable Recommendation',
-        value: isRecommendationFeatureOn,
       },
       ...(isRecommendationFeatureOn
         ? [
             {
-              path: urlPath,
+              path: RECOMMENDATION_KEYS.URL,
               dataType: SettingsItemDataType.TEXT,
               title: 'URL',
-              value: _.get(data, urlPath),
             },
             {
-              path: rsaPublicKeyPath,
+              path: RECOMMENDATION_KEYS.RSA_PUBLIC_KEY,
               dataType: SettingsItemDataType.TEXT,
               title: 'RSA public key',
-              value: _.get(data, rsaPublicKeyPath),
             },
             {
-              path: timeoutPath,
+              path: RECOMMENDATION_KEYS.TIMEOUT,
               dataType: SettingsItemDataType.TEXT,
               title: 'Request timeout',
-              value: _.get(data, timeoutPath),
             },
             {
-              path: haltTransactionInCaseOfAnyErrorKeyPath,
+              path: RECOMMENDATION_KEYS.HALT_TRANSACTION_IN_CASE_OF_ANY_ERROR,
               dataType: SettingsItemDataType.BOOLEAN,
               title: 'Halt transaction in case of any error',
-              value: _.get(data, haltTransactionInCaseOfAnyErrorKeyPath),
             },
           ]
         : []),

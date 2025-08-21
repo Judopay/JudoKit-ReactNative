@@ -2,20 +2,27 @@ import React, { FC } from 'react';
 import { useTheme } from '@react-navigation/native';
 import { Text, TextInput, View } from 'react-native';
 import { IS_IOS } from '../../Data/Constants';
+import { Persistable } from '../../Data/TypeDefinitions';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
+import { appStorage } from '../../Application';
 
-export interface TextSettingsItemProps {
+export interface TextSettingsItemProps extends Persistable<string> {
   title: string;
-  value?: string;
-  onChange: (value: string) => void;
   testID?: string;
 }
 
 const TextSettingsItem: FC<TextSettingsItemProps> = ({
   title,
-  value,
-  onChange,
   testID,
+  storageKey,
+  defaultValue = '',
 }) => {
+  const [value, setValue] = useMMKVStorage(
+    storageKey,
+    appStorage,
+    defaultValue
+  );
+
   const {
     colors: { card, text },
   } = useTheme();
@@ -55,7 +62,7 @@ const TextSettingsItem: FC<TextSettingsItemProps> = ({
         }}
         clearButtonMode="always"
         value={value}
-        onChangeText={onChange}
+        onChangeText={setValue}
         testID={testID}
       />
     </View>

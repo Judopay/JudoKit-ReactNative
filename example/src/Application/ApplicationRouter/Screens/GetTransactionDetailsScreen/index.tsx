@@ -12,13 +12,16 @@ import {
   useNavigation,
   useTheme,
 } from '@react-navigation/native';
-import { IS_IOS } from '../../../../Data/Constants';
+import { API_CONFIGURATION_KEYS, IS_IOS } from '../../../../Data/Constants';
 import Button from '../../../../Components/Button';
 import TextInput from '../../../../Components/TextInput';
 import HowToStepsList from '../../../../Components/HowToStepsList';
 import JudoPay from 'judokit-react-native';
-import { useJudoConfiguration } from '../../../../CustomHooks/useJudoConfiguration';
 import { onError, transformToListOfResultItems } from '../../../../Functions';
+import {
+  getBoolOrFalse,
+  judoAuthorizationFromSettingsData,
+} from '../../../../Data/Mapping';
 
 const GetTransactionDetailsScreen: FC<
   NativeStackScreenProps<RootStackParamList, Screen.GET_TRANSACTION_DETAILS>
@@ -26,7 +29,6 @@ const GetTransactionDetailsScreen: FC<
   const {
     colors: { background: backgroundColor },
   } = useTheme();
-  const { isSandboxed, authorization } = useJudoConfiguration();
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [receiptId, setReceiptId] = useState('');
@@ -35,8 +37,8 @@ const GetTransactionDetailsScreen: FC<
   const onGetTransactionDetailsPress = () => {
     setIsLoading(true);
 
-    const judo = new JudoPay(authorization);
-    judo.isSandboxed = isSandboxed;
+    const judo = new JudoPay(judoAuthorizationFromSettingsData());
+    judo.isSandboxed = getBoolOrFalse(API_CONFIGURATION_KEYS.IS_SANDBOXED);
 
     judo
       .fetchTransactionDetails(receiptId)

@@ -1,74 +1,45 @@
-import {
-  Screen,
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { Screen, SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
 import {
   CHALLENGE_REQUEST_INDICATOR_OPTIONS,
   SCA_EXEMPTION_OPTIONS,
+  THREE_DS_TWO_KEYS,
 } from '../Constants';
-import _ from 'lodash';
 
-const threeDSTwoSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isBillingInformationScreenEnabledPath =
-    'threeDSTwo.isBillingInformationScreenEnabled';
-  const challengeRequestIndicatorPath = 'threeDSTwo.challengeRequestIndicator';
-  const SCAExemptionPath = 'threeDSTwo.SCAExemption';
-  const maxTimeoutPath = 'threeDSTwo.maxTimeout';
-  const protocolMessageVersionPath = 'threeDSTwo.protocolMessageVersion';
-  const uiCustomizationPath = 'threeDSTwo.uiCustomization';
-
-  const isBillingInformationScreenEnabled = _.get(
-    data,
-    isBillingInformationScreenEnabledPath
-  );
-  const challengeRequestIndicator = _.get(data, challengeRequestIndicatorPath);
-  const SCAExemption = _.get(data, SCAExemptionPath);
-  const maxTimeout = _.get(data, maxTimeoutPath);
-  const protocolMessageVersion = _.get(data, protocolMessageVersionPath);
-
+const threeDSTwoSection = (): SectionListData<SettingsItem> => {
   return {
     header: '3DS 2.0',
     data: [
       {
-        path: isBillingInformationScreenEnabledPath,
+        path: THREE_DS_TWO_KEYS.IS_BILLING_INFORMATION_SCREEN_ENABLED,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Enable billing information screen',
-        value: isBillingInformationScreenEnabled,
         testID: 'billing-info-screen-toggle',
       },
       {
-        path: challengeRequestIndicatorPath,
+        path: THREE_DS_TWO_KEYS.CHALLENGE_REQUEST_INDICATOR,
         dataType: SettingsItemDataType.SINGLE_SELECTION,
         title: 'Challenge request indicator',
-        value: challengeRequestIndicator,
         options: CHALLENGE_REQUEST_INDICATOR_OPTIONS,
       },
       {
-        path: SCAExemptionPath,
+        path: THREE_DS_TWO_KEYS.SCA_EXEMPTION,
         dataType: SettingsItemDataType.SINGLE_SELECTION,
         title: 'SCA exemption',
-        value: SCAExemption,
         options: SCA_EXEMPTION_OPTIONS,
       },
       {
-        path: maxTimeoutPath,
+        path: THREE_DS_TWO_KEYS.MAX_TIMEOUT,
         dataType: SettingsItemDataType.TEXT,
         title: '3DS 2.0 max timeout',
-        value: maxTimeout,
       },
       {
-        path: protocolMessageVersionPath,
+        path: THREE_DS_TWO_KEYS.PROTOCOL_MESSAGE_VERSION,
         dataType: SettingsItemDataType.TEXT,
         title: 'Protocol message version',
-        value: protocolMessageVersion,
       },
       {
-        path: uiCustomizationPath,
+        path: 'threeDSTwo.uiCustomization',
         dataType: SettingsItemDataType.CHILD_PANE,
         title: 'UI customization',
         value: Screen.THREE_DS_UI_SETTINGS,

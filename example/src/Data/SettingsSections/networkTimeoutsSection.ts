@@ -1,38 +1,25 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { NETWORK_TIMEOUTS_KEYS } from '../Constants';
 
-const networkTimeoutsSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const connectTimeoutPath = 'networkTimeouts.connectTimeout';
-  const readTimeoutPath = 'networkTimeouts.readTimeout';
-  const writeTimeoutPath = 'networkTimeouts.writeTimeout';
-
+const networkTimeoutsSection = (): SectionListData<SettingsItem> => {
   return {
     header: 'NETWORK TIMEOUTS',
     data: [
       {
-        path: connectTimeoutPath,
+        path: NETWORK_TIMEOUTS_KEYS.CONNECT_TIMEOUT,
         dataType: SettingsItemDataType.TEXT,
         title: 'Connect timeout',
-        value: _.get(data, connectTimeoutPath),
       },
       {
-        path: readTimeoutPath,
+        path: NETWORK_TIMEOUTS_KEYS.READ_TIMEOUT,
         dataType: SettingsItemDataType.TEXT,
         title: 'Read timeout',
-        value: _.get(data, readTimeoutPath),
       },
       {
-        path: writeTimeoutPath,
+        path: NETWORK_TIMEOUTS_KEYS.WRITE_TIMEOUT,
         dataType: SettingsItemDataType.TEXT,
         title: 'Write timeout',
-        value: _.get(data, writeTimeoutPath),
       },
     ],
   };

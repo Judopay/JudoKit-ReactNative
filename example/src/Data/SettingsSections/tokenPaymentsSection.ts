@@ -1,33 +1,21 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { TOKEN_PAYMENTS_KEYS } from '../Constants';
 
-const tokenPaymentsSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const shouldAskForCSCPath = 'tokenPayments.shouldAskForCSC';
-  const shouldAskForCardholderNamePath =
-    'tokenPayments.shouldAskForCardholderName';
-
+const tokenPaymentsSection = (): SectionListData<SettingsItem> => {
   return {
     header: 'TOKEN PAYMENTS',
     data: [
       {
-        path: shouldAskForCSCPath,
+        path: TOKEN_PAYMENTS_KEYS.SHOULD_ASK_FOR_CSC,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Should ask for CSC',
-        value: _.get(data, shouldAskForCSCPath),
         testID: 'should-ask-for-csc',
       },
       {
-        path: shouldAskForCardholderNamePath,
+        path: TOKEN_PAYMENTS_KEYS.SHOULD_ASK_FOR_CARDHOLDER_NAME,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Should ask for cardholder name',
-        value: _.get(data, shouldAskForCardholderNamePath),
         testID: 'should-ask-for-cardholder-name',
       },
     ],

@@ -296,3 +296,8 @@ export interface AlertFunctionProps {
   message: string;
   onPressOK?: () => void;
 }
+
+export interface Persistable<T> {
+  storageKey: string;
+  defaultValue?: T;
+}

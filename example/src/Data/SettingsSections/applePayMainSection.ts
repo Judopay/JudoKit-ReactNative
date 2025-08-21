@@ -1,25 +1,15 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { APPLE_PAY_KEYS } from '../Constants';
 
-const applePayMainSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const merchantIdPath = 'applePay.merchantId';
-  const merchantId = _.get(data, merchantIdPath);
-
+const applePayMainSection = (): SectionListData<SettingsItem> => {
   return {
     header: 'APPLE PAY',
     data: [
       {
-        path: merchantIdPath,
+        path: APPLE_PAY_KEYS.MERCHANT_ID,
         dataType: SettingsItemDataType.TEXT,
         title: 'Merchant ID',
-        value: merchantId,
       },
     ],
   };
