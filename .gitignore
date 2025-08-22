@@ -88,3 +88,6 @@ lib/
 derived_data
 fastlane_output
 fastlane/report.xml
+
+# Code coverage reports
+coverage/
