@@ -1,0 +1,18 @@
+name: iOS Build, Test and Publish Sample Apps
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build_and_test_sample_apps:
+    uses: Judopay/github-actions/.github/workflows/ios-build-and-test-sample-apps.yml@master
+    secrets: inherit
+  test_sample_apps_simulator:
+    uses: Judopay/github-actions/.github/workflows/ios-test-sample-apps-simulator.yml@master
+    needs: build_and_test_sample_apps
+    secrets: inherit
+  publish_sample_apps:
+    uses: Judopay/github-actions/.github/workflows/ios-publish-sample-apps.yml@master
+    needs: test_sample_apps_simulator
+    secrets: inherit

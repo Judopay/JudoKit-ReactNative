@@ -17,7 +17,7 @@ require './helpers'
     firebase_app_id: {
       production: '1:34238832242:android:28f3dda075c60e3d63eceb'
     },
-    path: "#{@sample_apps_dir}/android",
+    path: "#{@sample_apps_dir}/android/app",
     platform: 'android',
   ),
 ]
@@ -220,54 +220,30 @@ end
 
 platform :android do
   desc "[Android] Build Sample App"
-  lane :build_sample_app do | options |
-    gradle(tasks: ['assembleDebug'], project_dir: './example/android')
-  end
-  # lane :build_sample_app do |options|
-  #   latest_release = firebase_app_distribution_get_latest_release(
-  #     app: options[:app].firebase_app_id(environment: options[:environment])
-  #   )
+  lane :build_sample_app do |options|
+    latest_release = firebase_app_distribution_get_latest_release(
+      app: options[:app].firebase_app_id(environment: options[:environment])
+    )
 
-  #   gradle(
-  #     tasks: ['clean', 'generateCodegenArtifactsFromSchema'], #, 'assembleDebug'], #'assembleRelease', 'assembleAndroidTest'],
-  #     project_dir: "#{options[:app].path}",
-  #     properties: {
-  #       "android.injected.version.code" => latest_release.nil? ? 1 : latest_release[:buildVersion].to_i + 1,
-  #     }
-  #   )
-  # end
+    gradle(
+      tasks: ['clean', 'generateCodegenArtifactsFromSchema', 'assembleRelease'], #, 'assembleDebug', 'assembleAndroidTest'],
+      project_dir: "#{options[:app].path}",
+      properties: {
+        "android.injected.version.code" => latest_release.nil? ? 1 : latest_release[:buildVersion].to_i + 1,
+      }
+    )
+
+    options[:app].copy_apks_to_destination(environment: options[:environment], destination: @fl_output_dir)
+  end
 
   desc "[Android] Run instrumented tests for a sample app on a simulator"
   lane :test_sample_app_simulator do |options|
     Dir.chdir(@sample_apps_dir) do
-      yarn(command: "start")
-      yarn(command: "detox:build:android")
+      # yarn(command: "start")
+      # yarn(command: "detox:build:android")
       yarn(command: "detox:test:android")
     end
   end
-
-  #  android/accept_licenses
-  # - android/create_avd:
-  #     avd_name: Pixel_3_API_34_x86_64
-  #     system_image: system-images;android-34;google_atd;x86_64
-  #     install: true
-  # - setup_avd_screen_size:
-  #     avd_name: Pixel_3_API_34_x86_64
-  # - android/start_emulator:
-  #     avd_name: Pixel_3_API_34_x86_64
-  #     memory: 4096
-  #     gpu: 'host'
-  #     run_logcat: true
-  #     wait_for_emulator: true
-  #     restore_gradle_cache_prefix: v1a
-  #     post_emulator_launch_assemble_command: 'echo "Emulator is ready"'
-  # - run:
-  #     name: Run the tests
-  #     working_directory: example
-  #     command: |
-  #       yarn start &
-  #       yarn detox:build:android
-  #       yarn detox:test:android
 
   desc "[Android] Publish Sample App"
   lane :publish_sample_app do |options|

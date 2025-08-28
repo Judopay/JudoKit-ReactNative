@@ -38,6 +38,7 @@ project.xcworkspace
 .cxx
 .gradle
 .idea
+.kotlin
 .project
 .settings
 local.properties
@@ -91,3 +92,6 @@ fastlane/report.xml
 
 # Code coverage reports
 coverage/
+
+# Detox
+example/artifacts
