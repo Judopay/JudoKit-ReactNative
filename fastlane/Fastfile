@@ -17,7 +17,7 @@ require './helpers'
     firebase_app_id: {
       production: '1:34238832242:android:28f3dda075c60e3d63eceb'
     },
-    path: "#{@sample_apps_dir}/android",
+    path: "#{@sample_apps_dir}/android/app",
     platform: 'android',
   ),
 ]
@@ -195,8 +195,6 @@ platform :ios do
   desc "[iOS] Run instrumented tests for a sample app on a simulator"
   lane :test_sample_app_simulator do |options|
     Dir.chdir(@sample_apps_dir) do
-      yarn(command: "start")
-      yarn(command: "detox:build:ios")
       yarn(command: "detox:test:ios")
     end
   end
@@ -227,7 +225,7 @@ platform :android do
 
     gradle(
       tasks: ['clean', 'generateCodegenArtifactsFromSchema', 'assembleRelease'], #, 'assembleDebug', 'assembleAndroidTest'],
-      project_dir: "#{options[:app].path}",
+      project_dir: "#{@sample_apps_dir}/android",
       properties: {
         "android.injected.version.code" => latest_release.nil? ? 1 : latest_release[:buildVersion].to_i + 1,
       }
@@ -239,8 +237,6 @@ platform :android do
   desc "[Android] Run instrumented tests for a sample app on a simulator"
   lane :test_sample_app_simulator do |options|
     Dir.chdir(@sample_apps_dir) do
-      # yarn(command: "start")
-      # yarn(command: "detox:build:android")
       yarn(command: "detox:test:android")
     end
   end
