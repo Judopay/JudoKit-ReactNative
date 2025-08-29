@@ -6,7 +6,7 @@ on:
       - master
 jobs:
   build_and_test_sample_apps:
-    uses: build-test-sample-apps.yml
+    uses: ./.github/workflows/build-test-sample-apps.yml
   publish_sample_apps:
     uses: Judopay/github-actions/.github/workflows/publish-sample-apps.yml@master
     needs: build_and_test_sample_apps

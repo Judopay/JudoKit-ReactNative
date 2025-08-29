@@ -7,4 +7,5 @@ on:
 jobs:
   publish:
     uses: Judopay/github-actions/.github/workflows/reactnative-publish.yml@master
-    secrets: inherit
+    secrets:
+       npm_token: ${{ secrets.npm_token }}
