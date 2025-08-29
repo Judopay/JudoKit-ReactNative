@@ -17,7 +17,7 @@ require './helpers'
     firebase_app_id: {
       production: '1:34238832242:android:28f3dda075c60e3d63eceb'
     },
-    path: "#{@sample_apps_dir}/android/app",
+    path: "#{@sample_apps_dir}/android",
     platform: 'android',
   ),
 ]
