@@ -339,6 +339,7 @@ internal fun getTransactionTypeWidget(options: ReadableMap) =
     1 -> PaymentWidgetType.CARD_PAYMENT
     2 -> PaymentWidgetType.PRE_AUTH
     4 -> PaymentWidgetType.CHECK_CARD
+    5 -> PaymentWidgetType.CREATE_CARD_TOKEN
     else -> throw IllegalArgumentException("Unknown transaction type")
   }
 
