@@ -104,7 +104,7 @@ test('check JudoAccountDetails model fields', () => {
 });
 
 test('check JudoUIConfiguration model fields', () => {
-  expect(Object.keys(judoUIConfiguration).length).toBe(5);
+  expect(Object.keys(judoUIConfiguration).length).toBe(4);
 });
 
 test('check JudoAddress is empty', () => {
