@@ -34,7 +34,6 @@ const cardAddress: JudoAddress = {
 const uiConfiguration: JudoUIConfiguration = {
   isAVSEnabled: false,
   shouldPaymentButtonDisplayAmount: true,
-  shouldPaymentMethodsVerifySecurityCode: true,
   shouldPaymentMethodsDisplayAmount: true,
 };
 

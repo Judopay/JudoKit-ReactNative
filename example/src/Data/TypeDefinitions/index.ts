@@ -270,7 +270,6 @@ export type RootStackParamList = {
 export enum DemoFeatureType {
   PAYMENT = 1,
   PRE_AUTH,
-  CREATE_CARD_TOKEN,
   SAVE_CARD,
   CHECK_CARD,
   APPLE_PAY_PAYMENT,

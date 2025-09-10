@@ -47,12 +47,6 @@ const promiseForFeature = ({
     case DemoFeatureType.PRE_AUTH:
       return judo.invokeTransaction(JudoTransactionType.PreAuth, configuration);
 
-    case DemoFeatureType.CREATE_CARD_TOKEN:
-      return judo.invokeTransaction(
-        JudoTransactionType.RegisterCard,
-        configuration
-      );
-
     case DemoFeatureType.SAVE_CARD:
       return judo.invokeTransaction(
         JudoTransactionType.SaveCard,

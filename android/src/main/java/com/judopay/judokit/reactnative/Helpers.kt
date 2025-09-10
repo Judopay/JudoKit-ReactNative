@@ -44,16 +44,6 @@ import com.judopay.judokit.android.model.typeId
 // https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L36
 private const val TRANSACTION_TYPE_PAYMENT = "payment"
 private const val TRANSACTION_TYPE_PRE_AUTH = "preauth"
-
-@Deprecated(
-  "Register Card functionality has been deprecated. Please use Check Card feature instead.",
-)
-private const val TRANSACTION_TYPE_REGISTER = "register"
-
-@Deprecated(
-  "Register Card functionality has been deprecated. Please use Check Card feature instead.",
-)
-private const val TRANSACTION_TYPE_REGISTER_CARD = "registercard"
 private const val TRANSACTION_TYPE_SAVE_CARD = "save"
 private const val TRANSACTION_TYPE_CHECK_CARD = "checkcard"
 
@@ -65,12 +55,6 @@ private enum class TransactionType(
 ) {
   PAYMENT(1, listOf(TRANSACTION_TYPE_PAYMENT)),
   PRE_AUTH(2, listOf(TRANSACTION_TYPE_PRE_AUTH)),
-
-  @Deprecated(
-    "Register Card functionality has been deprecated and will be removed in a future version. " +
-      "Please use Check Card feature instead.",
-  )
-  REGISTER_CARD(3, listOf(TRANSACTION_TYPE_REGISTER, TRANSACTION_TYPE_REGISTER_CARD)),
   CHECK_CARD(4, listOf(TRANSACTION_TYPE_CHECK_CARD)),
   SAVE_CARD(5, listOf(TRANSACTION_TYPE_SAVE_CARD)),
   UNKNOWN(-1),
@@ -354,9 +338,7 @@ internal fun getTransactionTypeWidget(options: ReadableMap) =
   when (options.getInt("transactionType")) {
     1 -> PaymentWidgetType.CARD_PAYMENT
     2 -> PaymentWidgetType.PRE_AUTH
-    3 -> PaymentWidgetType.REGISTER_CARD
     4 -> PaymentWidgetType.CHECK_CARD
-    5 -> PaymentWidgetType.CREATE_CARD_TOKEN
     else -> throw IllegalArgumentException("Unknown transaction type")
   }
 
@@ -500,9 +482,6 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
     options.isAVSEnabled?.let { setAvsEnabled(it) }
     options.shouldPaymentMethodsDisplayAmount?.let { setShouldPaymentMethodsDisplayAmount(it) }
     options.shouldPaymentButtonDisplayAmount?.let { setShouldPaymentButtonDisplayAmount(it) }
-    options.shouldPaymentMethodsVerifySecurityCode?.let {
-      setShouldPaymentMethodsVerifySecurityCode(it)
-    }
   }
 
   return builder.build()

@@ -77,7 +77,6 @@ const judoUIConfiguration: JudoUIConfiguration = {
   isAVSEnabled: true,
   shouldPaymentButtonDisplayAmount: true,
   shouldPaymentMethodsDisplayAmount: true,
-  shouldPaymentMethodsVerifySecurityCode: false,
   theme: judoTheme,
 };
 
@@ -105,7 +104,7 @@ test('check JudoAccountDetails model fields', () => {
 });
 
 test('check JudoUIConfiguration model fields', () => {
-  expect(Object.keys(judoUIConfiguration).length).toBe(5);
+  expect(Object.keys(judoUIConfiguration).length).toBe(4);
 });
 
 test('check JudoAddress is empty', () => {
@@ -141,12 +140,10 @@ test('check JudoTransactionType model fields', () => {
   expect(Object.keys(JudoTransactionType)).toStrictEqual([
     '1',
     '2',
-    '3',
     '4',
     '5',
     'Payment',
     'PreAuth',
-    'RegisterCard',
     'CheckCard',
     'SaveCard',
     'Unknown',

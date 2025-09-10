@@ -56,11 +56,6 @@ export interface NetworkTimeout {
 export enum JudoTransactionType {
   Payment = 1,
   PreAuth = 2,
-  /**
-   * @deprecated Register Card functionality has been deprecated and will be
-   * removed in a future version. Please use Check Card feature instead.
-   */
-  RegisterCard = 3,
   CheckCard = 4,
   SaveCard = 5,
   Unknown = -1,
@@ -156,10 +151,6 @@ export interface JudoUIConfiguration {
   isAVSEnabled?: boolean;
   shouldPaymentMethodsDisplayAmount?: boolean;
   shouldPaymentButtonDisplayAmount?: boolean;
-  /**
-   * @deprecated This export is deprecated. Please use `shouldAskForCSC` instead.
-   */
-  shouldPaymentMethodsVerifySecurityCode?: boolean;
   shouldAskForBillingInformation?: boolean;
   theme?: JudoTheme;
   threeDSUIConfiguration?: JudoThreeDSUIConfiguration;
@@ -238,10 +229,6 @@ export interface JudoCardDetails {
 
 export interface JudoConsumer {
   consumerReference?: string;
-  /**
-   * @deprecated Consumer Token is deprecated and will be removed in a future version.
-   */
-  consumerToken?: string;
 }
 
 export interface JudoResponse {
