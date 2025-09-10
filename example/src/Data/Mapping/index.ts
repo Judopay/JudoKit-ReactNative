@@ -753,9 +753,6 @@ export const judoConfigurationFromSettingsData = (): JudoConfiguration => {
       shouldPaymentMethodsDisplayAmount: getBoolOrUndefined(
         OTHERS_KEYS.IS_AMOUNT_LABEL_IN_PAYMENT_METHODS_ON
       ),
-      shouldPaymentMethodsVerifySecurityCode: getBoolOrUndefined(
-        OTHERS_KEYS.IS_SECURITY_CODE_ON
-      ),
       threeDSUIConfiguration,
       shouldAskForCSC: getBoolOrUndefined(
         TOKEN_PAYMENTS_KEYS.SHOULD_ASK_FOR_CSC

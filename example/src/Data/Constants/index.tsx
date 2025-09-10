@@ -795,11 +795,6 @@ const FEATURES_DATA: ReadonlyArray<DemoFeature> = [
     details: 'by entering card details',
   },
   {
-    type: DemoFeatureType.CREATE_CARD_TOKEN,
-    title: 'Register card',
-    details: 'to be stored for future transactions',
-  },
-  {
     type: DemoFeatureType.CHECK_CARD,
     title: 'Check card',
     details: 'to validate a card',
