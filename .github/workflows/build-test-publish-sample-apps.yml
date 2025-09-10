@@ -1,0 +1,14 @@
+name: Build, Test and Publish Sample Apps
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build_and_test_sample_apps:
+    uses: ./.github/workflows/build-test-sample-apps.yml
+  publish_sample_apps:
+    uses: Judopay/github-actions/.github/workflows/publish-sample-apps.yml@master
+    needs: build_and_test_sample_apps
+    secrets:
+      google_cloud_service_account_key: ${{ secrets.google_cloud_service_account_key }}
