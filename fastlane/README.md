@@ -61,21 +61,45 @@ Build SDK
 
 Run SDK tests
 
-### release
+### publish
 
 ```sh
-[bundle exec] fastlane release
+[bundle exec] fastlane publish
 ```
 
-Release SDK
+Publish SDK
 
-### distribute_sample_apps
+### build_sample_apps
 
 ```sh
-[bundle exec] fastlane distribute_sample_apps
+[bundle exec] fastlane build_sample_apps
 ```
 
-Distribute Sample Apps
+Build Sample Apps
+
+### test_sample_apps
+
+```sh
+[bundle exec] fastlane test_sample_apps
+```
+
+Test Sample Apps
+
+### test_sample_apps_simulator
+
+```sh
+[bundle exec] fastlane test_sample_apps_simulator
+```
+
+Run instrumented tests for sample apps on simulators
+
+### publish_sample_apps
+
+```sh
+[bundle exec] fastlane publish_sample_apps
+```
+
+Publish Sample Apps
 
 ----
 
@@ -90,13 +114,29 @@ Distribute Sample Apps
 
 [iOS] Build Sample App
 
-### ios distribute_sample_app
+### ios test_sample_app
 
 ```sh
-[bundle exec] fastlane ios distribute_sample_app
+[bundle exec] fastlane ios test_sample_app
 ```
 
-[iOS] Distribute Sample App
+[iOS] Test Sample App
+
+### ios test_sample_app_simulator
+
+```sh
+[bundle exec] fastlane ios test_sample_app_simulator
+```
+
+[iOS] Run instrumented tests for a sample app on a simulator
+
+### ios publish_sample_app
+
+```sh
+[bundle exec] fastlane ios publish_sample_app
+```
+
+[iOS] Publish Sample App
 
 ----
 
@@ -111,13 +151,21 @@ Distribute Sample Apps
 
 [Android] Build Sample App
 
-### android distribute_sample_app
+### android test_sample_app_simulator
 
 ```sh
-[bundle exec] fastlane android distribute_sample_app
+[bundle exec] fastlane android test_sample_app_simulator
 ```
 
-[Android] Distribute Sample App
+[Android] Run instrumented tests for a sample app on a simulator
+
+### android publish_sample_app
+
+```sh
+[bundle exec] fastlane android publish_sample_app
+```
+
+[Android] Publish Sample App
 
 ----
 
