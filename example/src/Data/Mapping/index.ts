@@ -1,4 +1,3 @@
-import { SettingsData } from '../TypeDefinitions';
 import {
   ChallengeRequestIndicator,
   JudoAddressFormat,
@@ -31,476 +30,341 @@ import {
   JudoCheckoutOption,
   JudoGooglePayPriceStatus,
 } from 'judokit-react-native';
+import { appStorage } from '../../Application';
+import {
+  AMOUNT_KEYS,
+  API_CONFIGURATION_KEYS,
+  APPLE_PAY_KEYS,
+  AUTHORIZATION_KEYS,
+  CARD_ADDRESS_KEYS,
+  GOOGLE_PAY_KEYS,
+  NETWORK_TIMEOUTS_KEYS,
+  OTHERS_KEYS,
+  PAYMENT_METHODS_KEYS,
+  PRIMARY_ACCOUNT_DETAILS_KEYS,
+  RECOMMENDATION_KEYS,
+  REFERENCE_KEYS,
+  SUPPORTED_CARD_NETWORKS_KEYS,
+  THREE_DS_TWO_KEYS,
+  TOKEN_PAYMENTS_KEYS,
+} from '../Constants';
 
-export const judoAuthorizationFromSettingsData = ({
-  authorization: {
-    isUsingPaymentSession,
-    isUsingTokenAndSecret,
-    secret,
-    token,
-    paymentSession,
-  },
-}: SettingsData): JudoAuthorization => {
-  if (isUsingTokenAndSecret) {
-    return { secret, token };
+export const getBoolOrFalse = (key: string) => {
+  const { getBool } = appStorage;
+
+  const value = getBool(key);
+  return typeof value === 'boolean' ? value : false;
+};
+
+export const getBoolOrUndefined = (key: string) => {
+  const { getBool } = appStorage;
+
+  const value = getBool(key);
+  return typeof value === 'boolean' ? value : undefined;
+};
+
+export const getStringOrUndefined = (key: string) => {
+  const { getString } = appStorage;
+
+  const value = getString(key);
+  return typeof value === 'string' ? value : undefined;
+};
+
+export const getStringOrEmpty = (key: string) => {
+  const { getString } = appStorage;
+
+  const value = getString(key);
+  return typeof value === 'string' ? value : '';
+};
+
+export const getNumberOrUndefined = (key: string) => {
+  const value = getStringOrEmpty(key);
+
+  if (value.length > 0) {
+    try {
+      return Number(value);
+    } catch (error) {
+      // noop
+    }
   }
 
-  if (isUsingPaymentSession) {
-    return { paymentSession, token };
+  return undefined;
+};
+
+// ============================================================================
+// AUTHORIZATION HELPERS
+// ============================================================================
+
+export const judoAuthorizationFromSettingsData = (): JudoAuthorization => {
+  if (getBoolOrFalse(AUTHORIZATION_KEYS.IS_USING_TOKEN_AND_SECRET)) {
+    return {
+      token: getStringOrEmpty(AUTHORIZATION_KEYS.TOKEN),
+      secret: getStringOrEmpty(AUTHORIZATION_KEYS.SECRET),
+    };
+  }
+
+  if (getBoolOrFalse(AUTHORIZATION_KEYS.IS_USING_PAYMENT_SESSION)) {
+    return {
+      paymentSession: getStringOrEmpty(AUTHORIZATION_KEYS.PAYMENT_SESSION),
+      token: getStringOrEmpty(AUTHORIZATION_KEYS.TOKEN),
+    };
   }
 
   return {} as JudoAuthorization;
 };
 
-export const judoConfigurationFromSettingsData = ({
-  apiConfiguration,
-  amount,
-  reference,
-  cardAddress,
-  supportedCardNetworks,
-  primaryAccountDetails,
-  networkTimeouts,
-  paymentMethods,
-  others,
-  threeDSTwo,
-  applePay,
-  googlePay,
-  tokenPayments,
-  recommendation,
-}: SettingsData): JudoConfiguration => {
-  let configuration = {} as JudoConfiguration;
+// ============================================================================
+// CARD NETWORK HELPERS
+// ============================================================================
 
-  // apiConfiguration
-  const { judoId } = apiConfiguration;
-  configuration = { ...configuration, judoId };
+const buildSupportedCardNetworks = (): JudoCardNetwork => {
+  let cardNetworks: JudoCardNetwork = 0 as JudoCardNetwork;
 
-  // amount
-  configuration = { ...configuration, amount };
+  const networkMappings = [
+    {
+      key: SUPPORTED_CARD_NETWORKS_KEYS.IS_VISA_ON,
+      network: JudoCardNetwork.Visa,
+    },
+    {
+      key: SUPPORTED_CARD_NETWORKS_KEYS.IS_MASTERCARD_ON,
+      network: JudoCardNetwork.Mastercard,
+    },
+    {
+      key: SUPPORTED_CARD_NETWORKS_KEYS.IS_AMEX_ON,
+      network: JudoCardNetwork.Amex,
+    },
+    {
+      key: SUPPORTED_CARD_NETWORKS_KEYS.IS_MAESTRO_ON,
+      network: JudoCardNetwork.Maestro,
+    },
+    {
+      key: SUPPORTED_CARD_NETWORKS_KEYS.IS_DISCOVER_ON,
+      network: JudoCardNetwork.Discover,
+    },
+    {
+      key: SUPPORTED_CARD_NETWORKS_KEYS.IS_DINERS_CLUB_ON,
+      network: JudoCardNetwork.DinersClub,
+    },
+    {
+      key: SUPPORTED_CARD_NETWORKS_KEYS.IS_CHINA_UNION_PAY_ON,
+      network: JudoCardNetwork.ChinaUnionPay,
+    },
+    {
+      key: SUPPORTED_CARD_NETWORKS_KEYS.IS_JCB_ON,
+      network: JudoCardNetwork.JCB,
+    },
+  ];
 
-  // reference
-  configuration = {
-    ...configuration,
-    reference,
-  };
+  networkMappings.forEach(({ key, network }) => {
+    if (getBoolOrFalse(key)) {
+      cardNetworks |= network;
+    }
+  });
 
-  // cardAddress
-  if (cardAddress.isEnabled) {
-    const {
-      line1,
-      line2,
-      line3,
-      phoneCountryCode,
-      countryCode,
-      postCode,
-      emailAddress,
-      state,
-      town,
-      mobileNumber,
-    } = cardAddress;
-    configuration = {
-      ...configuration,
-      phoneCountryCode,
-      mobileNumber,
-      emailAddress,
-      cardAddress: {
-        line1,
-        line2,
-        line3,
-        countryCode: Number(countryCode),
-        postCode,
-        state: state?.length === 0 ? undefined : state,
-        town,
-      },
-    };
-  }
+  return cardNetworks;
+};
 
-  // supportedCardNetworks
-  const {
-    isVisaOn,
-    isMastercardOn,
-    isAmexOn,
-    isMaestroOn,
-    isChinaUnionPayOn,
-    isJCBOn,
-    isDinersClubOn,
-    isDiscoverOn,
-  } = supportedCardNetworks;
+// ============================================================================
+// PAYMENT METHODS HELPERS
+// ============================================================================
 
-  // @ts-ignore
-  let cardNetworks: JudoCardNetwork = 0;
-
-  if (isVisaOn) {
-    cardNetworks |= JudoCardNetwork.Visa;
-  }
-
-  if (isMastercardOn) {
-    cardNetworks |= JudoCardNetwork.Mastercard;
-  }
-
-  if (isAmexOn) {
-    cardNetworks |= JudoCardNetwork.Amex;
-  }
-
-  if (isMaestroOn) {
-    cardNetworks |= JudoCardNetwork.Maestro;
-  }
-
-  if (isDiscoverOn) {
-    cardNetworks |= JudoCardNetwork.Discover;
-  }
-
-  if (isDinersClubOn) {
-    cardNetworks |= JudoCardNetwork.DinersClub;
-  }
-
-  if (isChinaUnionPayOn) {
-    cardNetworks |= JudoCardNetwork.ChinaUnionPay;
-  }
-
-  if (isJCBOn) {
-    cardNetworks |= JudoCardNetwork.JCB;
-  }
-
-  configuration = {
-    ...configuration,
-    supportedCardNetworks: cardNetworks,
-  };
-
-  // primaryAccountDetails
-  if (primaryAccountDetails.isEnabled) {
-    const { name, postCode, dateOfBirth, accountNumber } =
-      primaryAccountDetails;
-    configuration = {
-      ...configuration,
-      primaryAccountDetails: {
-        name,
-        postCode,
-        dateOfBirth,
-        accountNumber,
-      },
-    };
-  }
-
-  // networkTimeouts
-  const { connectTimeout, writeTimeout, readTimeout } = networkTimeouts;
-  if (
-    connectTimeout?.length > 0 &&
-    writeTimeout?.length > 0 &&
-    readTimeout?.length > 0
-  ) {
-    const connect = Number(connectTimeout);
-    const write = Number(writeTimeout);
-    const read = Number(readTimeout);
-
-    configuration = {
-      ...configuration,
-      networkTimeout: {
-        connectTimeout: connect,
-        writeTimeout: write,
-        readTimeout: read,
-      },
-    };
-  }
-
-  // paymentMethods
-  const { isCardOn, isApplePayOn, isGooglePayOn } = paymentMethods;
+const buildPaymentMethods = (): JudoPaymentMethod => {
   let methods = 0;
 
-  if (isCardOn) {
-    methods |= JudoPaymentMethod.Card;
-  }
+  const methodMappings = [
+    { key: PAYMENT_METHODS_KEYS.IS_CARD_ON, method: JudoPaymentMethod.Card },
+    {
+      key: PAYMENT_METHODS_KEYS.IS_APPLE_PAY_ON,
+      method: JudoPaymentMethod.ApplePay,
+    },
+    {
+      key: PAYMENT_METHODS_KEYS.IS_GOOGLE_PAY_ON,
+      method: JudoPaymentMethod.GooglePay,
+    },
+  ];
 
-  if (isApplePayOn) {
-    methods |= JudoPaymentMethod.ApplePay;
-  }
+  methodMappings.forEach(({ key, method }) => {
+    if (getBoolOrFalse(key)) {
+      methods |= method;
+    }
+  });
 
-  if (isGooglePayOn) {
-    methods |= JudoPaymentMethod.GooglePay;
-  }
+  return methods;
+};
 
-  configuration = {
-    ...configuration,
-    paymentMethods: methods,
+// ============================================================================
+// THREE DS HELPERS
+// ============================================================================
+
+const getChallengeRequestIndicator = ():
+  | ChallengeRequestIndicator
+  | undefined => {
+  const value = getStringOrUndefined(
+    THREE_DS_TWO_KEYS.CHALLENGE_REQUEST_INDICATOR
+  );
+
+  if (!value) return undefined;
+
+  const indicatorMap: Record<string, ChallengeRequestIndicator> = {
+    noPreference: ChallengeRequestIndicator.NoPreference,
+    noChallenge: ChallengeRequestIndicator.NoChallenge,
+    challengePreferred: ChallengeRequestIndicator.ChallengePreferred,
+    challengeAsMandate: ChallengeRequestIndicator.ChallengeAsMandate,
   };
 
-  // others, threeDSTwo, (mainly UI settings)
-  const {
-    isAddressVerificationServiceOn,
-    isAmountLabelInPaymentMethodsOn,
-    isAmountLabelInPaymentButtonOn,
-    isInitialRecurringPaymentOn,
-    isDelayedAuthorisationOn,
-    isSecurityCodeOn,
-    isAllowIncrementOn,
-  } = others;
+  return indicatorMap[value] || undefined;
+};
 
-  const {
-    isBillingInformationScreenEnabled,
-    protocolMessageVersion,
-    challengeRequestIndicator,
-    uiCustomization: {
-      isEnabled: isThreeDSUIConfigurationEnabled,
-      toolbarCustomization: {
-        textFontName: toolbarTextFontName,
-        textFontSize: toolbarTextFontSize,
-        textColor: toolbarTextColor,
-        backgroundColor: toolbarBackgroundColor,
-        headerText: toolbarHeaderText,
-        buttonText: toolbarButtonText,
-      },
-      labelCustomization: {
-        textFontName: labelTextFontName,
-        textFontSize: labelTextFontSize,
-        textColor: labelTextColor,
-        headingTextFontSize: labelHeadingTextFontSize,
-        headingTextFontName: labelHeadingTextFontName,
-        headingTextColor: labelHeadingTextColor,
-      },
-      continueButtonCustomization: {
-        textFontName: continueTextFontName,
-        textColor: continueTextColor,
-        textFontSize: continueTextFontSize,
-        backgroundColor: continueBackgroundColor,
-        cornerRadius: continueCornerRadius,
-      },
-      resendButtonCustomization: {
-        textFontName: resendTextFontName,
-        textColor: resendTextColor,
-        textFontSize: resendTextFontSize,
-        backgroundColor: resendBackgroundColor,
-        cornerRadius: resendCornerRadius,
-      },
-      submitButtonCustomization: {
-        textFontName: submitTextFontName,
-        textColor: submitTextColor,
-        textFontSize: submitTextFontSize,
-        backgroundColor: submitBackgroundColor,
-        cornerRadius: submitCornerRadius,
-      },
-      nextButtonCustomization: {
-        textFontName: nextTextFontName,
-        textColor: nextTextColor,
-        textFontSize: nextTextFontSize,
-        backgroundColor: nextBackgroundColor,
-        cornerRadius: nextCornerRadius,
-      },
-      cancelButtonCustomization: {
-        textFontName: cancelTextFontName,
-        textColor: cancelTextColor,
-        textFontSize: cancelTextFontSize,
-        backgroundColor: cancelBackgroundColor,
-        cornerRadius: cancelCornerRadius,
-      },
-      textBoxCustomization: {
-        textFontName: textBoxTextFontName,
-        textColor: textBoxTextColor,
-        textFontSize: textBoxTextFontSize,
-        cornerRadius: textBoxCornerRadius,
-        borderColor: textBoxBorderColor,
-        borderWidth: textBoxBorderWidth,
-      },
-    },
-    SCAExemption,
-    maxTimeout,
-  } = threeDSTwo;
+const getScaExemption = (): ScaExemption | undefined => {
+  const value = getStringOrUndefined(THREE_DS_TWO_KEYS.SCA_EXEMPTION);
 
-  let myChallengeRequestIndicator: ChallengeRequestIndicator | undefined;
-  let myScaExemption: ScaExemption | undefined;
+  if (!value) return undefined;
 
-  switch (challengeRequestIndicator) {
-    case 'noPreference':
-      myChallengeRequestIndicator = ChallengeRequestIndicator.NoPreference;
-      break;
-
-    case 'noChallenge':
-      myChallengeRequestIndicator = ChallengeRequestIndicator.NoChallenge;
-      break;
-
-    case 'challengePreferred':
-      myChallengeRequestIndicator =
-        ChallengeRequestIndicator.ChallengePreferred;
-      break;
-
-    case 'challengeAsMandate':
-      myChallengeRequestIndicator =
-        ChallengeRequestIndicator.ChallengeAsMandate;
-      break;
-
-    default:
-      myChallengeRequestIndicator = undefined;
-  }
-
-  switch (SCAExemption) {
-    case 'lowValue':
-      myScaExemption = ScaExemption.LowValue;
-      break;
-
-    case 'secureCorporate':
-      myScaExemption = ScaExemption.SecureCorporate;
-      break;
-
-    case 'trustedBeneficiary':
-      myScaExemption = ScaExemption.TrustedBeneficiary;
-      break;
-
-    case 'transactionRiskAnalysis':
-      myScaExemption = ScaExemption.TransactionRiskAnalysis;
-      break;
-
-    default:
-      myScaExemption = undefined;
-  }
-
-  let threeDSUIConfiguration: JudoThreeDSUIConfiguration | undefined;
-
-  if (isThreeDSUIConfigurationEnabled) {
-    let buttonCustomizations: Partial<
-      Record<JudoThreeDSButtonType, JudoThreeDSButtonCustomization>
-    > = {};
-
-    buttonCustomizations[JudoThreeDSButtonType.SUBMIT] = {
-      textFontName: submitTextFontName,
-      textColor: submitTextColor,
-      backgroundColor: submitBackgroundColor,
-      textFontSize: Number(submitTextFontSize),
-      cornerRadius: Number(submitCornerRadius),
-    };
-
-    buttonCustomizations[JudoThreeDSButtonType.CONTINUE] = {
-      textFontName: continueTextFontName,
-      textColor: continueTextColor,
-      backgroundColor: continueBackgroundColor,
-      textFontSize: Number(continueTextFontSize),
-      cornerRadius: Number(continueCornerRadius),
-    };
-
-    buttonCustomizations[JudoThreeDSButtonType.NEXT] = {
-      textFontName: nextTextFontName,
-      textColor: nextTextColor,
-      backgroundColor: nextBackgroundColor,
-      textFontSize: Number(nextTextFontSize),
-      cornerRadius: Number(nextCornerRadius),
-    };
-
-    buttonCustomizations[JudoThreeDSButtonType.CANCEL] = {
-      textFontName: cancelTextFontName,
-      textColor: cancelTextColor,
-      backgroundColor: cancelBackgroundColor,
-      textFontSize: Number(cancelTextFontSize),
-      cornerRadius: Number(cancelCornerRadius),
-    };
-
-    buttonCustomizations[JudoThreeDSButtonType.RESEND] = {
-      textFontName: resendTextFontName,
-      textColor: resendTextColor,
-      backgroundColor: resendBackgroundColor,
-      textFontSize: Number(resendTextFontSize),
-      cornerRadius: Number(resendCornerRadius),
-    };
-
-    const toolbarCustomization: JudoThreeDSToolbarCustomization = {
-      textFontName: toolbarTextFontName,
-      textFontSize: Number(toolbarTextFontSize),
-      textColor: toolbarTextColor,
-      backgroundColor: toolbarBackgroundColor,
-      headerText: toolbarHeaderText,
-      buttonText: toolbarButtonText,
-    };
-
-    const labelCustomization: JudoThreeDSLabelCustomization = {
-      textFontName: labelTextFontName,
-      textFontSize: Number(labelTextFontSize),
-      textColor: labelTextColor,
-      headingTextFontSize: Number(labelHeadingTextFontSize),
-      headingTextFontName: labelHeadingTextFontName,
-      headingTextColor: labelHeadingTextColor,
-    };
-
-    const textBoxCustomization: JudoThreeDSTextBoxCustomization = {
-      textFontName: textBoxTextFontName,
-      textColor: textBoxTextColor,
-      textFontSize: Number(textBoxTextFontSize),
-      cornerRadius: Number(textBoxCornerRadius),
-      borderColor: textBoxBorderColor,
-      borderWidth: Number(textBoxBorderWidth),
-    };
-
-    threeDSUIConfiguration = {
-      buttonCustomizations,
-      toolbarCustomization,
-      labelCustomization,
-      textBoxCustomization,
-    };
-  }
-
-  const threeDSTwoMaxTimeout =
-    maxTimeout.length > 0 ? Number(maxTimeout) : undefined;
-  const messageVersion =
-    protocolMessageVersion.length > 0 ? protocolMessageVersion : undefined;
-
-  const { shouldAskForCSC, shouldAskForCardholderName } = tokenPayments || {};
-
-  const {
-    isOn = false,
-    url,
-    timeout,
-    rsaPublicKey,
-    haltTransactionInCaseOfAnyError,
-  } = recommendation || {};
-
-  const recommendationConfiguration = isOn
-    ? {
-        url,
-        rsaPublicKey,
-        timeout: timeout.length > 0 ? Number(timeout) : undefined,
-        haltTransactionInCaseOfAnyError,
-      }
-    : undefined;
-
-  configuration = {
-    ...configuration,
-    isInitialRecurringPayment: isInitialRecurringPaymentOn,
-    isDelayedAuthorisation: isDelayedAuthorisationOn,
-    isAllowIncrement: isAllowIncrementOn,
-    challengeRequestIndicator: myChallengeRequestIndicator,
-    scaExemption: myScaExemption,
-    threeDSTwoMessageVersion: messageVersion,
-    threeDSTwoMaxTimeout,
-    uiConfiguration: {
-      isAVSEnabled: isAddressVerificationServiceOn,
-      shouldAskForBillingInformation: isBillingInformationScreenEnabled,
-      shouldPaymentButtonDisplayAmount: isAmountLabelInPaymentButtonOn,
-      shouldPaymentMethodsDisplayAmount: isAmountLabelInPaymentMethodsOn,
-      shouldPaymentMethodsVerifySecurityCode: isSecurityCodeOn,
-      threeDSUIConfiguration,
-      shouldAskForCSC,
-      shouldAskForCardholderName,
-    },
-    recommendationConfiguration,
+  const exemptionMap: Record<string, ScaExemption> = {
+    lowValue: ScaExemption.LowValue,
+    secureCorporate: ScaExemption.SecureCorporate,
+    trustedBeneficiary: ScaExemption.TrustedBeneficiary,
+    transactionRiskAnalysis: ScaExemption.TransactionRiskAnalysis,
   };
 
-  // applePay
-  const {
-    merchantId,
-    returnedContactInfo: {
-      isBillingContactsOn: applePayIsBillingContactsOn,
-      isShippingContactsOn: applePayIsShippingContactsOn,
-    },
-    requiredShippingContactFields: {
-      isPostalAddressOn: applePayIsShippingPostalAddressOn,
-      isPhoneOn: applePayIsShippingPhoneOn,
-      isNameOn: applePayIsShippingNameOn,
-      isEmailOn: applePayIsShippingEmailOn,
-    },
-    requiredBillingContactFields: {
-      isPostalAddressOn: applePayIsBillingPostalAddressOn,
-      isPhoneOn: applePayIsBillingPhoneOn,
-      isNameOn: applePayIsBillingNameOn,
-      isEmailOn: applePayIsBillingEmailOn,
-    },
-    recurringPaymentRequest,
-  } = applePay;
+  return exemptionMap[value] || undefined;
+};
 
+// ============================================================================
+// THREE DS UI CUSTOMIZATION HELPERS
+// ============================================================================
+
+const buildButtonCustomization = (
+  // @ts-ignore
+  buttonType: JudoThreeDSButtonType,
+  customizationKeys: any
+): JudoThreeDSButtonCustomization => {
+  return {
+    textFontName: getStringOrUndefined(customizationKeys.TEXT_FONT_NAME),
+    textColor: getStringOrUndefined(customizationKeys.TEXT_COLOR),
+    backgroundColor: getStringOrUndefined(customizationKeys.BACKGROUND_COLOR),
+    textFontSize: getNumberOrUndefined(customizationKeys.TEXT_FONT_SIZE),
+    cornerRadius: getNumberOrUndefined(customizationKeys.CORNER_RADIUS),
+  };
+};
+
+const buildThreeDSUIConfiguration = ():
+  | JudoThreeDSUIConfiguration
+  | undefined => {
+  if (!getBoolOrFalse(THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.IS_ENABLED)) {
+    return undefined;
+  }
+
+  const buttonCustomizations: Partial<
+    Record<JudoThreeDSButtonType, JudoThreeDSButtonCustomization>
+  > = {};
+
+  // Build button customizations for each button type
+  const buttonTypes = [
+    {
+      type: JudoThreeDSButtonType.SUBMIT,
+      keys: THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.SUBMIT_BUTTON_CUSTOMIZATION,
+    },
+    {
+      type: JudoThreeDSButtonType.CONTINUE,
+      keys: THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.CONTINUE_BUTTON_CUSTOMIZATION,
+    },
+    {
+      type: JudoThreeDSButtonType.NEXT,
+      keys: THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.NEXT_BUTTON_CUSTOMIZATION,
+    },
+    {
+      type: JudoThreeDSButtonType.CANCEL,
+      keys: THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.CANCEL_BUTTON_CUSTOMIZATION,
+    },
+    {
+      type: JudoThreeDSButtonType.RESEND,
+      keys: THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.RESEND_BUTTON_CUSTOMIZATION,
+    },
+  ];
+
+  buttonTypes.forEach(({ type, keys }) => {
+    buttonCustomizations[type] = buildButtonCustomization(type, keys);
+  });
+
+  const toolbarCustomization: JudoThreeDSToolbarCustomization = {
+    textFontName: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TOOLBAR_CUSTOMIZATION.TEXT_FONT_NAME
+    ),
+    textFontSize: getNumberOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TOOLBAR_CUSTOMIZATION.TEXT_FONT_SIZE
+    ),
+    textColor: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TOOLBAR_CUSTOMIZATION.TEXT_COLOR
+    ),
+    backgroundColor: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TOOLBAR_CUSTOMIZATION.BACKGROUND_COLOR
+    ),
+    headerText: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TOOLBAR_CUSTOMIZATION.HEADER_TEXT
+    ),
+    buttonText: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TOOLBAR_CUSTOMIZATION.BUTTON_TEXT
+    ),
+  };
+
+  const labelCustomization: JudoThreeDSLabelCustomization = {
+    textFontName: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.LABEL_CUSTOMIZATION.TEXT_FONT_NAME
+    ),
+    textFontSize: getNumberOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.LABEL_CUSTOMIZATION.TEXT_FONT_SIZE
+    ),
+    textColor: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.LABEL_CUSTOMIZATION.TEXT_COLOR
+    ),
+    headingTextFontSize: getNumberOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.LABEL_CUSTOMIZATION
+        .HEADING_TEXT_FONT_SIZE
+    ),
+    headingTextFontName: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.LABEL_CUSTOMIZATION
+        .HEADING_TEXT_FONT_NAME
+    ),
+    headingTextColor: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.LABEL_CUSTOMIZATION.HEADING_TEXT_COLOR
+    ),
+  };
+
+  const textBoxCustomization: JudoThreeDSTextBoxCustomization = {
+    textFontName: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TEXT_BOX_CUSTOMIZATION.TEXT_FONT_NAME
+    ),
+    textColor: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TEXT_BOX_CUSTOMIZATION.TEXT_COLOR
+    ),
+    textFontSize: getNumberOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TEXT_BOX_CUSTOMIZATION.TEXT_FONT_SIZE
+    ),
+    cornerRadius: getNumberOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TEXT_BOX_CUSTOMIZATION.CORNER_RADIUS
+    ),
+    borderColor: getStringOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TEXT_BOX_CUSTOMIZATION.BORDER_COLOR
+    ),
+    borderWidth: getNumberOrUndefined(
+      THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.TEXT_BOX_CUSTOMIZATION.BORDER_WIDTH
+    ),
+  };
+
+  return {
+    buttonCustomizations,
+    toolbarCustomization,
+    labelCustomization,
+    textBoxCustomization,
+  };
+};
+
+// ============================================================================
+// APPLE PAY HELPERS
+// ============================================================================
+
+const buildApplePayPaymentSummaryItems = (): JudoPaymentSummaryItem[] => {
   const itemOne: JudoPaymentSummaryItem = {
     label: 'Item 1',
     amount: '0.01',
@@ -517,6 +381,10 @@ export const judoConfigurationFromSettingsData = ({
     amount: '0.03',
   };
 
+  return [itemOne, itemTwo, total];
+};
+
+const buildApplePayShippingMethods = (): JudoShippingMethod[] => {
   const delivery: JudoShippingMethod = {
     identifier: 'delivery-id',
     label: 'Deliver',
@@ -525,50 +393,57 @@ export const judoConfigurationFromSettingsData = ({
     type: JudoPaymentSummaryItemType.Final,
   };
 
-  let returnedInfo: JudoReturnedInfo | undefined;
+  return [delivery];
+};
 
-  if (applePayIsBillingContactsOn && applePayIsShippingContactsOn) {
-    returnedInfo = JudoReturnedInfo.All;
-  } else if (applePayIsBillingContactsOn) {
-    returnedInfo = JudoReturnedInfo.BillingDetails;
-  } else if (applePayIsShippingContactsOn) {
-    returnedInfo = JudoReturnedInfo.ShippingDetails;
+const getApplePayReturnedInfo = (): JudoReturnedInfo | undefined => {
+  const isBillingContactsOn = getBoolOrFalse(
+    APPLE_PAY_KEYS.RETURNED_CONTACT_INFO.IS_BILLING_CONTACTS_ON
+  );
+  const isShippingContactsOn = getBoolOrFalse(
+    APPLE_PAY_KEYS.RETURNED_CONTACT_INFO.IS_SHIPPING_CONTACTS_ON
+  );
+
+  if (isBillingContactsOn && isShippingContactsOn) {
+    return JudoReturnedInfo.All;
+  } else if (isBillingContactsOn) {
+    return JudoReturnedInfo.BillingDetails;
+  } else if (isShippingContactsOn) {
+    return JudoReturnedInfo.ShippingDetails;
   }
 
-  let billingFields: Array<JudoContactField> = [];
-  let shippingFields: Array<JudoContactField> = [];
+  return undefined;
+};
 
-  if (applePayIsBillingPostalAddressOn) {
-    billingFields.push(JudoContactField.PostalAddress);
-  }
+const buildApplePayContactFields = (): {
+  requiredBillingContactFields?: JudoContactField;
+  requiredShippingContactFields?: JudoContactField;
+} => {
+  const buildContactFields = (fieldKeys: any): JudoContactField[] => {
+    const fields: JudoContactField[] = [];
 
-  if (applePayIsBillingPhoneOn) {
-    billingFields.push(JudoContactField.Phone);
-  }
+    if (getBoolOrFalse(fieldKeys.IS_POSTAL_ADDRESS_ON)) {
+      fields.push(JudoContactField.PostalAddress);
+    }
+    if (getBoolOrFalse(fieldKeys.IS_PHONE_ON)) {
+      fields.push(JudoContactField.Phone);
+    }
+    if (getBoolOrFalse(fieldKeys.IS_NAME_ON)) {
+      fields.push(JudoContactField.Name);
+    }
+    if (getBoolOrFalse(fieldKeys.IS_EMAIL_ON)) {
+      fields.push(JudoContactField.Email);
+    }
 
-  if (applePayIsBillingNameOn) {
-    billingFields.push(JudoContactField.Name);
-  }
+    return fields;
+  };
 
-  if (applePayIsBillingEmailOn) {
-    billingFields.push(JudoContactField.Email);
-  }
-
-  if (applePayIsShippingPostalAddressOn) {
-    shippingFields.push(JudoContactField.PostalAddress);
-  }
-
-  if (applePayIsShippingPhoneOn) {
-    shippingFields.push(JudoContactField.Phone);
-  }
-
-  if (applePayIsShippingNameOn) {
-    shippingFields.push(JudoContactField.Name);
-  }
-
-  if (applePayIsShippingEmailOn) {
-    shippingFields.push(JudoContactField.Email);
-  }
+  const billingFields = buildContactFields(
+    APPLE_PAY_KEYS.REQUIRED_BILLING_CONTACT_FIELDS
+  );
+  const shippingFields = buildContactFields(
+    APPLE_PAY_KEYS.REQUIRED_SHIPPING_CONTACT_FIELDS
+  );
 
   const reduceCallbackFn = (
     previousValue: JudoContactField,
@@ -580,174 +455,363 @@ export const judoConfigurationFromSettingsData = ({
     return currentValue;
   };
 
-  let requiredBillingContactFields =
-    billingFields.length > 0
-      ? billingFields.reduce(reduceCallbackFn)
-      : undefined;
-  let requiredShippingContactFields =
-    shippingFields.length > 0
-      ? shippingFields.reduce(reduceCallbackFn)
-      : undefined;
-
-  let recurringRequest: JudoApplePayRecurringPaymentRequest | undefined;
-  const {
-    isOn: recurringPaymentRequestIsOn = false,
-    regularBilling = {} as Record<string, any>,
-  } = recurringPaymentRequest || {};
-
-  if (recurringPaymentRequestIsOn) {
-    const { paymentDescription, managementURL, billingAgreement } =
-      recurringPaymentRequest;
-
-    const {
-      isOn: regularBillingIsOn = false,
-      label: regularBillingLabel,
-      amount: regularBillingAmount,
-      startDate: regularBillingStartDate,
-      endDate: regularBillingEndDate,
-      intervalUnit: regularBillingIntervalUnit,
-      intervalCount: regularBillingIntervalCount,
-    } = regularBilling;
-
-    const intervalUnit = (intervalUnitString: string) => {
-      switch (intervalUnitString) {
-        case 'year':
-          return JudoCalendarUnit.Year;
-
-        case 'month':
-          return JudoCalendarUnit.Month;
-
-        case 'day':
-          return JudoCalendarUnit.Day;
-
-        case 'hour':
-          return JudoCalendarUnit.Hour;
-
-        case 'minute':
-          return JudoCalendarUnit.Minute;
-
-        default:
-          return;
-      }
-    };
-
-    recurringRequest = {
-      // @ts-ignore
-      paymentDescription: paymentDescription || undefined,
-      // @ts-ignore
-      managementURL: managementURL || undefined,
-      billingAgreement: billingAgreement || undefined,
-      // @ts-ignore
-      regularBilling: regularBillingIsOn
-        ? {
-            label: regularBillingLabel || undefined,
-            amount: regularBillingAmount || undefined,
-            startDate: regularBillingStartDate || undefined,
-            endDate: regularBillingEndDate || undefined,
-            intervalUnit: intervalUnit(regularBillingIntervalUnit),
-            intervalCount: regularBillingIntervalCount
-              ? Number(regularBillingIntervalCount)
-              : undefined,
-          }
+  return {
+    requiredBillingContactFields:
+      billingFields.length > 0
+        ? billingFields.reduce(reduceCallbackFn)
         : undefined,
+    requiredShippingContactFields:
+      shippingFields.length > 0
+        ? shippingFields.reduce(reduceCallbackFn)
+        : undefined,
+  };
+};
+
+const buildApplePayRecurringPaymentRequest = ():
+  | JudoApplePayRecurringPaymentRequest
+  | undefined => {
+  if (!getBoolOrFalse(APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.IS_ON)) {
+    return undefined;
+  }
+
+  const getIntervalUnit = (
+    intervalUnitString: string
+  ): JudoCalendarUnit | undefined => {
+    const unitMap: Record<string, JudoCalendarUnit> = {
+      year: JudoCalendarUnit.Year,
+      month: JudoCalendarUnit.Month,
+      day: JudoCalendarUnit.Day,
+      hour: JudoCalendarUnit.Hour,
+      minute: JudoCalendarUnit.Minute,
+    };
+    return unitMap[intervalUnitString];
+  };
+
+  const regularBillingIsOn = getBoolOrFalse(
+    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON
+  );
+
+  const paymentDescription = getStringOrUndefined(
+    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.PAYMENT_DESCRIPTION
+  );
+  const managementURL = getStringOrUndefined(
+    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.MANAGEMENT_URL
+  );
+  const billingAgreement = getStringOrUndefined(
+    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.BILLING_AGREEMENT
+  );
+
+  if (!paymentDescription || !managementURL) {
+    return undefined;
+  }
+
+  const regularBillingData = regularBillingIsOn
+    ? {
+        label:
+          getStringOrUndefined(
+            APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.LABEL
+          ) || 'Recurring Payment',
+        amount:
+          getStringOrUndefined(
+            APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.AMOUNT
+          ) || '0.00',
+        startDate: getStringOrUndefined(
+          APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.START_DATE
+        ),
+        endDate: getStringOrUndefined(
+          APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.END_DATE
+        ),
+        intervalUnit: getIntervalUnit(
+          getStringOrEmpty(
+            APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
+              .INTERVAL_UNIT
+          )
+        ),
+        intervalCount: getNumberOrUndefined(
+          APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
+            .INTERVAL_COUNT
+        ),
+      }
+    : {
+        label: 'Recurring Payment',
+        amount: '0.00',
+      };
+
+  return {
+    paymentDescription,
+    managementURL,
+    billingAgreement: billingAgreement || undefined,
+    regularBilling: regularBillingData,
+  };
+};
+
+// ============================================================================
+// GOOGLE PAY HELPERS
+// ============================================================================
+
+const buildGooglePayBillingParameters = ():
+  | JudoBillingAddressParameters
+  | undefined => {
+  const billingAddressFields = getStringOrEmpty(
+    GOOGLE_PAY_KEYS.BILLING_ADDRESS_FIELDS
+  );
+
+  if (billingAddressFields !== 'MIN' && billingAddressFields !== 'FULL') {
+    return undefined;
+  }
+
+  return {
+    addressFormat:
+      billingAddressFields === 'MIN'
+        ? JudoAddressFormat.MIN
+        : JudoAddressFormat.FULL,
+    isPhoneNumberRequired: getBoolOrFalse(
+      GOOGLE_PAY_KEYS.IS_BILLING_ADDRESS_PHONE_NUMBER_ON
+    ),
+  };
+};
+
+const buildGooglePayShippingParameters = (): JudoShippingAddressParameters => {
+  const allowedCountryCodes = getStringOrEmpty(
+    GOOGLE_PAY_KEYS.SHIPPING_ADDRESS_ALLOWED_COUNTRIES
+  )
+    .split(',')
+    .map((code) => code.trim());
+
+  return {
+    allowedCountryCodes,
+    isPhoneNumberRequired: getBoolOrFalse(
+      GOOGLE_PAY_KEYS.IS_SHIPPING_ADDRESS_PHONE_NUMBER_ON
+    ),
+  };
+};
+
+const getGooglePayCheckoutOption = (): JudoCheckoutOption | undefined => {
+  const value = getStringOrUndefined(GOOGLE_PAY_KEYS.CHECKOUT_OPTION);
+
+  if (!value) return undefined;
+
+  const optionMap: Record<string, JudoCheckoutOption> = {
+    DEFAULT: JudoCheckoutOption.DEFAULT,
+    COMPLETE_IMMEDIATE_PURCHASE: JudoCheckoutOption.COMPLETE_IMMEDIATE_PURCHASE,
+  };
+
+  return optionMap[value];
+};
+
+const getGooglePayTotalPriceStatus = (): JudoGooglePayPriceStatus => {
+  const value = getStringOrEmpty(GOOGLE_PAY_KEYS.TOTAL_PRICE_STATUS);
+
+  if (!value) return JudoGooglePayPriceStatus.FINAL;
+
+  const statusMap: Record<string, JudoGooglePayPriceStatus> = {
+    ESTIMATED: JudoGooglePayPriceStatus.ESTIMATED,
+    NOT_CURRENTLY_KNOWN: JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN,
+  };
+
+  return statusMap[value] || JudoGooglePayPriceStatus.FINAL;
+};
+
+// ============================================================================
+// MAIN CONFIGURATION BUILDER
+// ============================================================================
+
+export const judoConfigurationFromSettingsData = (): JudoConfiguration => {
+  // Build base configuration
+  let configuration: JudoConfiguration = {
+    judoId: getStringOrEmpty(API_CONFIGURATION_KEYS.JUDO_ID),
+    amount: {
+      currency: getStringOrEmpty(AMOUNT_KEYS.CURRENCY),
+      value: getStringOrEmpty(AMOUNT_KEYS.VALUE),
+    },
+    reference: {
+      consumerReference: getStringOrEmpty(REFERENCE_KEYS.CONSUMER_REFERENCE),
+      paymentReference: getStringOrUndefined(REFERENCE_KEYS.PAYMENT_REFERENCE),
+    },
+  };
+
+  // Add card address if enabled
+  if (getBoolOrFalse(CARD_ADDRESS_KEYS.IS_ENABLED)) {
+    configuration = {
+      ...configuration,
+      phoneCountryCode: getStringOrUndefined(
+        CARD_ADDRESS_KEYS.PHONE_COUNTRY_CODE
+      ),
+      mobileNumber: getStringOrUndefined(CARD_ADDRESS_KEYS.MOBILE_NUMBER),
+      emailAddress: getStringOrUndefined(CARD_ADDRESS_KEYS.EMAIL_ADDRESS),
+      cardAddress: {
+        line1: getStringOrUndefined(CARD_ADDRESS_KEYS.LINE1),
+        line2: getStringOrUndefined(CARD_ADDRESS_KEYS.LINE2),
+        line3: getStringOrUndefined(CARD_ADDRESS_KEYS.LINE3),
+        countryCode: getNumberOrUndefined(CARD_ADDRESS_KEYS.COUNTRY_CODE),
+        postCode: getStringOrUndefined(CARD_ADDRESS_KEYS.POST_CODE),
+        state: getStringOrUndefined(CARD_ADDRESS_KEYS.STATE),
+        town: getStringOrUndefined(CARD_ADDRESS_KEYS.TOWN),
+      },
     };
   }
+
+  // Add supported card networks
+  configuration = {
+    ...configuration,
+    supportedCardNetworks: buildSupportedCardNetworks(),
+  };
+
+  // Add primary account details if enabled
+  if (getBoolOrFalse(PRIMARY_ACCOUNT_DETAILS_KEYS.IS_ENABLED)) {
+    configuration = {
+      ...configuration,
+      primaryAccountDetails: {
+        name: getStringOrUndefined(PRIMARY_ACCOUNT_DETAILS_KEYS.NAME),
+        postCode: getStringOrUndefined(PRIMARY_ACCOUNT_DETAILS_KEYS.POST_CODE),
+        dateOfBirth: getStringOrUndefined(
+          PRIMARY_ACCOUNT_DETAILS_KEYS.DATE_OF_BIRTH
+        ),
+        accountNumber: getStringOrUndefined(
+          PRIMARY_ACCOUNT_DETAILS_KEYS.ACCOUNT_NUMBER
+        ),
+      },
+    };
+  }
+
+  // Add network timeouts if all are provided
+  const [connectTimeout, writeTimeout, readTimeout] = [
+    getStringOrEmpty(NETWORK_TIMEOUTS_KEYS.CONNECT_TIMEOUT),
+    getStringOrEmpty(NETWORK_TIMEOUTS_KEYS.WRITE_TIMEOUT),
+    getStringOrEmpty(NETWORK_TIMEOUTS_KEYS.READ_TIMEOUT),
+  ];
+
+  if (
+    connectTimeout?.length > 0 &&
+    writeTimeout?.length > 0 &&
+    readTimeout?.length > 0
+  ) {
+    configuration = {
+      ...configuration,
+      networkTimeout: {
+        connectTimeout: Number(connectTimeout),
+        writeTimeout: Number(writeTimeout),
+        readTimeout: Number(readTimeout),
+      },
+    };
+  }
+
+  // Add payment methods
+  configuration = {
+    ...configuration,
+    paymentMethods: buildPaymentMethods(),
+  };
+
+  // Add Three DS configuration
+  const threeDSUIConfiguration = buildThreeDSUIConfiguration();
+  const maxTimeout = getStringOrEmpty(THREE_DS_TWO_KEYS.MAX_TIMEOUT);
+  const threeDSTwoMaxTimeout =
+    maxTimeout.length > 0 ? Number(maxTimeout) : undefined;
+  const protocolMessageVersion = getStringOrEmpty(
+    THREE_DS_TWO_KEYS.PROTOCOL_MESSAGE_VERSION
+  );
+  const messageVersion =
+    protocolMessageVersion.length > 0 ? protocolMessageVersion : undefined;
+
+  // Add recommendation configuration
+  const timeout = getStringOrEmpty(RECOMMENDATION_KEYS.TIMEOUT);
+  const recommendationConfiguration = getBoolOrFalse(RECOMMENDATION_KEYS.IS_ON)
+    ? {
+        url: getStringOrEmpty(RECOMMENDATION_KEYS.URL),
+        rsaPublicKey: getStringOrEmpty(RECOMMENDATION_KEYS.RSA_PUBLIC_KEY),
+        timeout: timeout.length > 0 ? Number(timeout) : undefined,
+        haltTransactionInCaseOfAnyError: getBoolOrFalse(
+          RECOMMENDATION_KEYS.HALT_TRANSACTION_IN_CASE_OF_ANY_ERROR
+        ),
+      }
+    : undefined;
+
+  // Add other configuration options
+  configuration = {
+    ...configuration,
+    isInitialRecurringPayment: getBoolOrUndefined(
+      OTHERS_KEYS.IS_INITIAL_RECURRING_PAYMENT_ON
+    ),
+    isDelayedAuthorisation: getBoolOrUndefined(
+      OTHERS_KEYS.IS_DELAYED_AUTHORISATION_ON
+    ),
+    isAllowIncrement: getBoolOrUndefined(OTHERS_KEYS.IS_ALLOW_INCREMENT_ON),
+    challengeRequestIndicator: getChallengeRequestIndicator(),
+    scaExemption: getScaExemption(),
+    threeDSTwoMessageVersion: messageVersion,
+    threeDSTwoMaxTimeout,
+    uiConfiguration: {
+      isAVSEnabled: getBoolOrUndefined(
+        OTHERS_KEYS.IS_ADDRESS_VERIFICATION_SERVICE_ON
+      ),
+      shouldAskForBillingInformation: getBoolOrUndefined(
+        THREE_DS_TWO_KEYS.IS_BILLING_INFORMATION_SCREEN_ENABLED
+      ),
+      shouldPaymentButtonDisplayAmount: getBoolOrUndefined(
+        OTHERS_KEYS.IS_AMOUNT_LABEL_IN_PAYMENT_BUTTON_ON
+      ),
+      shouldPaymentMethodsDisplayAmount: getBoolOrUndefined(
+        OTHERS_KEYS.IS_AMOUNT_LABEL_IN_PAYMENT_METHODS_ON
+      ),
+      threeDSUIConfiguration,
+      shouldAskForCSC: getBoolOrUndefined(
+        TOKEN_PAYMENTS_KEYS.SHOULD_ASK_FOR_CSC
+      ),
+      shouldAskForCardholderName: getBoolOrUndefined(
+        TOKEN_PAYMENTS_KEYS.SHOULD_ASK_FOR_CARDHOLDER_NAME
+      ),
+    },
+    recommendationConfiguration,
+  };
+
+  // Add Apple Pay configuration
+  const { requiredBillingContactFields, requiredShippingContactFields } =
+    buildApplePayContactFields();
 
   configuration = {
     ...configuration,
     applePayConfiguration: {
-      merchantId,
+      merchantId: getStringOrEmpty(APPLE_PAY_KEYS.MERCHANT_ID),
       countryCode: 'GB',
-      paymentSummaryItems: [itemOne, itemTwo, total],
+      paymentSummaryItems: buildApplePayPaymentSummaryItems(),
       merchantCapabilities: JudoMerchantCapability.ThreeDS,
       requiredBillingContactFields,
       requiredShippingContactFields,
-      shippingMethods: [delivery],
+      shippingMethods: buildApplePayShippingMethods(),
       shippingType: JudoShippingType.Delivery,
-      returnedInfo,
-      recurringPaymentRequest: recurringRequest,
+      returnedInfo: getApplePayReturnedInfo(),
+      recurringPaymentRequest: buildApplePayRecurringPaymentRequest(),
     },
   };
 
-  // googlePay
-  const {
-    isProductionEnvironmentOn,
-    merchantName,
-    countryCode,
-    isBillingAddressPhoneNumberOn,
-    billingAddressFields,
-    isShippingAddressPhoneNumberOn,
-    isShippingAddressOn,
-    isEmailAddressOn,
-    shippingAddressAllowedCountries,
-    allowPrepaidCards,
-    allowCreditCards,
-    transactionId,
-    totalPriceStatus,
-    totalPriceLabel,
-    checkoutOption,
-  } = googlePay;
-
-  let billingParameters: JudoBillingAddressParameters | undefined;
-
-  if (billingAddressFields === 'MIN' || billingAddressFields === 'FULL') {
-    billingParameters = {
-      addressFormat:
-        billingAddressFields === 'MIN'
-          ? JudoAddressFormat.MIN
-          : JudoAddressFormat.FULL,
-      isPhoneNumberRequired: isBillingAddressPhoneNumberOn,
-    };
-  }
-
-  const allowedCountryCodes = shippingAddressAllowedCountries
-    .split(',')
-    .map((code) => code.trim());
-
-  const shippingParameters: JudoShippingAddressParameters = {
-    allowedCountryCodes,
-    isPhoneNumberRequired: isShippingAddressPhoneNumberOn,
-  };
-
-  const environment = isProductionEnvironmentOn
+  // Add Google Pay configuration
+  const environment = getBoolOrFalse(
+    GOOGLE_PAY_KEYS.IS_PRODUCTION_ENVIRONMENT_ON
+  )
     ? JudoGooglePayEnvironment.PRODUCTION
     : JudoGooglePayEnvironment.TEST;
 
-  let checkoutOptionValue: JudoCheckoutOption | undefined;
-
-  if (checkoutOption === 'DEFAULT') {
-    checkoutOptionValue = JudoCheckoutOption.DEFAULT;
-  }
-
-  if (checkoutOption === 'COMPLETE_IMMEDIATE_PURCHASE') {
-    checkoutOptionValue = JudoCheckoutOption.COMPLETE_IMMEDIATE_PURCHASE;
-  }
-
-  let totalPriceStatusValue = JudoGooglePayPriceStatus.FINAL;
-
-  if (totalPriceStatus === 'ESTIMATED') {
-    totalPriceStatusValue = JudoGooglePayPriceStatus.ESTIMATED;
-  }
-
-  if (totalPriceStatus === 'NOT_CURRENTLY_KNOWN') {
-    totalPriceStatusValue = JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN;
-  }
+  const merchantName = getStringOrEmpty(GOOGLE_PAY_KEYS.MERCHANT_NAME);
+  const transactionId = getStringOrEmpty(GOOGLE_PAY_KEYS.TRANSACTION_ID);
+  const totalPriceLabel = getStringOrEmpty(GOOGLE_PAY_KEYS.TOTAL_PRICE_LABEL);
 
   const googlePayConfiguration: JudoGooglePayConfiguration = {
-    countryCode,
+    countryCode: getStringOrEmpty(GOOGLE_PAY_KEYS.COUNTRY_CODE),
     environment,
-    isEmailRequired: isEmailAddressOn,
-    billingAddressParameters: billingParameters,
-    shippingAddressParameters: shippingParameters,
+    isEmailRequired: getBoolOrFalse(GOOGLE_PAY_KEYS.IS_EMAIL_ADDRESS_ON),
+    billingAddressParameters: buildGooglePayBillingParameters(),
+    shippingAddressParameters: buildGooglePayShippingParameters(),
     isBillingAddressRequired: true,
-    isShippingAddressRequired: isShippingAddressOn,
+    isShippingAddressRequired: getBoolOrFalse(
+      GOOGLE_PAY_KEYS.IS_SHIPPING_ADDRESS_ON
+    ),
     merchantName: merchantName.length === 0 ? undefined : merchantName,
-    allowCreditCards,
-    allowPrepaidCards,
+    allowCreditCards: getBoolOrFalse(GOOGLE_PAY_KEYS.ALLOW_CREDIT_CARDS),
+    allowPrepaidCards: getBoolOrFalse(GOOGLE_PAY_KEYS.ALLOW_PREPAID_CARDS),
     transactionId: transactionId.length === 0 ? undefined : transactionId,
-    totalPriceStatus: totalPriceStatusValue,
+    totalPriceStatus: getGooglePayTotalPriceStatus(),
     totalPriceLabel: totalPriceLabel.length === 0 ? undefined : totalPriceLabel,
-    checkoutOption: checkoutOptionValue,
+    checkoutOption: getGooglePayCheckoutOption(),
   };
 
   configuration = {

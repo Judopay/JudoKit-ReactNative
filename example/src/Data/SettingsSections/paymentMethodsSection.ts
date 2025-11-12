@@ -1,35 +1,22 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import { IS_IOS } from '../Constants';
-import _ from 'lodash';
+import { IS_IOS, PAYMENT_METHODS_KEYS } from '../Constants';
 
-const paymentMethodsSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isCardOnPath = 'paymentMethods.isCardOn';
-  const isApplePayOnPath = 'paymentMethods.isApplePayOn';
-  const isGooglePayOnPath = 'paymentMethods.isGooglePayOn';
-
+const paymentMethodsSection = (): SectionListData<SettingsItem> => {
   return {
     header: 'PAYMENT METHODS',
     data: [
       {
-        path: isCardOnPath,
+        path: PAYMENT_METHODS_KEYS.IS_CARD_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Card',
-        value: _.get(data, isCardOnPath),
       },
       {
-        path: IS_IOS ? isApplePayOnPath : isGooglePayOnPath,
+        path: IS_IOS
+          ? PAYMENT_METHODS_KEYS.IS_APPLE_PAY_ON
+          : PAYMENT_METHODS_KEYS.IS_GOOGLE_PAY_ON,
         dataType: SettingsItemDataType.BOOLEAN,
         title: IS_IOS ? 'Apple Pay' : 'Google Pay',
-        value: IS_IOS
-          ? _.get(data, isApplePayOnPath)
-          : _.get(data, isGooglePayOnPath),
       },
     ],
   };

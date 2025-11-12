@@ -287,9 +287,6 @@ internal val ReadableMap.shouldPaymentMethodsDisplayAmount: Boolean?
 internal val ReadableMap.shouldPaymentButtonDisplayAmount: Boolean?
   get() = uiConfiguration?.getOptionalBoolean("shouldPaymentButtonDisplayAmount")
 
-internal val ReadableMap.shouldPaymentMethodsVerifySecurityCode: Boolean?
-  get() = uiConfiguration?.getOptionalBoolean("shouldPaymentMethodsVerifySecurityCode")
-
 internal val ReadableMap.shouldAskForBillingInformation: Boolean
   get() = uiConfiguration?.getOptionalBoolean("shouldAskForBillingInformation") ?: true
 
@@ -309,7 +306,9 @@ internal val ReadableMap.recommendationTimeout: Int?
   get() = recommendationConfiguration?.getOptionalInt("timeout")
 
 internal val ReadableMap.haltTransactionInCaseOfAnyError: Boolean
-  get() = recommendationConfiguration?.getOptionalBoolean("haltTransactionInCaseOfAnyError") ?: false
+  get() =
+    recommendationConfiguration?.getOptionalBoolean("haltTransactionInCaseOfAnyError")
+      ?: false
 
 internal val ReadableMap.primaryAccountDetails: ReadableMap?
   get() = configuration?.getOptionalMap("primaryAccountDetails")
@@ -384,5 +383,4 @@ internal val ReadableMap.allowCreditCards: Boolean?
   get() = googlePayConfiguration?.getOptionalBoolean("allowCreditCards")
 
 fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
-  Intent(packageContext, JudoActivity::class.java)
-    .also { it.putExtra(JUDO_OPTIONS, this) }
+  Intent(packageContext, JudoActivity::class.java).also { it.putExtra(JUDO_OPTIONS, this) }

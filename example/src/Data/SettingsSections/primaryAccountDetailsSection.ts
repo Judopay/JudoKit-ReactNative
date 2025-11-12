@@ -1,56 +1,40 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { PRIMARY_ACCOUNT_DETAILS_KEYS } from '../Constants';
+import { getBoolOrFalse } from '../Mapping';
 
-const primaryAccountDetailsSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const isEnabledPath = 'primaryAccountDetails.isEnabled';
-  const namePath = 'primaryAccountDetails.name';
-  const accountNumberPath = 'primaryAccountDetails.accountNumber';
-  const dateOfBirthPath = 'primaryAccountDetails.dateOfBirth';
-  const postCodePath = 'primaryAccountDetails.postCode';
-
-  const isEnabled = _.get(data, isEnabledPath);
+const primaryAccountDetailsSection = (): SectionListData<SettingsItem> => {
+  const isEnabled = getBoolOrFalse(PRIMARY_ACCOUNT_DETAILS_KEYS.IS_ENABLED);
 
   return {
     header: 'PRIMARY ACCOUNT DETAILS',
     data: [
       {
-        path: isEnabledPath,
+        path: PRIMARY_ACCOUNT_DETAILS_KEYS.IS_ENABLED,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Enable primary account details',
-        value: isEnabled,
       },
       ...(isEnabled
         ? [
             {
-              path: namePath,
+              path: PRIMARY_ACCOUNT_DETAILS_KEYS.NAME,
               dataType: SettingsItemDataType.TEXT,
               title: 'Name',
-              value: _.get(data, namePath),
             },
             {
-              path: accountNumberPath,
+              path: PRIMARY_ACCOUNT_DETAILS_KEYS.ACCOUNT_NUMBER,
               dataType: SettingsItemDataType.TEXT,
               title: 'Account number',
-              value: _.get(data, accountNumberPath),
             },
             {
-              path: dateOfBirthPath,
+              path: PRIMARY_ACCOUNT_DETAILS_KEYS.DATE_OF_BIRTH,
               dataType: SettingsItemDataType.TEXT,
               title: 'Date of birth',
-              value: _.get(data, dateOfBirthPath),
             },
             {
-              path: postCodePath,
+              path: PRIMARY_ACCOUNT_DETAILS_KEYS.POST_CODE,
               dataType: SettingsItemDataType.TEXT,
               title: 'Post code',
-              value: _.get(data, postCodePath),
             },
           ]
         : []),

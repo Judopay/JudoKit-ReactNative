@@ -1,6 +1,6 @@
 {
   "name": "judokit-react-native",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "A React Native module for the Judopay native SDKs to process payments on iOS and Android.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -86,7 +86,7 @@
   "workspaces": [
     "example"
   ],
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.9.4",
   "engines": {
     "node": ">= 18.0.0"
   },

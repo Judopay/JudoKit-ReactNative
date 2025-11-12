@@ -15,14 +15,18 @@ import {
 } from '@react-navigation/native';
 import { Theme } from '@react-navigation/native/lib/typescript/src/types';
 import ApplicationRouter from './ApplicationRouter';
-import { MMKVLoader, useMMKVStorage } from 'react-native-mmkv-storage';
+import { MMKVLoader } from 'react-native-mmkv-storage';
 import {
   IS_IOS,
-  DEFAULT_SETTINGS_DATA,
-  STORAGE_SETTINGS_KEY,
+  IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY,
 } from '../Data/Constants';
 import { LaunchArguments } from '@adeptus_artifex/react-native-launch-arguments';
-import { getSettingsFromEnv, MyExpectedArgs } from '../Functions';
+import {
+  getSettingsFromEnv,
+  MyExpectedArgs,
+  resetAppSettingsToDefaults,
+} from '../Functions';
+import { getBoolOrFalse } from '../Data/Mapping';
 
 const args = LaunchArguments.value<MyExpectedArgs>();
 export const appStorage = new MMKVLoader().initialize();
@@ -30,11 +34,6 @@ export const appStorage = new MMKVLoader().initialize();
 const Application = () => {
   const scheme = useColorScheme();
   const [theme, setTheme] = useState<Theme>(DefaultTheme);
-  const [_, setSettingsModel] = useMMKVStorage(
-    STORAGE_SETTINGS_KEY,
-    appStorage,
-    DEFAULT_SETTINGS_DATA
-  );
 
   useEffect(() => {
     setTheme(scheme === 'dark' ? DarkTheme : DefaultTheme);
@@ -131,15 +130,19 @@ const Application = () => {
   }, []);
 
   useEffect(() => {
-    const loadSettings = async () => {
-      const settings = getSettingsFromEnv(args);
-      if (settings) {
-        setSettingsModel(settings);
-      }
-    };
+    const customDefaults = getSettingsFromEnv(args);
+    if (customDefaults) {
+      resetAppSettingsToDefaults(customDefaults);
 
-    loadSettings().catch(console.error);
-  }, [setSettingsModel]);
+      // so that the settings are not reset on every app launch
+      appStorage.setBool(IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY, true);
+      return;
+    }
+
+    if (!getBoolOrFalse(IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY)) {
+      resetAppSettingsToDefaults();
+    }
+  }, []);
 
   return (
     <ThemeProvider value={theme}>

@@ -5,19 +5,27 @@ import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import { useTheme } from '@react-navigation/native';
 import {
   ActivityIndicator,
+  Alert,
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { encode as btoa } from 'base-64';
-import { onErrorSnackbar, onSuccessSnackbar } from '../../../../Functions';
 import {
-  DEFAULT_SETTINGS_DATA,
-  STORAGE_SETTINGS_KEY,
+  onErrorSnackbar,
+  onSuccessSnackbar,
+  resetAppSettingsToDefaults,
+} from '../../../../Functions';
+import {
+  AMOUNT_KEYS,
+  API_CONFIGURATION_KEYS,
+  AUTHORIZATION_KEYS,
+  REFERENCE_KEYS,
 } from '../../../../Data/Constants';
 import { appStorage } from '../../../index';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
+import { HStack } from '../../../../Components/HStack';
 
 const generateRandomString = (length: number = 36) => {
   const char = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -36,11 +44,64 @@ const SettingsMainScreen: FC<
   const {
     colors: { background: backgroundColor, primary },
   } = useTheme();
-  const [settings, setSettings] = useMMKVStorage(
-    STORAGE_SETTINGS_KEY,
+
+  const [token] = useMMKVStorage(AUTHORIZATION_KEYS.TOKEN, appStorage, '');
+  const [secret] = useMMKVStorage(AUTHORIZATION_KEYS.SECRET, appStorage, '');
+  const [judoId] = useMMKVStorage(
+    API_CONFIGURATION_KEYS.JUDO_ID,
     appStorage,
-    DEFAULT_SETTINGS_DATA
+    ''
   );
+  const [amount] = useMMKVStorage(AMOUNT_KEYS.VALUE, appStorage, '');
+  const [currency] = useMMKVStorage(AMOUNT_KEYS.CURRENCY, appStorage, '');
+  const [isSandboxed] = useMMKVStorage(
+    API_CONFIGURATION_KEYS.IS_SANDBOXED,
+    appStorage,
+    false
+  );
+  const [yourConsumerReference] = useMMKVStorage(
+    REFERENCE_KEYS.CONSUMER_REFERENCE,
+    appStorage,
+    ''
+  );
+
+  const [, setPaymentReference] = useMMKVStorage<string>(
+    REFERENCE_KEYS.PAYMENT_REFERENCE,
+    appStorage
+  );
+  const [, setIsUsingPaymentSession] = useMMKVStorage<boolean>(
+    AUTHORIZATION_KEYS.IS_USING_PAYMENT_SESSION,
+    appStorage
+  );
+  const [, setIsUsingTokenAndSecret] = useMMKVStorage<boolean>(
+    AUTHORIZATION_KEYS.IS_USING_TOKEN_AND_SECRET,
+    appStorage
+  );
+  const [, setPaymentSession] = useMMKVStorage<string>(
+    AUTHORIZATION_KEYS.PAYMENT_SESSION,
+    appStorage
+  );
+
+  const handleResetSettings = () => {
+    Alert.alert(
+      'Reset Settings',
+      'Are you sure you want to reset all app settings to their default values? This action cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Reset',
+          style: 'destructive',
+          onPress: () => {
+            resetAppSettingsToDefaults();
+            onSuccessSnackbar('Settings reset to defaults successfully.');
+          },
+        },
+      ]
+    );
+  };
 
   const generatePaymentSession = () => {
     setIsLoading(true);
@@ -57,13 +118,6 @@ const SettingsMainScreen: FC<
   };
 
   const fetchAndPersistSession = async () => {
-    const {
-      authorization: { token = '', secret = '' },
-      amount: { currency = '', value: amount = '' },
-      apiConfiguration: { isSandboxed = true, judoId = '' },
-      reference: { consumerReference: yourConsumerReference = '' },
-    } = settings;
-
     if (token.length === 0) {
       throw new Error('Token is not set.');
     }
@@ -113,47 +167,45 @@ const SettingsMainScreen: FC<
     if (result.ok) {
       const response = (await result.json()) as Record<'reference', string>;
 
-      const updatedSettings = {
-        ...settings,
-        reference: {
-          ...settings.reference,
-          paymentReference: yourPaymentReference,
-        },
-        authorization: {
-          ...settings.authorization,
-          isUsingPaymentSession: true,
-          isUsingTokenAndSecret: false,
-          paymentSession: response.reference,
-        },
-      };
-
-      setSettings(updatedSettings);
+      setPaymentReference(yourPaymentReference);
+      setIsUsingPaymentSession(true);
+      setIsUsingTokenAndSecret(false);
+      setPaymentSession(response.reference);
     } else {
       throw new Error('Failed to create payment session.');
     }
   };
 
-  const headerRight = () => {
-    return isLoading ? (
-      <ActivityIndicator
-        size={28}
-        color={primary}
-        style={{
-          marginRight: 18,
-        }}
-      />
-    ) : (
+  const headerRight = () => (
+    <HStack spacing={16} style={{ justifyContent: 'space-between' }}>
       <TouchableOpacity
         disabled={isLoading}
-        testID="generateSessionButton"
-        onPress={() => {
-          generatePaymentSession();
-        }}
+        testID="resetSettingsButton"
+        onPress={handleResetSettings}
       >
-        <Ionicons name="color-wand-outline" size={28} color={primary} />
+        <Ionicons name="refresh-circle-outline" size={28} color={primary} />
       </TouchableOpacity>
-    );
-  };
+      {isLoading ? (
+        <ActivityIndicator
+          size={28}
+          color={primary}
+          style={{
+            marginRight: 18,
+          }}
+        />
+      ) : (
+        <TouchableOpacity
+          disabled={isLoading}
+          testID="generateSessionButton"
+          onPress={() => {
+            generatePaymentSession();
+          }}
+        >
+          <Ionicons name="color-wand-outline" size={28} color={primary} />
+        </TouchableOpacity>
+      )}
+    </HStack>
+  );
 
   useEffect(() => {
     navigation.setOptions({ headerRight });

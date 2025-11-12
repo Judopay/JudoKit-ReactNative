@@ -1,31 +1,20 @@
-import {
-  SettingsData,
-  SettingsItem,
-  SettingsItemDataType,
-} from '../TypeDefinitions';
+import { SettingsItem, SettingsItemDataType } from '../TypeDefinitions';
 import { SectionListData } from 'react-native';
-import _ from 'lodash';
+import { API_CONFIGURATION_KEYS } from '../Constants';
 
-const apiConfigurationSection = (
-  data: SettingsData
-): SectionListData<SettingsItem> => {
-  const sandboxPath = 'apiConfiguration.isSandboxed';
-  const judoIdPath = 'apiConfiguration.judoId';
-
+const apiConfigurationSection = (): SectionListData<SettingsItem> => {
   return {
     header: 'API CONFIGURATIONS',
     data: [
       {
-        path: sandboxPath,
+        path: API_CONFIGURATION_KEYS.IS_SANDBOXED,
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Sandboxed',
-        value: _.get(data, sandboxPath),
       },
       {
-        path: judoIdPath,
+        path: API_CONFIGURATION_KEYS.JUDO_ID,
         dataType: SettingsItemDataType.TEXT,
         title: 'Judo ID',
-        value: _.get(data, judoIdPath),
         testID: 'judo-id-input',
       },
     ],

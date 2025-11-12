@@ -44,12 +44,6 @@ import com.judopay.judokit.android.model.typeId
 // https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L36
 private const val TRANSACTION_TYPE_PAYMENT = "payment"
 private const val TRANSACTION_TYPE_PRE_AUTH = "preauth"
-
-@Deprecated("Register Card functionality has been deprecated. Please use Check Card feature instead.")
-private const val TRANSACTION_TYPE_REGISTER = "register"
-
-@Deprecated("Register Card functionality has been deprecated. Please use Check Card feature instead.")
-private const val TRANSACTION_TYPE_REGISTER_CARD = "registercard"
 private const val TRANSACTION_TYPE_SAVE_CARD = "save"
 private const val TRANSACTION_TYPE_CHECK_CARD = "checkcard"
 
@@ -61,12 +55,6 @@ private enum class TransactionType(
 ) {
   PAYMENT(1, listOf(TRANSACTION_TYPE_PAYMENT)),
   PRE_AUTH(2, listOf(TRANSACTION_TYPE_PRE_AUTH)),
-
-  @Deprecated(
-    "Register Card functionality has been deprecated and will be removed in a future version. " +
-      "Please use Check Card feature instead.",
-  )
-  REGISTER_CARD(3, listOf(TRANSACTION_TYPE_REGISTER, TRANSACTION_TYPE_REGISTER_CARD)),
   CHECK_CARD(4, listOf(TRANSACTION_TYPE_CHECK_CARD)),
   SAVE_CARD(5, listOf(TRANSACTION_TYPE_SAVE_CARD)),
   UNKNOWN(-1),
@@ -123,7 +111,9 @@ internal fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
 internal fun getMappedType(type: String?): Int {
   val typeInLowercase = type?.lowercase()
   val typeValue =
-    TransactionType.values().firstOrNull { it.typeAsStrings?.contains(typeInLowercase) ?: false }
+    TransactionType.values().firstOrNull {
+      it.typeAsStrings?.contains(typeInLowercase) ?: false
+    }
 
   return typeValue?.value ?: TransactionType.UNKNOWN.value
 }
@@ -187,11 +177,7 @@ internal fun getJudoConfigurationForApiService(options: ReadableMap): Judo {
       .setCurrency(Currency.GBP)
       .build()
 
-  val reference =
-    Reference
-      .Builder()
-      .setConsumerReference("reference")
-      .build()
+  val reference = Reference.Builder().setConsumerReference("reference").build()
 
   return Judo
     .Builder(PaymentWidgetType.CARD_PAYMENT)
@@ -231,7 +217,6 @@ internal fun getJudoConfiguration(
       .setReference(reference)
       .setSupportedCardNetworks(cardNetworks)
       .setPaymentMethods(paymentMethods)
-      .setUiConfiguration(uiConfiguration)
       .setPrimaryAccountDetails(primaryAccountDetails)
       .setGooglePayConfiguration(googlePayConfiguration)
       .setInitialRecurringPayment(options.isInitialRecurringPayment)
@@ -247,6 +232,10 @@ internal fun getJudoConfiguration(
       .setPhoneCountryCode(options.phoneCountryCode)
       .setAddress(address)
       .setSubProductInfo(getSubProductInfo(options))
+
+  if (uiConfiguration != null) {
+    builder.setUiConfiguration(uiConfiguration)
+  }
 
   if (type.isTokenPayment) {
     val cardHolderName = options.cardholderName?.ifBlank { null }
@@ -273,7 +262,9 @@ internal fun getJudoConfiguration(
 }
 
 internal fun getRecommendationConfiguration(options: ReadableMap): RecommendationConfiguration? =
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && options.recommendationConfiguration != null) {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 &&
+    options.recommendationConfiguration != null
+  ) {
     RecommendationConfiguration
       .Builder()
       .setUrl(options.recommendationURL)
@@ -315,7 +306,9 @@ internal fun getNetworkTimeout(options: ReadableMap): NetworkTimeout? {
 }
 
 internal fun getChallengeRequestIndicator(options: ReadableMap): ChallengeRequestIndicator? =
-  ChallengeRequestIndicator.values().firstOrNull { it.value == options.challengeRequestIndicator }
+  ChallengeRequestIndicator.values().firstOrNull {
+    it.value == options.challengeRequestIndicator
+  }
 
 internal fun getScaExemption(options: ReadableMap): ScaExemption? = ScaExemption.values().firstOrNull { it.value == options.scaExemption }
 
@@ -345,7 +338,6 @@ internal fun getTransactionTypeWidget(options: ReadableMap) =
   when (options.getInt("transactionType")) {
     1 -> PaymentWidgetType.CARD_PAYMENT
     2 -> PaymentWidgetType.PRE_AUTH
-    3 -> PaymentWidgetType.REGISTER_CARD
     4 -> PaymentWidgetType.CHECK_CARD
     5 -> PaymentWidgetType.CREATE_CARD_TOKEN
     else -> throw IllegalArgumentException("Unknown transaction type")
@@ -385,9 +377,7 @@ internal fun getReference(options: ReadableMap): Reference? {
   val metadataMap = options.metadata
   metadataMap?.let {
     val bundle = Bundle()
-    metadataMap.toHashMap().forEach {
-      bundle.putString(it.key, it.value.toString())
-    }
+    metadataMap.toHashMap().forEach { bundle.putString(it.key, it.value.toString()) }
     builder = builder.setMetaData(bundle)
   }
 
@@ -493,7 +483,6 @@ internal fun getUIConfiguration(options: ReadableMap): UiConfiguration? {
     options.isAVSEnabled?.let { setAvsEnabled(it) }
     options.shouldPaymentMethodsDisplayAmount?.let { setShouldPaymentMethodsDisplayAmount(it) }
     options.shouldPaymentButtonDisplayAmount?.let { setShouldPaymentButtonDisplayAmount(it) }
-    options.shouldPaymentMethodsVerifySecurityCode?.let { setShouldPaymentMethodsVerifySecurityCode(it) }
   }
 
   return builder.build()

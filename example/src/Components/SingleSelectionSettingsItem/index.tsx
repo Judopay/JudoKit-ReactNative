@@ -1,22 +1,43 @@
 import React, { FC } from 'react';
-import { useTheme } from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useTheme,
+} from '@react-navigation/native';
 import { Text, TouchableHighlight, View } from 'react-native';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
+import {
+  Persistable,
+  RootStackParamList,
+  Screen,
+  SingleSelectionTableParams,
+} from '../../Data/TypeDefinitions';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
+import { appStorage } from '../../Application';
 
-export interface ChildPaneSettingsItemProps {
+export interface ChildPaneSettingsItemProps extends Persistable<string> {
   title: string;
-  value: string;
-  onPress: () => void;
+  selectionTableParams?: SingleSelectionTableParams;
 }
 
 const SingleSelectionSettingsItem: FC<ChildPaneSettingsItemProps> = ({
   title,
-  value,
-  onPress,
+  storageKey,
+  defaultValue = '',
+  selectionTableParams = null,
 }) => {
+  const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
+  const [value, _] = useMMKVStorage(storageKey, appStorage, defaultValue);
+
   const {
     colors: { card, text, border },
   } = useTheme();
+
+  const onPress = () => {
+    if (selectionTableParams) {
+      navigate(Screen.SINGLE_SELECTION, selectionTableParams);
+    }
+  };
 
   return (
     <TouchableHighlight onPress={onPress}>

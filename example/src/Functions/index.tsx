@@ -16,6 +16,8 @@ import { ResultItem } from '../Application/ApplicationRouter/Screens/ResultScree
 import Snackbar from 'react-native-snackbar';
 import { DefaultTheme } from '@react-navigation/native';
 import { Buffer } from 'buffer';
+import { appStorage } from '../Application';
+import { DEFAULT_SETTINGS_DATA } from '../Data/Constants';
 
 interface PromiseForFeature {
   featureType: DemoFeatureType;
@@ -44,12 +46,6 @@ const promiseForFeature = ({
 
     case DemoFeatureType.PRE_AUTH:
       return judo.invokeTransaction(JudoTransactionType.PreAuth, configuration);
-
-    case DemoFeatureType.CREATE_CARD_TOKEN:
-      return judo.invokeTransaction(
-        JudoTransactionType.RegisterCard,
-        configuration
-      );
 
     case DemoFeatureType.SAVE_CARD:
       return judo.invokeTransaction(
@@ -232,17 +228,71 @@ export interface MyExpectedArgs {
   customSettings?: string;
 }
 
-export const getSettingsFromEnv = (args: MyExpectedArgs) => {
+export const getSettingsFromEnv = (
+  args: MyExpectedArgs
+): Record<string, any> | null => {
   try {
     const base64Settings = args.customSettings;
     if (base64Settings) {
       const decodedSettings = Buffer.from(base64Settings, 'base64').toString(
         'utf-8'
       );
-      return JSON.parse(decodedSettings);
+
+      const parsedSettings = JSON.parse(decodedSettings);
+
+      return flattenJson(parsedSettings);
     }
   } catch (error) {
     console.error('Error while getting settings from environment:', error);
   }
   return null;
 };
+
+export const resetAppSettingsToDefaults = (
+  defaults: Record<string, string | boolean> = DEFAULT_SETTINGS_DATA
+) => {
+  const { setBool, setString } = appStorage;
+
+  // Reset all settings to their default values from defaults hashmap
+  Object.entries(defaults).forEach(([key, value]) => {
+    if (typeof value === 'boolean') {
+      setBool(key, value);
+    } else {
+      setString(key, value);
+    }
+  });
+};
+
+/**
+ * Flattens a nested JSON object into a flat key-value object using dot notation
+ * @param obj - The nested JSON object to flatten
+ * @param prefix - Optional prefix for the keys (used internally for recursion)
+ * @returns A flattened object with dot-notation keys
+ */
+export function flattenJson(
+  obj: Record<string, any>,
+  prefix: string = ''
+): Record<string, any> {
+  const flattened: Record<string, any> = {};
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const newKey = prefix ? `${prefix}.${key}` : key;
+      const value = obj[key];
+
+      if (
+        value !== null &&
+        typeof value === 'object' &&
+        !Array.isArray(value)
+      ) {
+        // Recursively flatten nested objects
+        Object.assign(flattened, flattenJson(value, newKey));
+      } else {
+        // Add primitive values, arrays, and null values directly
+        flattened[newKey] = value;
+      }
+    }
+  }
+
+  return flattened;
+}

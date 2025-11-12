@@ -98,8 +98,6 @@ static NSString *const kCardSchemeAMEX = @"amex";
             return JPTransactionTypePayment;
         case 2:
             return JPTransactionTypePreAuth;
-        case 3:
-            return JPTransactionTypeRegisterCard;
         case 4:
             return JPTransactionTypeCheckCard;
         case 5:
@@ -363,7 +361,6 @@ static NSString *const kCardSchemeAMEX = @"amex";
     NSNumber *isAVSEnabled = [dictionary optionalBoolForKey:@"isAVSEnabled"];
     NSNumber *shouldDisplayAmount = [dictionary optionalBoolForKey:@"shouldPaymentMethodsDisplayAmount"];
     NSNumber *isPayButtonAmountVisible = [dictionary optionalBoolForKey:@"shouldPaymentButtonDisplayAmount"];
-    NSNumber *isSecureCodeCheckEnabled = [dictionary optionalBoolForKey:@"shouldPaymentMethodsVerifySecurityCode"];
     NSNumber *shouldAskForBillingInformation = [dictionary optionalBoolForKey:@"shouldAskForBillingInformation"];
     NSNumber *shouldAskForCSC = [dictionary optionalBoolForKey:@"shouldAskForCSC"];
     NSNumber *shouldAskForCardholderName = [dictionary optionalBoolForKey:@"shouldAskForCardholderName"];
@@ -378,10 +375,6 @@ static NSString *const kCardSchemeAMEX = @"amex";
 
     if (isPayButtonAmountVisible) {
         uiConfiguration.shouldPaymentButtonDisplayAmount = isPayButtonAmountVisible.boolValue;
-    }
-
-    if (isSecureCodeCheckEnabled) {
-        uiConfiguration.shouldPaymentMethodsVerifySecurityCode = isSecureCodeCheckEnabled.boolValue;
     }
 
     if (shouldAskForBillingInformation) {
