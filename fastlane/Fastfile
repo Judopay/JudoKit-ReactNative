@@ -1,6 +1,26 @@
-before_all do
-  setup_circle_ci
-end
+require './helpers'
+
+@derived_data_path = ENV["XCODE_DERIVED_DATA_PATH"] || "#{File.expand_path('..')}/DerivedData"
+@environments = ['production']
+@fl_output_dir = ENV['FL_OUTPUT_DIR'] || "#{File.expand_path('..')}/fastlane_output"
+@sample_apps_dir = "#{File.expand_path('..')}/example"
+@sample_apps = [
+  SampleApp.new(
+    firebase_app_id: {
+      production: '1:34238832242:ios:17856b905e693be163eceb'
+    },
+    path: "#{@sample_apps_dir}/ios",
+    platform: 'ios',
+    scheme: 'JudoKitReactNativeExample'
+  ),
+  SampleApp.new(
+    firebase_app_id: {
+      production: '1:34238832242:android:28f3dda075c60e3d63eceb'
+    },
+    path: "#{@sample_apps_dir}/android/app",
+    platform: 'android',
+  ),
+]
 
 desc "Cleanup generated files"
 lane :clean do
@@ -24,7 +44,8 @@ lane :clean do
     'example/ios/build',
 
     # JS generated bundle
-    'lib']
+    'lib'
+  ]
 
   UI.message "Removing files: #{file_list}"
   Dir.chdir('..') do
@@ -67,115 +88,164 @@ lane :format do
 end
 
 desc "Build SDK"
-lane :build do | options |
+lane :build do |options|
   yarn command: "clean"
   yarn command: "prepare"
-
-  # Build iOS SDK sample app
-  Fastlane::LaneManager.cruise_lane("ios", "build_sample_app", options)
-  Fastlane::LaneManager.cruise_lane("android", "build_sample_app", options)
 end
 
 desc "Run SDK tests"
-lane :test do | options |
+lane :test do |options|
   yarn command: "test --maxWorkers=2 --coverage"
 end
 
-desc "Release SDK"
-lane :release do | options |
+desc "Publish SDK"
+lane :publish do |options|
   yarn command: "clean"
   yarn command: "prepare"
   yarn command: "npm publish"
 end
 
-desc "Distribute Sample Apps"
-lane :distribute_sample_apps do | options |
-  Fastlane::LaneManager.cruise_lane("ios", "distribute_sample_app", options)
-  Fastlane::LaneManager.cruise_lane("android", "distribute_sample_app", options)
+desc "Build Sample Apps"
+lane :build_sample_apps do |options|
+  @sample_apps.select { |app|
+    !options.key?(:platform) || options[:platform] == app.platform
+  }.each do |app|
+    @environments.select{ |env|
+      !options.key?(:environment) || options[:environment] == env
+    }.each do |env|
+      Fastlane::LaneManager.cruise_lane(app.platform, "build_sample_app", {app: app, environment: env}) if !app.firebase_app_id(environment: env).nil?
+    end
+  end
+end
+
+desc "Run instrumented tests for sample apps on simulators"
+lane :test_sample_apps_simulator do |options|
+  @sample_apps.select { |app|
+    !options.key?(:platform) || options[:platform] == app.platform
+  }.each do |app|
+    Fastlane::LaneManager.cruise_lane(app.platform, "test_sample_app_simulator", {app: app})
+  end
+end
+
+desc "Publish Sample Apps"
+lane :publish_sample_apps do |options|
+  @sample_apps.select { |app|
+    !options.key?(:platform) || options[:platform] == app.platform
+  }.each do |app|
+    @environments.select{ |env|
+      !options.key?(:environment) || options[:environment] == env
+    }.each do |env|
+      Fastlane::LaneManager.cruise_lane(app.platform, "publish_sample_app", {app: app, environment: env}) if !app.firebase_app_id(environment: env).nil?
+    end
+  end
 end
 
 platform :ios do
-
   desc "[iOS] Build Sample App"
-  lane :build_sample_app do | options |
-      build_for_distribution = options[:build_for_distribution].nil? ? true : options[:build_for_distribution]
+  lane :build_sample_app do |options|
+    setup_ci
+    app_store_connect_api_key
 
-      sync_code_signing_options = {
-        type: 'adhoc',
-        app_identifier: 'com.judopay.react-native-sample-app'
-      }
+    cocoapods(podfile: options[:app].podfile)
 
-      build_app_options = {
-        export_method: 'ad-hoc',
-        scheme: 'JudoKitReactNativeExample',
-        output_name: 'JudoKitReactNativeExample.ipa',
-        workspace: './example/ios/JudoKitReactNativeExample.xcworkspace'
-      }
+    bump_build_number(
+      app: options[:app],
+      environment: options[:environment]
+    )
+    
+    sync_code_signing({
+      readonly: true,
+      type: 'adhoc',
+      app_identifier: get_product_bundle_id(
+        project_filepath: options[:app].project,
+        scheme: options[:app].scheme
+      )
+    })
 
-      if !build_for_distribution
-        build_app_options[:skip_codesigning] = true
-        build_app_options[:skip_package_ipa] = true
-        build_app_options[:skip_archive] = true
-        build_app_options[:configuration] = 'Debug'
-      end
-
-      cocoapods(podfile: './example/ios/Podfile')
-
-      if build_for_distribution
-        app_store_connect_api_key
-        sync_code_signing sync_code_signing_options
-      end
-
-      build_app build_app_options
+    build_app({
+      archive_path: "#{@fl_output_dir}/#{options[:app].scheme}-#{options[:environment]}",
+      configuration: 'Release',
+      derived_data_path: @derived_data_path,
+      output_directory: @fl_output_dir,
+      export_method: 'ad-hoc',
+      output_name: "#{options[:app].scheme}-#{options[:environment]}.ipa",
+      sdk: "iphonesimulator",
+      scheme: options[:app].scheme,
+      workspace: options[:app].workspace,
+    })
   end
 
-  desc "[iOS] Distribute Sample App"
-  lane :distribute_sample_app do | options |
+  desc "[iOS] Test Sample App"
+  lane :test_sample_app do |options|
+    run_tests(
+      derived_data_path: @derived_data_path,
+      ensure_devices_found: true,
+      scheme: options[:app].unit_test_scheme,
+      skip_build: true,
+      workspace: options[:app].workspace,
+    )
+  end
 
-    increment_build_number_options = {
-      xcodeproj: './example/ios/JudoKitReactNativeExample.xcodeproj'
-    }
+  desc "[iOS] Run instrumented tests for a sample app on a simulator"
+  lane :test_sample_app_simulator do |options|
+    Dir.chdir(@sample_apps_dir) do
+      yarn(command: "detox:test:ios")
+    end
+  end
 
-    firebase_app_distribution_options = {
+
+  desc "[iOS] Publish Sample App"
+  lane :publish_sample_app do |options|
+    if options[:app].firebase_app_id(environment: options[:environment]).nil?
+      UI.important("No Firebase App ID found for #{options[:app].scheme} and environment #{options[:environment]}. Won't publish.")
+      next
+    end
+
+    firebase_app_distribution({
+      app: options[:app].firebase_app_id(environment: options[:environment]),
       groups: 'default-testers',
-      release_notes: changelog_from_git_commits(commits_count: 1)
-    }
-
-    firebase_app_distribution_options[:app] = ENV['REACT_NATIVE_IOS_FIREBASE_APP_ID']
-    latest_release = firebase_app_distribution_get_latest_release app:firebase_app_distribution_options[:app]
-    current_version = latest_release.nil? ? 0 : latest_release[:buildVersion].to_i
-    increment_build_number_options[:build_number] = current_version + 1
-    increment_build_number increment_build_number_options
-
-    build_sample_app build_for_distribution: true
-    firebase_app_distribution firebase_app_distribution_options
+      ipa_path: "#{@fl_output_dir}/#{options[:app].scheme}-#{options[:environment]}.ipa",
+      release_notes: changelog_from_git_commits(commits_count: 1),
+    })
   end
 end
 
 platform :android do
-
   desc "[Android] Build Sample App"
-  lane :build_sample_app do | options |
-    gradle(tasks: ['clean', 'generateCodegenArtifactsFromSchema', 'assembleRelease'], project_dir: './example/android')
+  lane :build_sample_app do |options|
+    latest_release = firebase_app_distribution_get_latest_release(
+      app: options[:app].firebase_app_id(environment: options[:environment])
+    )
+
+    gradle(
+      tasks: ['clean', 'generateCodegenArtifactsFromSchema', 'assembleRelease'],
+      project_dir: "#{@sample_apps_dir}/android",
+      properties: {
+        "android.injected.version.code" => latest_release.nil? ? 1 : latest_release[:buildVersion].to_i + 1,
+      }
+    )
+
+    options[:app].copy_apks_to_destination(environment: options[:environment], destination: @fl_output_dir)
   end
 
-  desc "[Android] Distribute Sample App"
-  lane :distribute_sample_app do |options|
-    firebase_app_distribution_options = {
-      app: ENV['REACT_NATIVE_ANDROID_FIREBASE_APP_ID'],
+  desc "[Android] Run instrumented tests for a sample app on a simulator"
+  lane :test_sample_app_simulator do |options|
+    Dir.chdir(@sample_apps_dir) do
+      yarn(command: "detox:test:android")
+    end
+  end
+
+  desc "[Android] Publish Sample App"
+  lane :publish_sample_app do |options|
+    if options[:app].firebase_app_id(environment: options[:environment]).nil?
+      UI.important("No Firebase App ID found for #{options[:app].app_name} and environment #{options[:environment]}. Won't publish.")
+      next
+    end
+    firebase_app_distribution({
+      android_artifact_path: "#{@fl_output_dir}/#{options[:app].release_apk(environment: options[:environment])}",
+      app: options[:app].firebase_app_id(environment: options[:environment]),
       groups: 'default-testers',
-      release_notes: changelog_from_git_commits(commits_count: 1)
-    }
-
-    latest_release = firebase_app_distribution_get_latest_release app:firebase_app_distribution_options[:app]
-    current_version = latest_release.nil? ? 0 : latest_release[:buildVersion].to_i
-
-    increment_version_code({
-     gradle_file_path: './example/android/app/build.gradle',
-     version_code: current_version + 1
+      release_notes: changelog_from_git_commits(commits_count: 1),
     })
-
-    build_sample_app
-    firebase_app_distribution firebase_app_distribution_options
   end
 end

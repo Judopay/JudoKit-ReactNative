@@ -20,9 +20,9 @@ module.exports = {
     'ios.release': {
       type: 'ios.app',
       binaryPath:
-        'ios/build/Build/Products/Release-iphonesimulator/JudoKitReactNativeExample.app',
+        `${process.env.FL_OUTPUT_DIR ?? "../fastlane_output"}/JudoKitReactNativeExample-production.xcarchive/Products/Applications/JudoKitReactNativeExample.app`,
       build:
-        'xcodebuild -workspace ios/JudoKitReactNativeExample.xcworkspace -configuration Release -scheme JudoKitReactNativeExample -sdk iphonesimulator -derivedDataPath ios/build -quiet',
+        'cd .. && bundle exec fastlane build_sample_apps platform:ios',
     },
     'android.debug': {
       type: 'android.apk',
@@ -33,9 +33,9 @@ module.exports = {
     },
     'android.release': {
       type: 'android.apk',
-      binaryPath: 'android/app/build/outputs/apk/release/app-release.apk',
+      binaryPath: `${process.env.FL_OUTPUT_DIR ?? "../fastlane_output"}/app-production-release.apk`,
       build:
-        'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release -Dorg.gradle.jvmargs=-Xmx4g',
+        'cd .. && bundle exec fastlane build_sample_apps platform:android',
     },
   },
   devices: {
