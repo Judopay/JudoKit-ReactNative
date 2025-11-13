@@ -3,6 +3,61 @@ name: Build and Test Sample Apps
 on:
   pull_request:
   workflow_call:
+    secrets:
+      fabrick_3ds_judo_api_secret:
+        required: true
+        description: Judo API secret for Fabrick 3DS testing
+      fabrick_3ds_judo_api_token:
+        required: true
+        description: Judo API token for Fabrick 3DS testing
+      fabrick_3ds_judo_id:
+        required: true
+        description: Judo ID for Fabrick 3DS testing
+      google_cloud_service_account_key:
+        required: true
+        description: JSON key for Google Cloud service account for Firebase authentication
+      android_app_signing_private_key_base64:
+        required: true
+        description: Base64 encoded private key for Android app signing
+      android_app_signing_certificate_base64:
+        required: true
+        description: Base64 encoded certificate for Android app signing
+      android_app_signing_keystore_password:
+        required: true
+        description: Password for the Android app signing keystore
+      android_3ds2_sample_app_google_services_json_base64:
+        required: false
+        description: Base64 encoded google-services.json for the 3DS2 sample app
+      android_devicedna_sample_app_google_services_json_base64:
+        required: false
+        description: Base64 encoded google-services.json for the DeviceDNA sample app
+      ios_app_store_connect_api_key:
+        required: true
+        description: API key for App Store Connect for code signing
+      match_password:
+        required: true
+        description: Password for Fastlane match, for retrieving code signing certificates
+      mobile_testing_judo_api_secret:
+        required: true
+        description: Judo API secret for mobile testing
+      mobile_testing_judo_api_token:
+        required: true
+        description: Judo API token for mobile testing
+      mobile_testing_judo_id:
+        required: true
+        description: Judo ID for mobile testing
+      mobile_testing_ravelin_mock_server_url:
+        required: true
+        description: Ravelin mock server URL for mobile testing
+      mobile_testing_ravelin_public_key:
+        required: true
+        description: Ravelin public key for mobile testing
+      ssh_key_github:
+        required: true
+        description: SSH key for accessing Github repositories
+      staging_domain:
+        required: true
+        description: Staging environment domain name for mobile testing
 jobs:
   ios_build_and_test_sample_apps:
     uses: Judopay/github-actions/.github/workflows/ios-build-and-test-sample-apps.yml@master
