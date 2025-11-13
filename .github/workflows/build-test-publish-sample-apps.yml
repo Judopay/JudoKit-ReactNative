@@ -7,6 +7,22 @@ on:
 jobs:
   build_and_test_sample_apps:
     uses: ./.github/workflows/build-test-sample-apps.yml
+    secrets:
+      fabrick_3ds_judo_api_secret: ${{ secrets.fabrick_3ds_judo_api_secret }}
+      fabrick_3ds_judo_api_token: ${{ secrets.fabrick_3ds_judo_api_token }}
+      fabrick_3ds_judo_id: ${{ secrets.fabrick_3ds_judo_id }}
+      google_cloud_service_account_key: ${{ secrets.google_cloud_service_account_key }}
+      android_app_signing_private_key_base64: ${{ secrets.android_app_signing_private_key_base64 }}
+      android_app_signing_certificate_base64: ${{ secrets.android_app_signing_certificate_base64 }}
+      android_app_signing_keystore_password: ${{ secrets.android_app_signing_keystore_password }}
+      android_3ds2_sample_app_google_services_json_base64: ${{ secrets.android_3ds2_sample_app_google_services_json_base64 }}
+      android_devicedna_sample_app_google_services_json_base64: ${{ secrets.android_devicedna_sample_app_google_services_json_base64 }}
+      mobile_testing_judo_api_secret: ${{ secrets.mobile_testing_judo_api_secret }}
+      mobile_testing_judo_api_token: ${{ secrets.mobile_testing_judo_api_token }}
+      mobile_testing_judo_id: ${{ secrets.mobile_testing_judo_id }}
+      mobile_testing_ravelin_mock_server_url: ${{ secrets.mobile_testing_ravelin_mock_server_url }}
+      mobile_testing_ravelin_public_key: ${{ secrets.mobile_testing_ravelin_public_key }}
+      staging_domain: ${{ secrets.staging_domain }}
   publish_sample_apps:
     uses: Judopay/github-actions/.github/workflows/publish-sample-apps.yml@master
     needs: build_and_test_sample_apps
