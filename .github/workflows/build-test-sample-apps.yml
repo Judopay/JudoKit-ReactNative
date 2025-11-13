@@ -7,6 +7,9 @@ jobs:
   ios_build_and_test_sample_apps:
     uses: Judopay/github-actions/.github/workflows/ios-build-and-test-sample-apps.yml@master
     secrets:
+      fabrick_3ds_judo_api_secret: ${{ secrets.fabrick_3ds_judo_api_secret }}
+      fabrick_3ds_judo_api_token: ${{ secrets.fabrick_3ds_judo_api_token }}
+      fabrick_3ds_judo_id: ${{ secrets.fabrick_3ds_judo_id }}
       google_cloud_service_account_key: ${{ secrets.google_cloud_service_account_key }}
       ios_app_store_connect_api_key: ${{ secrets.ios_app_store_connect_api_key }}
       match_password: ${{ secrets.match_password }}
@@ -20,6 +23,9 @@ jobs:
   android_build_and_test_sample_apps:
     uses: Judopay/github-actions/.github/workflows/android-build-and-test-sample-apps.yml@master
     secrets:
+      fabrick_3ds_judo_api_secret: ${{ secrets.fabrick_3ds_judo_api_secret }}
+      fabrick_3ds_judo_api_token: ${{ secrets.fabrick_3ds_judo_api_token }}
+      fabrick_3ds_judo_id: ${{ secrets.fabrick_3ds_judo_id }}
       google_cloud_service_account_key: ${{ secrets.google_cloud_service_account_key }}
       android_app_signing_private_key_base64: ${{ secrets.android_app_signing_private_key_base64 }}
       android_app_signing_certificate_base64: ${{ secrets.android_app_signing_certificate_base64 }}
