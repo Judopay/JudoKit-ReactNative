@@ -1,6 +1,6 @@
 {
   "name": "judokit-react-native-example",
-  "version": "5.0.2",
+  "version": "6.1.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
