@@ -2956,7 +2956,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli@npm:^18.0.0":
+"@react-native-community/cli@npm:^18.0.1":
   version: 18.0.1
   resolution: "@react-native-community/cli@npm:18.0.1"
   dependencies:
@@ -9558,7 +9558,7 @@ __metadata:
   dependencies:
     "@commitlint/config-conventional": "npm:^17.8.1"
     "@evilmartians/lefthook": "npm:^1.7.12"
-    "@react-native-community/cli": "npm:^18.0.0"
+    "@react-native-community/cli": "npm:^18.0.1"
     "@react-native/babel-preset": "npm:^0.80.1"
     "@react-native/eslint-config": "npm:^0.79.2"
     "@types/jest": "npm:^29.5.14"
