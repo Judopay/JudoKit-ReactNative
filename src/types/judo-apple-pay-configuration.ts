@@ -54,8 +54,7 @@ export enum JudoCalendarUnit {
   Minute,
 }
 
-export interface JudoRecurringPaymentSummaryItem
-  extends JudoPaymentSummaryItem {
+export interface JudoRecurringPaymentSummaryItem extends JudoPaymentSummaryItem {
   startDate?: string;
   endDate?: string;
   intervalUnit?: JudoCalendarUnit;
