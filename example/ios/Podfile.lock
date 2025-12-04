@@ -45,9 +45,9 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - MMKV (1.3.14):
-    - MMKVCore (~> 1.3.14)
-  - MMKVCore (1.3.14)
+  - MMKV (1.3.16):
+    - MMKVCore (~> 1.3.16)
+  - MMKVCore (1.3.16)
   - RavelinEncrypt (1.1.2)
   - RCT-Folly (2024.11.18.00):
     - boost
@@ -2746,8 +2746,8 @@ SPEC CHECKSUMS:
   Judo3DS2_iOS: 52a1c039fb83e7e581c6b386a352b6458653ccdd
   JudoKit-iOS: c26c5889ee850808077e593ae7d3efbb667670eb
   JudoKit-ReactNative: af3ca9e3b791d349ef95585f3a9a6f497b40e9b0
-  MMKV: 7b5df6a8bf785c6705cc490c541b9d8a957c4a64
-  MMKVCore: 3f40b896e9ab522452df9df3ce983471aa2449ba
+  MMKV: 43cd10be0f925bf3fd5c2bd8bea501a328037b64
+  MMKVCore: 13be45a0394861b74836875ac9ec7ee939e86b78
   RavelinEncrypt: ea533da1cb48ccf84382cb161979b27bfb23d467
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: 300c5eb91114d4339b0bb39505d0f4824d7299b7
