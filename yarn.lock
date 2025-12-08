@@ -4966,11 +4966,11 @@ __metadata:
   linkType: hard
 
 "baseline-browser-mapping@npm:^2.9.0":
-  version: 2.9.2
-  resolution: "baseline-browser-mapping@npm:2.9.2"
+  version: 2.9.4
+  resolution: "baseline-browser-mapping@npm:2.9.4"
   bin:
     baseline-browser-mapping: dist/cli.js
-  checksum: 10/6e42ae4aaaa0becd37a58b00aa4734063a59b752b5bb66776fc73858d8d7eecea007f4af67fba7c48a9022ec243ad6a77aee735d9e063b1220a7f39b8cd39f4b
+  checksum: 10/71cf80f822e74e0f0109a9ed69d87fdb128d01bf06670a2ef91166a3eb636034e0a013d76cd9915a9d38594f649848c8c1ef6cbe39ed417f38314ff5bd22e393
   languageName: node
   linkType: hard
 
@@ -6212,9 +6212,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.5.263":
-  version: 1.5.264
-  resolution: "electron-to-chromium@npm:1.5.264"
-  checksum: 10/83722da6fec39a3b1561a3d1087e726f9366339330891786de0af87cbaacc5c8484cc70ea2687c2c0e7ea702d4f56c45ec28dc5a831315b8f40ebd0da839ffa8
+  version: 1.5.266
+  resolution: "electron-to-chromium@npm:1.5.266"
+  checksum: 10/2c7e05d1df189013e01b9fa19f5794dc249b80f330ab87f78674fa7416df153e2d32738d16914eee1112b5d8878b6181336e502215a34c63c255da078de5209d
   languageName: node
   linkType: hard
 
@@ -13993,8 +13993,8 @@ __metadata:
   linkType: hard
 
 "winston@npm:^3.17.0":
-  version: 3.18.3
-  resolution: "winston@npm:3.18.3"
+  version: 3.19.0
+  resolution: "winston@npm:3.19.0"
   dependencies:
     "@colors/colors": "npm:^1.6.0"
     "@dabh/diagnostics": "npm:^2.0.8"
@@ -14007,7 +14007,7 @@ __metadata:
     stack-trace: "npm:0.0.x"
     triple-beam: "npm:^1.3.0"
     winston-transport: "npm:^4.9.0"
-  checksum: 10/0d94690e051c625ff5a2731b3057ddaa709445cc791c707c56f99ad7b5bf3eebe634656f707c01c9409dc21dbc118903464f80e29c0cb438b1cc2739c0135e51
+  checksum: 10/8279e221d8017da601a725939d31d65de71504d8328051312a85b1b4d7ddc68634329f8d611fb1ff91cb797643409635f3e97ef5b4a650c587639e080af76b7b
   languageName: node
   linkType: hard
 
