@@ -3,9 +3,9 @@ name: ReactNative Publish SDK
 on:
   push:
     tags: 'v[0-9]*.[0-9]*'
-
+permissions:
+  id-token: write  # Required for NPM trusted publisher authentication
+  contents: read
 jobs:
   publish:
     uses: Judopay/github-actions/.github/workflows/reactnative-publish.yml@master
-    secrets:
-       npm_token: ${{ secrets.npm_token }}
