@@ -21,7 +21,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         cache: yarn
-        node-version-file: .nvmrc
+        node-version: 24.x
     - name: Update npm
       run: npm install -g npm@latest # Ensure npm 11.5.1 or later is installed for trusted publisher support
     - name: Show yarn version
