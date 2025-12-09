@@ -35,6 +35,4 @@ jobs:
       with:
         lane: build
     - name: Publish
-      uses: maierj/fastlane-action@v3.1.0
-      with:
-        lane: publish
+      run: npm publish
