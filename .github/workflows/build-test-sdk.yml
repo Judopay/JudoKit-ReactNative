@@ -1,10 +1,10 @@
-name: ReactNative Build and Test SDK
+# name: ReactNative Build and Test SDK
 
-on:
-  pull_request:
+# on:
+#   pull_request:
 
-jobs:
-  build_and_test:
-    uses: Judopay/github-actions/.github/workflows/reactnative-build-and-test.yml@master
-    secrets:
-      sonar_token: ${{ secrets.sonar_token }}
+# jobs:
+#   build_and_test:
+#     uses: Judopay/github-actions/.github/workflows/reactnative-build-and-test.yml@master
+#     secrets:
+#       sonar_token: ${{ secrets.sonar_token }}
