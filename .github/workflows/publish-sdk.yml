@@ -1,37 +1,9 @@
 name: ReactNative Publish SDK
+
 on:
   push:
     tags: 'v[0-9]*.[0-9]*'
-permissions:
-  id-token: write  # Required for NPM trusted publisher authentication
-  contents: read
+
 jobs:
-  build:
-    runs-on: ubuntu-24.04
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-    - name: Set up Ruby
-      if: ${{ hashFiles('Gemfile.lock') != '' }}
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        node-version-file: .nvmrc
-    - name: Update npm
-      run: npm install -g npm@latest # Ensure npm 11.5.1 or later is installed for trusted publisher support
-    - name: Install Dependencies
-      uses: maierj/fastlane-action@v3.1.0
-      with:
-        lane: install
-    - name: Run Build
-      uses: maierj/fastlane-action@v3.1.0
-      with:
-        lane: build
-    - name: Publish
-      uses: maierj/fastlane-action@v3.1.0
-      with:
-        lane: publish
+  publish:
+    uses: Judopay/github-actions/.github/workflows/reactnative-publish.yml@master
