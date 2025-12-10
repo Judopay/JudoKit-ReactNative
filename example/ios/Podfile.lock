@@ -15,7 +15,7 @@ PODS:
     - Judo3DS2_iOS (= 1.3.0)
     - RavelinEncrypt (= 1.1.2)
     - TrustKit (~> 3.0.7)
-  - JudoKit-ReactNative (6.1.0):
+  - JudoKit-ReactNative (6.1.1):
     - boost
     - DoubleConversion
     - fast_float
