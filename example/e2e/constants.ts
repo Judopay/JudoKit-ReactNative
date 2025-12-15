@@ -47,7 +47,6 @@ export enum Selectors {
   PAY_NOW_BUTTON = 'Submit Button',
   PAY_WITH_CARD = 'Pay with card',
   PAY_WITH_PREAUTH = 'Pre-auth with card',
-  REGISTER_CARD = 'Register card',
   CHECK_CARD = 'Check card',
   SAVE_CARD = 'Save card',
   ADD_CARD_BUTTON = 'ADD CARD',

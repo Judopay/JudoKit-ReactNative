@@ -52,7 +52,7 @@
 
 /**
  * A method that returns the correct TransactionType value based on the passed dictionary parameters
- * TransactionType is set to switch between Payment, PreAuth, Register Card, Check Card and Save Card transactions
+ * TransactionType is set to switch between Payment, PreAuth, Check Card and Save Card transactions
  *
  * @param properties - an NSDictionary that contains the complete configuration properties set by the merchant
  *

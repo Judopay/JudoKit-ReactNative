@@ -79,7 +79,7 @@ export class JudoPay {
 
   /**
    * A method for invoking the Judo UI for card transactions.
-   * Supported operations - payments, pre-auths, register card, save card, check card.
+   * Supported operations - payments, pre-auths, save card, check card.
    *
    * @param type - a JudoTransactionType value that defines the transaction type.
    * @param configuration - a JudoConfiguration object that is used to configure/customize the payment flow.
