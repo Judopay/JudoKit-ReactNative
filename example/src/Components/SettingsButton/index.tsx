@@ -17,6 +17,11 @@ const SettingsButton: FC = () => {
   return (
     <TouchableOpacity
       testID="settings-button"
+      style={{
+        width: 48,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
       onPress={() => navigation.navigate(Screen.SETTINGS)}
     >
       <Ionicons name="settings-outline" size={28} color={primary} />
