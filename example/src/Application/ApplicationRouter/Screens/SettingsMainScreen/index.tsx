@@ -180,6 +180,11 @@ const SettingsMainScreen: FC<
     <HStack spacing={16} style={{ justifyContent: 'space-between' }}>
       <TouchableOpacity
         disabled={isLoading}
+        style={{
+          width: 48,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
         testID="resetSettingsButton"
         onPress={handleResetSettings}
       >
@@ -196,6 +201,11 @@ const SettingsMainScreen: FC<
       ) : (
         <TouchableOpacity
           disabled={isLoading}
+          style={{
+            width: 48,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
           testID="generateSessionButton"
           onPress={() => {
             generatePaymentSession();

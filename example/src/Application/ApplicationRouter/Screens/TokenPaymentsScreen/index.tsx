@@ -17,6 +17,7 @@ import { API_CONFIGURATION_KEYS, IS_IOS } from '../../../../Data/Constants';
 import HowToStepsList from '../../../../Components/HowToStepsList';
 import TextInput from '../../../../Components/TextInput';
 import Button from '../../../../Components/Button';
+import SimulateDelayStepper from '../../../../Components/SimulateDelayStepper';
 import JudoPay, {
   JudoTransactionMode,
   JudoTransactionType,
@@ -47,6 +48,7 @@ const TokenPaymentsScreen: FC<
   const [scheme, setScheme] = useState('');
   const [cardSecurityCode, sedCardSecurityCode] = useState('');
   const [cardholderName, setCardholderName] = useState('');
+  const [delaySeconds, setDelaySeconds] = useState(0);
 
   useEffect(() => {
     setIsValid(scheme.length > 0 && token.length > 0);
@@ -90,25 +92,37 @@ const TokenPaymentsScreen: FC<
     const code = cardSecurityCode.length > 0 ? cardSecurityCode : undefined;
     const name = cardholderName.length > 0 ? cardholderName : undefined;
 
-    judo
-      .performTokenTransaction(
-        mode,
-        regeneratePaymentReferenceIfNeeded(judoConfigurationFromSettingsData()),
-        token,
-        code,
-        name,
-        scheme
-      )
-      .then((result) => {
-        setIsLoading(false);
-        navigate(Screen.RESULT, {
-          items: transformToListOfResultItems(result),
+    const performTransaction = () => {
+      judo
+        .performTokenTransaction(
+          mode,
+          regeneratePaymentReferenceIfNeeded(
+            judoConfigurationFromSettingsData()
+          ),
+          token,
+          code,
+          name,
+          scheme
+        )
+        .then((result) => {
+          setIsLoading(false);
+          navigate(Screen.RESULT, {
+            items: transformToListOfResultItems(result),
+          });
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          onError(error);
         });
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        onError(error);
-      });
+    };
+
+    if (delaySeconds > 0) {
+      setTimeout(() => {
+        performTransaction();
+      }, delaySeconds * 1000);
+    } else {
+      performTransaction();
+    }
   };
 
   return (
@@ -202,6 +216,12 @@ const TokenPaymentsScreen: FC<
               disabled={isLoading}
               title="Tokenize a new card"
               onPress={() => invokeSaveCard()}
+            />
+
+            <SimulateDelayStepper
+              value={delaySeconds}
+              onValueChange={setDelaySeconds}
+              disabled={isLoading}
             />
 
             <Button
