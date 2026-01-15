@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![React Native](https://img.shields.io/badge/React%20Native-%3E%3D0.70-blue.svg)](https://facebook.github.io/react-native/)
 [![install size](https://packagephobia.com/badge?p=judokit-react-native)](https://packagephobia.com/result?p=judokit-react-native)
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Judopay/JudoKit-ReactNative/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Judopay/JudoKit-ReactNative/tree/master)
+[![GitHub Actions](https://github.com/Judopay/JudoKit-ReactNative/actions/workflows/build-test-sdk.yml/badge.svg)](https://github.com/Judopay/JudoKit-ReactNative/actions/workflows/build-test-sdk.yml)
 
 [![NPM](https://nodei.co/npm/judokit-react-native.png?downloads=true&mini=true)](https://nodei.co/npm/judokit-react-native/)
 
