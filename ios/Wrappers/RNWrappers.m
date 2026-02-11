@@ -863,6 +863,59 @@ static NSString *const kCardSchemeAMEX = @"amex";
         }
     }
 
+    JPNetworkTokenisationDetails *tokenisationDetails = response.networkTokenisationDetails;
+
+    if (tokenisationDetails) {
+        NSMutableDictionary *tokenisationDictionary = [NSMutableDictionary new];
+
+        tokenisationDictionary[@"networkTokenProvisioned"] = @(tokenisationDetails.networkTokenProvisioned);
+        tokenisationDictionary[@"networkTokenUsed"] = @(tokenisationDetails.networkTokenUsed);
+        tokenisationDictionary[@"accountDetailsUpdated"] = @(tokenisationDetails.accountDetailsUpdated);
+
+        JPVirtualPan *virtualPan = tokenisationDetails.virtualPan;
+
+        if (virtualPan) {
+            NSMutableDictionary *virtualPanDictionary = [NSMutableDictionary new];
+
+            if (virtualPan.lastFour) {
+                virtualPanDictionary[@"lastFour"] = virtualPan.lastFour;
+            }
+
+            if (virtualPan.expiryDate) {
+                virtualPanDictionary[@"expiryDate"] = virtualPan.expiryDate;
+            }
+
+            tokenisationDictionary[@"virtualPan"] = [NSDictionary dictionaryWithDictionary:virtualPanDictionary];
+        }
+
+        [mappedResponse setValue:[NSDictionary dictionaryWithDictionary:tokenisationDictionary]
+                          forKey:@"networkTokenisationDetails"];
+    }
+
+    JPThreeDSecureResult *threeDSecureResult = response.threeDSecure;
+
+    if (threeDSecureResult) {
+        NSMutableDictionary *threeDSecureDictionary = [NSMutableDictionary new];
+
+        threeDSecureDictionary[@"attempted"] = @(threeDSecureResult.attempted);
+        threeDSecureDictionary[@"challengeCompleted"] = @(threeDSecureResult.challengeCompleted);
+
+        if (threeDSecureResult.result) {
+            threeDSecureDictionary[@"result"] = threeDSecureResult.result;
+        }
+
+        if (threeDSecureResult.eci) {
+            threeDSecureDictionary[@"eci"] = threeDSecureResult.eci;
+        }
+
+        if (threeDSecureResult.challengeRequestIndicator) {
+            threeDSecureDictionary[@"challengeRequestIndicator"] = threeDSecureResult.challengeRequestIndicator;
+        }
+
+        [mappedResponse setValue:[NSDictionary dictionaryWithDictionary:threeDSecureDictionary]
+                          forKey:@"threeDSecure"];
+    }
+
     return [NSDictionary dictionaryWithDictionary:mappedResponse];
 }
 

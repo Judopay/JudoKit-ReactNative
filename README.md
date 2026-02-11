@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/judokit-react-native.svg)](https://www.npmjs.com/package/judokit-react-native)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![React Native](https://img.shields.io/badge/React%20Native-%3E%3D0.70-blue.svg)](https://facebook.github.io/react-native/)
+[![React Native](https://img.shields.io/badge/React%20Native-%3E%3D0.80-blue.svg)](https://facebook.github.io/react-native/)
 [![install size](https://packagephobia.com/badge?p=judokit-react-native)](https://packagephobia.com/result?p=judokit-react-native)
 [![GitHub Actions](https://github.com/Judopay/JudoKit-ReactNative/actions/workflows/build-test-sdk.yml/badge.svg)](https://github.com/Judopay/JudoKit-ReactNative/actions/workflows/build-test-sdk.yml)
 

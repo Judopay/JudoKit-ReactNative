@@ -111,7 +111,7 @@ internal fun getPaymentMethodsConfiguration(options: ReadableMap): Judo {
 internal fun getMappedType(type: String?): Int {
   val typeInLowercase = type?.lowercase()
   val typeValue =
-    TransactionType.values().firstOrNull {
+    TransactionType.entries.firstOrNull {
       it.typeAsStrings?.contains(typeInLowercase) ?: false
     }
 
@@ -122,7 +122,7 @@ internal fun getMappedType(type: String?): Int {
 // https://github.com/Judopay/JudoKit-iOS/blob/master/Source/Models/Response/JPResponse.m#L125
 internal fun getMappedResult(result: String?): Int {
   val resultInLowercase = result?.lowercase()
-  val resultValue = TransactionResult.values().firstOrNull { it.status == resultInLowercase }
+  val resultValue = TransactionResult.entries.firstOrNull { it.status == resultInLowercase }
 
   return resultValue?.value ?: TransactionResult.UNKNOWN.value
 }
@@ -144,25 +144,15 @@ internal fun getMappedResult(result: JudoResult?): WritableMap {
   map.putString("amount", result?.amount.toString())
   map.putString("currency", result?.currency)
 
-  val cardDetailsMap = Arguments.createMap()
-  cardDetailsMap.putString("cardLastFour", result?.cardDetails?.lastFour)
-  cardDetailsMap.putString("endDate", result?.cardDetails?.endDate)
-  cardDetailsMap.putString("cardToken", result?.cardDetails?.token)
-  result?.cardDetails?.type?.let { cardDetailsMap.putInt("cardNetwork", it) }
-  cardDetailsMap.putString("bank", result?.cardDetails?.bank)
-  cardDetailsMap.putString("cardCategory", result?.cardDetails?.category)
-  cardDetailsMap.putString("cardCountry", result?.cardDetails?.country)
-  cardDetailsMap.putString("cardFunding", result?.cardDetails?.funding)
-  cardDetailsMap.putString("cardScheme", result?.cardDetails?.scheme)
-  cardDetailsMap.putString("cardHolderName", result?.cardDetails?.cardHolderName)
-  cardDetailsMap.putString("ownerType", result?.cardDetails?.ownerType)
-
-  map.putMap("cardDetails", cardDetailsMap)
+  result?.cardDetails?.let { map.putMap("cardDetails", it.toWritableMap()) }
 
   val consumerMap = Arguments.createMap()
   consumerMap.putString("consumerReference", result?.consumer?.yourConsumerReference)
 
   map.putMap("consumerResponse", consumerMap)
+
+  result?.networkTokenisationDetails?.let { map.putMap("networkTokenisationDetails", it.toWritableMap()) }
+  result?.threeDSecure?.let { map.putMap("threeDSecure", it.toWritableMap()) }
 
   return map
 }
@@ -306,11 +296,11 @@ internal fun getNetworkTimeout(options: ReadableMap): NetworkTimeout? {
 }
 
 internal fun getChallengeRequestIndicator(options: ReadableMap): ChallengeRequestIndicator? =
-  ChallengeRequestIndicator.values().firstOrNull {
+  ChallengeRequestIndicator.entries.firstOrNull {
     it.value == options.challengeRequestIndicator
   }
 
-internal fun getScaExemption(options: ReadableMap): ScaExemption? = ScaExemption.values().firstOrNull { it.value == options.scaExemption }
+internal fun getScaExemption(options: ReadableMap): ScaExemption? = ScaExemption.entries.firstOrNull { it.value == options.scaExemption }
 
 internal fun getAuthorization(options: ReadableMap): Authorization {
   val token = options.token
@@ -367,7 +357,7 @@ internal fun getSubProductInfo(options: ReadableMap): SubProductInfo {
   return SubProductInfo.ReactNative(version)
 }
 
-internal fun getReference(options: ReadableMap): Reference? {
+internal fun getReference(options: ReadableMap): Reference {
   var builder =
     Reference
       .Builder()
@@ -402,39 +392,39 @@ internal fun getCardNetworks(options: ReadableMap): Array<CardNetwork>? {
     supportedNetworks = ArrayList()
 
     if (cardValue and cardVisa == cardVisa) {
-      supportedNetworks?.add(CardNetwork.VISA)
+      supportedNetworks.add(CardNetwork.VISA)
     }
 
     if (cardValue and cardMastercard == cardMastercard) {
-      supportedNetworks?.add(CardNetwork.MASTERCARD)
+      supportedNetworks.add(CardNetwork.MASTERCARD)
     }
 
     if (cardValue and cardMaestro == cardMaestro) {
-      supportedNetworks?.add(CardNetwork.MAESTRO)
+      supportedNetworks.add(CardNetwork.MAESTRO)
     }
 
     if (cardValue and cardAmex == cardAmex) {
-      supportedNetworks?.add(CardNetwork.AMEX)
+      supportedNetworks.add(CardNetwork.AMEX)
     }
 
     if (cardValue and cardChinaUnionPay == cardChinaUnionPay) {
-      supportedNetworks?.add(CardNetwork.CHINA_UNION_PAY)
+      supportedNetworks.add(CardNetwork.CHINA_UNION_PAY)
     }
 
     if (cardValue and cardJcb == cardJcb) {
-      supportedNetworks?.add(CardNetwork.JCB)
+      supportedNetworks.add(CardNetwork.JCB)
     }
 
     if (cardValue and cardDiscover == cardDiscover) {
-      supportedNetworks?.add(CardNetwork.DISCOVER)
+      supportedNetworks.add(CardNetwork.DISCOVER)
     }
 
     if (cardValue and cardDinersClub == cardDinersClub) {
-      supportedNetworks?.add(CardNetwork.DINERS_CLUB)
+      supportedNetworks.add(CardNetwork.DINERS_CLUB)
     }
 
     if (cardValue and cardsAll == cardsAll) {
-      return CardNetwork.values()
+      return CardNetwork.entries.toTypedArray()
     }
   }
   return supportedNetworks?.toTypedArray()
@@ -451,15 +441,15 @@ internal fun getPaymentMethods(options: ReadableMap): Array<PaymentMethod>? {
     paymentMethods = arrayListOf()
 
     if (it and cardPaymentValue == cardPaymentValue) {
-      paymentMethods?.add(PaymentMethod.CARD)
+      paymentMethods.add(PaymentMethod.CARD)
     }
 
     if (it and googlePaymentValue == googlePaymentValue) {
-      paymentMethods?.add(PaymentMethod.GOOGLE_PAY)
+      paymentMethods.add(PaymentMethod.GOOGLE_PAY)
     }
 
     if (it and allPaymentValues == allPaymentValues) {
-      return PaymentMethod.values()
+      return PaymentMethod.entries.toTypedArray()
     }
   }
 
@@ -663,7 +653,7 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
   }
 }
 
-internal fun getBillingParameters(options: ReadableMap): GooglePayBillingAddressParameters? {
+internal fun getBillingParameters(options: ReadableMap): GooglePayBillingAddressParameters {
   val addressFormat =
     when (options.addressFormat) {
       0 -> GooglePayAddressFormat.MIN
@@ -675,7 +665,7 @@ internal fun getBillingParameters(options: ReadableMap): GooglePayBillingAddress
   )
 }
 
-internal fun getShippingParameters(options: ReadableMap): GooglePayShippingAddressParameters? {
+internal fun getShippingParameters(options: ReadableMap): GooglePayShippingAddressParameters {
   var allowedCountryCodes: Array<String>? = null
   val allowedCountryArray = options.allowedCountryCodeList
 
