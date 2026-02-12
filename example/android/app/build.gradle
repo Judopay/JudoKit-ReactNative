@@ -115,7 +115,7 @@ dependencies {
 
   // The following is for `JudoApiServiceFactory.externalInterceptors` in `MainApplication.java`
   implementation "com.github.chuckerteam.chucker:library:4.2.0"
-  implementation "com.judopay:judokit-android:6.0.0"
+  implementation "com.judopay:judokit-android:6.1.0"
 
   // This is for Ravelin recommendation feature
   implementation 'com.ravelin.sdk:ravelin-encrypt:3.1.0'

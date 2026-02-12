@@ -2,11 +2,16 @@ package com.judopay.judokit.reactnative
 
 import android.content.Context
 import android.content.Intent
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableMap
 import com.judopay.judokit.android.JUDO_OPTIONS
 import com.judopay.judokit.android.Judo
 import com.judopay.judokit.android.JudoActivity
+import com.judopay.judokit.android.api.model.response.CardToken
+import com.judopay.judokit.android.api.model.response.NetworkTokenisationDetails
+import com.judopay.judokit.android.api.model.response.ThreeDSecure
 import com.judopay.judokit.android.model.CardNetwork
 
 const val CARD_SCHEME_VISA = "visa"
@@ -384,3 +389,43 @@ internal val ReadableMap.allowCreditCards: Boolean?
 
 fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
   Intent(packageContext, JudoActivity::class.java).also { it.putExtra(JUDO_OPTIONS, this) }
+
+fun NetworkTokenisationDetails.toWritableMap(): WritableMap =
+  Arguments.createMap().apply {
+    networkTokenProvisioned?.let { putBoolean("networkTokenProvisioned", it) }
+    networkTokenUsed?.let { putBoolean("networkTokenUsed", it) }
+    accountDetailsUpdated?.let { putBoolean("accountDetailsUpdated", it) }
+    virtualPan?.let { pan ->
+      putMap(
+        "virtualPan",
+        Arguments.createMap().apply {
+          pan.lastFour?.let { putString("lastFour", it) }
+          pan.expiryDate?.let { putString("expiryDate", it) }
+        },
+      )
+    }
+  }
+
+fun ThreeDSecure.toWritableMap(): WritableMap =
+  Arguments.createMap().apply {
+    attempted?.let { putBoolean("attempted", it) }
+    result?.let { putString("result", it) }
+    eci?.let { putString("eci", it) }
+    challengeRequestIndicator?.let { putString("challengeRequestIndicator", it) }
+    challengeCompleted?.let { putBoolean("challengeCompleted", it) }
+  }
+
+fun CardToken.toWritableMap(): WritableMap =
+  Arguments.createMap().apply {
+    putString("cardLastFour", lastFour)
+    putString("endDate", endDate)
+    putString("cardToken", token)
+    putInt("cardNetwork", type)
+    putString("bank", bank)
+    putString("cardCategory", category)
+    putString("cardCountry", country)
+    putString("cardFunding", funding)
+    putString("cardScheme", scheme)
+    putString("cardHolderName", cardHolderName)
+    putString("ownerType", ownerType)
+  }

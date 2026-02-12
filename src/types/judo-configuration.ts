@@ -231,6 +231,26 @@ export interface JudoConsumer {
   consumerReference?: string;
 }
 
+export interface JudoVirtualPan {
+  lastFour?: string;
+  expiryDate?: string;
+}
+
+export interface JudoNetworkTokenisationDetails {
+  networkTokenProvisioned?: boolean;
+  networkTokenUsed?: boolean;
+  virtualPan?: JudoVirtualPan;
+  accountDetailsUpdated?: boolean;
+}
+
+export interface JudoThreeDSecure {
+  attempted?: boolean;
+  result?: string;
+  eci?: string;
+  challengeRequestIndicator?: string;
+  challengeCompleted?: boolean;
+}
+
 export interface JudoResponse {
   receiptId?: string;
   yourPaymentReference?: string;
@@ -248,6 +268,8 @@ export interface JudoResponse {
   currency?: string;
   cardDetails?: JudoCardDetails;
   consumerResponse?: JudoConsumer;
+  networkTokenisationDetails?: JudoNetworkTokenisationDetails;
+  threeDSecure?: JudoThreeDSecure;
 }
 
 export interface JudoAuthorization {

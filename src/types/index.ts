@@ -26,6 +26,9 @@ export {
   JudoResponse,
   JudoAuthorization,
   JudoRecommendationConfiguration,
+  JudoVirtualPan,
+  JudoNetworkTokenisationDetails,
+  JudoThreeDSecure,
 } from './judo-configuration';
 
 export {

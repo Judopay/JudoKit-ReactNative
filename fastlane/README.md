@@ -77,14 +77,6 @@ Publish SDK
 
 Build Sample Apps
 
-### test_sample_apps
-
-```sh
-[bundle exec] fastlane test_sample_apps
-```
-
-Test Sample Apps
-
 ### test_sample_apps_simulator
 
 ```sh
