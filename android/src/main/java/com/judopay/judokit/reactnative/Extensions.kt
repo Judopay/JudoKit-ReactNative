@@ -415,11 +415,12 @@ fun ThreeDSecure.toWritableMap(): WritableMap =
     challengeCompleted?.let { putBoolean("challengeCompleted", it) }
   }
 
-fun CardToken.toWritableMap(): WritableMap =
-  Arguments.createMap().apply {
+fun CardToken.toWritableMap(): WritableMap {
+  val cardToken = token
+  return Arguments.createMap().apply {
     putString("cardLastFour", lastFour)
     putString("endDate", endDate)
-    putString("cardToken", token)
+    putString("cardToken", cardToken)
     putInt("cardNetwork", type)
     putString("bank", bank)
     putString("cardCategory", category)
@@ -429,3 +430,4 @@ fun CardToken.toWritableMap(): WritableMap =
     putString("cardHolderName", cardHolderName)
     putString("ownerType", ownerType)
   }
+}
