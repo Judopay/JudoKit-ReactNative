@@ -104,7 +104,12 @@ android {
       // see https://reactnative.dev/docs/signed-apk-android.
       signingConfig signingConfigs.debug
       minifyEnabled enableProguardInReleaseBuilds
-      proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+      proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+    }
+  }
+  packaging {
+    resources {
+      excludes += ['META-INF/versions/9/OSGI-INF/MANIFEST.MF']
     }
   }
 }
@@ -115,7 +120,7 @@ dependencies {
 
   // The following is for `JudoApiServiceFactory.externalInterceptors` in `MainApplication.java`
   implementation "com.github.chuckerteam.chucker:library:4.2.0"
-  implementation "com.judopay:judokit-android:6.2.0"
+  implementation "com.judopay:judokit-android:7.0.0"
 
   // This is for Ravelin recommendation feature
   implementation 'com.ravelin.sdk:ravelin-encrypt:7.0.0'
