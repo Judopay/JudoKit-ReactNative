@@ -14,6 +14,7 @@ import {
   ThemeProvider,
 } from '@react-navigation/native';
 import { Theme } from '@react-navigation/native/lib/typescript/src/types';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ApplicationRouter from './ApplicationRouter';
 import { MMKVLoader } from 'react-native-mmkv-storage';
 import {
@@ -145,9 +146,11 @@ const Application = () => {
   }, []);
 
   return (
-    <ThemeProvider value={theme}>
-      <ApplicationRouter theme={theme} />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider value={theme}>
+        <ApplicationRouter theme={theme} />
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 };
 

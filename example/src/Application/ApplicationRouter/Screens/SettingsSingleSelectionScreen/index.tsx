@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import {
-  SafeAreaView,
   SectionList,
   SectionListRenderItemInfo,
   Text,
   TouchableHighlight,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Separator from '../../../../Components/Separator';
 import {
   NavigationProp,

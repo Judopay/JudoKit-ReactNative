@@ -3,12 +3,8 @@ import SettingsTable from '../../../../Components/SettingsTable';
 import { buildSettingsSections } from '../../../../Data/SettingsSections';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import { useTheme } from '@react-navigation/native';
-import {
-  ActivityIndicator,
-  Alert,
-  SafeAreaView,
-  TouchableOpacity,
-} from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { encode as btoa } from 'base-64';
 import {

@@ -1,9 +1,6 @@
 import React, { FC } from 'react';
-import {
-  SafeAreaView,
-  SectionList,
-  SectionListRenderItemInfo,
-} from 'react-native';
+import { SectionList, SectionListRenderItemInfo } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   NavigationProp,
   useNavigation,

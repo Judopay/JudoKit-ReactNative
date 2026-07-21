@@ -1,13 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
-import {
-  KeyboardAvoidingView,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   NavigationProp,
   useNavigation,

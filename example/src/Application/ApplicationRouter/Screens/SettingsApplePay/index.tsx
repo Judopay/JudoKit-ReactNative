@@ -3,7 +3,7 @@ import SettingsTable from '../../../../Components/SettingsTable';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import { useTheme } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import applePaySettingsSections from '../../../../Data/SettingsSections/applePaySettingsSections';
 
 const SettingsApplePayScreen: FC<
