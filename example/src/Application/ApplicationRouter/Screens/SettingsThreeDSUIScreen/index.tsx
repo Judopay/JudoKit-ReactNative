@@ -4,7 +4,7 @@ import { buildThreeDSSDKUISections } from '../../../../Data/SettingsSections';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Screen } from '../../../../Data/TypeDefinitions';
 import { useTheme } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SettingsThreeDSUIScreen: FC<
   NativeStackScreenProps<RootStackParamList, Screen.THREE_DS_UI_SETTINGS>
