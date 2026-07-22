@@ -15,6 +15,7 @@ const SettingsThreeDSUIScreen: FC<
 
   return (
     <SafeAreaView
+      edges={['bottom', 'left', 'right']}
       style={{
         flex: 1,
         backgroundColor,
