@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, useColorScheme } from 'react-native';
+import { Alert, StatusBar, useColorScheme } from 'react-native';
 import {
   check,
   openSettings,
@@ -147,6 +147,9 @@ const Application = () => {
 
   return (
     <SafeAreaProvider>
+      <StatusBar
+        barStyle={scheme === 'dark' ? 'light-content' : 'dark-content'}
+      />
       <ThemeProvider value={theme}>
         <ApplicationRouter theme={theme} />
       </ThemeProvider>
