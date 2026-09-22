@@ -16,7 +16,6 @@ import {
   AMOUNT_KEYS,
   API_CONFIGURATION_KEYS,
   AUTHORIZATION_KEYS,
-  IS_ANDROID,
   REFERENCE_KEYS,
 } from '../../../../Data/Constants';
 import { appStorage } from '../../../index';
@@ -190,36 +189,32 @@ const SettingsMainScreen: FC<
 
   const headerRight = () => (
     <HStack spacing={8} style={{ justifyContent: 'space-between' }}>
-      {IS_ANDROID ? (
-        <TouchableOpacity
-          disabled={isLoading}
-          style={{
-            width: 40,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          testID="import-settings-button"
-          accessibilityLabel="Import settings button"
-          onPress={() => setImportVisible(true)}
-        >
-          <Ionicons name="download-outline" size={28} color={primary} />
-        </TouchableOpacity>
-      ) : null}
-      {IS_ANDROID ? (
-        <TouchableOpacity
-          disabled={isLoading}
-          style={{
-            width: 40,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          testID="export-settings-button"
-          accessibilityLabel="Export settings button"
-          onPress={handleExportSettings}
-        >
-          <Ionicons name="share-outline" size={28} color={primary} />
-        </TouchableOpacity>
-      ) : null}
+      <TouchableOpacity
+        disabled={isLoading}
+        style={{
+          width: 40,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        testID="import-settings-button"
+        accessibilityLabel="Import settings button"
+        onPress={() => setImportVisible(true)}
+      >
+        <Ionicons name="download-outline" size={28} color={primary} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={isLoading}
+        style={{
+          width: 40,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        testID="export-settings-button"
+        accessibilityLabel="Export settings button"
+        onPress={handleExportSettings}
+      >
+        <Ionicons name="share-outline" size={28} color={primary} />
+      </TouchableOpacity>
       <TouchableOpacity
         disabled={isLoading}
         style={{
@@ -273,12 +268,10 @@ const SettingsMainScreen: FC<
       }}
     >
       <SettingsTable transformationFunction={buildSettingsSections} />
-      {IS_ANDROID ? (
-        <ImportSettingsModal
-          visible={importVisible}
-          onClose={() => setImportVisible(false)}
-        />
-      ) : null}
+      <ImportSettingsModal
+        visible={importVisible}
+        onClose={() => setImportVisible(false)}
+      />
     </SafeAreaView>
   );
 };

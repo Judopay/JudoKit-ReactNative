@@ -30,11 +30,7 @@ import {
   RootStackParamList,
   Screen,
 } from '../../../../Data/TypeDefinitions';
-import {
-  API_CONFIGURATION_KEYS,
-  FEATURES,
-  IS_ANDROID,
-} from '../../../../Data/Constants';
+import { API_CONFIGURATION_KEYS, FEATURES } from '../../../../Data/Constants';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   getBoolOrFalse,
@@ -52,20 +48,18 @@ const HomeHeaderRight: FC<{
   onImportPress: () => void;
 }> = ({ primary, onImportPress }) => (
   <HStack spacing={8} style={{ justifyContent: 'space-between' }}>
-    {IS_ANDROID ? (
-      <TouchableOpacity
-        style={{
-          width: 48,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        testID="import-settings-button"
-        accessibilityLabel="Import settings button"
-        onPress={onImportPress}
-      >
-        <Ionicons name="download-outline" size={28} color={primary} />
-      </TouchableOpacity>
-    ) : null}
+    <TouchableOpacity
+      style={{
+        width: 48,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      testID="import-settings-button"
+      accessibilityLabel="Import settings button"
+      onPress={onImportPress}
+    >
+      <Ionicons name="download-outline" size={28} color={primary} />
+    </TouchableOpacity>
     <SettingsButton />
   </HStack>
 );
@@ -151,12 +145,10 @@ const HomeScreen: FC<
         renderItem={renderItem}
         sections={FEATURES}
       />
-      {IS_ANDROID ? (
-        <ImportSettingsModal
-          visible={importVisible}
-          onClose={() => setImportVisible(false)}
-        />
-      ) : null}
+      <ImportSettingsModal
+        visible={importVisible}
+        onClose={() => setImportVisible(false)}
+      />
     </SafeAreaView>
   );
 };
