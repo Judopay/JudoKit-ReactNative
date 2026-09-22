@@ -4,6 +4,8 @@ import { Platform, SectionListData } from 'react-native';
 export const IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY =
   'is_storage_initiated_with_defaults_key';
 
+export const SETTINGS_IMPORT_REVISION_KEY = 'settings.importRevision';
+
 // API Configuration keys
 export const API_CONFIGURATION_KEYS = {
   IS_SANDBOXED: 'apiConfiguration.isSandboxed',

@@ -1,15 +1,23 @@
-import React, { FC } from 'react';
-import { SectionList, SectionListRenderItemInfo } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import {
+  SectionList,
+  SectionListRenderItemInfo,
+  TouchableOpacity,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   NavigationProp,
   useNavigation,
   useTheme,
 } from '@react-navigation/native';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import FeatureItem from '../../../../Components/FeatureItem';
 import Separator from '../../../../Components/Separator';
 import SectionHeader from '../../../../Components/SectionHeader';
 import SectionFooter from '../../../../Components/SectionFooter';
+import SettingsButton from '../../../../Components/SettingsButton';
+import ImportSettingsModal from '../../../../Components/ImportSettingsModal';
+import { HStack } from '../../../../Components/HStack';
 import {
   dispatch,
   onError,
@@ -22,7 +30,11 @@ import {
   RootStackParamList,
   Screen,
 } from '../../../../Data/TypeDefinitions';
-import { API_CONFIGURATION_KEYS, FEATURES } from '../../../../Data/Constants';
+import {
+  API_CONFIGURATION_KEYS,
+  FEATURES,
+  IS_ANDROID,
+} from '../../../../Data/Constants';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   getBoolOrFalse,
@@ -35,13 +47,49 @@ const ItemSeparatorComponent = () => (
 );
 const SectionSeparatorComponent = () => <Separator key="separator-key" />;
 
+const HomeHeaderRight: FC<{
+  primary: string;
+  onImportPress: () => void;
+}> = ({ primary, onImportPress }) => (
+  <HStack spacing={8} style={{ justifyContent: 'space-between' }}>
+    {IS_ANDROID ? (
+      <TouchableOpacity
+        style={{
+          width: 48,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        testID="import-settings-button"
+        accessibilityLabel="Import settings button"
+        onPress={onImportPress}
+      >
+        <Ionicons name="download-outline" size={28} color={primary} />
+      </TouchableOpacity>
+    ) : null}
+    <SettingsButton />
+  </HStack>
+);
+
 const HomeScreen: FC<
   NativeStackScreenProps<RootStackParamList, Screen.HOME>
-> = () => {
+> = ({ navigation }) => {
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
   const {
-    colors: { background: backgroundColor },
+    colors: { background: backgroundColor, primary },
   } = useTheme();
+  const [importVisible, setImportVisible] = useState(false);
+
+  const headerRight = () => (
+    <HomeHeaderRight
+      primary={primary}
+      onImportPress={() => setImportVisible(true)}
+    />
+  );
+
+  useEffect(() => {
+    navigation.setOptions({ headerRight });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation, primary]);
 
   const onSuccess = (response: JudoResponse) =>
     navigate(Screen.RESULT, { items: transformToListOfResultItems(response) });
@@ -103,6 +151,12 @@ const HomeScreen: FC<
         renderItem={renderItem}
         sections={FEATURES}
       />
+      {IS_ANDROID ? (
+        <ImportSettingsModal
+          visible={importVisible}
+          onClose={() => setImportVisible(false)}
+        />
+      ) : null}
     </SafeAreaView>
   );
 };
