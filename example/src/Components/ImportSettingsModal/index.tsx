@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
+  Dimensions,
   KeyboardAvoidingView,
   Modal,
   Pressable,
@@ -20,6 +21,12 @@ import { onErrorSnackbar, onSuccessSnackbar } from '../../Functions';
 
 const TITLE = 'Import Settings from JSON';
 const PLACEHOLDER = 'Paste JSON here…';
+
+const WINDOW_HEIGHT = Dimensions.get('window').height;
+/** Room for title, padding, and button row below the text field. */
+const CARD_CHROME_HEIGHT = 140;
+const CARD_MAX_HEIGHT = Math.min(WINDOW_HEIGHT * 0.85, 560);
+const INPUT_MAX_HEIGHT = Math.max(120, CARD_MAX_HEIGHT - CARD_CHROME_HEIGHT);
 
 export interface ImportSettingsModalProps {
   visible: boolean;
@@ -96,31 +103,34 @@ const ImportSettingsModal: FC<ImportSettingsModalProps> = ({
       >
         <Pressable style={styles.backdrop} onPress={onClose}>
           <Pressable
-            style={[styles.card, { backgroundColor: card }]}
+            style={[
+              styles.card,
+              { backgroundColor: card, maxHeight: CARD_MAX_HEIGHT },
+            ]}
             onPress={(event) => event.stopPropagation()}
           >
             <Text style={[styles.title, { color: text }]}>{TITLE}</Text>
-            <View style={{ position: 'relative' }}>
-              <TextInput
-                testID="import-settings-text-view"
-                accessibilityLabel="Import settings text view"
-                style={[
-                  styles.input,
-                  {
-                    color: text,
-                    borderColor: border,
-                  },
-                ]}
-                multiline
-                textAlignVertical="top"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholder={PLACEHOLDER}
-                placeholderTextColor="#6e6e6e"
-                value={json}
-                onChangeText={setJson}
-              />
-            </View>
+            <TextInput
+              testID="import-settings-text-view"
+              accessibilityLabel="Import settings text view"
+              style={[
+                styles.input,
+                {
+                  color: text,
+                  borderColor: border,
+                  maxHeight: INPUT_MAX_HEIGHT,
+                },
+              ]}
+              multiline
+              scrollEnabled
+              textAlignVertical="top"
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder={PLACEHOLDER}
+              placeholderTextColor="#6e6e6e"
+              value={json}
+              onChangeText={setJson}
+            />
             <View style={styles.buttons}>
               <TouchableOpacity
                 testID="import-settings-choose-file-button"
@@ -175,6 +185,7 @@ const styles = StyleSheet.create({
     maxWidth: 320,
     borderRadius: 12,
     padding: 16,
+    overflow: 'hidden',
   },
   title: {
     fontSize: 17,
@@ -182,7 +193,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   input: {
-    minHeight: 150,
+    minHeight: 120,
     borderWidth: 1,
     borderRadius: 8,
     padding: 12,
