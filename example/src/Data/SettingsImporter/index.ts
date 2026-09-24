@@ -64,7 +64,6 @@ const CARD_NETWORK_STORAGE_KEYS: Record<string, string> = {
   DINERS_CLUB: SUPPORTED_CARD_NETWORKS_KEYS.IS_DINERS_CLUB_ON,
 };
 
-/** Same section layout as JudoKit-Android `SettingsImporter.SECTIONS`. */
 const EXPORT_SECTIONS: Array<{ name: string; keys: string[] }> = [
   {
     name: 'api',
