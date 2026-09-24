@@ -360,8 +360,9 @@ export const parseSettingsImport = (json: string): SettingsPatch => {
   try {
     parsed = JSON.parse(json);
   } catch (error) {
-    const message = error instanceof Error ? error.message : `${error}`;
-    throw new SettingsImportError(`Invalid JSON: ${message}`);
+    throw new SettingsImportError(
+      `Invalid JSON: ${error instanceof Error ? error.message : error}`
+    );
   }
 
   if (!isPlainObject(parsed)) {

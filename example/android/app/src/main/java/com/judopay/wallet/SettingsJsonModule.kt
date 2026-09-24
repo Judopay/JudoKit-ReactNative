@@ -11,7 +11,6 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import java.io.IOException
 
 class SettingsJsonModule(
   private val reactContext: ReactApplicationContext,
@@ -100,9 +99,7 @@ class SettingsJsonModule(
       } else {
         promise.resolve(json)
       }
-    } catch (error: IOException) {
-      promise.reject("read_error", error.localizedMessage, error)
-    } catch (error: SecurityException) {
+    } catch (error: Exception) {
       promise.reject("read_error", error.localizedMessage, error)
     }
   }

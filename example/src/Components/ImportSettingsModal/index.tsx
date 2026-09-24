@@ -65,13 +65,11 @@ const ImportSettingsModal: FC<ImportSettingsModalProps> = ({
       onSuccessSnackbar('Settings imported successfully');
       onClose();
     } catch (error) {
-      const message =
+      onErrorSnackbar(
         error instanceof SettingsImportError
-          ? error.message
-          : error instanceof Error
-            ? `Import failed: ${error.message}`
-            : 'Import failed';
-      onErrorSnackbar(new Error(message));
+          ? error
+          : new Error(error instanceof Error ? error.message : 'Import failed')
+      );
     }
   };
 
@@ -84,9 +82,9 @@ const ImportSettingsModal: FC<ImportSettingsModalProps> = ({
       setJson(fileJson);
       applyJson(fileJson);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Failed to read file';
-      onErrorSnackbar(new Error(`Failed to read file: ${message}`));
+      onErrorSnackbar(
+        error instanceof Error ? error : new Error('Failed to read file')
+      );
     }
   };
 
