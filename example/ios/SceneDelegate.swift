@@ -3,8 +3,9 @@ import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import UIKit
 
-class SceneDelegate: RCTDefaultReactNativeFactoryDelegate, UIWindowSceneDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
+  var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
 
   func scene(
@@ -16,18 +17,25 @@ class SceneDelegate: RCTDefaultReactNativeFactoryDelegate, UIWindowSceneDelegate
       return
     }
 
-    dependencyProvider = RCTAppDependencyProvider()
-    reactNativeFactory = RCTReactNativeFactory(delegate: self)
+    let delegate = ReactNativeDelegate()
+    let factory = RCTReactNativeFactory(delegate: delegate)
+    delegate.dependencyProvider = RCTAppDependencyProvider()
+
+    reactNativeDelegate = delegate
+    reactNativeFactory = factory
+
     window = UIWindow(windowScene: windowScene)
     (UIApplication.shared.delegate as? AppDelegate)?.window = window
 
-    reactNativeFactory?.startReactNative(
+    factory.startReactNative(
       withModuleName: "JudoKitReactNativeExample",
       in: window,
       launchOptions: nil
     )
   }
+}
 
+class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
   override func sourceURL(for bridge: RCTBridge) -> URL? {
     bundleURL()
   }
