@@ -3,7 +3,6 @@ import React, { FC } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './Screens/HomeScreen';
 import SettingsMainScreen from './Screens/SettingsMainScreen';
-import SettingsButton from '../../Components/SettingsButton';
 import ResultScreen from './Screens/ResultScreen';
 import SettingsThreeDSUIScreen from './Screens/SettingsThreeDSUIScreen';
 import BackButton from '../../Components/BackButton';
@@ -20,7 +19,6 @@ interface ApplicationRouterProps {
 }
 
 const headerLeft = () => <BackButton />;
-const headerRight = () => <SettingsButton />;
 
 const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
   const options = (title: string) => ({
@@ -28,7 +26,6 @@ const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
     title,
   });
   const homeScreenOptions = {
-    headerRight,
     title: '[ReactNative] Features',
   };
   return (

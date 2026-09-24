@@ -18,6 +18,10 @@ import { DefaultTheme } from '@react-navigation/native';
 import { Buffer } from 'buffer';
 import { appStorage } from '../Application';
 import { DEFAULT_SETTINGS_DATA } from '../Data/Constants';
+import {
+  isSharedSettingsDialect,
+  parseSettingsImport,
+} from '../Data/SettingsImporter';
 
 interface PromiseForFeature {
   featureType: DemoFeatureType;
@@ -239,6 +243,13 @@ export const getSettingsFromEnv = (
       );
 
       const parsedSettings = JSON.parse(decodedSettings);
+
+      if (isSharedSettingsDialect(parsedSettings)) {
+        return {
+          ...DEFAULT_SETTINGS_DATA,
+          ...parseSettingsImport(decodedSettings),
+        };
+      }
 
       return flattenJson(parsedSettings);
     }

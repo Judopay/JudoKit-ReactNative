@@ -4,281 +4,240 @@ import { Platform, SectionListData } from 'react-native';
 export const IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY =
   'is_storage_initiated_with_defaults_key';
 
+export const SETTINGS_IMPORT_REVISION_KEY = 'settings_import_revision';
+
 // API Configuration keys
 export const API_CONFIGURATION_KEYS = {
-  IS_SANDBOXED: 'apiConfiguration.isSandboxed',
-  JUDO_ID: 'apiConfiguration.judoId',
+  IS_SANDBOXED: 'is_sandboxed',
+  JUDO_ID: 'judo_id',
 } as const;
 
 // Authorization keys
 export const AUTHORIZATION_KEYS = {
-  IS_USING_PAYMENT_SESSION: 'authorization.isUsingPaymentSession',
-  IS_USING_TOKEN_AND_SECRET: 'authorization.isUsingTokenAndSecret',
-  TOKEN: 'authorization.token',
-  SECRET: 'authorization.secret',
-  PAYMENT_SESSION: 'authorization.paymentSession',
+  IS_USING_PAYMENT_SESSION: 'is_payment_session_enabled',
+  IS_USING_TOKEN_AND_SECRET: 'is_using_token_and_secret',
+  TOKEN: 'token',
+  SECRET: 'secret',
+  PAYMENT_SESSION: 'payment_session',
 } as const;
 
 // Reference keys
 export const REFERENCE_KEYS = {
-  CONSUMER_REFERENCE: 'reference.consumerReference',
-  PAYMENT_REFERENCE: 'reference.paymentReference',
+  CONSUMER_REFERENCE: 'consumer_reference',
+  PAYMENT_REFERENCE: 'payment_reference',
 } as const;
 
 // Others keys
 export const OTHERS_KEYS = {
-  IS_ADDRESS_VERIFICATION_SERVICE_ON: 'others.isAddressVerificationServiceOn',
+  IS_ADDRESS_VERIFICATION_SERVICE_ON: 'is_avs_enabled',
   IS_AMOUNT_LABEL_IN_PAYMENT_METHODS_ON:
-    'others.isAmountLabelInPaymentMethodsOn',
-  IS_AMOUNT_LABEL_IN_PAYMENT_BUTTON_ON: 'others.isAmountLabelInPaymentButtonOn',
-  IS_SECURITY_CODE_ON: 'others.isSecurityCodeOn',
-  IS_INITIAL_RECURRING_PAYMENT_ON: 'others.isInitialRecurringPaymentOn',
-  IS_DELAYED_AUTHORISATION_ON: 'others.isDelayedAuthorisationOn',
-  IS_ALLOW_INCREMENT_ON: 'others.isAllowIncrementOn',
+    'should_payment_methods_display_amount',
+  IS_AMOUNT_LABEL_IN_PAYMENT_BUTTON_ON: 'should_payment_button_display_amount',
+  IS_SECURITY_CODE_ON: 'should_payment_methods_verify_security_code',
+  IS_INITIAL_RECURRING_PAYMENT_ON: 'is_initial_recurring_payment',
+  IS_DELAYED_AUTHORISATION_ON: 'is_delayed_authorisation_on',
+  IS_ALLOW_INCREMENT_ON: 'is_allow_increment_on',
 } as const;
 
 // Amount keys
 export const AMOUNT_KEYS = {
-  CURRENCY: 'amount.currency',
-  VALUE: 'amount.value',
+  CURRENCY: 'currency',
+  VALUE: 'amount',
 } as const;
 
 // Payment Methods keys
 export const PAYMENT_METHODS_KEYS = {
-  IS_CARD_ON: 'paymentMethods.isCardOn',
-  IS_APPLE_PAY_ON: 'paymentMethods.isApplePayOn',
-  IS_GOOGLE_PAY_ON: 'paymentMethods.isGooglePayOn',
+  IS_CARD_ON: 'is_card_on',
+  IS_APPLE_PAY_ON: 'is_apple_pay_on',
+  IS_GOOGLE_PAY_ON: 'is_google_pay_on',
 } as const;
 
 // Supported Card Networks keys
 export const SUPPORTED_CARD_NETWORKS_KEYS = {
-  IS_VISA_ON: 'supportedCardNetworks.isVisaOn',
-  IS_MASTERCARD_ON: 'supportedCardNetworks.isMastercardOn',
-  IS_AMEX_ON: 'supportedCardNetworks.isAmexOn',
-  IS_MAESTRO_ON: 'supportedCardNetworks.isMaestroOn',
-  IS_CHINA_UNION_PAY_ON: 'supportedCardNetworks.isChinaUnionPayOn',
-  IS_JCB_ON: 'supportedCardNetworks.isJCBOn',
-  IS_DISCOVER_ON: 'supportedCardNetworks.isDiscoverOn',
-  IS_DINERS_CLUB_ON: 'supportedCardNetworks.isDinersClubOn',
+  IS_VISA_ON: 'is_visa_on',
+  IS_MASTERCARD_ON: 'is_mastercard_on',
+  IS_AMEX_ON: 'is_amex_on',
+  IS_MAESTRO_ON: 'is_maestro_on',
+  IS_CHINA_UNION_PAY_ON: 'is_china_union_pay_on',
+  IS_JCB_ON: 'is_jcb_on',
+  IS_DISCOVER_ON: 'is_discover_on',
+  IS_DINERS_CLUB_ON: 'is_diners_club_on',
 } as const;
 
 // Network Timeouts keys
 export const NETWORK_TIMEOUTS_KEYS = {
-  CONNECT_TIMEOUT: 'networkTimeouts.connectTimeout',
-  READ_TIMEOUT: 'networkTimeouts.readTimeout',
-  WRITE_TIMEOUT: 'networkTimeouts.writeTimeout',
+  CONNECT_TIMEOUT: 'connect_timeout',
+  READ_TIMEOUT: 'read_timeout',
+  WRITE_TIMEOUT: 'write_timeout',
 } as const;
 
 // Card Address keys
 export const CARD_ADDRESS_KEYS = {
-  IS_ENABLED: 'cardAddress.isEnabled',
-  LINE1: 'cardAddress.line1',
-  LINE2: 'cardAddress.line2',
-  LINE3: 'cardAddress.line3',
-  TOWN: 'cardAddress.town',
-  POST_CODE: 'cardAddress.postCode',
-  COUNTRY_CODE: 'cardAddress.countryCode',
-  STATE: 'cardAddress.state',
-  PHONE_COUNTRY_CODE: 'cardAddress.phoneCountryCode',
-  MOBILE_NUMBER: 'cardAddress.mobileNumber',
-  EMAIL_ADDRESS: 'cardAddress.emailAddress',
+  IS_ENABLED: 'is_address_enabled',
+  LINE1: 'address_line_1',
+  LINE2: 'address_line_2',
+  LINE3: 'address_line_3',
+  TOWN: 'address_town',
+  POST_CODE: 'address_post_code',
+  COUNTRY_CODE: 'address_country_code',
+  STATE: 'address_administrative_division',
+  PHONE_COUNTRY_CODE: 'address_phone_country_code',
+  MOBILE_NUMBER: 'address_mobile_number',
+  EMAIL_ADDRESS: 'address_email_address',
 } as const;
 
 // Primary Account Details keys
 export const PRIMARY_ACCOUNT_DETAILS_KEYS = {
-  IS_ENABLED: 'primaryAccountDetails.isEnabled',
-  NAME: 'primaryAccountDetails.name',
-  ACCOUNT_NUMBER: 'primaryAccountDetails.accountNumber',
-  DATE_OF_BIRTH: 'primaryAccountDetails.dateOfBirth',
-  POST_CODE: 'primaryAccountDetails.postCode',
+  IS_ENABLED: 'is_primary_account_details_enabled',
+  NAME: 'primary_account_name',
+  ACCOUNT_NUMBER: 'primary_account_account_number',
+  DATE_OF_BIRTH: 'primary_account_date_of_birth',
+  POST_CODE: 'primary_account_post_code',
 } as const;
 
 // Apple Pay keys
 export const APPLE_PAY_KEYS = {
-  MERCHANT_ID: 'applePay.merchantId',
+  MERCHANT_ID: 'apple_pay_merchant_id',
   REQUIRED_BILLING_CONTACT_FIELDS: {
-    IS_POSTAL_ADDRESS_ON:
-      'applePay.requiredBillingContactFields.isPostalAddressOn',
-    IS_PHONE_ON: 'applePay.requiredBillingContactFields.isPhoneOn',
-    IS_EMAIL_ON: 'applePay.requiredBillingContactFields.isEmailOn',
-    IS_NAME_ON: 'applePay.requiredBillingContactFields.isNameOn',
+    IS_POSTAL_ADDRESS_ON: 'is_billing_contact_field_postal_address_required',
+    IS_PHONE_ON: 'is_billing_contact_field_phone_required',
+    IS_EMAIL_ON: 'is_billing_contact_field_email_required',
+    IS_NAME_ON: 'is_billing_contact_field_name_required',
   },
   REQUIRED_SHIPPING_CONTACT_FIELDS: {
-    IS_POSTAL_ADDRESS_ON:
-      'applePay.requiredShippingContactFields.isPostalAddressOn',
-    IS_PHONE_ON: 'applePay.requiredShippingContactFields.isPhoneOn',
-    IS_EMAIL_ON: 'applePay.requiredShippingContactFields.isEmailOn',
-    IS_NAME_ON: 'applePay.requiredShippingContactFields.isNameOn',
+    IS_POSTAL_ADDRESS_ON: 'is_shipping_contact_field_postal_address_required',
+    IS_PHONE_ON: 'is_shipping_contact_field_phone_required',
+    IS_EMAIL_ON: 'is_shipping_contact_field_email_required',
+    IS_NAME_ON: 'is_shipping_contact_field_name_required',
   },
   RETURNED_CONTACT_INFO: {
-    IS_BILLING_CONTACTS_ON: 'applePay.returnedContactInfo.isBillingContactsOn',
-    IS_SHIPPING_CONTACTS_ON:
-      'applePay.returnedContactInfo.isShippingContactsOn',
+    IS_BILLING_CONTACTS_ON: 'is_apple_pay_billing_contact_info_required',
+    IS_SHIPPING_CONTACTS_ON: 'is_apple_pay_shipping_contact_info_required',
   },
   RECURRING_PAYMENT_REQUEST: {
-    IS_ON: 'applePay.recurringPaymentRequest.isOn',
-    PAYMENT_DESCRIPTION: 'applePay.recurringPaymentRequest.paymentDescription',
-    MANAGEMENT_URL: 'applePay.recurringPaymentRequest.managementURL',
+    IS_ON: 'is_recurring_payment_enabled',
+    PAYMENT_DESCRIPTION: 'recurring_payment_description',
+    MANAGEMENT_URL: 'recurring_payment_management_url',
     REGULAR_BILLING: {
-      IS_ON: 'applePay.recurringPaymentRequest.regularBilling.isOn',
-      LABEL: 'applePay.recurringPaymentRequest.regularBilling.label',
-      AMOUNT: 'applePay.recurringPaymentRequest.regularBilling.amount',
-      START_DATE: 'applePay.recurringPaymentRequest.regularBilling.startDate',
-      END_DATE: 'applePay.recurringPaymentRequest.regularBilling.endDate',
-      INTERVAL_UNIT:
-        'applePay.recurringPaymentRequest.regularBilling.intervalUnit',
-      INTERVAL_COUNT:
-        'applePay.recurringPaymentRequest.regularBilling.intervalCount',
+      IS_ON: 'is_recurring_payment_regular_billing_on',
+      LABEL: 'recurring_payment_label',
+      AMOUNT: 'recurring_payment_amount',
+      START_DATE: 'recurring_payment_start_date',
+      END_DATE: 'recurring_payment_end_date',
+      INTERVAL_UNIT: 'recurring_payment_interval_unit',
+      INTERVAL_COUNT: 'recurring_payment_interval_count',
     },
-    BILLING_AGREEMENT: 'applePay.recurringPaymentRequest.billingAgreement',
+    BILLING_AGREEMENT: 'recurring_payment_billing_agreement',
   },
 } as const;
 
 // Google Pay keys
 export const GOOGLE_PAY_KEYS = {
-  IS_PRODUCTION_ENVIRONMENT_ON: 'googlePay.isProductionEnvironmentOn',
-  MERCHANT_NAME: 'googlePay.merchantName',
-  COUNTRY_CODE: 'googlePay.countryCode',
-  BILLING_ADDRESS_FIELDS: 'googlePay.billingAddressFields',
-  IS_BILLING_ADDRESS_PHONE_NUMBER_ON: 'googlePay.isBillingAddressPhoneNumberOn',
-  IS_SHIPPING_ADDRESS_ON: 'googlePay.isShippingAddressOn',
+  IS_PRODUCTION_ENVIRONMENT_ON: 'is_google_pay_production_environment',
+  MERCHANT_NAME: 'google_pay_merchant_name',
+  COUNTRY_CODE: 'google_pay_country_code',
+  BILLING_ADDRESS_FIELDS: 'billing_address',
+  IS_BILLING_ADDRESS_PHONE_NUMBER_ON:
+    'is_billing_address_phone_number_required',
+  IS_SHIPPING_ADDRESS_ON: 'is_shipping_address_required',
   SHIPPING_ADDRESS_ALLOWED_COUNTRIES:
-    'googlePay.shippingAddressAllowedCountries',
+    'google_pay_shipping_address_allowed_countries',
   IS_SHIPPING_ADDRESS_PHONE_NUMBER_ON:
-    'googlePay.isShippingAddressPhoneNumberOn',
-  IS_EMAIL_ADDRESS_ON: 'googlePay.isEmailAddressOn',
-  ALLOW_PREPAID_CARDS: 'googlePay.allowPrepaidCards',
-  ALLOW_CREDIT_CARDS: 'googlePay.allowCreditCards',
-  TRANSACTION_ID: 'googlePay.transactionId',
-  TOTAL_PRICE_STATUS: 'googlePay.totalPriceStatus',
-  TOTAL_PRICE_LABEL: 'googlePay.totalPriceLabel',
-  CHECKOUT_OPTION: 'googlePay.checkoutOption',
+    'is_shipping_address_phone_number_required',
+  IS_EMAIL_ADDRESS_ON: 'is_email_address_required',
+  ALLOW_PREPAID_CARDS: 'allow_prepaid_cards',
+  ALLOW_CREDIT_CARDS: 'allow_credit_cards',
+  TRANSACTION_ID: 'google_pay_transaction_id',
+  TOTAL_PRICE_STATUS: 'google_pay_total_price_status',
+  TOTAL_PRICE_LABEL: 'google_pay_total_price_label',
+  CHECKOUT_OPTION: 'google_pay_checkout_option',
 } as const;
 
 // 3DS Two keys
 export const THREE_DS_TWO_KEYS = {
-  IS_BILLING_INFORMATION_SCREEN_ENABLED:
-    'threeDSTwo.isBillingInformationScreenEnabled',
-  CHALLENGE_REQUEST_INDICATOR: 'threeDSTwo.challengeRequestIndicator',
-  SCA_EXEMPTION: 'threeDSTwo.SCAExemption',
-  MAX_TIMEOUT: 'threeDSTwo.maxTimeout',
-  PROTOCOL_MESSAGE_VERSION: 'threeDSTwo.protocolMessageVersion',
+  IS_BILLING_INFORMATION_SCREEN_ENABLED: 'should_ask_for_billing_information',
+  CHALLENGE_REQUEST_INDICATOR: 'challenge_request_indicator',
+  SCA_EXEMPTION: 'sca_exemption',
+  MAX_TIMEOUT: 'three_ds_two_max_timeout',
+  PROTOCOL_MESSAGE_VERSION: 'three_ds_two_message_version',
   UI_CUSTOMIZATION: {
-    IS_ENABLED: 'threeDSTwo.uiCustomization.isEnabled',
+    IS_ENABLED: 'three_ds_is_ui_customisation_enabled',
     TOOLBAR_CUSTOMIZATION: {
-      TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.toolbarCustomization.textFontName',
-      TEXT_COLOR: 'threeDSTwo.uiCustomization.toolbarCustomization.textColor',
-      TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.toolbarCustomization.textFontSize',
-      BACKGROUND_COLOR:
-        'threeDSTwo.uiCustomization.toolbarCustomization.backgroundColor',
-      HEADER_TEXT: 'threeDSTwo.uiCustomization.toolbarCustomization.headerText',
-      BUTTON_TEXT: 'threeDSTwo.uiCustomization.toolbarCustomization.buttonText',
+      TEXT_FONT_NAME: 'three_ds_toolbar_text_font_name',
+      TEXT_COLOR: 'three_ds_toolbar_text_color',
+      TEXT_FONT_SIZE: 'three_ds_toolbar_text_font_size',
+      BACKGROUND_COLOR: 'three_ds_toolbar_background_color',
+      HEADER_TEXT: 'three_ds_toolbar_header_text',
+      BUTTON_TEXT: 'three_ds_toolbar_button_text',
     },
     LABEL_CUSTOMIZATION: {
-      TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.labelCustomization.textFontName',
-      TEXT_COLOR: 'threeDSTwo.uiCustomization.labelCustomization.textColor',
-      TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.labelCustomization.textFontSize',
-      HEADING_TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.labelCustomization.headingTextFontName',
-      HEADING_TEXT_COLOR:
-        'threeDSTwo.uiCustomization.labelCustomization.headingTextColor',
-      HEADING_TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.labelCustomization.headingTextFontSiz',
+      TEXT_FONT_NAME: 'three_ds_label_text_font_name',
+      TEXT_COLOR: 'three_ds_label_text_color',
+      TEXT_FONT_SIZE: 'three_ds_label_text_font_size',
+      HEADING_TEXT_FONT_NAME: 'three_ds_label_heading_text_font_name',
+      HEADING_TEXT_COLOR: 'three_ds_label_heading_text_color',
+      HEADING_TEXT_FONT_SIZE: 'three_ds_label_heading_text_font_size',
     },
     TEXT_BOX_CUSTOMIZATION: {
-      TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.textBoxCustomization.textFontName',
-      TEXT_COLOR: 'threeDSTwo.uiCustomization.textBoxCustomization.textColor',
-      TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.textBoxCustomization.textFontSize',
-      BORDER_WIDTH:
-        'threeDSTwo.uiCustomization.textBoxCustomization.borderWidth',
-      BORDER_COLOR:
-        'threeDSTwo.uiCustomization.textBoxCustomization.borderColor',
-      CORNER_RADIUS:
-        'threeDSTwo.uiCustomization.textBoxCustomization.cornerRadius',
+      TEXT_FONT_NAME: 'three_ds_text_box_text_font_name',
+      TEXT_COLOR: 'three_ds_text_box_text_color',
+      TEXT_FONT_SIZE: 'three_ds_text_box_text_font_size',
+      BORDER_WIDTH: 'three_ds_text_box_border_width',
+      BORDER_COLOR: 'three_ds_text_box_border_color',
+      CORNER_RADIUS: 'three_ds_text_box_corner_radius',
     },
     SUBMIT_BUTTON_CUSTOMIZATION: {
-      TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.submitButtonCustomization.textFontName',
-      TEXT_COLOR:
-        'threeDSTwo.uiCustomization.submitButtonCustomization.textColor',
-      TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.submitButtonCustomization.textFontSize',
-      BACKGROUND_COLOR:
-        'threeDSTwo.uiCustomization.submitButtonCustomization.backgroundColor',
-      CORNER_RADIUS:
-        'threeDSTwo.uiCustomization.submitButtonCustomization.cornerRadius',
+      TEXT_FONT_NAME: 'three_ds_submit_button_text_font_name',
+      TEXT_COLOR: 'three_ds_submit_button_text_color',
+      TEXT_FONT_SIZE: 'three_ds_submit_button_text_font_size',
+      BACKGROUND_COLOR: 'three_ds_submit_button_background_color',
+      CORNER_RADIUS: 'three_ds_submit_button_corner_radius',
     },
     NEXT_BUTTON_CUSTOMIZATION: {
-      TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.nextButtonCustomization.textFontName',
-      TEXT_COLOR:
-        'threeDSTwo.uiCustomization.nextButtonCustomization.textColor',
-      TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.nextButtonCustomization.textFontSize',
-      BACKGROUND_COLOR:
-        'threeDSTwo.uiCustomization.nextButtonCustomization.backgroundColor',
-      CORNER_RADIUS:
-        'threeDSTwo.uiCustomization.nextButtonCustomization.cornerRadius',
+      TEXT_FONT_NAME: 'three_ds_next_button_text_font_name',
+      TEXT_COLOR: 'three_ds_next_button_text_color',
+      TEXT_FONT_SIZE: 'three_ds_next_button_text_font_size',
+      BACKGROUND_COLOR: 'three_ds_next_button_background_color',
+      CORNER_RADIUS: 'three_ds_next_button_corner_radius',
     },
     CONTINUE_BUTTON_CUSTOMIZATION: {
-      TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.continueButtonCustomization.textFontName',
-      TEXT_COLOR:
-        'threeDSTwo.uiCustomization.continueButtonCustomization.textColor',
-      TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.continueButtonCustomization.textFontSize',
-      BACKGROUND_COLOR:
-        'threeDSTwo.uiCustomization.continueButtonCustomization.backgroundColor',
-      CORNER_RADIUS:
-        'threeDSTwo.uiCustomization.continueButtonCustomization.cornerRadius',
+      TEXT_FONT_NAME: 'three_ds_continue_button_text_font_name',
+      TEXT_COLOR: 'three_ds_continue_button_text_color',
+      TEXT_FONT_SIZE: 'three_ds_continue_button_text_font_size',
+      BACKGROUND_COLOR: 'three_ds_continue_button_background_color',
+      CORNER_RADIUS: 'three_ds_continue_button_corner_radius',
     },
     CANCEL_BUTTON_CUSTOMIZATION: {
-      TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.cancelButtonCustomization.textFontName',
-      TEXT_COLOR:
-        'threeDSTwo.uiCustomization.cancelButtonCustomization.textColor',
-      TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.cancelButtonCustomization.textFontSize',
-      BACKGROUND_COLOR:
-        'threeDSTwo.uiCustomization.cancelButtonCustomization.backgroundColor',
-      CORNER_RADIUS:
-        'threeDSTwo.uiCustomization.cancelButtonCustomization.cornerRadius',
+      TEXT_FONT_NAME: 'three_ds_cancel_button_text_font_name',
+      TEXT_COLOR: 'three_ds_cancel_button_text_color',
+      TEXT_FONT_SIZE: 'three_ds_cancel_button_text_font_size',
+      BACKGROUND_COLOR: 'three_ds_cancel_button_background_color',
+      CORNER_RADIUS: 'three_ds_cancel_button_corner_radius',
     },
     RESEND_BUTTON_CUSTOMIZATION: {
-      TEXT_FONT_NAME:
-        'threeDSTwo.uiCustomization.resendButtonCustomization.textFontName',
-      TEXT_COLOR:
-        'threeDSTwo.uiCustomization.resendButtonCustomization.textColor',
-      TEXT_FONT_SIZE:
-        'threeDSTwo.uiCustomization.resendButtonCustomization.textFontSize',
-      BACKGROUND_COLOR:
-        'threeDSTwo.uiCustomization.resendButtonCustomization.backgroundColor',
-      CORNER_RADIUS:
-        'threeDSTwo.uiCustomization.resendButtonCustomization.cornerRadius',
+      TEXT_FONT_NAME: 'three_ds_resend_button_text_font_name',
+      TEXT_COLOR: 'three_ds_resend_button_text_color',
+      TEXT_FONT_SIZE: 'three_ds_resend_button_text_font_size',
+      BACKGROUND_COLOR: 'three_ds_resend_button_background_color',
+      CORNER_RADIUS: 'three_ds_resend_button_corner_radius',
     },
   },
 } as const;
 
 // Token Payments keys
 export const TOKEN_PAYMENTS_KEYS = {
-  SHOULD_ASK_FOR_CSC: 'tokenPayments.shouldAskForCSC',
-  SHOULD_ASK_FOR_CARDHOLDER_NAME: 'tokenPayments.shouldAskForCardholderName',
+  SHOULD_ASK_FOR_CSC: 'should_ask_for_csc',
+  SHOULD_ASK_FOR_CARDHOLDER_NAME: 'should_ask_for_cardholder_name',
 } as const;
 
 // Recommendation keys
 export const RECOMMENDATION_KEYS = {
-  IS_ON: 'recommendation.isOn',
-  URL: 'recommendation.url',
-  RSA_PUBLIC_KEY: 'recommendation.rsaPublicKey',
-  TIMEOUT: 'recommendation.timeout',
+  IS_ON: 'is_recommendation_enabled',
+  URL: 'recommendation_url',
+  RSA_PUBLIC_KEY: 'rsa_key',
+  TIMEOUT: 'recommendation_timeout',
   HALT_TRANSACTION_IN_CASE_OF_ANY_ERROR:
-    'recommendation.haltTransactionInCaseOfAnyError',
+    'is_recommendation_halt_transaction_enabled',
 } as const;
 
 export const DEFAULT_SETTINGS_DATA: Record<string, string | boolean> = {

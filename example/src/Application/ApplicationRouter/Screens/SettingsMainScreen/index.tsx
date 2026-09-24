@@ -22,6 +22,9 @@ import { appStorage } from '../../../index';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { HStack } from '../../../../Components/HStack';
+import ImportSettingsModal from '../../../../Components/ImportSettingsModal';
+import { exportSettingsToJson } from '../../../../Data/SettingsImporter/persist';
+import { copySettingsToClipboard } from '../../../../Native/SettingsJsonModule';
 
 const generateRandomString = (length: number = 36) => {
   const char = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -37,6 +40,7 @@ const SettingsMainScreen: FC<
 > = ({ navigation }) => {
   const { goBack, canGoBack } = navigation;
   const [isLoading, setIsLoading] = useState(false);
+  const [importVisible, setImportVisible] = useState(false);
   const {
     colors: { background: backgroundColor, primary },
   } = useTheme();
@@ -77,6 +81,17 @@ const SettingsMainScreen: FC<
     AUTHORIZATION_KEYS.PAYMENT_SESSION,
     appStorage
   );
+
+  const handleExportSettings = () => {
+    try {
+      copySettingsToClipboard(exportSettingsToJson());
+      onSuccessSnackbar('Settings copied to clipboard');
+    } catch (error) {
+      onErrorSnackbar(
+        error instanceof Error ? error : new Error('Failed to export settings')
+      );
+    }
+  };
 
   const handleResetSettings = () => {
     Alert.alert(
@@ -173,11 +188,37 @@ const SettingsMainScreen: FC<
   };
 
   const headerRight = () => (
-    <HStack spacing={16} style={{ justifyContent: 'space-between' }}>
+    <HStack spacing={8} style={{ justifyContent: 'space-between' }}>
       <TouchableOpacity
         disabled={isLoading}
         style={{
-          width: 48,
+          width: 40,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        testID="import-settings-button"
+        accessibilityLabel="Import settings button"
+        onPress={() => setImportVisible(true)}
+      >
+        <Ionicons name="download-outline" size={28} color={primary} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={isLoading}
+        style={{
+          width: 40,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        testID="export-settings-button"
+        accessibilityLabel="Export settings button"
+        onPress={handleExportSettings}
+      >
+        <Ionicons name="share-outline" size={28} color={primary} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={isLoading}
+        style={{
+          width: 40,
           justifyContent: 'center',
           alignItems: 'center',
         }}
@@ -198,7 +239,7 @@ const SettingsMainScreen: FC<
         <TouchableOpacity
           disabled={isLoading}
           style={{
-            width: 48,
+            width: 40,
             justifyContent: 'center',
             alignItems: 'center',
           }}
@@ -227,6 +268,10 @@ const SettingsMainScreen: FC<
       }}
     >
       <SettingsTable transformationFunction={buildSettingsSections} />
+      <ImportSettingsModal
+        visible={importVisible}
+        onClose={() => setImportVisible(false)}
+      />
     </SafeAreaView>
   );
 };
