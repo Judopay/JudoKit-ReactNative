@@ -19,7 +19,7 @@ import { Buffer } from 'buffer';
 import { appStorage } from '../Application';
 import { DEFAULT_SETTINGS_DATA } from '../Data/Constants';
 import {
-  isSharedSettingsDialect,
+  hasNestedSettingsSections,
   parseSettingsImport,
 } from '../Data/SettingsImporter';
 
@@ -244,13 +244,14 @@ export const getSettingsFromEnv = (
 
       const parsedSettings = JSON.parse(decodedSettings);
 
-      if (isSharedSettingsDialect(parsedSettings)) {
+      if (hasNestedSettingsSections(parsedSettings)) {
         return {
           ...DEFAULT_SETTINGS_DATA,
           ...parseSettingsImport(decodedSettings),
         };
       }
 
+      // Backward compatibility with e2e configs until they use native sectioned JSON.
       return flattenJson(parsedSettings);
     }
   } catch (error) {

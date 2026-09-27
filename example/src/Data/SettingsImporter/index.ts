@@ -1,6 +1,6 @@
 export { buildSettingsExport } from './buildSettingsExport';
 export {
-  isSharedSettingsDialect,
+  hasNestedSettingsSections,
   parseSettingsImport,
 } from './parseSettingsImport';
 export { SettingsImportError } from './types';

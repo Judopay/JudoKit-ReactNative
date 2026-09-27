@@ -20,7 +20,12 @@ import {
   SettingsPatch,
 } from './types';
 
-export const isSharedSettingsDialect = (
+/**
+ * Detox `customSettings` (launch args): native demo export uses `{ "api": { ... }, ... }`.
+ * Kept so we can tell that apart from `example/e2e/configs` (camelCase) for backward
+ * compatibility until those fixtures are migrated; then this helper can be removed.
+ */
+export const hasNestedSettingsSections = (
   value: unknown
 ): value is JsonObject => {
   if (!isPlainObject(value)) {
