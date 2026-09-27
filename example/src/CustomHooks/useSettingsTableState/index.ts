@@ -8,7 +8,6 @@ import {
   PRIMARY_ACCOUNT_DETAILS_KEYS,
   THREE_DS_TWO_KEYS,
   APPLE_PAY_KEYS,
-  SETTINGS_IMPORT_REVISION_KEY,
 } from '../../Data/Constants';
 
 export const useSettingsTableState = <T>(transformationFunction: () => T) => {
@@ -46,12 +45,6 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON,
     appStorage
   );
-  const [importRevision] = useMMKVStorage<number>(
-    SETTINGS_IMPORT_REVISION_KEY,
-    appStorage,
-    0
-  );
-
   // Handle mutual exclusivity between token/secret and payment session
   useEffect(() => {
     if (isTokenAndSecretOn) {
@@ -86,7 +79,6 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     is3DSUICustomizationOn,
     isRecurringPaymentOn,
     isRecurringPaymentRegularBillingOn,
-    importRevision,
   ]);
 
   return {

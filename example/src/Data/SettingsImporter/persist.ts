@@ -1,5 +1,4 @@
 import { appStorage } from '../../Application';
-import { SETTINGS_IMPORT_REVISION_KEY } from '../Constants';
 import {
   buildSettingsExport,
   parseSettingsImport,
@@ -27,9 +26,6 @@ export const persistSettingsPatch = (
       appStorage.setString(key, value);
     }
   });
-
-  const currentRevision = appStorage.getInt(SETTINGS_IMPORT_REVISION_KEY) ?? 0;
-  appStorage.setInt(SETTINGS_IMPORT_REVISION_KEY, currentRevision + 1);
 };
 
 export const importSettingsFromJson = (json: string) => {
