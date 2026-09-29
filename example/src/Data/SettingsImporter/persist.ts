@@ -4,13 +4,14 @@ import {
   parseSettingsImport,
   SettingsImportError,
 } from './index';
+import { BOOLEAN_STORAGE_KEYS } from './importMaps';
 
 export { SettingsImportError };
 
 const readStoredValue = (storageKey: string): string | boolean | undefined => {
-  const boolValue = appStorage.getBool(storageKey);
-  if (typeof boolValue === 'boolean') {
-    return boolValue;
+  if (BOOLEAN_STORAGE_KEYS.has(storageKey)) {
+    const boolValue = appStorage.getBool(storageKey);
+    return typeof boolValue === 'boolean' ? boolValue : undefined;
   }
   const stringValue = appStorage.getString(storageKey);
   return typeof stringValue === 'string' ? stringValue : undefined;
