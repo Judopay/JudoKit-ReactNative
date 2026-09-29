@@ -7,6 +7,7 @@ export const IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY =
 // API Configuration keys
 export const API_CONFIGURATION_KEYS = {
   IS_SANDBOXED: 'is_sandboxed',
+  IS_USING_FABRICK_3DS_SERVICE: 'is_using_fabrick_3ds_service',
   JUDO_ID: 'judo_id',
 } as const;
 
@@ -35,6 +36,7 @@ export const OTHERS_KEYS = {
   IS_INITIAL_RECURRING_PAYMENT_ON: 'is_initial_recurring_payment',
   IS_DELAYED_AUTHORISATION_ON: 'is_delayed_authorisation_on',
   IS_ALLOW_INCREMENT_ON: 'is_allow_increment_on',
+  IS_DISABLE_NETWORK_TOKENISATION_ON: 'is_disable_network_tokenisation_on',
 } as const;
 
 // Amount keys
@@ -243,6 +245,7 @@ export const DEFAULT_SETTINGS_DATA: Record<string, string | boolean> = {
 
   // apiConfiguration
   [API_CONFIGURATION_KEYS.IS_SANDBOXED]: true,
+  [API_CONFIGURATION_KEYS.IS_USING_FABRICK_3DS_SERVICE]: false,
   [API_CONFIGURATION_KEYS.JUDO_ID]: '',
 
   // authorization
@@ -264,6 +267,7 @@ export const DEFAULT_SETTINGS_DATA: Record<string, string | boolean> = {
   [OTHERS_KEYS.IS_INITIAL_RECURRING_PAYMENT_ON]: false,
   [OTHERS_KEYS.IS_DELAYED_AUTHORISATION_ON]: false,
   [OTHERS_KEYS.IS_ALLOW_INCREMENT_ON]: false,
+  [OTHERS_KEYS.IS_DISABLE_NETWORK_TOKENISATION_ON]: false,
 
   // amount
   [AMOUNT_KEYS.CURRENCY]: 'GBP',
