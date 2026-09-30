@@ -23,7 +23,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { HStack } from '../../../../Components/HStack';
 import ImportSettingsModal from '../../../../Components/ImportSettingsModal';
-import { exportSettingsToJson } from '../../../../Data/SettingsImporter/persist';
+import { exportSettingsToJson } from '../../../../Data/SettingsImporter/settingsJsonPersistence';
 import { copySettingsToClipboard } from '../../../../Native/SettingsJsonModule';
 
 const generateRandomString = (length: number = 36) => {

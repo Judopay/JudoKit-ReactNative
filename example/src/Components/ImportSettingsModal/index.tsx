@@ -15,7 +15,7 @@ import { IS_IOS } from '../../Data/Constants';
 import {
   importSettingsFromJson,
   SettingsImportError,
-} from '../../Data/SettingsImporter/persist';
+} from '../../Data/SettingsImporter/settingsJsonPersistence';
 import { pickSettingsJsonFile } from '../../Native/SettingsJsonModule';
 import { onErrorSnackbar, onSuccessSnackbar } from '../../Functions';
 
