@@ -316,30 +316,24 @@ async function fillPostCodeField(country: string) {
 }
 
 export const defaultConfig = processJSONFile('./configs/default.json', {
-  apiConfiguration: {
-    judoId: process.env.JUDO_ID,
-  },
-  authorization: {
+  api: {
+    judo_id: process.env.JUDO_ID,
     token: process.env.API_TEST_TOKEN,
     secret: process.env.API_TEST_SECRET,
   },
 });
 
 export const noPrefsConfig = processJSONFile('./configs/noPreferenceCRI.json', {
-  apiConfiguration: {
-    judoId: process.env.JUDO_ID,
-  },
-  authorization: {
+  api: {
+    judo_id: process.env.JUDO_ID,
     token: process.env.API_TEST_TOKEN,
     secret: process.env.API_TEST_SECRET,
   },
 });
 
 export const billingInfoConfig = processJSONFile('./configs/billingInfo.json', {
-  apiConfiguration: {
-    judoId: process.env.JUDO_ID,
-  },
-  authorization: {
+  api: {
+    judo_id: process.env.JUDO_ID,
     token: process.env.API_TEST_TOKEN,
     secret: process.env.API_TEST_SECRET,
   },
@@ -365,23 +359,19 @@ export async function disableSync() {
 export async function setupRavelinConfigWithURL(config: ravelinConfig) {
   const recommendationURL = process.env.RAVELIN_REC_URL;
   const ravelinConfig = processJSONFile('./configs/ravelin.json', {
-    apiConfiguration: {
-      judoId: process.env.JUDO_ID,
-    },
-    authorization: {
+    api: {
+      judo_id: process.env.JUDO_ID,
       token: process.env.API_TEST_TOKEN,
       secret: process.env.API_TEST_SECRET,
-    },
-    reference: {
-      consumerReference: `RAVELIN-TRANSACTION-${crypto
+      consumer_reference: `RAVELIN-TRANSACTION-${crypto
         .randomUUID()
         .slice(0, 8)}`,
     },
     recommendation: {
-      isOn: true,
-      url: recommendationURL + config.url,
-      rsaPublicKey: process.env.RAVELIN_RSA_KEY,
-      haltTransactionInCaseOfAnyError: config.haltTransaction,
+      is_recommendation_enabled: true,
+      recommendation_url: recommendationURL + config.url,
+      rsa_key: process.env.RAVELIN_RSA_KEY,
+      is_recommendation_halt_transaction_enabled: config.haltTransaction,
     },
   });
   return ravelinConfig;

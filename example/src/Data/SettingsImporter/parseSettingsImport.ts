@@ -1,7 +1,6 @@
 import { AUTHORIZATION_KEYS, PAYMENT_METHODS_KEYS } from '../Constants';
 import {
   ALL_SECTION_KEYS,
-  EXPORT_SECTIONS,
   PAYMENT_METHODS_JSON_KEY,
   PAYMENT_SESSION_ENABLED_JSON_KEY,
   SUPPORTED_NETWORKS_JSON_KEY,
@@ -14,26 +13,10 @@ import {
 import {
   asStringArray,
   isPlainObject,
-  JsonObject,
   JsonValue,
   SettingsImportError,
   SettingsPatch,
 } from './types';
-
-/**
- * Detox `customSettings` (launch args): native demo export uses `{ "api": { ... }, ... }`.
- * Kept so we can tell that apart from `example/e2e/configs` (camelCase) for backward
- * compatibility until those fixtures are migrated; then this helper can be removed.
- */
-export const hasNestedSettingsSections = (
-  value: unknown
-): value is JsonObject => {
-  if (!isPlainObject(value)) {
-    return false;
-  }
-  const sectionNames = new Set(EXPORT_SECTIONS.map(({ name }) => name));
-  return Object.keys(value).some((key) => sectionNames.has(key));
-};
 
 const applyLeaf = (
   patch: SettingsPatch,
