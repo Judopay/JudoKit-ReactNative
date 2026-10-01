@@ -24,6 +24,8 @@ export enum TestData {
 export enum Selectors {
   // Settings
   SETTINGS_BUTTON = 'settings-button',
+  IMPORT_SETTINGS_BUTTON = 'import-settings-button',
+  EXPORT_SETTINGS_BUTTON = 'export-settings-button',
   AUTH_TOGGLE = 'using-token-and-secret-toggle',
   BACK_BUTTON = 'back-button',
   CHALLENGE_REQUEST_SETTINGS = 'Challenge request indicator',

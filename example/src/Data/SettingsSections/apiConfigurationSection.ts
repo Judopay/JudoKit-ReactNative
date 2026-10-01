@@ -12,6 +12,11 @@ const apiConfigurationSection = (): SectionListData<SettingsItem> => {
         title: 'Sandboxed',
       },
       {
+        path: API_CONFIGURATION_KEYS.IS_USING_FABRICK_3DS_SERVICE,
+        dataType: SettingsItemDataType.BOOLEAN,
+        title: 'Using Fabrick 3DS service',
+      },
+      {
         path: API_CONFIGURATION_KEYS.JUDO_ID,
         dataType: SettingsItemDataType.TEXT,
         title: 'Judo ID',

@@ -11,8 +11,10 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		449FF17F2BFE1EB200A66616 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 449FF17E2BFE1EB200A66616 /* PrivacyInfo.xcprivacy */; };
 		472A453F7DBDCDA521745982 /* libPods-JudoKitReactNativeExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4BBB430577CD0887C2C39D1 /* libPods-JudoKitReactNativeExample.a */; };
+		7A3C91A12C8F4B0E9D2E1002 /* SettingsJsonModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A3C91A12C8F4B0E9D2E1001 /* SettingsJsonModule.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		99EF569C2E27BA9C00789EAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF569B2E27BA9C00789EAF /* AppDelegate.swift */; };
+		7A3C91B22C8F4B0E9D2E1003 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3C91B12C8F4B0E9D2E1003 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,9 +38,11 @@
 		4468D2112B67CEA90059D7C0 /* JudoKitReactNativeExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = JudoKitReactNativeExample.entitlements; path = JudoKitReactNativeExample/JudoKitReactNativeExample.entitlements; sourceTree = "<group>"; };
 		449FF17E2BFE1EB200A66616 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = JudoKitReactNativeExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4D19E84EE1D8D675D3F41C8A /* Pods-JudoKitReactNativeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JudoKitReactNativeExample.debug.xcconfig"; path = "Target Support Files/Pods-JudoKitReactNativeExample/Pods-JudoKitReactNativeExample.debug.xcconfig"; sourceTree = "<group>"; };
+		7A3C91A12C8F4B0E9D2E1001 /* SettingsJsonModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsJsonModule.m; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = JudoKitReactNativeExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		99EF569A2E27B17100789EAF /* JudoKitReactNativeExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JudoKitReactNativeExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		99EF569B2E27BA9C00789EAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7A3C91B12C8F4B0E9D2E1003 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A4BBB430577CD0887C2C39D1 /* libPods-JudoKitReactNativeExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JudoKitReactNativeExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -83,6 +87,8 @@
 			isa = PBXGroup;
 			children = (
 				99EF569B2E27BA9C00789EAF /* AppDelegate.swift */,
+				7A3C91B12C8F4B0E9D2E1003 /* SceneDelegate.swift */,
+				7A3C91A12C8F4B0E9D2E1001 /* SettingsJsonModule.m */,
 				4468D2112B67CEA90059D7C0 /* JudoKitReactNativeExample.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -329,6 +335,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				99EF569C2E27BA9C00789EAF /* AppDelegate.swift in Sources */,
+				7A3C91B22C8F4B0E9D2E1003 /* SceneDelegate.swift in Sources */,
+				7A3C91A12C8F4B0E9D2E1002 /* SettingsJsonModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

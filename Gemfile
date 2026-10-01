@@ -10,7 +10,7 @@ gem 'activesupport', '>= 6.1.7.5', '!= 7.1.0'
 gem 'xcodeproj', '< 1.26.0'
 gem 'concurrent-ruby', '< 1.3.6'
 
-gem 'fastlane', '= 2.226.0'
+gem 'fastlane', '>= 2.228.0'
 gem 'colorize', '~> 1.1'
 
 # temporary workaround: https://github.com/fastlane/fastlane/issues/21794#issuecomment-2102563823

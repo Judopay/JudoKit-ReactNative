@@ -45,7 +45,6 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON,
     appStorage
   );
-
   // Handle mutual exclusivity between token/secret and payment session
   useEffect(() => {
     if (isTokenAndSecretOn) {

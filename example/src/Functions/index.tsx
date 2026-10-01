@@ -18,6 +18,7 @@ import { DefaultTheme } from '@react-navigation/native';
 import { Buffer } from 'buffer';
 import { appStorage } from '../Application';
 import { DEFAULT_SETTINGS_DATA } from '../Data/Constants';
+import { parseSettingsImport } from '../Data/SettingsImporter';
 
 interface PromiseForFeature {
   featureType: DemoFeatureType;
@@ -238,9 +239,10 @@ export const getSettingsFromEnv = (
         'utf-8'
       );
 
-      const parsedSettings = JSON.parse(decodedSettings);
-
-      return flattenJson(parsedSettings);
+      return {
+        ...DEFAULT_SETTINGS_DATA,
+        ...parseSettingsImport(decodedSettings),
+      };
     }
   } catch (error) {
     console.error('Error while getting settings from environment:', error);
@@ -262,37 +264,3 @@ export const resetAppSettingsToDefaults = (
     }
   });
 };
-
-/**
- * Flattens a nested JSON object into a flat key-value object using dot notation
- * @param obj - The nested JSON object to flatten
- * @param prefix - Optional prefix for the keys (used internally for recursion)
- * @returns A flattened object with dot-notation keys
- */
-export function flattenJson(
-  obj: Record<string, any>,
-  prefix: string = ''
-): Record<string, any> {
-  const flattened: Record<string, any> = {};
-
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const newKey = prefix ? `${prefix}.${key}` : key;
-      const value = obj[key];
-
-      if (
-        value !== null &&
-        typeof value === 'object' &&
-        !Array.isArray(value)
-      ) {
-        // Recursively flatten nested objects
-        Object.assign(flattened, flattenJson(value, newKey));
-      } else {
-        // Add primitive values, arrays, and null values directly
-        flattened[newKey] = value;
-      }
-    }
-  }
-
-  return flattened;
-}

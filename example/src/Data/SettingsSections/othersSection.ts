@@ -41,6 +41,11 @@ const othersSection = (): SectionListData<SettingsItem> => {
         dataType: SettingsItemDataType.BOOLEAN,
         title: 'Allow increment',
       },
+      {
+        path: OTHERS_KEYS.IS_DISABLE_NETWORK_TOKENISATION_ON,
+        dataType: SettingsItemDataType.BOOLEAN,
+        title: 'Disable network tokenisation',
+      },
     ],
   };
 };
