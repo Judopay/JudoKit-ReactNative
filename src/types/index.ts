@@ -53,5 +53,13 @@ export {
   JudoShippingAddressParameters,
   JudoGooglePayPriceStatus,
   JudoCheckoutOption,
+  JudoGooglePayDisplayItemType,
+  JudoGooglePayDisplayItemStatus,
+  JudoGooglePayDisplayItem,
+  JudoGooglePayRecurrencePeriod,
+  JudoGooglePayIntroductoryPeriodInfo,
+  JudoGooglePayRecurrencePeriodItem,
+  JudoGooglePayDeferredParameters,
+  JudoGooglePayRecurringParameters,
   JudoGooglePayConfiguration,
 } from './judo-google-pay-configuration';

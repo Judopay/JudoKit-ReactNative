@@ -3,6 +3,7 @@ package com.judopay.judokit.reactnative
 import android.os.Build
 import android.os.Bundle
 import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.judopay.judo3ds2.customization.ButtonCustomization
@@ -34,8 +35,16 @@ import com.judopay.judokit.android.model.UiConfiguration
 import com.judopay.judokit.android.model.googlepay.GooglePayAddressFormat
 import com.judopay.judokit.android.model.googlepay.GooglePayBillingAddressParameters
 import com.judopay.judokit.android.model.googlepay.GooglePayCheckoutOption
+import com.judopay.judokit.android.model.googlepay.GooglePayDeferredParameters
+import com.judopay.judokit.android.model.googlepay.GooglePayDisplayItem
+import com.judopay.judokit.android.model.googlepay.GooglePayDisplayItemStatus
+import com.judopay.judokit.android.model.googlepay.GooglePayDisplayItemType
 import com.judopay.judokit.android.model.googlepay.GooglePayEnvironment
+import com.judopay.judokit.android.model.googlepay.GooglePayIntroductoryPeriodInfo
 import com.judopay.judokit.android.model.googlepay.GooglePayPriceStatus
+import com.judopay.judokit.android.model.googlepay.GooglePayRecurrencePeriod
+import com.judopay.judokit.android.model.googlepay.GooglePayRecurrencePeriodItem
+import com.judopay.judokit.android.model.googlepay.GooglePayRecurringParameters
 import com.judopay.judokit.android.model.googlepay.GooglePayShippingAddressParameters
 import com.judopay.judokit.android.model.isTokenPayment
 import com.judopay.judokit.android.model.typeId
@@ -612,13 +621,6 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
       0 -> GooglePayEnvironment.TEST
       else -> GooglePayEnvironment.PRODUCTION
     }
-  val totalPriceStatus =
-    when (options.totalPriceStatus) {
-      0 -> GooglePayPriceStatus.FINAL
-      1 -> GooglePayPriceStatus.ESTIMATED
-      2 -> GooglePayPriceStatus.NOT_CURRENTLY_KNOWN
-      else -> null
-    }
 
   val checkoutOption =
     when (options.checkoutOption) {
@@ -637,7 +639,7 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
       .setMerchantName(options.merchantName)
       .setTransactionCountryCode(options.countryCode)
       .setTransactionId(options.transactionId)
-      .setTotalPriceStatus(totalPriceStatus)
+      .setTotalPriceStatus(options.totalPriceStatus.toGooglePayPriceStatus())
       .setTotalPriceLabel(options.totalPriceLabel)
       .setCheckoutOption(checkoutOption)
       .setIsEmailRequired(options.isEmailRequired)
@@ -647,6 +649,8 @@ internal fun getGooglePayConfiguration(options: ReadableMap): GooglePayConfigura
       .setShippingAddressParameters(shippingParameters)
       .setAllowPrepaidCards(options.allowPrepaidCards)
       .setAllowCreditCards(options.allowCreditCards)
+      .setDeferredParameters(getDeferredParameters(options.deferredParameters))
+      .setRecurringParameters(getRecurringParameters(options.recurringParameters))
       .build()
   } else {
     null
@@ -677,5 +681,145 @@ internal fun getShippingParameters(options: ReadableMap): GooglePayShippingAddre
   return GooglePayShippingAddressParameters(
     allowedCountryCodes,
     options.isShippingPhoneNumberRequired,
+  )
+}
+
+private fun Int?.toGooglePayPriceStatus(): GooglePayPriceStatus? =
+  when (this) {
+    0 -> GooglePayPriceStatus.FINAL
+    1 -> GooglePayPriceStatus.ESTIMATED
+    2 -> GooglePayPriceStatus.NOT_CURRENTLY_KNOWN
+    else -> null
+  }
+
+private fun Int?.toGooglePayDisplayItemType(): GooglePayDisplayItemType? =
+  when (this) {
+    0 -> GooglePayDisplayItemType.DISCOUNT
+    1 -> GooglePayDisplayItemType.LINE_ITEM
+    2 -> GooglePayDisplayItemType.SHIPPING_OPTION
+    3 -> GooglePayDisplayItemType.SUBTOTAL
+    4 -> GooglePayDisplayItemType.TAX
+    else -> null
+  }
+
+private fun Int?.toGooglePayDisplayItemStatus(): GooglePayDisplayItemStatus? =
+  when (this) {
+    0 -> GooglePayDisplayItemStatus.FINAL
+    1 -> GooglePayDisplayItemStatus.PENDING
+    else -> null
+  }
+
+private fun Int?.toGooglePayRecurrencePeriod(): GooglePayRecurrencePeriod? =
+  when (this) {
+    0 -> GooglePayRecurrencePeriod.YEAR
+    1 -> GooglePayRecurrencePeriod.MONTH
+    2 -> GooglePayRecurrencePeriod.WEEK
+    3 -> GooglePayRecurrencePeriod.DAY
+    else -> null
+  }
+
+private fun getDisplayItems(array: ReadableArray?): List<GooglePayDisplayItem>? {
+  if (array == null || array.size() == 0) {
+    return null
+  }
+
+  return (0 until array.size())
+    .mapNotNull { index ->
+      val item = array.getMap(index) ?: return@mapNotNull null
+      val label = item.getOptionalString("label") ?: return@mapNotNull null
+      val price = item.getOptionalString("price") ?: return@mapNotNull null
+      val type = item.getOptionalInt("type").toGooglePayDisplayItemType() ?: return@mapNotNull null
+      GooglePayDisplayItem(
+        label = label,
+        type = type,
+        price = price,
+        status = item.getOptionalInt("status").toGooglePayDisplayItemStatus(),
+      )
+    }.takeIf { it.isNotEmpty() }
+}
+
+private fun getDeferredParameters(parameters: ReadableMap?): GooglePayDeferredParameters? {
+  if (parameters == null) {
+    return null
+  }
+
+  val immediateTotalPrice = parameters.getOptionalString("immediateTotalPrice") ?: return null
+  val billingDateTime = parameters.getOptionalString("billingDateTime") ?: return null
+  val label = parameters.getOptionalString("label") ?: return null
+  val priceStatus = parameters.getOptionalInt("priceStatus").toGooglePayPriceStatus() ?: return null
+
+  return GooglePayDeferredParameters(
+    immediateTotalPrice = immediateTotalPrice,
+    billingDateTime = billingDateTime,
+    priceStatus = priceStatus,
+    price = parameters.getOptionalString("price"),
+    label = label,
+    immediateDisplayItems = getDisplayItems(parameters.getOptionalArray("immediateDisplayItems")),
+    displayItems = getDisplayItems(parameters.getOptionalArray("displayItems")),
+    managementUrl = parameters.getOptionalString("managementUrl"),
+    billingAgreement = parameters.getOptionalString("billingAgreement"),
+  )
+}
+
+private fun getRecurrencePeriodItem(item: ReadableMap): GooglePayRecurrencePeriodItem? {
+  val label = item.getOptionalString("label") ?: return null
+  val priceStatus = item.getOptionalInt("priceStatus").toGooglePayPriceStatus() ?: return null
+  val recurrencePeriod = item.getOptionalInt("recurrencePeriod").toGooglePayRecurrencePeriod() ?: return null
+  val recurrencePeriodCount = item.getOptionalInt("recurrencePeriodCount") ?: return null
+
+  return GooglePayRecurrencePeriodItem(
+    billingInitialDateTime = item.getOptionalString("billingInitialDateTime"),
+    billingFinalDateTime = item.getOptionalString("billingFinalDateTime"),
+    label = label,
+    price = item.getOptionalString("price"),
+    priceStatus = priceStatus,
+    displayItems = getDisplayItems(item.getOptionalArray("displayItems")),
+    recurrencePeriod = recurrencePeriod,
+    recurrencePeriodCount = recurrencePeriodCount,
+  )
+}
+
+private fun getIntroductoryPeriodInfo(info: ReadableMap?): GooglePayIntroductoryPeriodInfo? {
+  if (info == null) {
+    return null
+  }
+
+  val introductoryPeriodEndDateTime = info.getOptionalString("introductoryPeriodEndDateTime") ?: return null
+  val label = info.getOptionalString("label") ?: return null
+  val totalPrice = info.getOptionalString("totalPrice") ?: return null
+
+  return GooglePayIntroductoryPeriodInfo(
+    introductoryPeriodStartDateTime = info.getOptionalString("introductoryPeriodStartDateTime"),
+    introductoryPeriodEndDateTime = introductoryPeriodEndDateTime,
+    label = label,
+    totalPrice = totalPrice,
+    displayItems = getDisplayItems(info.getOptionalArray("displayItems")),
+  )
+}
+
+private fun getRecurringParameters(parameters: ReadableMap?): GooglePayRecurringParameters? {
+  if (parameters == null) {
+    return null
+  }
+
+  val immediateTotalPrice = parameters.getOptionalString("immediateTotalPrice") ?: return null
+  val recurrenceItemsArray = parameters.getOptionalArray("recurrenceItems") ?: return null
+  val recurrenceItems =
+    (0 until recurrenceItemsArray.size())
+      .mapNotNull { index ->
+        recurrenceItemsArray.getMap(index)?.let { getRecurrencePeriodItem(it) }
+      }
+
+  if (recurrenceItems.isEmpty()) {
+    return null
+  }
+
+  return GooglePayRecurringParameters(
+    immediateTotalPrice = immediateTotalPrice,
+    recurrenceItems = recurrenceItems,
+    introductoryPeriodInfo = getIntroductoryPeriodInfo(parameters.getOptionalMap("introductoryPeriodInfo")),
+    immediateDisplayItems = getDisplayItems(parameters.getOptionalArray("immediateDisplayItems")),
+    managementUrl = parameters.getOptionalString("managementUrl"),
+    billingAgreement = parameters.getOptionalString("billingAgreement"),
   )
 }
