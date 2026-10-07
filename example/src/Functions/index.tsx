@@ -219,11 +219,11 @@ export const regeneratePaymentReferenceIfNeeded = (
     ...configuration,
     reference: {
       paymentReference:
-        paymentReference?.length === 0
+        !paymentReference || paymentReference.length === 0
           ? Math.random().toString(36).substring(2, 10)
           : paymentReference,
       consumerReference:
-        consumerReference?.length === 0
+        !consumerReference || consumerReference.length === 0
           ? 'my-unique-consumer-ref'
           : consumerReference,
       metadata,

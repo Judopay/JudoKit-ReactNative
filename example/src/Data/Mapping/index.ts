@@ -67,7 +67,10 @@ export const getStringOrUndefined = (key: string) => {
   const { getString } = appStorage;
 
   const value = getString(key);
-  return typeof value === 'string' ? value : undefined;
+  if (typeof value !== 'string' || value.length === 0) {
+    return undefined;
+  }
+  return value;
 };
 
 export const getStringOrEmpty = (key: string) => {
