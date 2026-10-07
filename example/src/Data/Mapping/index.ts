@@ -576,7 +576,8 @@ const buildGooglePayShippingParameters = (): JudoShippingAddressParameters => {
     GOOGLE_PAY_KEYS.SHIPPING_ADDRESS_ALLOWED_COUNTRIES
   )
     .split(',')
-    .map((code) => code.trim());
+    .map((code) => code.trim())
+    .filter((code) => code.length > 0);
 
   return {
     allowedCountryCodes,
