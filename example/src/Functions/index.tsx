@@ -5,7 +5,7 @@ import JudoPay, {
   JudoTransactionMode,
   JudoTransactionType,
 } from 'judokit-react-native';
-import { Alert } from 'react-native';
+import { Alert, ToastAndroid } from 'react-native';
 import {
   AlertFunctionProps,
   DemoFeatureType,
@@ -17,7 +17,7 @@ import Snackbar from 'react-native-snackbar';
 import { DefaultTheme } from '@react-navigation/native';
 import { Buffer } from 'buffer';
 import { appStorage } from '../Application';
-import { DEFAULT_SETTINGS_DATA } from '../Data/Constants';
+import { DEFAULT_SETTINGS_DATA, IS_ANDROID, IS_IOS } from '../Data/Constants';
 import { parseSettingsImport } from '../Data/SettingsImporter';
 
 interface PromiseForFeature {
@@ -175,11 +175,17 @@ export const onErrorSnackbar = (error: Error) => {
 };
 
 export const onSuccessSnackbar = (message: string) => {
-  Snackbar.show({
-    text: message,
-    duration: Snackbar.LENGTH_SHORT,
-    backgroundColor: DefaultTheme.colors.primary,
-  });
+  if (IS_ANDROID) {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  }
+
+  if (IS_IOS) {
+    Snackbar.show({
+      text: message,
+      duration: Snackbar.LENGTH_SHORT,
+      backgroundColor: DefaultTheme.colors.primary,
+    });
+  }
 };
 
 export const onErrorAlert = (error: Error) => {
