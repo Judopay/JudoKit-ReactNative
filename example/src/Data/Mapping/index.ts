@@ -67,7 +67,10 @@ export const getStringOrUndefined = (key: string) => {
   const { getString } = appStorage;
 
   const value = getString(key);
-  return typeof value === 'string' ? value : undefined;
+  if (typeof value !== 'string' || value.length === 0) {
+    return undefined;
+  }
+  return value;
 };
 
 export const getStringOrEmpty = (key: string) => {
@@ -576,7 +579,8 @@ const buildGooglePayShippingParameters = (): JudoShippingAddressParameters => {
     GOOGLE_PAY_KEYS.SHIPPING_ADDRESS_ALLOWED_COUNTRIES
   )
     .split(',')
-    .map((code) => code.trim());
+    .map((code) => code.trim())
+    .filter((code) => code.length > 0);
 
   return {
     allowedCountryCodes,
