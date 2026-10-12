@@ -151,6 +151,38 @@ export const GOOGLE_PAY_KEYS = {
   TOTAL_PRICE_STATUS: 'google_pay_total_price_status',
   TOTAL_PRICE_LABEL: 'google_pay_total_price_label',
   CHECKOUT_OPTION: 'google_pay_checkout_option',
+  MIT_TYPE: 'google_pay_mit_type',
+  MIT_MANAGEMENT_URL: 'google_pay_mit_management_url',
+  MIT_BILLING_AGREEMENT: 'google_pay_mit_billing_agreement',
+  MIT_IMMEDIATE_TOTAL_PRICE: 'google_pay_mit_immediate_total_price',
+  MIT_IMMEDIATE_DISPLAY_ITEMS: 'google_pay_mit_immediate_display_items',
+  DEFERRED_BILLING_DATE_TIME: 'google_pay_deferred_billing_date_time',
+  DEFERRED_PRICE_STATUS: 'google_pay_deferred_price_status',
+  DEFERRED_PRICE: 'google_pay_deferred_price',
+  DEFERRED_LABEL: 'google_pay_deferred_label',
+  DEFERRED_DISPLAY_ITEMS: 'google_pay_deferred_display_items',
+  RECURRING_ITEM_LABEL: 'google_pay_recurring_item_label',
+  RECURRING_ITEM_PRICE_STATUS: 'google_pay_recurring_item_price_status',
+  RECURRING_ITEM_PRICE: 'google_pay_recurring_item_price',
+  RECURRING_ITEM_PERIOD: 'google_pay_recurring_item_period',
+  RECURRING_ITEM_PERIOD_COUNT: 'google_pay_recurring_item_period_count',
+  RECURRING_ITEM_BILLING_INITIAL_DATE_TIME:
+    'google_pay_recurring_item_billing_initial_date_time',
+  RECURRING_ITEM_BILLING_FINAL_DATE_TIME:
+    'google_pay_recurring_item_billing_final_date_time',
+  RECURRING_ITEM_DISPLAY_ITEMS: 'google_pay_recurring_item_display_items',
+  IS_RECURRING_INTRODUCTORY_PERIOD_ENABLED:
+    'is_google_pay_recurring_introductory_period_enabled',
+  RECURRING_INTRODUCTORY_PERIOD_START_DATE_TIME:
+    'google_pay_recurring_introductory_period_start_date_time',
+  RECURRING_INTRODUCTORY_PERIOD_END_DATE_TIME:
+    'google_pay_recurring_introductory_period_end_date_time',
+  RECURRING_INTRODUCTORY_PERIOD_LABEL:
+    'google_pay_recurring_introductory_period_label',
+  RECURRING_INTRODUCTORY_PERIOD_TOTAL_PRICE:
+    'google_pay_recurring_introductory_period_total_price',
+  RECURRING_INTRODUCTORY_PERIOD_DISPLAY_ITEMS:
+    'google_pay_recurring_introductory_period_display_items',
 } as const;
 
 // 3DS Two keys
@@ -358,6 +390,31 @@ export const DEFAULT_SETTINGS_DATA: Record<string, string | boolean> = {
   [GOOGLE_PAY_KEYS.TOTAL_PRICE_STATUS]: 'FINAL',
   [GOOGLE_PAY_KEYS.TOTAL_PRICE_LABEL]: '',
   [GOOGLE_PAY_KEYS.CHECKOUT_OPTION]: 'DEFAULT',
+  [GOOGLE_PAY_KEYS.MIT_TYPE]: 'NONE',
+  [GOOGLE_PAY_KEYS.MIT_MANAGEMENT_URL]: '',
+  [GOOGLE_PAY_KEYS.MIT_BILLING_AGREEMENT]: '',
+  [GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE]: '0.00',
+  [GOOGLE_PAY_KEYS.MIT_IMMEDIATE_DISPLAY_ITEMS]: '',
+  [GOOGLE_PAY_KEYS.DEFERRED_BILLING_DATE_TIME]: '2027-01-01T08:00:00Z',
+  [GOOGLE_PAY_KEYS.DEFERRED_PRICE_STATUS]: 'FINAL',
+  [GOOGLE_PAY_KEYS.DEFERRED_PRICE]: '200.00',
+  [GOOGLE_PAY_KEYS.DEFERRED_LABEL]: 'Hotel Room Reservation',
+  [GOOGLE_PAY_KEYS.DEFERRED_DISPLAY_ITEMS]: '',
+  [GOOGLE_PAY_KEYS.RECURRING_ITEM_LABEL]: 'Premium Plan Monthly Subscription',
+  [GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE_STATUS]: 'FINAL',
+  [GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE]: '25.00',
+  [GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD]: 'MONTH',
+  [GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD_COUNT]: '1',
+  [GOOGLE_PAY_KEYS.RECURRING_ITEM_BILLING_INITIAL_DATE_TIME]: '',
+  [GOOGLE_PAY_KEYS.RECURRING_ITEM_BILLING_FINAL_DATE_TIME]: '',
+  [GOOGLE_PAY_KEYS.RECURRING_ITEM_DISPLAY_ITEMS]: '',
+  [GOOGLE_PAY_KEYS.IS_RECURRING_INTRODUCTORY_PERIOD_ENABLED]: false,
+  [GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_START_DATE_TIME]: '',
+  [GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_END_DATE_TIME]:
+    '2026-08-01T08:00:00Z',
+  [GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_LABEL]: '7 Day Free Trial',
+  [GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_TOTAL_PRICE]: '0.00',
+  [GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_DISPLAY_ITEMS]: '',
 
   [THREE_DS_TWO_KEYS.IS_BILLING_INFORMATION_SCREEN_ENABLED]: false,
   [THREE_DS_TWO_KEYS.CHALLENGE_REQUEST_INDICATOR]: 'dontSet',
@@ -738,6 +795,40 @@ export const GOOGLE_PAY_CHECKOUT_OPTION_OPTIONS = [
   {
     id: 'COMPLETE_IMMEDIATE_PURCHASE',
     title: 'Complete immediate purchase',
+  },
+];
+
+export const GOOGLE_PAY_MIT_TYPE_OPTIONS = [
+  {
+    id: 'NONE',
+    title: 'None',
+  },
+  {
+    id: 'DEFERRED',
+    title: 'Deferred',
+  },
+  {
+    id: 'RECURRING',
+    title: 'Recurring',
+  },
+];
+
+export const GOOGLE_PAY_RECURRENCE_PERIOD_OPTIONS = [
+  {
+    id: 'YEAR',
+    title: 'Year',
+  },
+  {
+    id: 'MONTH',
+    title: 'Month',
+  },
+  {
+    id: 'WEEK',
+    title: 'Week',
+  },
+  {
+    id: 'DAY',
+    title: 'Day',
   },
 ];
 

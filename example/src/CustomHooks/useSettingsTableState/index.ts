@@ -8,6 +8,7 @@ import {
   PRIMARY_ACCOUNT_DETAILS_KEYS,
   THREE_DS_TWO_KEYS,
   APPLE_PAY_KEYS,
+  GOOGLE_PAY_KEYS,
 } from '../../Data/Constants';
 
 export const useSettingsTableState = <T>(transformationFunction: () => T) => {
@@ -45,6 +46,14 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON,
     appStorage
   );
+  const [googlePayMitType] = useMMKVStorage<string>(
+    GOOGLE_PAY_KEYS.MIT_TYPE,
+    appStorage
+  );
+  const [isGooglePayIntroductoryPeriodOn] = useMMKVStorage<boolean>(
+    GOOGLE_PAY_KEYS.IS_RECURRING_INTRODUCTORY_PERIOD_ENABLED,
+    appStorage
+  );
   // Handle mutual exclusivity between token/secret and payment session
   useEffect(() => {
     if (isTokenAndSecretOn) {
@@ -79,6 +88,8 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     is3DSUICustomizationOn,
     isRecurringPaymentOn,
     isRecurringPaymentRegularBillingOn,
+    googlePayMitType,
+    isGooglePayIntroductoryPeriodOn,
   ]);
 
   return {

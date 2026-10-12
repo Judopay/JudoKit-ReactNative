@@ -7,7 +7,15 @@ import {
   JudoConfiguration,
   JudoContactField,
   JudoGooglePayConfiguration,
+  JudoGooglePayDeferredParameters,
+  JudoGooglePayDisplayItem,
+  JudoGooglePayDisplayItemStatus,
+  JudoGooglePayDisplayItemType,
   JudoGooglePayEnvironment,
+  JudoGooglePayIntroductoryPeriodInfo,
+  JudoGooglePayRecurrencePeriod,
+  JudoGooglePayRecurrencePeriodItem,
+  JudoGooglePayRecurringParameters,
   JudoMerchantCapability,
   JudoPaymentMethod,
   JudoPaymentSummaryItem,
@@ -599,8 +607,10 @@ const getGooglePayCheckoutOption = (): JudoCheckoutOption | undefined => {
   return optionMap[value];
 };
 
-const getGooglePayTotalPriceStatus = (): JudoGooglePayPriceStatus => {
-  const value = getStringOrEmpty(GOOGLE_PAY_KEYS.TOTAL_PRICE_STATUS);
+const getGooglePayTotalPriceStatus = (
+  key: string = GOOGLE_PAY_KEYS.TOTAL_PRICE_STATUS
+): JudoGooglePayPriceStatus => {
+  const value = getStringOrEmpty(key);
 
   if (!value) return JudoGooglePayPriceStatus.FINAL;
 
@@ -610,6 +620,227 @@ const getGooglePayTotalPriceStatus = (): JudoGooglePayPriceStatus => {
   };
 
   return statusMap[value] || JudoGooglePayPriceStatus.FINAL;
+};
+
+const emptyToUndefined = (value: string): string | undefined =>
+  value.length === 0 ? undefined : value;
+
+const parseGooglePayDisplayItems = (
+  json: string | undefined
+): JudoGooglePayDisplayItem[] | undefined => {
+  const trimmed = json?.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(trimmed);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return undefined;
+    }
+
+    const typeMap: Record<string, JudoGooglePayDisplayItemType> = {
+      DISCOUNT: JudoGooglePayDisplayItemType.DISCOUNT,
+      LINE_ITEM: JudoGooglePayDisplayItemType.LINE_ITEM,
+      SHIPPING_OPTION: JudoGooglePayDisplayItemType.SHIPPING_OPTION,
+      SUBTOTAL: JudoGooglePayDisplayItemType.SUBTOTAL,
+      TAX: JudoGooglePayDisplayItemType.TAX,
+    };
+    const statusMap: Record<string, JudoGooglePayDisplayItemStatus> = {
+      FINAL: JudoGooglePayDisplayItemStatus.FINAL,
+      PENDING: JudoGooglePayDisplayItemStatus.PENDING,
+    };
+
+    const items = parsed
+      .map((item): JudoGooglePayDisplayItem | undefined => {
+        if (!item || typeof item !== 'object') {
+          return undefined;
+        }
+        const { label, type, price, status } = item as {
+          label?: unknown;
+          type?: unknown;
+          price?: unknown;
+          status?: unknown;
+        };
+        if (typeof label !== 'string' || typeof price !== 'string') {
+          return undefined;
+        }
+        const mappedType =
+          typeof type === 'number'
+            ? type
+            : typeof type === 'string'
+              ? typeMap[type]
+              : undefined;
+        if (mappedType === undefined) {
+          return undefined;
+        }
+        const mappedStatus =
+          typeof status === 'number'
+            ? status
+            : typeof status === 'string'
+              ? statusMap[status]
+              : undefined;
+        return {
+          label,
+          type: mappedType,
+          price,
+          status: mappedStatus,
+        };
+      })
+      .filter((item): item is JudoGooglePayDisplayItem => item !== undefined);
+
+    return items.length > 0 ? items : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const getGooglePayRecurrencePeriod = (): JudoGooglePayRecurrencePeriod => {
+  const value = getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD);
+  const periodMap: Record<string, JudoGooglePayRecurrencePeriod> = {
+    YEAR: JudoGooglePayRecurrencePeriod.YEAR,
+    MONTH: JudoGooglePayRecurrencePeriod.MONTH,
+    WEEK: JudoGooglePayRecurrencePeriod.WEEK,
+    DAY: JudoGooglePayRecurrencePeriod.DAY,
+  };
+  return periodMap[value] ?? JudoGooglePayRecurrencePeriod.MONTH;
+};
+
+const buildGooglePayDeferredParameters = ():
+  | JudoGooglePayDeferredParameters
+  | undefined => {
+  const priceStatus = getGooglePayTotalPriceStatus(
+    GOOGLE_PAY_KEYS.DEFERRED_PRICE_STATUS
+  );
+
+  return {
+    immediateTotalPrice:
+      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE) || '0.00',
+    billingDateTime:
+      getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_BILLING_DATE_TIME) ||
+      '2027-01-01T08:00:00Z',
+    priceStatus,
+    price:
+      priceStatus === JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN
+        ? undefined
+        : getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_PRICE) || '200.00',
+    label:
+      getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_LABEL) ||
+      'Hotel Room Reservation',
+    immediateDisplayItems: parseGooglePayDisplayItems(
+      getStringOrUndefined(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_DISPLAY_ITEMS)
+    ),
+    displayItems: parseGooglePayDisplayItems(
+      getStringOrUndefined(GOOGLE_PAY_KEYS.DEFERRED_DISPLAY_ITEMS)
+    ),
+    managementUrl: emptyToUndefined(
+      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_MANAGEMENT_URL)
+    ),
+    billingAgreement: emptyToUndefined(
+      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_BILLING_AGREEMENT)
+    ),
+  };
+};
+
+const buildGooglePayIntroductoryPeriodInfo = ():
+  | JudoGooglePayIntroductoryPeriodInfo
+  | undefined => {
+  if (
+    !getBoolOrFalse(GOOGLE_PAY_KEYS.IS_RECURRING_INTRODUCTORY_PERIOD_ENABLED)
+  ) {
+    return undefined;
+  }
+
+  return {
+    introductoryPeriodStartDateTime: emptyToUndefined(
+      getStringOrEmpty(
+        GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_START_DATE_TIME
+      )
+    ),
+    introductoryPeriodEndDateTime:
+      getStringOrEmpty(
+        GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_END_DATE_TIME
+      ) || '2026-08-01T08:00:00Z',
+    label:
+      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_LABEL) ||
+      '7 Day Free Trial',
+    totalPrice:
+      getStringOrEmpty(
+        GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_TOTAL_PRICE
+      ) || '0.00',
+    displayItems: parseGooglePayDisplayItems(
+      getStringOrUndefined(
+        GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_DISPLAY_ITEMS
+      )
+    ),
+  };
+};
+
+const buildGooglePayRecurringParameters = ():
+  | JudoGooglePayRecurringParameters
+  | undefined => {
+  const itemPriceStatus = getGooglePayTotalPriceStatus(
+    GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE_STATUS
+  );
+  const recurrenceItem: JudoGooglePayRecurrencePeriodItem = {
+    billingInitialDateTime: emptyToUndefined(
+      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_BILLING_INITIAL_DATE_TIME)
+    ),
+    billingFinalDateTime: emptyToUndefined(
+      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_BILLING_FINAL_DATE_TIME)
+    ),
+    label:
+      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_LABEL) ||
+      'Premium Plan Monthly Subscription',
+    price:
+      itemPriceStatus === JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN
+        ? undefined
+        : getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE) || '25.00',
+    priceStatus: itemPriceStatus,
+    displayItems: parseGooglePayDisplayItems(
+      getStringOrUndefined(GOOGLE_PAY_KEYS.RECURRING_ITEM_DISPLAY_ITEMS)
+    ),
+    recurrencePeriod: getGooglePayRecurrencePeriod(),
+    recurrencePeriodCount:
+      getNumberOrUndefined(GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD_COUNT) ?? 1,
+  };
+
+  return {
+    immediateTotalPrice:
+      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE) || '0.00',
+    recurrenceItems: [recurrenceItem],
+    introductoryPeriodInfo: buildGooglePayIntroductoryPeriodInfo(),
+    immediateDisplayItems: parseGooglePayDisplayItems(
+      getStringOrUndefined(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_DISPLAY_ITEMS)
+    ),
+    managementUrl: emptyToUndefined(
+      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_MANAGEMENT_URL)
+    ),
+    billingAgreement: emptyToUndefined(
+      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_BILLING_AGREEMENT)
+    ),
+  };
+};
+
+const buildGooglePayMitParameters = (): Pick<
+  JudoGooglePayConfiguration,
+  'deferredParameters' | 'recurringParameters'
+> => {
+  const mitType = getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_TYPE) || 'NONE';
+
+  if (mitType === 'DEFERRED') {
+    return {
+      deferredParameters: buildGooglePayDeferredParameters(),
+    };
+  }
+
+  if (mitType === 'RECURRING') {
+    return {
+      recurringParameters: buildGooglePayRecurringParameters(),
+    };
+  }
+
+  return {};
 };
 
 // ============================================================================
@@ -812,6 +1043,7 @@ export const judoConfigurationFromSettingsData = (): JudoConfiguration => {
     totalPriceStatus: getGooglePayTotalPriceStatus(),
     totalPriceLabel: totalPriceLabel.length === 0 ? undefined : totalPriceLabel,
     checkoutOption: getGooglePayCheckoutOption(),
+    ...buildGooglePayMitParameters(),
   };
 
   configuration = {
