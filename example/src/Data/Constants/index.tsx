@@ -129,6 +129,16 @@ export const APPLE_PAY_KEYS = {
     },
     BILLING_AGREEMENT: 'recurring_payment_billing_agreement',
   },
+  DEFERRED_PAYMENT_REQUEST: {
+    IS_ON: 'is_deferred_payment_enabled',
+    PAYMENT_DESCRIPTION: 'deferred_payment_description',
+    MANAGEMENT_URL: 'deferred_payment_management_url',
+    BILLING_AGREEMENT: 'deferred_payment_billing_agreement',
+    LABEL: 'deferred_payment_label',
+    AMOUNT: 'deferred_payment_amount',
+    DEFERRED_DATE: 'deferred_payment_deferred_date',
+    FREE_CANCELLATION_DATE: 'deferred_payment_free_cancellation_date',
+  },
 } as const;
 
 // Google Pay keys
@@ -373,6 +383,15 @@ export const DEFAULT_SETTINGS_DATA: Record<string, string | boolean> = {
   [APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.INTERVAL_UNIT]: '',
   [APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.INTERVAL_COUNT]: '',
   [APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.BILLING_AGREEMENT]: '',
+
+  [APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.IS_ON]: false,
+  [APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.PAYMENT_DESCRIPTION]: '',
+  [APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.MANAGEMENT_URL]: '',
+  [APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.BILLING_AGREEMENT]: '',
+  [APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.LABEL]: '',
+  [APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.AMOUNT]: '',
+  [APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.DEFERRED_DATE]: '',
+  [APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.FREE_CANCELLATION_DATE]: '',
 
   // googlePay
   [GOOGLE_PAY_KEYS.IS_PRODUCTION_ENVIRONMENT_ON]: false,

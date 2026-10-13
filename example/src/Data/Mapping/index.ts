@@ -32,6 +32,7 @@ import {
   JudoThreeDSUIConfiguration,
   ScaExemption,
   JudoApplePayRecurringPaymentRequest,
+  JudoApplePayDeferredPaymentRequest,
   JudoCalendarUnit,
 } from 'judokit-react-native';
 import {
@@ -553,6 +554,59 @@ const buildApplePayRecurringPaymentRequest = ():
   };
 };
 
+const buildApplePayDeferredPaymentRequest = ():
+  | JudoApplePayDeferredPaymentRequest
+  | undefined => {
+  if (!getBoolOrFalse(APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.IS_ON)) {
+    return undefined;
+  }
+
+  const paymentDescription = getStringOrUndefined(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.PAYMENT_DESCRIPTION
+  );
+  const managementURL = getStringOrUndefined(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.MANAGEMENT_URL
+  );
+  const label = getStringOrUndefined(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.LABEL
+  );
+  const amount = getStringOrUndefined(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.AMOUNT
+  );
+  const deferredDate = getStringOrUndefined(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.DEFERRED_DATE
+  );
+
+  if (
+    !paymentDescription ||
+    !managementURL ||
+    !label ||
+    !amount ||
+    !deferredDate
+  ) {
+    return undefined;
+  }
+
+  const billingAgreement = getStringOrUndefined(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.BILLING_AGREEMENT
+  );
+  const freeCancellationDate = getStringOrUndefined(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.FREE_CANCELLATION_DATE
+  );
+
+  return {
+    paymentDescription,
+    managementURL,
+    deferredBilling: {
+      label,
+      amount,
+      deferredDate,
+    },
+    billingAgreement: billingAgreement || undefined,
+    freeCancellationDate: freeCancellationDate || undefined,
+  };
+};
+
 // ============================================================================
 // GOOGLE PAY HELPERS
 // ============================================================================
@@ -1012,6 +1066,7 @@ export const judoConfigurationFromSettingsData = (): JudoConfiguration => {
       shippingType: JudoShippingType.Delivery,
       returnedInfo: getApplePayReturnedInfo(),
       recurringPaymentRequest: buildApplePayRecurringPaymentRequest(),
+      deferredPaymentRequest: buildApplePayDeferredPaymentRequest(),
     },
   };
 
