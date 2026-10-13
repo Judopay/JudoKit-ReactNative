@@ -94,18 +94,19 @@ const ImportSettingsModal: FC<ImportSettingsModalProps> = ({
       transparent
       animationType="fade"
       onRequestClose={onClose}
+      accessibilityViewIsModal
     >
       <KeyboardAvoidingView
         behavior={IS_IOS ? 'padding' : 'height'}
         style={styles.flex}
       >
-        <Pressable style={styles.backdrop} onPress={onClose}>
-          <Pressable
+        <View style={styles.backdrop}>
+          <Pressable style={StyleSheet.absoluteFillObject} onPress={onClose} />
+          <View
             style={[
               styles.card,
               { backgroundColor: card, maxHeight: CARD_MAX_HEIGHT },
             ]}
-            onPress={(event) => event.stopPropagation()}
           >
             <Text style={[styles.title, { color: text }]}>{TITLE}</Text>
             <TextInput
@@ -160,8 +161,8 @@ const ImportSettingsModal: FC<ImportSettingsModalProps> = ({
                 </Text>
               </TouchableOpacity>
             </View>
-          </Pressable>
-        </Pressable>
+          </View>
+        </View>
       </KeyboardAvoidingView>
     </Modal>
   );
