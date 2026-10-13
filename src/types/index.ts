@@ -42,7 +42,9 @@ export {
   JudoShippingMethod,
   JudoApplePayConfiguration,
   JudoApplePayRecurringPaymentRequest,
+  JudoApplePayDeferredPaymentRequest,
   JudoRecurringPaymentSummaryItem,
+  JudoDeferredPaymentSummaryItem,
   JudoCalendarUnit,
 } from './judo-apple-pay-configuration';
 
