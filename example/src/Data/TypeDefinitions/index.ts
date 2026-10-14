@@ -256,6 +256,7 @@ export enum Screen {
   SETTINGS = 'SettingsMain',
   THREE_DS_UI_SETTINGS = 'SettingsThreeDSUI',
   APPLE_PAY_SETTINGS = 'SettingsApplePay',
+  GOOGLE_PAY_SETTINGS = 'SettingsGooglePay',
   SINGLE_SELECTION = 'SettingsSingleSelection',
   RESULT = 'Result',
   TOKEN_PAYMENTS = 'TokenPayments',
@@ -288,6 +289,7 @@ export type RootStackParamList = {
   SettingsSingleSelection: SingleSelectionTableParams;
   SettingsThreeDSUI: undefined;
   SettingsApplePay: undefined;
+  SettingsGooglePay: undefined;
   TokenPayments: undefined;
 };
 
