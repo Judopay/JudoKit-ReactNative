@@ -70,10 +70,6 @@ export interface JudoApplePayRecurringPaymentRequest {
    */
   trialBilling?: JudoRecurringPaymentSummaryItem;
   billingAgreement?: string;
-  /**
-   * Reserved for future use. Currently not implemented.
-   */
-  tokenNotificationURL?: string;
 }
 
 export interface JudoDeferredPaymentSummaryItem extends JudoPaymentSummaryItem {

@@ -297,7 +297,6 @@
     // Optional fields
     NSDictionary *trialBillingDict = [recurringPaymentRequestDict optionalDictionaryForKey:@"trialBilling"];
     NSString *billingAgreement = [recurringPaymentRequestDict optionalStringForKey:@"billingAgreement"];
-    NSString *tokenNotificationURLString = [recurringPaymentRequestDict optionalStringForKey:@"tokenNotificationURL"];
 
     NSURL *managementURL = [NSURL URLWithString:managementURLString];
 
@@ -308,10 +307,6 @@
 
     request.trialBilling = [RNApplePayWrappers recurringPaymentSummaryItemFromDictionary:trialBillingDict];
     request.billingAgreement = billingAgreement;
-
-    if (tokenNotificationURLString) {
-        request.tokenNotificationURL = [NSURL URLWithString:tokenNotificationURLString];
-    }
 
     return request;
 }
