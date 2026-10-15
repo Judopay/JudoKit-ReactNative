@@ -46,6 +46,7 @@ import {
   APPLE_PAY_KEYS,
   AUTHORIZATION_KEYS,
   CARD_ADDRESS_KEYS,
+  DEFAULT_SETTINGS_DATA,
   GOOGLE_PAY_KEYS,
   NETWORK_TIMEOUTS_KEYS,
   OTHERS_KEYS,
@@ -87,6 +88,15 @@ export const getStringOrEmpty = (key: string) => {
 
   const value = getString(key);
   return typeof value === 'string' ? value : '';
+};
+
+const getStringOrDefault = (key: string) => {
+  const value = getStringOrEmpty(key);
+  if (value.length > 0) {
+    return value;
+  }
+  const fallback = DEFAULT_SETTINGS_DATA[key];
+  return typeof fallback === 'string' ? fallback : '';
 };
 
 export const getNumberOrUndefined = (key: string) => {
@@ -772,19 +782,18 @@ const buildGooglePayDeferredParameters = ():
   );
 
   return {
-    immediateTotalPrice:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE) || '0.00',
-    billingDateTime:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_BILLING_DATE_TIME) ||
-      '2027-01-01T08:00:00Z',
+    immediateTotalPrice: getStringOrDefault(
+      GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE
+    ),
+    billingDateTime: getStringOrDefault(
+      GOOGLE_PAY_KEYS.DEFERRED_BILLING_DATE_TIME
+    ),
     priceStatus,
     price:
       priceStatus === JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN
         ? undefined
-        : getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_PRICE) || '200.00',
-    label:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_LABEL) ||
-      'Hotel Room Reservation',
+        : getStringOrDefault(GOOGLE_PAY_KEYS.DEFERRED_PRICE),
+    label: getStringOrDefault(GOOGLE_PAY_KEYS.DEFERRED_LABEL),
     immediateDisplayItems: parseGooglePayDisplayItems(
       getStringOrUndefined(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_DISPLAY_ITEMS)
     ),
@@ -815,17 +824,15 @@ const buildGooglePayIntroductoryPeriodInfo = ():
         GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_START_DATE_TIME
       )
     ),
-    introductoryPeriodEndDateTime:
-      getStringOrEmpty(
-        GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_END_DATE_TIME
-      ) || '2026-08-01T08:00:00Z',
-    label:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_LABEL) ||
-      '7 Day Free Trial',
-    totalPrice:
-      getStringOrEmpty(
-        GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_TOTAL_PRICE
-      ) || '0.00',
+    introductoryPeriodEndDateTime: getStringOrDefault(
+      GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_END_DATE_TIME
+    ),
+    label: getStringOrDefault(
+      GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_LABEL
+    ),
+    totalPrice: getStringOrDefault(
+      GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_TOTAL_PRICE
+    ),
     displayItems: parseGooglePayDisplayItems(
       getStringOrUndefined(
         GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_DISPLAY_ITEMS
@@ -847,25 +854,25 @@ const buildGooglePayRecurringParameters = ():
     billingFinalDateTime: emptyToUndefined(
       getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_BILLING_FINAL_DATE_TIME)
     ),
-    label:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_LABEL) ||
-      'Premium Plan Monthly Subscription',
+    label: getStringOrDefault(GOOGLE_PAY_KEYS.RECURRING_ITEM_LABEL),
     price:
       itemPriceStatus === JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN
         ? undefined
-        : getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE) || '25.00',
+        : getStringOrDefault(GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE),
     priceStatus: itemPriceStatus,
     displayItems: parseGooglePayDisplayItems(
       getStringOrUndefined(GOOGLE_PAY_KEYS.RECURRING_ITEM_DISPLAY_ITEMS)
     ),
     recurrencePeriod: getGooglePayRecurrencePeriod(),
     recurrencePeriodCount:
-      getNumberOrUndefined(GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD_COUNT) ?? 1,
+      getNumberOrUndefined(GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD_COUNT) ??
+      Number(getStringOrDefault(GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD_COUNT)),
   };
 
   return {
-    immediateTotalPrice:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE) || '0.00',
+    immediateTotalPrice: getStringOrDefault(
+      GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE
+    ),
     recurrenceItems: [recurrenceItem],
     introductoryPeriodInfo: buildGooglePayIntroductoryPeriodInfo(),
     immediateDisplayItems: parseGooglePayDisplayItems(
@@ -884,7 +891,7 @@ const buildGooglePayMitParameters = (): Pick<
   JudoGooglePayConfiguration,
   'deferredParameters' | 'recurringParameters'
 > => {
-  const mitType = getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_TYPE) || 'NONE';
+  const mitType = getStringOrDefault(GOOGLE_PAY_KEYS.MIT_TYPE);
 
   if (mitType === 'DEFERRED') {
     return {
