@@ -499,10 +499,6 @@ const buildApplePayRecurringPaymentRequest = ():
     return unitMap[intervalUnitString];
   };
 
-  const regularBillingIsOn = getBoolOrFalse(
-    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON
-  );
-
   const paymentDescription = getStringOrUndefined(
     APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.PAYMENT_DESCRIPTION
   );
@@ -512,48 +508,41 @@ const buildApplePayRecurringPaymentRequest = ():
   const billingAgreement = getStringOrUndefined(
     APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.BILLING_AGREEMENT
   );
+  const label = getStringOrUndefined(
+    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.LABEL
+  );
+  const amount = getStringOrUndefined(
+    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.AMOUNT
+  );
 
-  if (!paymentDescription || !managementURL) {
+  if (!paymentDescription || !managementURL || !label || !amount) {
     return undefined;
   }
 
-  const regularBillingData = regularBillingIsOn
-    ? {
-        label:
-          getStringOrUndefined(
-            APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.LABEL
-          ) || 'Recurring Payment',
-        amount:
-          getStringOrUndefined(
-            APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.AMOUNT
-          ) || '0.00',
-        startDate: getStringOrUndefined(
-          APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.START_DATE
-        ),
-        endDate: getStringOrUndefined(
-          APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.END_DATE
-        ),
-        intervalUnit: getIntervalUnit(
-          getStringOrEmpty(
-            APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
-              .INTERVAL_UNIT
-          )
-        ),
-        intervalCount: getNumberOrUndefined(
-          APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING
-            .INTERVAL_COUNT
-        ),
-      }
-    : {
-        label: 'Recurring Payment',
-        amount: '0.00',
-      };
+  const intervalUnit = getIntervalUnit(
+    getStringOrEmpty(
+      APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.INTERVAL_UNIT
+    )
+  );
 
   return {
     paymentDescription,
     managementURL,
     billingAgreement: billingAgreement || undefined,
-    regularBilling: regularBillingData,
+    regularBilling: {
+      label,
+      amount,
+      startDate: getStringOrUndefined(
+        APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.START_DATE
+      ),
+      endDate: getStringOrUndefined(
+        APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.END_DATE
+      ),
+      intervalUnit,
+      intervalCount: getNumberOrUndefined(
+        APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.INTERVAL_COUNT
+      ),
+    },
   };
 };
 
@@ -761,7 +750,7 @@ const getGooglePayRecurrencePeriod = (): JudoGooglePayRecurrencePeriod => {
     WEEK: JudoGooglePayRecurrencePeriod.WEEK,
     DAY: JudoGooglePayRecurrencePeriod.DAY,
   };
-  return periodMap[value] ?? JudoGooglePayRecurrencePeriod.MONTH;
+  return periodMap[value]!;
 };
 
 const buildGooglePayDeferredParameters = ():
@@ -772,19 +761,18 @@ const buildGooglePayDeferredParameters = ():
   );
 
   return {
-    immediateTotalPrice:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE) || '0.00',
-    billingDateTime:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_BILLING_DATE_TIME) ||
-      '2027-01-01T08:00:00Z',
+    immediateTotalPrice: getStringOrEmpty(
+      GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE
+    ),
+    billingDateTime: getStringOrEmpty(
+      GOOGLE_PAY_KEYS.DEFERRED_BILLING_DATE_TIME
+    ),
     priceStatus,
     price:
       priceStatus === JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN
         ? undefined
-        : getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_PRICE) || '200.00',
-    label:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_LABEL) ||
-      'Hotel Room Reservation',
+        : getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_PRICE),
+    label: getStringOrEmpty(GOOGLE_PAY_KEYS.DEFERRED_LABEL),
     immediateDisplayItems: parseGooglePayDisplayItems(
       getStringOrUndefined(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_DISPLAY_ITEMS)
     ),
@@ -815,17 +803,15 @@ const buildGooglePayIntroductoryPeriodInfo = ():
         GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_START_DATE_TIME
       )
     ),
-    introductoryPeriodEndDateTime:
-      getStringOrEmpty(
-        GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_END_DATE_TIME
-      ) || '2026-08-01T08:00:00Z',
-    label:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_LABEL) ||
-      '7 Day Free Trial',
-    totalPrice:
-      getStringOrEmpty(
-        GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_TOTAL_PRICE
-      ) || '0.00',
+    introductoryPeriodEndDateTime: getStringOrEmpty(
+      GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_END_DATE_TIME
+    ),
+    label: getStringOrEmpty(
+      GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_LABEL
+    ),
+    totalPrice: getStringOrEmpty(
+      GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_TOTAL_PRICE
+    ),
     displayItems: parseGooglePayDisplayItems(
       getStringOrUndefined(
         GOOGLE_PAY_KEYS.RECURRING_INTRODUCTORY_PERIOD_DISPLAY_ITEMS
@@ -847,25 +833,25 @@ const buildGooglePayRecurringParameters = ():
     billingFinalDateTime: emptyToUndefined(
       getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_BILLING_FINAL_DATE_TIME)
     ),
-    label:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_LABEL) ||
-      'Premium Plan Monthly Subscription',
+    label: getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_LABEL),
     price:
       itemPriceStatus === JudoGooglePayPriceStatus.NOT_CURRENTLY_KNOWN
         ? undefined
-        : getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE) || '25.00',
+        : getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE),
     priceStatus: itemPriceStatus,
     displayItems: parseGooglePayDisplayItems(
       getStringOrUndefined(GOOGLE_PAY_KEYS.RECURRING_ITEM_DISPLAY_ITEMS)
     ),
     recurrencePeriod: getGooglePayRecurrencePeriod(),
-    recurrencePeriodCount:
-      getNumberOrUndefined(GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD_COUNT) ?? 1,
+    recurrencePeriodCount: Number(
+      getStringOrEmpty(GOOGLE_PAY_KEYS.RECURRING_ITEM_PERIOD_COUNT)
+    ),
   };
 
   return {
-    immediateTotalPrice:
-      getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE) || '0.00',
+    immediateTotalPrice: getStringOrEmpty(
+      GOOGLE_PAY_KEYS.MIT_IMMEDIATE_TOTAL_PRICE
+    ),
     recurrenceItems: [recurrenceItem],
     introductoryPeriodInfo: buildGooglePayIntroductoryPeriodInfo(),
     immediateDisplayItems: parseGooglePayDisplayItems(
@@ -884,7 +870,7 @@ const buildGooglePayMitParameters = (): Pick<
   JudoGooglePayConfiguration,
   'deferredParameters' | 'recurringParameters'
 > => {
-  const mitType = getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_TYPE) || 'NONE';
+  const mitType = getStringOrEmpty(GOOGLE_PAY_KEYS.MIT_TYPE);
 
   if (mitType === 'DEFERRED') {
     return {

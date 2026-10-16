@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { appStorage } from '../../Application';
 import {
@@ -38,12 +38,13 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.IS_ENABLED,
     appStorage
   );
-  const [isRecurringPaymentOn] = useMMKVStorage<boolean>(
-    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.IS_ON,
-    appStorage
-  );
-  const [isRecurringPaymentRegularBillingOn] = useMMKVStorage<boolean>(
-    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON,
+  const [isRecurringPaymentOn, setIsRecurringPaymentOn] =
+    useMMKVStorage<boolean>(
+      APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.IS_ON,
+      appStorage
+    );
+  const [isDeferredPaymentOn, setIsDeferredPaymentOn] = useMMKVStorage<boolean>(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.IS_ON,
     appStorage
   );
   const [googlePayMitType] = useMMKVStorage<string>(
@@ -67,6 +68,25 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     }
   }, [isPaymentSessionOn, setIsTokenAndSecretOn]);
 
+  const prevRecurringPaymentOn = useRef(isRecurringPaymentOn);
+  const prevDeferredPaymentOn = useRef(isDeferredPaymentOn);
+
+  useEffect(() => {
+    const turnedOn = isRecurringPaymentOn && !prevRecurringPaymentOn.current;
+    prevRecurringPaymentOn.current = isRecurringPaymentOn;
+    if (turnedOn) {
+      setIsDeferredPaymentOn(false);
+    }
+  }, [isRecurringPaymentOn, setIsDeferredPaymentOn]);
+
+  useEffect(() => {
+    const turnedOn = isDeferredPaymentOn && !prevDeferredPaymentOn.current;
+    prevDeferredPaymentOn.current = isDeferredPaymentOn;
+    if (turnedOn) {
+      setIsRecurringPaymentOn(false);
+    }
+  }, [isDeferredPaymentOn, setIsRecurringPaymentOn]);
+
   const regenerateSections = () => {
     setSettingsSections(transformationFunction());
   };
@@ -87,7 +107,7 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     isPrimaryAccountDetailsOn,
     is3DSUICustomizationOn,
     isRecurringPaymentOn,
-    isRecurringPaymentRegularBillingOn,
+    isDeferredPaymentOn,
     googlePayMitType,
     isGooglePayIntroductoryPeriodOn,
   ]);
@@ -103,7 +123,7 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     isPrimaryAccountDetailsOn,
     is3DSUICustomizationOn,
     isRecurringPaymentOn,
-    isRecurringPaymentRegularBillingOn,
+    isDeferredPaymentOn,
 
     // Settings sections
     settingsSections,

@@ -94,7 +94,6 @@ export interface SettingsData {
       paymentDescription: string;
       managementURL: string;
       regularBilling: {
-        isOn: boolean;
         label: string;
         amount: string;
         startDate: string;

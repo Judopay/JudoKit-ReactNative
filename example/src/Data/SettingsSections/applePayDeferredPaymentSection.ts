@@ -24,14 +24,14 @@ const applePayDeferredPaymentSection = (): SectionListData<SettingsItem> => {
               title: 'Payment description',
             },
             {
-              path: APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.MANAGEMENT_URL,
-              dataType: SettingsItemDataType.TEXT,
-              title: 'Management URL',
-            },
-            {
               path: APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.BILLING_AGREEMENT,
               dataType: SettingsItemDataType.TEXT,
               title: 'Billing agreement',
+            },
+            {
+              path: APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.MANAGEMENT_URL,
+              dataType: SettingsItemDataType.TEXT,
+              title: 'Management URL',
             },
             {
               path: APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.LABEL,
