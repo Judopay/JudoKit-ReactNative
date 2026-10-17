@@ -36,12 +36,12 @@ const applePayDeferredPaymentSection = (): SectionListData<SettingsItem> => {
             {
               path: APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.LABEL,
               dataType: SettingsItemDataType.TEXT,
-              title: 'Deferred billing label',
+              title: 'Label',
             },
             {
               path: APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.AMOUNT,
               dataType: SettingsItemDataType.TEXT,
-              title: 'Deferred billing amount',
+              title: 'Amount',
             },
             {
               path: APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.DEFERRED_DATE,
