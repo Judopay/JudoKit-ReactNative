@@ -12,6 +12,7 @@ import { RootStackParamList, Screen } from '../../Data/TypeDefinitions';
 import TokenPaymentsScreen from './Screens/TokenPaymentsScreen';
 import GetTransactionDetailsScreen from './Screens/GetTransactionDetailsScreen';
 import SettingsApplePayScreen from './Screens/SettingsApplePay';
+import SettingsGooglePayScreen from './Screens/SettingsGooglePay';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -53,6 +54,11 @@ const ApplicationRouter: FC<ApplicationRouterProps> = ({ theme }) => {
           name={Screen.APPLE_PAY_SETTINGS}
           component={SettingsApplePayScreen}
           options={options('Apple Pay')}
+        />
+        <Stack.Screen
+          name={Screen.GOOGLE_PAY_SETTINGS}
+          component={SettingsGooglePayScreen}
+          options={options('Google Pay')}
         />
         <Stack.Screen
           name={Screen.RESULT}

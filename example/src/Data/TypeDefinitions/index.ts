@@ -94,7 +94,6 @@ export interface SettingsData {
       paymentDescription: string;
       managementURL: string;
       regularBilling: {
-        isOn: boolean;
         label: string;
         amount: string;
         startDate: string;
@@ -121,6 +120,30 @@ export interface SettingsData {
     totalPriceStatus: string;
     totalPriceLabel: string;
     checkoutOption: string;
+    mitType: string;
+    mitManagementUrl: string;
+    mitBillingAgreement: string;
+    mitImmediateTotalPrice: string;
+    mitImmediateDisplayItems: string;
+    deferredBillingDateTime: string;
+    deferredPriceStatus: string;
+    deferredPrice: string;
+    deferredLabel: string;
+    deferredDisplayItems: string;
+    recurringItemLabel: string;
+    recurringItemPriceStatus: string;
+    recurringItemPrice: string;
+    recurringItemPeriod: string;
+    recurringItemPeriodCount: string;
+    recurringItemBillingInitialDateTime: string;
+    recurringItemBillingFinalDateTime: string;
+    recurringItemDisplayItems: string;
+    isRecurringIntroductoryPeriodEnabled: boolean;
+    recurringIntroductoryPeriodStartDateTime: string;
+    recurringIntroductoryPeriodEndDateTime: string;
+    recurringIntroductoryPeriodLabel: string;
+    recurringIntroductoryPeriodTotalPrice: string;
+    recurringIntroductoryPeriodDisplayItems: string;
   };
   threeDSTwo: {
     isBillingInformationScreenEnabled: boolean;
@@ -232,6 +255,7 @@ export enum Screen {
   SETTINGS = 'SettingsMain',
   THREE_DS_UI_SETTINGS = 'SettingsThreeDSUI',
   APPLE_PAY_SETTINGS = 'SettingsApplePay',
+  GOOGLE_PAY_SETTINGS = 'SettingsGooglePay',
   SINGLE_SELECTION = 'SettingsSingleSelection',
   RESULT = 'Result',
   TOKEN_PAYMENTS = 'TokenPayments',
@@ -264,6 +288,7 @@ export type RootStackParamList = {
   SettingsSingleSelection: SingleSelectionTableParams;
   SettingsThreeDSUI: undefined;
   SettingsApplePay: undefined;
+  SettingsGooglePay: undefined;
   TokenPayments: undefined;
 };
 

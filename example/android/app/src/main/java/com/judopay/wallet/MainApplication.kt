@@ -13,7 +13,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
-import com.judopay.judokit.android.api.factory.JudoApiServiceFactory
+import com.judopay.judokit.android.api.factory.JudoHttpInterceptors
 import com.judopay.wallet.BuildConfig
 
 class MainApplication :
@@ -54,6 +54,6 @@ class MainApplication :
         .alwaysReadResponseBody(false)
         .build()
 
-    JudoApiServiceFactory.externalInterceptors = listOf(interceptor)
+    JudoHttpInterceptors.interceptors = listOf(interceptor)
   }
 }

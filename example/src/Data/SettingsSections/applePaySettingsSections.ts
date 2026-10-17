@@ -5,6 +5,7 @@ import applePayRequiredBillingContactFieldsSection from './applePayRequiredBilli
 import applePayRequiredShippingContactFieldsSection from './applePayRequiredShippingContactFieldsSection';
 import applePayReturnedContactInfoSection from './applePayReturnedContactInfoSection';
 import applePayRecurringPaymentSection from './applePayRecurringPaymentSection';
+import applePayDeferredPaymentSection from './applePayDeferredPaymentSection';
 
 const applePaySettingsSections = (): ReadonlyArray<
   SectionListData<SettingsItem>
@@ -15,6 +16,7 @@ const applePaySettingsSections = (): ReadonlyArray<
     applePayRequiredShippingContactFieldsSection(),
     applePayReturnedContactInfoSection(),
     applePayRecurringPaymentSection(),
+    applePayDeferredPaymentSection(),
   ];
 };
 
