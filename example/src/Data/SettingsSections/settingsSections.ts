@@ -8,7 +8,7 @@ import amountSection from './amountSection';
 import cardAddressSection from './cardAddressSection';
 import primaryAccountDetailsSection from './primaryAccountDetailsSection';
 import referenceSection from './referenceSection';
-import googlePaySection from './googlePaySection';
+import googlePayChildPaneSection from './googlePayChildPaneSection';
 import supportedCardNetworksSection from './supportedCardNetworksSection';
 import paymentMethodsSection from './paymentMethodsSection';
 import othersSection from './othersSection';
@@ -35,7 +35,7 @@ const settingsSections = (): ReadonlyArray<SectionListData<SettingsItem>> => {
   }
 
   if (IS_ANDROID) {
-    sections = [...sections, googlePaySection()];
+    sections = [...sections, googlePayChildPaneSection()];
   }
 
   return [

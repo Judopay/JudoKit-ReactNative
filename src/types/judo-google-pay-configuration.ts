@@ -29,6 +29,73 @@ export enum JudoCheckoutOption {
   COMPLETE_IMMEDIATE_PURCHASE,
 }
 
+export enum JudoGooglePayDisplayItemType {
+  DISCOUNT,
+  LINE_ITEM,
+  SHIPPING_OPTION,
+  SUBTOTAL,
+  TAX,
+}
+
+export enum JudoGooglePayDisplayItemStatus {
+  FINAL,
+  PENDING,
+}
+
+export interface JudoGooglePayDisplayItem {
+  label: string;
+  type: JudoGooglePayDisplayItemType;
+  price: string;
+  status?: JudoGooglePayDisplayItemStatus;
+}
+
+export enum JudoGooglePayRecurrencePeriod {
+  YEAR,
+  MONTH,
+  WEEK,
+  DAY,
+}
+
+export interface JudoGooglePayIntroductoryPeriodInfo {
+  introductoryPeriodStartDateTime?: string;
+  introductoryPeriodEndDateTime: string;
+  label: string;
+  totalPrice: string;
+  displayItems?: JudoGooglePayDisplayItem[];
+}
+
+export interface JudoGooglePayRecurrencePeriodItem {
+  billingInitialDateTime?: string;
+  billingFinalDateTime?: string;
+  label: string;
+  price?: string;
+  priceStatus: JudoGooglePayPriceStatus;
+  displayItems?: JudoGooglePayDisplayItem[];
+  recurrencePeriod: JudoGooglePayRecurrencePeriod;
+  recurrencePeriodCount: number;
+}
+
+export interface JudoGooglePayDeferredParameters {
+  immediateTotalPrice: string;
+  billingDateTime: string;
+  priceStatus: JudoGooglePayPriceStatus;
+  price?: string;
+  label: string;
+  immediateDisplayItems?: JudoGooglePayDisplayItem[];
+  displayItems?: JudoGooglePayDisplayItem[];
+  managementUrl?: string;
+  billingAgreement?: string;
+}
+
+export interface JudoGooglePayRecurringParameters {
+  immediateTotalPrice: string;
+  recurrenceItems: JudoGooglePayRecurrencePeriodItem[];
+  introductoryPeriodInfo?: JudoGooglePayIntroductoryPeriodInfo;
+  immediateDisplayItems?: JudoGooglePayDisplayItem[];
+  managementUrl?: string;
+  billingAgreement?: string;
+}
+
 export interface JudoGooglePayConfiguration {
   environment: JudoGooglePayEnvironment;
   merchantName?: string;
@@ -44,4 +111,6 @@ export interface JudoGooglePayConfiguration {
   shippingAddressParameters?: JudoShippingAddressParameters;
   allowPrepaidCards?: boolean;
   allowCreditCards?: boolean;
+  deferredParameters?: JudoGooglePayDeferredParameters;
+  recurringParameters?: JudoGooglePayRecurringParameters;
 }

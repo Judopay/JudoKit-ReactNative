@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { appStorage } from '../../Application';
 import {
@@ -8,6 +8,7 @@ import {
   PRIMARY_ACCOUNT_DETAILS_KEYS,
   THREE_DS_TWO_KEYS,
   APPLE_PAY_KEYS,
+  GOOGLE_PAY_KEYS,
 } from '../../Data/Constants';
 
 export const useSettingsTableState = <T>(transformationFunction: () => T) => {
@@ -37,12 +38,21 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.IS_ENABLED,
     appStorage
   );
-  const [isRecurringPaymentOn] = useMMKVStorage<boolean>(
-    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.IS_ON,
+  const [isRecurringPaymentOn, setIsRecurringPaymentOn] =
+    useMMKVStorage<boolean>(
+      APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.IS_ON,
+      appStorage
+    );
+  const [isDeferredPaymentOn, setIsDeferredPaymentOn] = useMMKVStorage<boolean>(
+    APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.IS_ON,
     appStorage
   );
-  const [isRecurringPaymentRegularBillingOn] = useMMKVStorage<boolean>(
-    APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.REGULAR_BILLING.IS_ON,
+  const [googlePayMitType] = useMMKVStorage<string>(
+    GOOGLE_PAY_KEYS.MIT_TYPE,
+    appStorage
+  );
+  const [isGooglePayIntroductoryPeriodOn] = useMMKVStorage<boolean>(
+    GOOGLE_PAY_KEYS.IS_RECURRING_INTRODUCTORY_PERIOD_ENABLED,
     appStorage
   );
   // Handle mutual exclusivity between token/secret and payment session
@@ -57,6 +67,25 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
       setIsTokenAndSecretOn(false);
     }
   }, [isPaymentSessionOn, setIsTokenAndSecretOn]);
+
+  const prevRecurringPaymentOn = useRef(isRecurringPaymentOn);
+  const prevDeferredPaymentOn = useRef(isDeferredPaymentOn);
+
+  useEffect(() => {
+    const turnedOn = isRecurringPaymentOn && !prevRecurringPaymentOn.current;
+    prevRecurringPaymentOn.current = isRecurringPaymentOn;
+    if (turnedOn) {
+      setIsDeferredPaymentOn(false);
+    }
+  }, [isRecurringPaymentOn, setIsDeferredPaymentOn]);
+
+  useEffect(() => {
+    const turnedOn = isDeferredPaymentOn && !prevDeferredPaymentOn.current;
+    prevDeferredPaymentOn.current = isDeferredPaymentOn;
+    if (turnedOn) {
+      setIsRecurringPaymentOn(false);
+    }
+  }, [isDeferredPaymentOn, setIsRecurringPaymentOn]);
 
   const regenerateSections = () => {
     setSettingsSections(transformationFunction());
@@ -78,7 +107,9 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     isPrimaryAccountDetailsOn,
     is3DSUICustomizationOn,
     isRecurringPaymentOn,
-    isRecurringPaymentRegularBillingOn,
+    isDeferredPaymentOn,
+    googlePayMitType,
+    isGooglePayIntroductoryPeriodOn,
   ]);
 
   return {
@@ -92,7 +123,7 @@ export const useSettingsTableState = <T>(transformationFunction: () => T) => {
     isPrimaryAccountDetailsOn,
     is3DSUICustomizationOn,
     isRecurringPaymentOn,
-    isRecurringPaymentRegularBillingOn,
+    isDeferredPaymentOn,
 
     // Settings sections
     settingsSections,
