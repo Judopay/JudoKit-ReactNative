@@ -13,9 +13,9 @@
   "recommendation": {
     "is_recommendation_enabled": true,
     "recommendation_url": "",
-    "rsa_key": "",
     "recommendation_timeout": "",
-    "is_recommendation_halt_transaction_enabled": false
+    "is_recommendation_halt_transaction_enabled": false,
+    "recommendation_rsa_key": ""
   },
   "three_ds": {
     "should_ask_for_billing_information": false,
@@ -67,7 +67,9 @@
       "JCB",
       "DISCOVER"
     ],
-    "payment_methods": ["CARD"]
+    "payment_methods": [
+      "CARD"
+    ]
   },
   "token_payments": {
     "should_ask_for_csc": true,
