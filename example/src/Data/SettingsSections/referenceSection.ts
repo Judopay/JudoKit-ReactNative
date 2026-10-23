@@ -16,6 +16,7 @@ const referenceSection = (): SectionListData<SettingsItem> => {
         path: REFERENCE_KEYS.CONSUMER_REFERENCE,
         dataType: SettingsItemDataType.TEXT,
         title: 'Consumer reference',
+        testID: 'consumer-reference-input',
       },
     ],
   };
