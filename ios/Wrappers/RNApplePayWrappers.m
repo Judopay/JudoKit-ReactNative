@@ -66,6 +66,10 @@
         appleConfiguration.recurringPaymentRequest = [RNApplePayWrappers recurringPaymentRequestFromDictionary:dictionary];
     }
 
+    if (@available(iOS 16.4, *)) {
+        appleConfiguration.deferredPaymentRequest = [RNApplePayWrappers deferredPaymentRequestFromDictionary:dictionary];
+    }
+
     return appleConfiguration;
 }
 
@@ -234,6 +238,50 @@
     return returnedInfo;
 }
 
++ (NSDate *)dateFromISO8601String:(NSString *)dateString {
+    NSISO8601DateFormatter *dateFormatter = [NSISO8601DateFormatter new];
+    dateFormatter.formatOptions = NSISO8601DateFormatWithFullDate | NSISO8601DateFormatWithFullTime | NSISO8601DateFormatWithFractionalSeconds;
+    return [dateFormatter dateFromString:dateString];
+}
+
++ (JPDeferredPaymentRequest *)deferredPaymentRequestFromDictionary:(NSDictionary *)dictionary API_AVAILABLE(ios(16.4)) {
+    NSDictionary *deferredPaymentRequestDict = [dictionary optionalDictionaryForKey:@"deferredPaymentRequest"];
+
+    if (!deferredPaymentRequestDict) {
+        return nil;
+    }
+
+    NSString *paymentDescription = [deferredPaymentRequestDict stringForKey:@"paymentDescription"];
+    NSString *managementURLString = [deferredPaymentRequestDict stringForKey:@"managementURL"];
+    NSDictionary *deferredBillingDict = [deferredPaymentRequestDict dictionaryForKey:@"deferredBilling"];
+    NSString *billingAgreement = [deferredPaymentRequestDict optionalStringForKey:@"billingAgreement"];
+    NSString *freeCancellationDateString = [deferredPaymentRequestDict optionalStringForKey:@"freeCancellationDate"];
+
+    NSURL *managementURL = [NSURL URLWithString:managementURLString];
+    JPDeferredPaymentSummaryItem *deferredBilling = [RNApplePayWrappers deferredPaymentSummaryItemFromDictionary:deferredBillingDict];
+
+    JPDeferredPaymentRequest *request = [JPDeferredPaymentRequest requestWithPaymentDescription:paymentDescription
+                                                                                deferredBilling:deferredBilling
+                                                                               andManagementURL:managementURL];
+    request.billingAgreement = billingAgreement;
+
+    if (freeCancellationDateString) {
+        request.freeCancellationDate = [RNApplePayWrappers dateFromISO8601String:freeCancellationDateString];
+    }
+
+    return request;
+}
+
++ (JPDeferredPaymentSummaryItem *)deferredPaymentSummaryItemFromDictionary:(NSDictionary *)dictionary API_AVAILABLE(ios(16.4)) {
+    NSString *label = [dictionary stringForKey:@"label"];
+    NSString *amountString = [dictionary stringForKey:@"amount"];
+    NSString *deferredDateString = [dictionary stringForKey:@"deferredDate"];
+    NSDecimalNumber *amount = [NSDecimalNumber decimalNumberWithString:amountString];
+    NSDate *deferredDate = [RNApplePayWrappers dateFromISO8601String:deferredDateString];
+
+    return [[JPDeferredPaymentSummaryItem alloc] initWithLabel:label amount:amount deferredDate:deferredDate];
+}
+
 + (JPRecurringPaymentRequest *)recurringPaymentRequestFromDictionary:(NSDictionary *)dictionary API_AVAILABLE(ios(16.0)) {
     NSDictionary *recurringPaymentRequestDict = [dictionary optionalDictionaryForKey:@"recurringPaymentRequest"];
 
@@ -249,7 +297,6 @@
     // Optional fields
     NSDictionary *trialBillingDict = [recurringPaymentRequestDict optionalDictionaryForKey:@"trialBilling"];
     NSString *billingAgreement = [recurringPaymentRequestDict optionalStringForKey:@"billingAgreement"];
-    NSString *tokenNotificationURLString = [recurringPaymentRequestDict optionalStringForKey:@"tokenNotificationURL"];
 
     NSURL *managementURL = [NSURL URLWithString:managementURLString];
 
@@ -260,10 +307,6 @@
 
     request.trialBilling = [RNApplePayWrappers recurringPaymentSummaryItemFromDictionary:trialBillingDict];
     request.billingAgreement = billingAgreement;
-
-    if (tokenNotificationURLString) {
-        request.tokenNotificationURL = [NSURL URLWithString:tokenNotificationURLString];
-    }
 
     return request;
 }
@@ -286,15 +329,12 @@
     NSNumber *intervalUnit = [dictionary optionalNumberForKey:@"intervalUnit"];
     NSNumber *intervalCount = [dictionary optionalNumberForKey:@"intervalCount"];
 
-    NSISO8601DateFormatter *dateFormatter = [NSISO8601DateFormatter new];
-    dateFormatter.formatOptions = NSISO8601DateFormatWithFullDate | NSISO8601DateFormatWithFullTime | NSISO8601DateFormatWithFractionalSeconds;
-
     if (startDateString) {
-        item.startDate = [dateFormatter dateFromString:startDateString];
+        item.startDate = [RNApplePayWrappers dateFromISO8601String:startDateString];
     }
 
     if (endDateString) {
-        item.endDate = [dateFormatter dateFromString:endDateString];
+        item.endDate = [RNApplePayWrappers dateFromISO8601String:endDateString];
     }
 
     switch (intervalUnit.integerValue) {

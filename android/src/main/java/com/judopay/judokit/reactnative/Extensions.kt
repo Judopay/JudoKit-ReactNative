@@ -387,6 +387,12 @@ internal val ReadableMap.allowPrepaidCards: Boolean?
 internal val ReadableMap.allowCreditCards: Boolean?
   get() = googlePayConfiguration?.getOptionalBoolean("allowCreditCards")
 
+internal val ReadableMap.deferredParameters: ReadableMap?
+  get() = googlePayConfiguration?.getOptionalMap("deferredParameters")
+
+internal val ReadableMap.recurringParameters: ReadableMap?
+  get() = googlePayConfiguration?.getOptionalMap("recurringParameters")
+
 fun Judo.toJudoActivityIntent(packageContext: Context): Intent =
   Intent(packageContext, JudoActivity::class.java).also { it.putExtra(JUDO_OPTIONS, this) }
 

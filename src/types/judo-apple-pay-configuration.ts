@@ -70,10 +70,18 @@ export interface JudoApplePayRecurringPaymentRequest {
    */
   trialBilling?: JudoRecurringPaymentSummaryItem;
   billingAgreement?: string;
-  /**
-   * Reserved for future use. Currently not implemented.
-   */
-  tokenNotificationURL?: string;
+}
+
+export interface JudoDeferredPaymentSummaryItem extends JudoPaymentSummaryItem {
+  deferredDate: string;
+}
+
+export interface JudoApplePayDeferredPaymentRequest {
+  paymentDescription: string;
+  managementURL: string;
+  deferredBilling: JudoDeferredPaymentSummaryItem;
+  billingAgreement?: string;
+  freeCancellationDate?: string;
 }
 
 export interface JudoApplePayConfiguration {
@@ -87,4 +95,5 @@ export interface JudoApplePayConfiguration {
   shippingType?: JudoShippingType;
   returnedInfo?: JudoReturnedInfo;
   recurringPaymentRequest?: JudoApplePayRecurringPaymentRequest;
+  deferredPaymentRequest?: JudoApplePayDeferredPaymentRequest;
 }

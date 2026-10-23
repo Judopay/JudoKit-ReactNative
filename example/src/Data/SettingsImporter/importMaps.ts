@@ -47,12 +47,23 @@ export const CARD_NETWORK_STORAGE_KEYS: Record<string, string> = {
   DINERS_CLUB: SUPPORTED_CARD_NETWORKS_KEYS.IS_DINERS_CLUB_ON,
 };
 
+const RECURRING_PAYMENT_INTERVAL_UNIT_IMPORT_VALUES: Record<string, string> = {
+  '4': 'year',
+  '8': 'month',
+  '16': 'day',
+  '32': 'hour',
+  '64': 'minute',
+};
+
 export const toStoredString = (jsonKey: string, value: string): string => {
   if (jsonKey === 'challenge_request_indicator') {
     return CHALLENGE_REQUEST_INDICATOR_IMPORT_VALUES[value] ?? value;
   }
   if (jsonKey === 'sca_exemption') {
     return SCA_EXEMPTION_IMPORT_VALUES[value] ?? value;
+  }
+  if (jsonKey === 'recurring_payment_interval_unit') {
+    return RECURRING_PAYMENT_INTERVAL_UNIT_IMPORT_VALUES[value] ?? value;
   }
   return value;
 };

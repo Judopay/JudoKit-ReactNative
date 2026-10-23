@@ -1,6 +1,5 @@
 PODS:
   - boost (1.84.0)
-  - DeviceDNA (2.1.2)
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
   - FBLazyVector (0.81.6)
@@ -9,10 +8,9 @@ PODS:
   - hermes-engine (0.81.6):
     - hermes-engine/Pre-built (= 0.81.6)
   - hermes-engine/Pre-built (0.81.6)
-  - Judo3DS2_iOS (1.4.0)
-  - JudoKit-iOS (6.4.0):
-    - DeviceDNA (= 2.1.2)
-    - Judo3DS2_iOS (= 1.4.0)
+  - Judo3DS2_iOS (2.0.0)
+  - JudoKit-iOS (6.6.0):
+    - Judo3DS2_iOS (= 2.0.0)
     - RavelinEncrypt (= 1.1.2)
     - TrustKit (~> 3.0.7)
   - JudoKit-ReactNative (6.6.0):
@@ -22,7 +20,7 @@ PODS:
     - fmt
     - glog
     - hermes-engine
-    - JudoKit-iOS (= 6.4.0)
+    - JudoKit-iOS (= 6.6.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2676,7 +2674,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - DeviceDNA
     - Judo3DS2_iOS
     - JudoKit-iOS
     - MMKV
@@ -2853,16 +2850,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  DeviceDNA: a2812a2a54bdaf3bafd4d109bd9072759e4d9506
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 812782f0506ba4c4a1b9f4b793e6de1bfdfc4c25
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 7219f6e751ad6ec7f3d7ec121830ee34dae40749
-  Judo3DS2_iOS: b56210b385e21570a62e3ecfefd658578b1e465b
-  JudoKit-iOS: d796d66047fc2dcea6b01bf907636b6fe50a21d6
-  JudoKit-ReactNative: 9d9a2fb5a45dab9a52ea6479bd373aa3e0021730
+  Judo3DS2_iOS: cc85f92cdc406533c2f11619799e22df34ee44ee
+  JudoKit-iOS: 8d014307462ad0d01efca88d179bd851a037059e
+  JudoKit-ReactNative: 5cb49b26e6af2546a2b558e3f159da6d68de5589
   MMKV: 43cd10be0f925bf3fd5c2bd8bea501a328037b64
   MMKVCore: 13be45a0394861b74836875ac9ec7ee939e86b78
   RavelinEncrypt: ea533da1cb48ccf84382cb161979b27bfb23d467

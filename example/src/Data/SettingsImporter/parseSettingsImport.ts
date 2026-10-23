@@ -81,6 +81,13 @@ const applyLeaf = (
     return;
   }
 
+  if (jsonKey === 'recurring_payment_interval_unit') {
+    if (typeof value === 'string' || typeof value === 'number') {
+      patch[jsonKey] = toStoredString(jsonKey, `${value}`);
+    }
+    return;
+  }
+
   if (typeof value === 'boolean') {
     patch[jsonKey] = value;
     return;
