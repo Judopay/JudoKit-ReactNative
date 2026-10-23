@@ -22,7 +22,7 @@ export const EXPORT_SECTIONS: Array<{ name: string; keys: string[] }> = [
     keys: [
       'is_recommendation_enabled',
       'recommendation_url',
-      'rsa_key',
+      'recommendation_rsa_key',
       'recommendation_timeout',
       'is_recommendation_halt_transaction_enabled',
     ],

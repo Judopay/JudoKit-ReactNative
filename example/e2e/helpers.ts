@@ -370,7 +370,7 @@ export async function setupRavelinConfigWithURL(config: ravelinConfig) {
     recommendation: {
       is_recommendation_enabled: true,
       recommendation_url: recommendationURL + config.url,
-      rsa_key: process.env.RAVELIN_RSA_KEY,
+      recommendation_rsa_key: process.env.RAVELIN_RSA_KEY,
       is_recommendation_halt_transaction_enabled: config.haltTransaction,
     },
   });
