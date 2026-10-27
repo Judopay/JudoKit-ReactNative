@@ -275,7 +275,7 @@ export const TOKEN_PAYMENTS_KEYS = {
 export const RECOMMENDATION_KEYS = {
   IS_ON: 'is_recommendation_enabled',
   URL: 'recommendation_url',
-  RSA_PUBLIC_KEY: 'rsa_key',
+  RSA_PUBLIC_KEY: 'recommendation_rsa_key',
   TIMEOUT: 'recommendation_timeout',
   HALT_TRANSACTION_IN_CASE_OF_ANY_ERROR:
     'is_recommendation_halt_transaction_enabled',
