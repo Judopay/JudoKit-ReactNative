@@ -31,4 +31,13 @@ allprojects {
   }
 }
 
+// NDK r27 links native libraries with 4 KB page alignment by default. Libraries that build
+// C++ from source (e.g. react-native-mmkv-storage) need this flag to be 16 KB page compatible.
+// See https://developer.android.com/guide/practices/page-sizes
+subprojects {
+  plugins.withId("com.android.library") {
+    android.defaultConfig.externalNativeBuild.cmake.arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+  }
+}
+
 apply plugin: "com.facebook.react.rootproject"
