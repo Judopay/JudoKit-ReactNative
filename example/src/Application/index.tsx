@@ -24,6 +24,7 @@ import {
 import { LaunchArguments } from '@adeptus_artifex/react-native-launch-arguments';
 import {
   getSettingsFromEnv,
+  importSettingsFromLaunchArguments,
   MyExpectedArgs,
   resetAppSettingsToDefaults,
 } from '../Functions';
@@ -137,12 +138,12 @@ const Application = () => {
 
       // so that the settings are not reset on every app launch
       appStorage.setBool(IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY, true);
-      return;
-    }
-
-    if (!getBoolOrFalse(IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY)) {
+    } else if (!getBoolOrFalse(IS_STORAGE_INITIATED_WITH_DEFAULTS_KEY)) {
       resetAppSettingsToDefaults();
     }
+
+    // After the defaults, so the imported settings aren't overwritten by them.
+    importSettingsFromLaunchArguments(args);
   }, []);
 
   return (

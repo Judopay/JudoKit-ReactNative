@@ -19,6 +19,7 @@ import { Buffer } from 'buffer';
 import { appStorage } from '../Application';
 import { DEFAULT_SETTINGS_DATA, IS_ANDROID, IS_IOS } from '../Data/Constants';
 import { parseSettingsImport } from '../Data/SettingsImporter';
+import { importSettingsFromJson } from '../Data/SettingsImporter/settingsJsonPersistence';
 
 interface PromiseForFeature {
   featureType: DemoFeatureType;
@@ -233,7 +234,33 @@ export const regeneratePaymentReferenceIfNeeded = (
 
 export interface MyExpectedArgs {
   customSettings?: string;
+  // A settings JSON, base64 encoded, imported on top of the current settings at launch, as the
+  // Import Settings screen does. Same names as in the native example apps, so UI tests can set
+  // up every app the same way: an intent extra on Android
+  // (`adb shell am start -n <app>/.MainActivity --es import_settings_base64 <base64 JSON>`)
+  // and a launch argument on iOS (`xcrun simctl launch <device> <app> -importSettings <base64 JSON>`).
+  import_settings_base64?: string;
+  importSettings?: string;
 }
+
+// UI tests read the import outcome from the logs, so keep these messages in sync with the native
+// example apps.
+export const importSettingsFromLaunchArguments = (args: MyExpectedArgs) => {
+  const encoded = args.import_settings_base64 ?? args.importSettings;
+  if (!encoded) {
+    return;
+  }
+  try {
+    importSettingsFromJson(Buffer.from(encoded, 'base64').toString('utf-8'));
+    console.log('SettingsImport: Settings imported');
+  } catch (error) {
+    console.warn(
+      `SettingsImport: Settings import failed: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
+  }
+};
 
 export const getSettingsFromEnv = (
   args: MyExpectedArgs
