@@ -72,7 +72,7 @@ export async function complete3DS2() {
         await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
         await delay(1000);
       }
-    } catch (exception) {}
+    } catch {}
   } else {
     await waitFor(element(by.text(Selectors.THREEDS2_SCREEN_HEADER)))
       .toBeVisible()
@@ -81,7 +81,7 @@ export async function complete3DS2() {
     await delay(5000);
     try {
       await element(by.text(Selectors.THREEDS2_COMPLETE_BUTTON)).longPress();
-    } catch (exception) {}
+    } catch {}
   }
 }
 
@@ -89,7 +89,7 @@ export async function isCardAddedToPaymentMethods(): Promise<boolean> {
   try {
     await expect(element(by.label(Selectors.EXISTING_CARD))).toBeVisible();
     return true;
-  } catch (exception) {
+  } catch {
     return false;
   }
 }
@@ -191,7 +191,7 @@ export async function pressBackButton() {
     if ('visible' in backButton && backButton.visible === true) {
       await element(by.id(Selectors.BACK_BUTTON)).longPress();
     }
-  } catch (exception) {}
+  } catch {}
 }
 
 export async function fillBillingInfoFields(props: BillingDetails) {

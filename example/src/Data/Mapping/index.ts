@@ -95,7 +95,7 @@ export const getNumberOrUndefined = (key: string) => {
   if (value.length > 0) {
     try {
       return Number(value);
-    } catch (error) {
+    } catch {
       // noop
     }
   }
@@ -209,8 +209,7 @@ const buildPaymentMethods = (): JudoPaymentMethod => {
 // ============================================================================
 
 const getChallengeRequestIndicator = ():
-  | ChallengeRequestIndicator
-  | undefined => {
+  ChallengeRequestIndicator | undefined => {
   const value = getStringOrUndefined(
     THREE_DS_TWO_KEYS.CHALLENGE_REQUEST_INDICATOR
   );
@@ -261,8 +260,7 @@ const buildButtonCustomization = (
 };
 
 const buildThreeDSUIConfiguration = ():
-  | JudoThreeDSUIConfiguration
-  | undefined => {
+  JudoThreeDSUIConfiguration | undefined => {
   if (!getBoolOrFalse(THREE_DS_TWO_KEYS.UI_CUSTOMIZATION.IS_ENABLED)) {
     return undefined;
   }
@@ -480,8 +478,7 @@ const buildApplePayContactFields = (): {
 };
 
 const buildApplePayRecurringPaymentRequest = ():
-  | JudoApplePayRecurringPaymentRequest
-  | undefined => {
+  JudoApplePayRecurringPaymentRequest | undefined => {
   if (!getBoolOrFalse(APPLE_PAY_KEYS.RECURRING_PAYMENT_REQUEST.IS_ON)) {
     return undefined;
   }
@@ -547,8 +544,7 @@ const buildApplePayRecurringPaymentRequest = ():
 };
 
 const buildApplePayDeferredPaymentRequest = ():
-  | JudoApplePayDeferredPaymentRequest
-  | undefined => {
+  JudoApplePayDeferredPaymentRequest | undefined => {
   if (!getBoolOrFalse(APPLE_PAY_KEYS.DEFERRED_PAYMENT_REQUEST.IS_ON)) {
     return undefined;
   }
@@ -604,8 +600,7 @@ const buildApplePayDeferredPaymentRequest = ():
 // ============================================================================
 
 const buildGooglePayBillingParameters = ():
-  | JudoBillingAddressParameters
-  | undefined => {
+  JudoBillingAddressParameters | undefined => {
   const billingAddressFields = getStringOrEmpty(
     GOOGLE_PAY_KEYS.BILLING_ADDRESS_FIELDS
   );
@@ -754,8 +749,7 @@ const getGooglePayRecurrencePeriod = (): JudoGooglePayRecurrencePeriod => {
 };
 
 const buildGooglePayDeferredParameters = ():
-  | JudoGooglePayDeferredParameters
-  | undefined => {
+  JudoGooglePayDeferredParameters | undefined => {
   const priceStatus = getGooglePayTotalPriceStatus(
     GOOGLE_PAY_KEYS.DEFERRED_PRICE_STATUS
   );
@@ -789,8 +783,7 @@ const buildGooglePayDeferredParameters = ():
 };
 
 const buildGooglePayIntroductoryPeriodInfo = ():
-  | JudoGooglePayIntroductoryPeriodInfo
-  | undefined => {
+  JudoGooglePayIntroductoryPeriodInfo | undefined => {
   if (
     !getBoolOrFalse(GOOGLE_PAY_KEYS.IS_RECURRING_INTRODUCTORY_PERIOD_ENABLED)
   ) {
@@ -821,8 +814,7 @@ const buildGooglePayIntroductoryPeriodInfo = ():
 };
 
 const buildGooglePayRecurringParameters = ():
-  | JudoGooglePayRecurringParameters
-  | undefined => {
+  JudoGooglePayRecurringParameters | undefined => {
   const itemPriceStatus = getGooglePayTotalPriceStatus(
     GOOGLE_PAY_KEYS.RECURRING_ITEM_PRICE_STATUS
   );
