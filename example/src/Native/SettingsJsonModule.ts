@@ -6,8 +6,7 @@ type SettingsJsonNativeModule = {
 };
 
 const nativeModule = NativeModules.SettingsJsonModule as
-  | SettingsJsonNativeModule
-  | undefined;
+  SettingsJsonNativeModule | undefined;
 
 export const copySettingsToClipboard = (json: string) => {
   if (!nativeModule?.copyToClipboard) {

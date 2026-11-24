@@ -6,12 +6,7 @@ export class SettingsImportError extends Error {
 }
 
 export type JsonValue =
-  | string
-  | boolean
-  | number
-  | JsonValue[]
-  | JsonObject
-  | null;
+  string | boolean | number | JsonValue[] | JsonObject | null;
 export type JsonObject = { [key: string]: JsonValue };
 export type SettingsPatch = Record<string, string | boolean>;
 export type StoredValue = string | boolean | undefined;
