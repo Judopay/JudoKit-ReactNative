@@ -30,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     factory.startReactNative(
       withModuleName: "JudoKitReactNativeExample",
       in: window,
-      launchOptions: nil
+      connectionOptions: connectionOptions
     )
   }
 }

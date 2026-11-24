@@ -13,7 +13,7 @@ import {
 } from '../Data/TypeDefinitions';
 import _ from 'lodash';
 import { ResultItem } from '../Application/ApplicationRouter/Screens/ResultScreen';
-import Snackbar from 'react-native-snackbar';
+import { Snackbar } from 'react-native-snackbar';
 import { DefaultTheme } from '@react-navigation/native';
 import { Buffer } from 'buffer';
 import { appStorage } from '../Application';
