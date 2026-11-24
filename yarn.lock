@@ -3199,6 +3199,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native/assets-registry@npm:0.88.1":
+  version: 0.88.1
+  resolution: "@react-native/assets-registry@npm:0.88.1"
+  peerDependencies:
+    react-native: "*"
+  checksum: 10/9a32a56ed0958778dd004fe5536290bb41917f570a41506cb87682726435a3a7db370230d165c1dfbe730a73d7beb49b41f67e68735120fb528c04463f197bfb
+  languageName: node
+  linkType: hard
+
 "@react-native/babel-plugin-codegen@npm:0.88.1":
   version: 0.88.1
   resolution: "@react-native/babel-plugin-codegen@npm:0.88.1"
@@ -9255,6 +9264,7 @@ __metadata:
     "@react-native-community/cli-platform-ios": "npm:20.2.0"
     "@react-native-masked-view/masked-view": "npm:^0.3.2"
     "@react-native-vector-icons/ionicons": "npm:^12.3.0"
+    "@react-native/assets-registry": "npm:0.88.1"
     "@react-native/babel-preset": "npm:0.88.1"
     "@react-native/jest-preset": "npm:0.88.1"
     "@react-native/metro-config": "npm:0.88.1"
