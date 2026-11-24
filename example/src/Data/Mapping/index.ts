@@ -95,7 +95,7 @@ export const getNumberOrUndefined = (key: string) => {
   if (value.length > 0) {
     try {
       return Number(value);
-    } catch (error) {
+    } catch {
       // noop
     }
   }

@@ -101,7 +101,7 @@ const ImportSettingsModal: FC<ImportSettingsModalProps> = ({
         style={styles.flex}
       >
         <View style={styles.backdrop}>
-          <Pressable style={StyleSheet.absoluteFillObject} onPress={onClose} />
+          <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
           <View
             style={[
               styles.card,
