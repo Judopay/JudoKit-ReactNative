@@ -2,18 +2,60 @@
 
 [![npm version](https://badge.fury.io/js/judokit-react-native.svg)](https://www.npmjs.com/package/judokit-react-native)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![React Native](https://img.shields.io/badge/React%20Native-%3E%3D0.80-blue.svg)](https://facebook.github.io/react-native/)
-[![install size](https://packagephobia.com/badge?p=judokit-react-native)](https://packagephobia.com/result?p=judokit-react-native)
+[![React Native](https://img.shields.io/badge/React%20Native-%3E%3D0.86-blue.svg)](https://reactnative.dev)
+[![npm unpacked size](https://img.shields.io/npm/unpacked-size/judokit-react-native)](https://www.npmjs.com/package/judokit-react-native)
 [![GitHub Actions](https://github.com/Judopay/JudoKit-ReactNative/actions/workflows/build-test-sdk.yml/badge.svg)](https://github.com/Judopay/JudoKit-ReactNative/actions/workflows/build-test-sdk.yml)
 
 [![NPM](https://nodei.co/npm/judokit-react-native.png?downloads=true&mini=true)](https://nodei.co/npm/judokit-react-native/)
 
 A React Native module for the Judopay native [JudoKit-iOS](https://github.com/Judopay/JudoKit-iOS) and [JudoKit-Android](https://github.com/Judopay/JudoKit-Android) to process payments on iOS and Android.
 
+## Requirements
+
+| | Minimum |
+| --- | --- |
+| React Native | 0.86 |
+| iOS | 15.1 (the React Native `min_ios_version_supported`) |
+| Android | API 24 (`minSdkVersion`), `compileSdkVersion` 37 |
+| Node.js | 22.11 |
+
+Under the hood the module uses [JudoKit-iOS](https://github.com/Judopay/JudoKit-iOS) 6.6.0 and [JudoKit-Android](https://github.com/Judopay/JudoKit-Android) 7.4.0.
+
+> Expo Go is not supported, because the module contains native code. Use a development build instead.
+
 ## Installation
 
 ```sh
 yarn add judokit-react-native
+# or
+npm install judokit-react-native
+```
+
+### iOS
+
+Install the native dependencies:
+
+```sh
+cd ios && bundle exec pod install
+```
+
+### Android
+
+No extra setup is needed; the module is autolinked.
+
+If your app is on Android Gradle Plugin 9 (the React Native 0.88 template default), keep these opt-outs from the template in `android/gradle.properties`:
+
+```properties
+android.builtInKotlin=false
+android.newDsl=false
+```
+
+## Sandbox vs. production
+
+`JudoPay` runs against the **sandbox** environment by default. Switch it off before going live:
+
+```ts
+judoKit.isSandboxed = false;
 ```
 
 ## Usage
@@ -47,6 +89,21 @@ judoKit
   );
 
 ```
+
+### Available methods
+
+| Method | Description |
+| --- | --- |
+| `invokeTransaction(type, configuration)` | Opens the card entry UI for a payment, pre-auth, register card, save card or check card. |
+| `performTokenTransaction(mode, configuration, cardToken, securityCode, cardholderName, cardScheme)` | Makes a payment or pre-auth with a saved card token. |
+| `invokeApplePay(mode, configuration)` | Starts an Apple Pay payment or pre-auth (iOS). Needs `applePayConfiguration`. |
+| `isApplePayAvailableWithConfiguration(configuration)` | Checks whether Apple Pay can be used with the given configuration (iOS). |
+| `invokeGooglePay(mode, configuration)` | Starts a Google Pay payment or pre-auth (Android). Needs `googlePayConfiguration`. |
+| `invokePaymentMethodScreen(mode, configuration)` | Opens the payment method screen (cards, Apple Pay or Google Pay). |
+| `fetchTransactionDetails(receiptId)` | Fetches the details of a transaction by its receipt ID. |
+
+All methods return a `Promise` that resolves with a `JudoResponse`; `isApplePayAvailableWithConfiguration` resolves with a `boolean`.
+
 ## Example
 Below is a simple example to showcase the basic usage of the library.
 ```tsx
