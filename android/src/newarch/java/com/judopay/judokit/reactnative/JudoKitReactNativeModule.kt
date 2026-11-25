@@ -15,28 +15,28 @@ class JudoKitReactNativeModule(
     options: ReadableMap,
     promise: Promise,
   ) {
-    moduleImpl.invokeTransaction(currentActivity, options, promise)
+    moduleImpl.invokeTransaction(reactApplicationContext.currentActivity, options, promise)
   }
 
   override fun invokeGooglePay(
     options: ReadableMap,
     promise: Promise,
   ) {
-    moduleImpl.invokeGooglePay(currentActivity, options, promise)
+    moduleImpl.invokeGooglePay(reactApplicationContext.currentActivity, options, promise)
   }
 
   override fun invokePaymentMethodScreen(
     options: ReadableMap,
     promise: Promise,
   ) {
-    moduleImpl.invokePaymentMethodScreen(currentActivity, options, promise)
+    moduleImpl.invokePaymentMethodScreen(reactApplicationContext.currentActivity, options, promise)
   }
 
   override fun performTokenTransaction(
     options: ReadableMap,
     promise: Promise,
   ) {
-    moduleImpl.performTokenTransaction(currentActivity, options, promise)
+    moduleImpl.performTokenTransaction(reactApplicationContext.currentActivity, options, promise)
   }
 
   override fun fetchTransactionDetails(
