@@ -7,15 +7,17 @@ on:
       - chore/DO-3542/test-rn-both
 jobs:
   maestro_tests_android:
-    uses: Judopay/github-actions/.github/workflows/android-test-sample-apps-maestro.yml@chore/DO-3542/test-master-plus-51-52
+    uses: Judopay/github-actions/.github/workflows/android-test-sample-apps-maestro.yml@master
     secrets: inherit
     with:
       app_file: app-production-release.apk
       app_id: com.judopay.wallet
       exclude_tags: ravelin,objc_only,challenge_resilience
+      tests_ref: chore/NONE/increase-script-timeout
   maestro_tests_ios:
-    uses: Judopay/github-actions/.github/workflows/ios-test-sample-apps-maestro.yml@chore/DO-3542/test-master-plus-51-52
+    uses: Judopay/github-actions/.github/workflows/ios-test-sample-apps-maestro.yml@master
     secrets: inherit
     with:
       flavor: react-native
       exclude_tags: ravelin,android_only,objc_only
+      tests_ref: chore/NONE/increase-script-timeout
