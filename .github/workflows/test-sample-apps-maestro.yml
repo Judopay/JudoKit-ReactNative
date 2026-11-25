@@ -15,7 +15,7 @@ jobs:
       exclude_tags: ravelin,objc_only,challenge_resilience
       tests_ref: chore/NONE/increase-script-timeout
   maestro_tests_ios:
-    uses: Judopay/github-actions/.github/workflows/ios-test-sample-apps-maestro.yml@master
+    uses: Judopay/github-actions/.github/workflows/ios-test-sample-apps-maestro.yml@fix/DO-3542/ios-simulator-log
     secrets: inherit
     with:
       flavor: react-native
