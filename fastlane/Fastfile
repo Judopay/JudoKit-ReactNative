@@ -140,6 +140,31 @@ lane :publish_sample_apps do |options|
   end
 end
 
+desc "[iOS] Build the Sample App for the iOS Simulator"
+lane :build_sample_app_simulator do |options|
+  app = @sample_apps.find { |sample_app| sample_app.platform == 'ios' }
+  environment = options[:environment] || 'production'
+  UI.user_error!("Only the production environment is set up, not #{environment}") if !@environments.include?(environment)
+
+  cocoapods(podfile: app.podfile)
+
+  build_app({
+    configuration: 'Release',
+    derived_data_path: @derived_data_path,
+    destination: 'generic/platform=iOS Simulator',
+    scheme: app.scheme,
+    skip_archive: true,
+    skip_codesigning: true,
+    skip_package_ipa: true,
+    workspace: app.workspace,
+  })
+
+  built_apps = Dir.glob("#{@derived_data_path}/Build/Products/Release-iphonesimulator/*.app")
+  UI.user_error!("Expected one simulator app, found #{built_apps.map { |path| File.basename(path) }}") if built_apps.length != 1
+  FileUtils.mkdir_p(@fl_output_dir)
+  FileUtils.cp_r(built_apps.first, "#{@fl_output_dir}/#{app.scheme}-#{environment}-simulator.app")
+end
+
 platform :ios do
   desc "[iOS] Build Sample App"
   lane :build_sample_app do |options|

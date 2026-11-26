@@ -1,0 +1,18 @@
+name: Test Sample Apps with Maestro
+
+on:
+  workflow_dispatch:
+jobs:
+  maestro_tests_android:
+    uses: Judopay/github-actions/.github/workflows/android-test-sample-apps-maestro.yml@master
+    secrets: inherit
+    with:
+      app_file: app-production-release.apk
+      app_id: com.judopay.wallet
+      exclude_tags: ravelin,objc_only,challenge_resilience
+  maestro_tests_ios:
+    uses: Judopay/github-actions/.github/workflows/ios-test-sample-apps-maestro.yml@master
+    secrets: inherit
+    with:
+      flavor: react-native
+      exclude_tags: ravelin,android_only,objc_only
