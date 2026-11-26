@@ -7,7 +7,7 @@ on:
       - chore/DO-3542/test-rn-both
 jobs:
   maestro_tests_ios:
-    uses: Judopay/github-actions/.github/workflows/ios-test-sample-apps-maestro.yml@fix/DO-3542/ios-simulator-log
+    uses: Judopay/github-actions/.github/workflows/ios-test-sample-apps-maestro.yml@master
     secrets: inherit
     with:
       flavor: react-native
